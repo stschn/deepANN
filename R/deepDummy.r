@@ -62,7 +62,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first","last","mo
       ifelse(values == l, 1, zero_value)
     })
     colnames(dummies) <- do.call(paste0, list(rep(col_name, length(lvl)), "_", lvl))
-    dataset <- cbind(dataset,dummies)
+    dataset <- cbind(dataset, dummies)
     if (remove_columns == TRUE) dataset[[col_name]] <- NULL
   }
   return(dataset)
@@ -215,10 +215,10 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
       
     cbind.columns <- function(dataset, new_column, after) {
       if (after == 0) {
-        return(cbind.data.frame(new_column,dataset))
+        return(cbind.data.frame(new_column, dataset))
       } else {
       if (after >= NCOL(dataset)) {
-        return(cbind.data.frame(dataset,new_column))
+        return(cbind.data.frame(dataset, new_column))
       } else {
         return(cbind.data.frame(d[, 1:(after), drop = F], y, d[, (after + 1):length(d), drop = F]))
       }}

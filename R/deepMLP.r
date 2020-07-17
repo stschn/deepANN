@@ -270,18 +270,36 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
 #' @param mlp A model object, returned by \code{fit.MLP} in the list element \code{model}.
 #' @param X A feature data set, usually a matrix or data.frame.
 #' @param batch_size Batch size, the number of samples used per gradient update.
-#' @param y.min A vector with minima of outcomes, returned by \code{normalize_data}, otherwise \code{NULL}.
-#' @param y.max A vector with maxima of outcomes, returned by \code{normalize_data}, otherwise \code{NULL}.
+#' @param scale_type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
+#'   Per default (\code{NULL}) no inverted scaling is done.
+#' @param scaler Scaling factors for the different scaling types. The type min-max scaling needs a list with vectors of min and max values for each outcome,
+#'   z-score scaling needs a list with vectors of mean and sd values for each outcome, log transformation needs no scaler.
 #'
 #' @return A matrix with predicted outcome values per column.
 #' @export
 #' 
-#' @seealso \code{\link{fit.MLP}}, \code{\link[stats]{predict}}, \code{\link{normalize_data}}.
+#' @seealso \code{\link{fit.MLP}}, \code{\link[stats]{predict}}, \code{\link{scale.datasets}}.
 #'
 #' @examples
-predict.MLP <- function(mlp, X, batch_size = 1, y.min = NULL, y.max = NULL) {
+predict.MLP <- function(mlp, X, batch_size = 1, scale_type = NULL, scaler = NULL) {
   X.tensor <- as.MLP.X(X)
   Y.predict <- mlp %>% predict(X.tensor, batch_size = batch_size)
-  if (!((is.null(y.min)) || (is.null(y.max)))) { Y.predict <- as.matrix(mapply(denormalize, Y.predict, y.min, y.max)) }
+  if (!is.null(scale_type)) {
+    if (scale_type == "minmax") {
+      if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
+      minx <- scaler[[1]]
+      maxx <- scaler[[2]]
+      Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T, minx, maxx))
+    } else {
+    if (scale_type == "zscore") {
+      if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
+      meanx <- scaler[[1]]
+      sdx <- scaler[[2]]
+      Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T, meanx, sdx))
+    } else {
+    if (scale_type == "log") {
+      Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T))
+    }}}
+  }
   return(Y.predict)
 }

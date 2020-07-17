@@ -11,8 +11,8 @@
   lag = 0,
   differences = 1,
   batch_size = 1,
-  y.min = NULL,
-  y.max = NULL,
+  scale_type = NULL,
+  scaler = NULL,
   invert_first_row = NULL,
   Y.actual = NULL,
   type = "univariate"
@@ -31,9 +31,11 @@
 
 \item{batch_size}{Batch size, the number of samples used per gradient update.}
 
-\item{y.min}{A vector with minima of outcomes, returned by \code{normalize_data}, otherwise \code{NULL}.}
+\item{scale_type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
+Per default (\code{NULL}) no inverted scaling is done.}
 
-\item{y.max}{A vector with maxima of outcomes, returned by \code{normalize_data}, otherwise \code{NULL}.}
+\item{scaler}{Scaling factors for the different scaling types. The type min-max scaling needs a list with vectors with min and max values for each outcome,
+z-score scaling needs a list with vectors with mean and sd values for each outcome, log transformation needs no scaler.}
 
 \item{invert_first_row}{The row index of the first row of the training or test data set regarding to the raw data set before differencing.}
 

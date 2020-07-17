@@ -543,8 +543,10 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1,FALSE),
 #' @param lag The number of considered lags on feature side.
 #' @param differences The number of differences.
 #' @param batch_size Batch size, the number of samples used per gradient update.
-#' @param y.min A vector with minima of outcomes, returned by \code{normalize_data}, otherwise \code{NULL}.
-#' @param y.max A vector with maxima of outcomes, returned by \code{normalize_data}, otherwise \code{NULL}.
+#' @param scale_type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
+#'   Per default (\code{NULL}) no inverted scaling is done.
+#' @param scaler Scaling factors for the different scaling types. The type min-max scaling needs a list with vectors with min and max values for each outcome,
+#'   z-score scaling needs a list with vectors with mean and sd values for each outcome, log transformation needs no scaler.
 #' @param invert_first_row The row index of the first row of the training or test data set regarding to the raw data set before differencing.
 #' @param Y.actual A vector, matrix or data.frame of raw data outcome values used for invert differencing.
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
@@ -559,13 +561,29 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1,FALSE),
 #'
 #' @examples
 predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch_size = 1,
-                         y.min = NULL, y.max = NULL,
+                         scale_type = NULL, scaler = NULL,
                          invert_first_row = NULL, Y.actual = NULL, type = "univariate") {
   X.tensor <- as.LSTM.X(X, timesteps)
   Y.predict <- lstm %>% predict(X.tensor, batch_size = batch_size)
   dim_predict <- length(dim(Y.predict)) # 2 without timesteps, 3 with timesteps
   if (dim_predict == 2) {
-    if (!((is.null(y.min)) || (is.null(y.max)))) { Y.predict <- as.matrix(mapply(denormalize, Y.predict, y.min, y.max)) }
+    if (!is.null(scale_type)) { 
+      if (scale_type == "minmax") {
+        if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
+        minx <- scaler[[1]]
+        maxx <- scaler[[2]]
+        Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T, minx, maxx))
+      } else {
+      if (scale_type == "zscore") {
+        if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
+        meanx <- scaler[[1]]
+        sdx <- scaler[[2]]
+        Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T, meanx, sdx))
+      } else {
+      if (scale_type == "log") {
+        Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T))
+      }}}
+    }
     if (!is.null(invert_first_row)) {
       i <- start.LSTM.invert_differencing(invert_first_row, differences, timesteps, lag, type)
       actuals <- as.matrix(Y.actual)
@@ -583,8 +601,23 @@ predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch
     tsteps <- dim(a)[2]
     outcomes <- dim(a)[3]
     for (y in 1:outcomes) {
-      if (!((is.null(y.min)) || (is.null(y.max))))
-        { a[,,y] <- as.matrix(mapply(denormalize, a[,,y], rep(y.min[y],tsteps), rep(y.max[y],tsteps))) }
+      if (!is.null(scale_type)) {
+        if (scale_type == "minmax") {
+          if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
+          minx <- scaler[[1]]
+          maxx <- scaler[[2]]
+          a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
+      } else {
+      if (scale_type == "zscore") {
+        if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
+        meanx <- scaler[[1]]
+        sdx <- scaler[[2]]
+        a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
+      } else {
+      if (scale_type == "log") {
+        a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T))
+      }}}
+      }
       if (!is.null(invert_first_row)) {
         i <- start.LSTM.invert_differencing(invert_first_row, differences, timesteps, lag, type)
         actuals <- as.matrix(Y.actual[, , y])
@@ -628,5 +661,5 @@ as.LSTM.period_outcome <- function(dataset, p, y, timesteps = 1, lag = 0, type =
     period <- dataset[, p]
     outcome <- dataset[, y]
   }
-  return(cbind.data.frame(period,outcome))
+  return(cbind.data.frame(period, outcome))
 }

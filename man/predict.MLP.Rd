@@ -4,7 +4,7 @@
 \alias{predict.MLP}
 \title{Predict with SLP/MLP model}
 \usage{
-\method{predict}{MLP}(mlp, X, batch_size = 1, y.min = NULL, y.max = NULL)
+\method{predict}{MLP}(mlp, X, batch_size = 1, scale_type = NULL, scaler = NULL)
 }
 \arguments{
 \item{mlp}{A model object, returned by \code{fit.MLP} in the list element \code{model}.}
@@ -13,9 +13,11 @@
 
 \item{batch_size}{Batch size, the number of samples used per gradient update.}
 
-\item{y.min}{A vector with minima of outcomes, returned by \code{normalize_data}, otherwise \code{NULL}.}
+\item{scale_type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
+Per default (\code{NULL}) no inverted scaling is done.}
 
-\item{y.max}{A vector with maxima of outcomes, returned by \code{normalize_data}, otherwise \code{NULL}.}
+\item{scaler}{Scaling factors for the different scaling types. The type min-max scaling needs a list with vectors of min and max values for each outcome,
+z-score scaling needs a list with vectors of mean and sd values for each outcome, log transformation needs no scaler.}
 }
 \value{
 A matrix with predicted outcome values per column.
@@ -24,7 +26,7 @@ A matrix with predicted outcome values per column.
 Predict with SLP/MLP model
 }
 \seealso{
-\code{\link{fit.MLP}}, \code{\link[stats]{predict}}, \code{\link{normalize_data}}.
+\code{\link{fit.MLP}}, \code{\link[stats]{predict}}, \code{\link{scale.datasets}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as.ANN.matrix}()},
