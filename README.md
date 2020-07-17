@@ -21,9 +21,11 @@ This R library is currently structured in form of the following functional famil
 
 <b>Scaling</b>
 <ul>
-  <li><code>normalize()</code></li>
-  <li><code>denormalize()</code></li>
-  <li><code>normalize_data()</code></li>
+  <li><code>scale.minmax()</code> scales a numeric vector thru min-max scaling.</li>
+  <li><code>scale.zscore()</code> scales a numeric vector thru z-score scaling.</li>
+  <li><code>scale.log()</code> scales a numeric vector thru log transformation.</li>
+  <li><code>scaling()</code> encapsulates the different types of scaling.</li>
+  <li><code>scale.datasets()</code> scales a train and a test data set.</li>
 </ul>
 
 <b>TimeSeries</b>
