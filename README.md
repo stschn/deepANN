@@ -41,7 +41,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>mape()</code> calculates the mean absolute percentage error.</li>
   <li><code>mse()</code> calculates the mean squared error.</li>
   <li><code>rmse()</code> calculates the root mean square error.</li>
-  <li><code>vc()</code> calculates the variance coefficient</li>
+  <li><code>vc()</code> calculates the variance coefficient.</li>
 </ul>
 
 <b>Machine Learning (ML)</b>
@@ -57,7 +57,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>as.ANN.matrix()</code> converts a data set into a matrix with adjusting factor variable levels to their numeric index if necessary.</li>
   <li><code>as.MLP.X()</code> creates a 2-dimensional feature array with the dimensions samples and units.</li>
   <li><code>as.MLP.Y()</code> creates a 2-dimensional outcome array with the dimensions samples and units.</li>
-  <li><code>get.MLP.X.units() returns the number of feature units.</code></li>
+  <li><code>get.MLP.X.units()</code> returns the number of feature units.</li>
   <li><code>get.MLP.Y.units()</code> returns the number of outcome units.</li>
   <li><code>build.MLP()</code> builds an sequential SLP/MLP model with stacked dense layers and optionally dropout layers.</li>
   <li><code>fit.MLP()</code> encapsulates building and fitting a SLP/MLP model.</li>
