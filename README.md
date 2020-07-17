@@ -50,7 +50,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>naive_forecast()</code> predicts values for a data series based upon random walk without and with drifts.</li>
   <li><code>euclidean_distance()</code> calculates the euclidean distance between to numerical vectors.</li>
   <li><code>k_nearest_neighbors()</code> identifies the majority class of k nearest neighbors of a query/test instance.</li>
-</list>
+</ul>
 
 <b>Single & Multi Layer Perceptron (SLP, MLP)</b>
 <ul>
