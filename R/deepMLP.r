@@ -10,7 +10,7 @@
 #'
 #' @examples
 as.ANN.matrix <- function(X, adjust = NULL) {
-  return(as.matrix(apply(X, 2, function(column) {
+  return(as.matrix(apply(as.matrix(X), 2, function(column) {
     if (is.factor(column)) { 
       if (is.null(adjust)) { as.integer(column) } else { as.integer(column) + as.integer(adjust) }
     } else { column }
