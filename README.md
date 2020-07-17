@@ -94,5 +94,5 @@ This R library is currently structured in form of the following functional famil
 
 <b>Self-Organizing Map (SOM)</b>
 <ul>
-  <li><code>fit.SOM()</code> encapsulates a comples SOM analysis.</li>
+  <li><code>fit.SOM()</code> encapsulates a complete SOM analysis.</li>
 </ul>
