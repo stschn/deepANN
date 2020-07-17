@@ -59,7 +59,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>as.MLP.Y()</code> creates a 2-dimensional outcome array with the dimensions samples and units.</li>
   <li><code>get.MLP.X.units()</code> returns the number of feature units.</li>
   <li><code>get.MLP.Y.units()</code> returns the number of outcome units.</li>
-  <li><code>build.MLP()</code> builds an sequential SLP/MLP model with stacked dense layers and optionally dropout layers.</li>
+  <li><code>build.MLP()</code> builds a sequential SLP/MLP model with stacked dense layers and optionally dropout layers.</li>
   <li><code>fit.MLP()</code> encapsulates building and fitting a SLP/MLP model.</li>
   <li><code>predict.MLP()</code> predicts values with prior invert scaling if wished.</li>
 </ul>
