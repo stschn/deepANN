@@ -1,5 +1,5 @@
 <!-- # deepANN -->
-<h2>deepANN</h2>
+<h2>Overview deepANN</h2>
 Neural Network Toolbox
 
 This R library is currently structured in form of the following functional families:
