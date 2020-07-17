@@ -5,92 +5,92 @@ Neural Network Toolbox
 This R library is currently structured in form of the following functional families:
 
 <b>Dummy</b>
-<list>
-  <li>dummify()
-  <li>effectcoding()
-  <li>one_hot_encode()
-  <li>one_hot_decode()
-  <li>resample.imbalanced()
-</list>
+<ul>
+  <li><code>dummify()</code></li>
+  <li><code>effectcoding()</code></li>
+  <li><code>one_hot_encode()</code></li>
+  <li><code>one_hot_decode()</code></li>
+  <li><code>resample.imbalanced()</code></li>
+</ul>
 
 <b>Outlier</b>
-<list>
-  <li>outlier()
-  <li>winsorize()
-</list>
+<ul>
+  <li><code>outlier()</code></li>
+  <li><code>winsorize()</code></li>
+</ul>
 
 <b>Scaling</b>
-<list>
-  <li>normalize()
-  <li>denormalize()
-  <li>normalize_data()
-</list>
+<ul>
+  <li><code>normalize()</code></li>
+  <li><code>denormalize()</code></li>
+  <li><code>normalize_data()</code></li>
+</ul>
 
 <b>TimeSeries</b>
-<list>
-  <li>get.season()
-  <li>lags()
-  <li>build.stationary()
-  <li>invert_differencing()
-  <li>period()
-</list>
+<ul>
+  <li><code>get.season()</code></li>
+  <li><code>lags()</code></li>
+  <li><code>build.stationary()</code></li>
+  <li><code>invert_differencing()</code></li>
+  <li><code>period()</code></li>
+</ul>
 
 <b>Quality</b>
-<list>
-  <li>mae()
-  <li>mape()
-  <li>mse()
-  <li>rmse()
-  <li>vc()
-</list>
+<ul>
+  <li><code>mae()</code></li>
+  <li><code>mape()</code></li>
+  <li><code>mse()</code></li>
+  <li><code>rmse()</code></li>
+  <li><code>vc()</code></li>
+</ul>
 
 <b>Machine Learning (ML)</b>
-<list>
-  <li>cross_validation_split()
-  <li>naive_forecast()
-  <li>euclidean_distance()
-  <li>k_nearest_neighbors()
+<ul>
+  <li><code>cross_validation_split()</code></li>
+  <li><code>naive_forecast()</code></li>
+  <li><code>euclidean_distance()</code></li>
+  <li><code>k_nearest_neighbors()</code></li>
 </list>
 
 <b>Single & Multi Layer Perceptron (SLP, MLP)</b>
-<list>
-  <li>as.ANN.matrix()
-  <li>as.MLP.X()
-  <li>as.MLP.Y()
-  <li>get.MLP.X.units()
-  <li>get.MLP.Y.units()
-  <li>build.MLP()
-  <li>fit.MLP()
-  <li>predict.MLP()
-</list>
+<ul>
+  <li><code>as.ANN.matrix()</code></li>
+  <li><code>as.MLP.X()</code></li>
+  <li><code>as.MLP.Y()</code></li>
+  <li><code>get.MLP.X.units()</code></li>
+  <li><code>get.MLP.Y.units()</code></li>
+  <li><code>build.MLP()</code></li>
+  <li><code>fit.MLP()</code></li>
+  <li><code>predict.MLP()</code></li>
+</ul>
 
 <b>Reccurent Neural Network (RNN), Long Short-Term Memory (LSTM)</b>
-<list>
-  <li>get.LSTM.XY()
-  <li>get.LSTM.period_shift()
-  <li>start.LSTM.invert_differencing()
-  <li>as.lag()
-  <li>as.timesteps()
-  <li>as.LSTM.X()
-  <li>as.LSTM.Y()
-  <li>get.LSTM.X.samples()
-  <li>get.LSTM.X.timesteps()
-  <li>get.LSTM.X.units()
-  <li>get.LSTM.Y.samples()
-  <li>get.LSTM.Y.units()
-  <li>as.LSTM.data.frame()
-  <li>build.LSTM()
-  <li>fit.LSTM()
-  <li>predict.LSTM()
-  <li>as.LSTM.period_outcome()
-</list>
+<ul>
+  <li><code>get.LSTM.XY()</code></li>
+  <li><code>get.LSTM.period_shift()</code></li>
+  <li><code>start.LSTM.invert_differencing()</code></li>
+  <li><code>as.lag()</code></li>
+  <li><code>as.timesteps()</code></li>
+  <li><code>as.LSTM.X()</code></li>
+  <li><code>as.LSTM.Y()</code></li>
+  <li><code>get.LSTM.X.samples()</code></li>
+  <li><code>get.LSTM.X.timesteps()</code></li>
+  <li><code>get.LSTM.X.units()</code></li>
+  <li><code>get.LSTM.Y.samples()</code></li>
+  <li><code>get.LSTM.Y.units()</code></li>
+  <li><code>as.LSTM.data.frame()</code></li>
+  <li><code>build.LSTM()</code></li>
+  <li><code>fit.LSTM()</code></li>
+  <li><code>predict.LSTM()</code></li>
+  <li><code>as.LSTM.period_outcome()</code></li>
+</ul>
 
 <b>Convolutional Neural Network (CNN)</b>
-<list>
-  <li>load.image_features()
-</list>
+<ul>
+  <li><code>load.image_features()</code></li>
+</ul>
 
 <b>Self-Organizing Map (SOM)</b>
-<list>
-  <li>fit.SOM()
-</list>
+<ul>
+  <li><code>fit.SOM()</code></li>
+</ul>
