@@ -54,7 +54,7 @@ This R library is currently structured in form of the following functional famil
 
 <b>Single & Multi Layer Perceptron (SLP, MLP)</b>
 <ul>
-  <li><code>as.ANN.matrix()</code> converts a data set into a matrix with adjusted factor variable levels to their numeric index if necessary.</li>
+  <li><code>as.ANN.matrix()</code> converts a data set into a matrix with adjusted factor variable levels to their numeric indices if necessary.</li>
   <li><code>as.MLP.X()</code> creates a 2-dimensional feature array with the dimensions samples and units.</li>
   <li><code>as.MLP.Y()</code> creates a 2-dimensional outcome array with the dimensions samples and units.</li>
   <li><code>get.MLP.X.units()</code> returns the number of feature units.</li>
