@@ -25,7 +25,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>scale.zscore()</code> scales a numeric vector thru z-score scaling.</li>
   <li><code>scale.log()</code> scales a numeric vector thru log transformation.</li>
   <li><code>scaling()</code> encapsulates the different types of scaling.</li>
-  <li><code>scale.datasets()</code> scales a train and a test data set.</li>
+  <li><code>scale.datasets()</code> scales a train and a test data set with a specific scale type.</li>
 </ul>
 
 <b>TimeSeries</b>
