@@ -292,25 +292,37 @@ get.LSTM.Y.samples <- function(Y.tensor) { dim(Y.tensor)[1] }
 #' @examples
 get.LSTM.Y.units <- function(Y.tensor) { dim(Y.tensor)[2] }
 
-#' Recreation of a data.frame based on a X- and Y-tensor
+#' Recreation of a data.frame based on preformatted X and Y data sets
 #'
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
-#' @param X.tensor A three-dimensional array of the resampled feature matrix produced by \code{as.LSTM.X}.
-#' @param Y.tensor A two-dimensional array of the outcome produced by \code{as.LSTM.Y}.
+#' @param X A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.
+#' @param Y An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.
+#' @param names_X Names of the features.
+#' @param names_Y Names of the outcomes.
+#' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.
+#' @param forward The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).
+#' @param suffix The suffix for every feature per timestep or period.
 #'
 #' @return A data.frame with outcome column(s) and a further resampled feature matrix.
-#'   The feature matrix within this data.frame has the following form:
+#'   The feature matrix within this data.frame has the following forward oriented form:
 #'   x1(t1), x1(t2), x1(t3)...x2(t1), x2(t2), x2(t3)...x3(t1), x3(t2), x3(t3)...
 #' @export
 #' 
-#' @seealso \code{\link{as.LSTM.X}}, \code{\link{as.LSTM.Y}}.
+#' @seealso \code{\link{get.LSTM.XY}}.
 #'
 #' @examples
-as.LSTM.data.frame <- function(X.tensor, Y.tensor) {
-  X <- X.tensor
-  dim(X) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
-  return(cbind.data.frame(Y.tensor,X))
+as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 0, forward = TRUE, suffix = "_period") {
+  X.tensor <- as.LSTM.X(X, timesteps)
+  Y.tensor <- as.LSTM.Y(Y)
+  dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
+  dataset <- cbind.data.frame(Y.tensor, X.tensor)
+  # Inclusion of periods in the names of features
+  if (forward) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
+  cnames <- unlist(lapply(names_X, function(cname) { paste0(cname, suffix, "%d") }))
+  cnames <- unlist(lapply(cnames, function(cname) { unlist(lapply(tsteps, function(t) { sprintf(cname, t) })) }))
+  colnames(dataset) <- c(names_Y, cnames)
+  return(dataset)
 }
 
 #' Build LSTM architecture

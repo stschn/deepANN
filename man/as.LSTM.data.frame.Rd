@@ -2,25 +2,43 @@
 % Please edit documentation in R/deepRNN.r
 \name{as.LSTM.data.frame}
 \alias{as.LSTM.data.frame}
-\title{Recreation of a data.frame based on a X- and Y-tensor}
+\title{Recreation of a data.frame based on preformatted X and Y data sets}
 \usage{
-as.LSTM.data.frame(X.tensor, Y.tensor)
+as.LSTM.data.frame(
+  X,
+  Y,
+  names_X,
+  names_Y,
+  timesteps = 0,
+  forward = TRUE,
+  suffix = "_period"
+)
 }
 \arguments{
-\item{X.tensor}{A three-dimensional array of the resampled feature matrix produced by \code{as.LSTM.X}.}
+\item{X}{A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.}
 
-\item{Y.tensor}{A two-dimensional array of the outcome produced by \code{as.LSTM.Y}.}
+\item{Y}{An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.}
+
+\item{names_X}{Names of the features.}
+
+\item{names_Y}{Names of the outcomes.}
+
+\item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.}
+
+\item{forward}{The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).}
+
+\item{suffix}{The suffix for every feature per timestep or period.}
 }
 \value{
 A data.frame with outcome column(s) and a further resampled feature matrix.
-  The feature matrix within this data.frame has the following form:
+  The feature matrix within this data.frame has the following forward oriented form:
   x1(t1), x1(t2), x1(t3)...x2(t1), x2(t2), x2(t3)...x3(t1), x3(t2), x3(t3)...
 }
 \description{
-Recreation of a data.frame based on a X- and Y-tensor
+Recreation of a data.frame based on preformatted X and Y data sets
 }
 \seealso{
-\code{\link{as.LSTM.X}}, \code{\link{as.LSTM.Y}}.
+\code{\link{get.LSTM.XY}}.
 
 Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
 \code{\link{as.LSTM.X}()},
