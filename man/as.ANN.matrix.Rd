@@ -7,7 +7,7 @@
 as.ANN.matrix(X, adjust = NULL)
 }
 \arguments{
-\item{X}{A dataset.}
+\item{X}{A data set.}
 
 \item{adjust}{A number that is added to or subtracted from a factor level value, or even not (\code{NULL})}
 }

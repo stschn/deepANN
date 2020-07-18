@@ -2,7 +2,7 @@
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param X A dataset.
+#' @param X A data set.
 #' @param adjust A number that is added to or subtracted from a factor level value, or even not (\code{NULL})
 #'
 #' @return A matrix with only numbers.
