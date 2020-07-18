@@ -232,7 +232,8 @@ as.LSTM.Y <- function(Y) {
 #' @return Number of input samples.
 #' @export
 #' 
-#' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.units}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.Y.units}}, \code{\link{get.LSTM.Y.samples}}.
+#' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}},
+#'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
 #' @examples
 get.LSTM.X.samples <- function(X.tensor) { dim(X.tensor)[1] }
@@ -246,7 +247,8 @@ get.LSTM.X.samples <- function(X.tensor) { dim(X.tensor)[1] }
 #' @return Number of input timesteps; number of different periods within one sample of the resampled feature matrix.
 #' @export
 #' 
-#' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.units}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.Y.units}}, \code{\link{get.LSTM.Y.samples}}.
+#' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.units}},
+#'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
 #' @examples
 get.LSTM.X.timesteps <- function(X.tensor) { dim(X.tensor)[2] }
@@ -259,7 +261,8 @@ get.LSTM.X.timesteps <- function(X.tensor) { dim(X.tensor)[2] }
 #' @return Number of input units or features.
 #' @export
 #' 
-#' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.Y.units}}, \code{\link{get.LSTM.Y.samples}}.
+#' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, 
+#'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
 #' @examples
 get.LSTM.X.units <- function(X.tensor) { dim(X.tensor)[3] }
@@ -273,7 +276,8 @@ get.LSTM.X.units <- function(X.tensor) { dim(X.tensor)[3] }
 #' @return Number of output samples.
 #' @export
 #' 
-#' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.units}}, \code{\link{get.MLP.X.units}}, \code{\link{get.MLP.X.samples}}, \code{\link{get.MLP.X.timesteps}}.
+#' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.units}},
+#'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 #'
 #' @examples
 get.LSTM.Y.samples <- function(Y.tensor) { dim(Y.tensor)[1] }
@@ -287,7 +291,8 @@ get.LSTM.Y.samples <- function(Y.tensor) { dim(Y.tensor)[1] }
 #' @return Number of output units or outcomes.
 #' @export
 #' 
-#' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.MLP.X.units}}, \code{\link{get.MLP.X.samples}}, \code{\link{get.MLP.X.timesteps}}.
+#' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}},
+#'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 #'
 #' @examples
 get.LSTM.Y.units <- function(Y.tensor) { dim(Y.tensor)[2] }
@@ -543,8 +548,6 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1,FALSE),
   return(l)
 }
 
-### Predict with LSTM ####
-
 #' Predict with LSTM model
 #'
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
@@ -569,7 +572,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1,FALSE),
 #' @export
 #' 
 #' @seealso \code{\link{fit.LSTM}}, \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}},
-#'   \code{\link[stats]{predict}}, \code{\link{normalize_data}}.
+#'   \code{\link[stats]{predict}}, \code{\link{scale.datasets}}.
 #'
 #' @examples
 predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch_size = 1,

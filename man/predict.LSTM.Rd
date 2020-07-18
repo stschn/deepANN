@@ -53,7 +53,7 @@ Predict with LSTM model
 }
 \seealso{
 \code{\link{fit.LSTM}}, \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}},
-  \code{\link[stats]{predict}}, \code{\link{normalize_data}}.
+  \code{\link[stats]{predict}}, \code{\link{scale.datasets}}.
 
 Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
 \code{\link{as.LSTM.X}()},

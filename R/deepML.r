@@ -66,7 +66,6 @@ naive_forecast <- function(x, drift = 0, na = NA) {
   }}
 }
 
-### Euclidean distance ####
 #' Euclidean distance
 #'
 #' \code{euclidean_distance} calculates the euclidean distance between two vectors (or scalars).
@@ -82,7 +81,6 @@ naive_forecast <- function(x, drift = 0, na = NA) {
 #' @examples
 euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 
-### k-nearest neighbors ####
 #' k-nearest neighbors
 #'
 #' \code{k_nearest_neighbors} calculates the majority category (class label) of k nearest neighbors of a query or test instance.

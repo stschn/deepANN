@@ -16,7 +16,8 @@ Number of output units or outcomes.
 Get number of output units from 2-dimensional outcome tensor
 }
 \seealso{
-\code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.MLP.X.units}}, \code{\link{get.MLP.X.samples}}, \code{\link{get.MLP.X.timesteps}}.
+\code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}},
+  \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 
 Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
 \code{\link{as.LSTM.X}()},
