@@ -57,7 +57,7 @@ winsorize <- function(x, quantile.low = .05) {
   if (length(quantile.low) != 1 || quantile.low < 0 || quantile.low > 0.5) {
     stop("bad value for lower quantile limit.")
   }
-  lim <- quantile(x, probs=c(quantile.low, 1 - quantile.low))
+  lim <- quantile(x, probs = c(quantile.low, 1 - quantile.low))
   x[x < lim[1]] <- lim[1]
   x[x > lim[2]] <- lim[2]
   return(x)
