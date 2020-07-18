@@ -9,7 +9,7 @@ as.LSTM.data.frame(
   Y,
   names_X,
   names_Y,
-  timesteps = 0,
+  timesteps = 1,
   forward = TRUE,
   suffix = "_period"
 )

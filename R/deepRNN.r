@@ -312,7 +312,7 @@ get.LSTM.Y.units <- function(Y.tensor) { dim(Y.tensor)[2] }
 #' @seealso \code{\link{get.LSTM.XY}}.
 #'
 #' @examples
-as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 0, forward = TRUE, suffix = "_period") {
+as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = TRUE, suffix = "_period") {
   X.tensor <- as.LSTM.X(X, timesteps)
   Y.tensor <- as.LSTM.Y(Y)
   dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
