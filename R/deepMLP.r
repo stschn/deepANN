@@ -10,11 +10,14 @@
 #'
 #' @examples
 as.ANN.matrix <- function(X, adjust = NULL) {
-  return(as.matrix(apply(as.matrix(X), 2, function(column) {
+  X <- as.data.frame(X)
+  m <- sapply(X, function(column) {
     if (is.factor(column)) { 
       if (is.null(adjust)) { as.integer(column) } else { as.integer(column) + as.integer(adjust) }
     } else { column }
-  })))
+  })
+  m <- as.matrix(m)
+  return(m)
 }
 
 #' Features data format
