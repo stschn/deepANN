@@ -21,14 +21,14 @@
 #' @seealso \code{\link{effectcoding}}.
 #'
 #' @examples
-dummify <- function(dataset, columns = NULL, remove_level = c("first","last","most","least","none"), effectcoding = FALSE, remove_columns = FALSE) {
+dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "most", "least", "none"), effectcoding = FALSE, remove_columns = FALSE) {
   if (!is.null(columns)) {
     col_names <- columns
     if (!all(col_names %in% names(dataset)))
       stop("columns are not in dataset.")
   } else {
     all_classes <- sapply(dataset, class)
-    col_classes <- all_classes[all_classes %in% c("factor","character")]
+    col_classes <- all_classes[all_classes %in% c("factor", "character")]
     col_names <- names(col_classes)
   }
   if (length(col_names) == 0) { stop("No character or factor column found.") }
@@ -47,17 +47,17 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first","last","mo
     if (remove_level == "first") {
       lvl <- lvl[-1]
     } else {
-      if (remove_level == "last") {
-        lvl <- lvl[-length(lvl)]
-      } else {
-        if (remove_level == "most") {
-          lvl.max <- names(which.max(table(values))) # majority level
-          lvl <- lvl[-which(lvl == lvl.max)]
-        } else {
-          if (remove_level == "least") {
-            lvl.min <- names(which.min(table(values))) # minority level
-            lvl <- lvl[-which(lvl == lvl.min)]
-          }}}}
+    if (remove_level == "last") {
+      lvl <- lvl[-length(lvl)]
+    } else {
+    if (remove_level == "most") {
+      lvl.max <- names(which.max(table(values))) # majority level
+      lvl <- lvl[-which(lvl == lvl.max)]
+    } else {
+    if (remove_level == "least") {
+      lvl.min <- names(which.min(table(values))) # minority level
+      lvl <- lvl[-which(lvl == lvl.min)]
+    }}}}
     dummies <- sapply(lvl, function(l) {
       ifelse(values == l, 1, zero_value)
     })

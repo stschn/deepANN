@@ -32,7 +32,7 @@
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{as.LSTM.Y}}.
 #'
 #' @examples
-get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0, y.lag = 0, y.lag_type = c("none","tsteps","plain")) {
+get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0, y.lag = 0, y.lag_type = c("none", "tsteps", "plain")) {
   data_list <- list()
   df <- as.data.frame(dataset)
   max_lag <- max(x.lag)

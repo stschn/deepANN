@@ -12,6 +12,7 @@
 as.ANN.matrix <- function(X, adjust = NULL) {
   X <- as.data.frame(X)
   m <- sapply(X, function(column) {
+    if (is.character(column)) { column <- as.factor(column) }
     if (is.factor(column)) { 
       if (is.null(adjust)) { as.integer(column) } else { as.integer(column) + as.integer(adjust) }
     } else { column }
