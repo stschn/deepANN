@@ -11,7 +11,7 @@ as.LSTM.data.frame(
   names_Y,
   timesteps = 1,
   forward = TRUE,
-  suffix = "_period"
+  suffix = "_t"
 )
 }
 \arguments{
