@@ -35,6 +35,7 @@
 get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0, y.lag = 0, y.lag_type = c("none", "tsteps", "plain")) {
   data_list <- list()
   df <- as.data.frame(dataset)
+  timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
   max_lag <- max(x.lag)
   max_lag <- ifelse(max_lag < 0, 0, max_lag)
   if ((is.null(x)) || (x == y)) {
@@ -326,6 +327,9 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = 
   if (forward) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
   cnames <- unlist(lapply(names_X, function(cname) { paste0(cname, suffix, "%d") }))
   cnames <- unlist(lapply(cnames, function(cname) { unlist(lapply(tsteps, function(t) { sprintf(cname, t) })) }))
+  # cnames <- unlist(lapply(names_X, function(cname) { paste0(cname, suffix, "%d") }))
+  # cnames <- unlist(lapply(cnames, function(cname) { rep(cname, timesteps) }))
+  # cnames <- do.call(sprintf, list(cnames, tsteps))
   colnames(dataset) <- c(names_Y, cnames)
   return(dataset)
 }
