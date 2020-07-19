@@ -193,6 +193,7 @@ as.timesteps <- function(lag = 1, type = "univariate") {
 #'
 #' @examples
 as.LSTM.X <- function(X, timesteps = 1, forward = TRUE) {
+  timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
   m <- as.ANN.matrix(X)
   features <- NCOL(m)
   samples <- NROW(m) - timesteps + 1
