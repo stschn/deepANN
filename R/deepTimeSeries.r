@@ -10,14 +10,14 @@
 #' 
 #' @examples
 get.season <- function(dates) {
-  season_names <- c("Winter","Spring","Summer","Fall")
+  season_names <- c("Winter", "Spring", "Summer", "Fall")
   WS <- as.Date("2012-12-15", format = "%Y-%m-%d") # Winter Solstice
   SE <- as.Date("2012-3-15",  format = "%Y-%m-%d") # Spring Equinox
   SS <- as.Date("2012-6-15",  format = "%Y-%m-%d") # Summer Solstice
   FE <- as.Date("2012-9-15",  format = "%Y-%m-%d") # Fall Equinox
   
   # Convert dates from any year to 2012 dates
-  d <- as.Date(strftime(dates, format="2012-%m-%d"))
+  d <- as.Date(strftime(dates, format = "2012-%m-%d"))
   
   ifelse (d >= WS | d < SE, season_names[1],
     ifelse (d >= SE & d < SS, season_names[2],
@@ -90,7 +90,7 @@ build.stationary <- function(dataset, y = 2, differences = 1, suffix = "_delta",
   dataset <- as.data.frame(dataset)
   cnames <- names(dataset)[y]
   cnames <- do.call(paste0, list(cnames, suffix))
-  delta <- sapply(y, function(x) {diff(dataset[,x], differences = differences)})
+  delta <- sapply(y, function(x) { diff(dataset[, x], differences = differences) })
   colnames(delta) <- cnames
   if (adjust) {
     dataset <- cbind(dataset[-c(1:differences), ], delta)
@@ -157,18 +157,18 @@ invert_differencing <- function(delta, origin) {
 #' @export
 #'
 #' @examples
-period <- function(dataset, p = 1, type = c("seq","weekday","monthday","week","month","quarter","season"), ...) {
+period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week", "month", "quarter", "season"), ...) {
   # internal constants for day of week and month of year
-  ts.day.name <- c("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday")
+  ts.day.name <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
   ts.month.name <- month.name
-  ts.season.name <- c("Winter","Spring","Summer","Fall")
+  ts.season.name <- c("Winter", "Spring", "Summer", "Fall")
   # the ... argument holds the specific start index and each increment, days of week, days of month, weeks, months, or quarters
   params <- list(...)
   # type of periodically selection
   type <- match.arg(type)
   # period column
   dataset <- as.data.frame(dataset)
-  periods <- dataset[[p]] # extract periods as vector
+  periods <- dataset[[p]] # extract periods as row vector
   if (type == "seq") {
     if (length(params) < 2) { stop("specify start index and increment of the sequence.") }
     start <- params[[1]]

@@ -38,6 +38,7 @@ Other Dummyfication:
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
-\code{\link{one_hot_encode}()}
+\code{\link{one_hot_encode}()},
+\code{\link{remove_columns}()}
 }
 \concept{Dummyfication}

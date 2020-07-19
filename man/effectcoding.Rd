@@ -29,6 +29,7 @@ Other Dummyfication:
 \code{\link{dummify}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},
+\code{\link{remove_columns}()},
 \code{\link{resample.imbalanced}()}
 }
 \concept{Dummyfication}

@@ -230,3 +230,37 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
   }}}
   return(df)
 }
+
+#' Remove columns with only one specific value
+#'
+#' @family Dummyfication
+#' 
+#' @param dataset A data set, usually a data.frame.
+#' @param value The specified value searched for.
+#'
+#' @return The dataset without those columns that contain only one specific value.
+#' @export
+#'
+#' @examples
+remove_columns <- function(dataset, value = 0) {
+  del_columns <- c()
+  all_classes <- sapply(dataset, class)
+  # Detect numeric related columns with the searched value
+  col_classes <- all_classes[all_classes %in% c("numeric", "complex", "integer", "logical")]
+  if (length(col_classes) > 0) {
+    cs <- colSums(dataset[names(col_classes)], na.rm = T)
+    col_name <- names(cs[cs == value])
+    if (length(col_name) > 0) { del_columns <- c(del_columns, col_name) }
+  }
+  # Detect character and factor columns with the searched value
+  col_classes <- all_classes[all_classes %in% c("character", "factor")]
+  col_names <- names(col_classes)
+  for (col_name in col_names) {
+    values <- unique(as.character(dataset[[col_name]]))
+    if ((length(values) == 1) && (as.numeric(values) == value)) {
+      del_columns <- c(del_columns, col_name)
+    }
+  }
+  if (length(del_columns) > 0) { dataset[del_columns] <- NULL }
+  return(dataset)
+}
