@@ -237,11 +237,11 @@ as.LSTM.Y <- function(Y, timesteps = 1, forward = TRUE) {
   }
 }
 
-#' Get number of input samples from 3-dimensional feature tensor
+#' Get number of input samples from feature tensor
 #'
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
-#' @param X.tensor A three-dimensional array of the resampled feature matrix produced by \code{as.LSTM.X}.
+#' @param X.tensor A tensor of the resampled feature matrix produced by \code{as.LSTM.X}.
 #' @return Number of input samples.
 #' @export
 #' 
@@ -249,13 +249,13 @@ as.LSTM.Y <- function(Y, timesteps = 1, forward = TRUE) {
 #'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
 #' @examples
-get.LSTM.X.samples <- function(X.tensor) { dim(X.tensor)[1] }
+get.LSTM.X.samples <- function(X.tensor) { return(dim(X.tensor)[1]) }
 
-#' Get number of input timesteps from 3-dimensional feature tensor
+#' Get number of input timesteps from feature tensor
 #'
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
-#' @param X.tensor A three-dimensional array of the resampled feature matrix produced by \code{as.LSTM.X}.
+#' @param X.tensor A tensor of the resampled feature matrix produced by \code{as.LSTM.X}.
 #'
 #' @return Number of input timesteps; number of different periods within one sample of the resampled feature matrix.
 #' @export
@@ -264,13 +264,13 @@ get.LSTM.X.samples <- function(X.tensor) { dim(X.tensor)[1] }
 #'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
 #' @examples
-get.LSTM.X.timesteps <- function(X.tensor) { dim(X.tensor)[2] }
+get.LSTM.X.timesteps <- function(X.tensor) { return(dim(X.tensor)[2]) }
 
-#' Get number of input units from 3-dimensional feature tensor
+#' Get number of input units from feature tensor
 #'
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
-#' @param X.tensor A three-dimensional array of the resampled feature matrix produced by \code{as.LSTM.X}.
+#' @param X.tensor A tensor of the resampled feature matrix produced by \code{as.LSTM.X}.
 #' @return Number of input units or features.
 #' @export
 #' 
@@ -278,13 +278,13 @@ get.LSTM.X.timesteps <- function(X.tensor) { dim(X.tensor)[2] }
 #'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
 #' @examples
-get.LSTM.X.units <- function(X.tensor) { dim(X.tensor)[3] }
+get.LSTM.X.units <- function(X.tensor) { return(dim(X.tensor)[3]) }
 
-#' Get number of output samples from 2-dimensional outcome tensor
+#' Get number of output samples from outcome tensor
 #'
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
-#' @param Y.tensor A two-dimensional array of the outcome produced by \code{as.LSTM.Y}.
+#' @param Y.tensor A tensor of the outcome produced by \code{as.LSTM.Y}.
 #'
 #' @return Number of output samples.
 #' @export
@@ -293,13 +293,28 @@ get.LSTM.X.units <- function(X.tensor) { dim(X.tensor)[3] }
 #'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 #'
 #' @examples
-get.LSTM.Y.samples <- function(Y.tensor) { dim(Y.tensor)[1] }
+get.LSTM.Y.samples <- function(Y.tensor) { return(dim(Y.tensor)[1]) }
 
-#' Get number of output units from 2-dimensional outcome tensor
+#' Get number of timesteps from outcome tensor if outcome is a sequence
 #'
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
-#' @param Y.tensor A two-dimensional array of the outcome produced by \code{as.LSTM.Y}.
+#' @param Y.tensor A tensor of the outcome produced by \code{as.LSTM.Y}.
+#'
+#' @return Number of output timesteps.
+#' @export
+#' 
+#' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}},
+#'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
+#'
+#' @examples
+get.LSTM.Y.timesteps <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 3, dim(Y.tensor)[2], NA)) }
+
+#' Get number of output units from outcome tensor
+#'
+#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#'
+#' @param Y.tensor A tensor of the outcome produced by \code{as.LSTM.Y}.
 #'
 #' @return Number of output units or outcomes.
 #' @export
@@ -308,7 +323,7 @@ get.LSTM.Y.samples <- function(Y.tensor) { dim(Y.tensor)[1] }
 #'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 #'
 #' @examples
-get.LSTM.Y.units <- function(Y.tensor) { dim(Y.tensor)[2] }
+get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 3, dim(Y.tensor)[3], dim(Y.tensor)[2])) }
 
 #' Recreation of a data.frame based on preformatted X and Y data sets
 #'

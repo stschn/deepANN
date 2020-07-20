@@ -2,18 +2,18 @@
 % Please edit documentation in R/deepRNN.r
 \name{get.LSTM.Y.samples}
 \alias{get.LSTM.Y.samples}
-\title{Get number of output samples from 2-dimensional outcome tensor}
+\title{Get number of output samples from outcome tensor}
 \usage{
 get.LSTM.Y.samples(Y.tensor)
 }
 \arguments{
-\item{Y.tensor}{A two-dimensional array of the outcome produced by \code{as.LSTM.Y}.}
+\item{Y.tensor}{A tensor of the outcome produced by \code{as.LSTM.Y}.}
 }
 \value{
 Number of output samples.
 }
 \description{
-Get number of output samples from 2-dimensional outcome tensor
+Get number of output samples from outcome tensor
 }
 \seealso{
 \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.units}},
@@ -32,6 +32,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.X.timesteps}()},
 \code{\link{get.LSTM.X.units}()},
 \code{\link{get.LSTM.XY}()},
+\code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.LSTM.period_shift}()},
 \code{\link{predict.LSTM}()},

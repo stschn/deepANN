@@ -36,6 +36,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.X.units}()},
 \code{\link{get.LSTM.XY}()},
 \code{\link{get.LSTM.Y.samples}()},
+\code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{predict.LSTM}()},
 \code{\link{start.LSTM.invert_differencing}()}

@@ -2,18 +2,18 @@
 % Please edit documentation in R/deepRNN.r
 \name{get.LSTM.Y.units}
 \alias{get.LSTM.Y.units}
-\title{Get number of output units from 2-dimensional outcome tensor}
+\title{Get number of output units from outcome tensor}
 \usage{
 get.LSTM.Y.units(Y.tensor)
 }
 \arguments{
-\item{Y.tensor}{A two-dimensional array of the outcome produced by \code{as.LSTM.Y}.}
+\item{Y.tensor}{A tensor of the outcome produced by \code{as.LSTM.Y}.}
 }
 \value{
 Number of output units or outcomes.
 }
 \description{
-Get number of output units from 2-dimensional outcome tensor
+Get number of output units from outcome tensor
 }
 \seealso{
 \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}},
@@ -33,6 +33,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.X.units}()},
 \code{\link{get.LSTM.XY}()},
 \code{\link{get.LSTM.Y.samples}()},
+\code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.period_shift}()},
 \code{\link{predict.LSTM}()},
 \code{\link{start.LSTM.invert_differencing}()}

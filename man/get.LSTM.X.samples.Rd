@@ -2,18 +2,18 @@
 % Please edit documentation in R/deepRNN.r
 \name{get.LSTM.X.samples}
 \alias{get.LSTM.X.samples}
-\title{Get number of input samples from 3-dimensional feature tensor}
+\title{Get number of input samples from feature tensor}
 \usage{
 get.LSTM.X.samples(X.tensor)
 }
 \arguments{
-\item{X.tensor}{A three-dimensional array of the resampled feature matrix produced by \code{as.LSTM.X}.}
+\item{X.tensor}{A tensor of the resampled feature matrix produced by \code{as.LSTM.X}.}
 }
 \value{
 Number of input samples.
 }
 \description{
-Get number of input samples from 3-dimensional feature tensor
+Get number of input samples from feature tensor
 }
 \seealso{
 \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}},
@@ -32,6 +32,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.X.units}()},
 \code{\link{get.LSTM.XY}()},
 \code{\link{get.LSTM.Y.samples}()},
+\code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.LSTM.period_shift}()},
 \code{\link{predict.LSTM}()},
