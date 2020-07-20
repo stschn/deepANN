@@ -217,10 +217,10 @@ as.LSTM.X <- function(X, timesteps = 1, forward = TRUE) {
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
 #' @param Y An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.
-#' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.
-#' @param forward The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).
+#' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{Y}.
+#' @param forward The resampled outcome matrix \code{Y} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).
 #'
-#' @return Dependend on timesteps: 
+#' @return Dependent on timesteps: 
 #'   \code{= 1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
 #'   \code{> 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
 #' @export
