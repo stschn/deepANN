@@ -354,7 +354,7 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = 
 #' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.LSTM.Y.units},
 #'   and the second element the output activation function.
 #' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
-#' @param return_sequences A boolean that indicates whether outcome values are produced once (\code{FALSE}) or per each timestep (\code{TRUE}).
+#' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).
 #' @param loss Name of objective function or objective function. If the model has multiple outputs, 
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
@@ -369,31 +369,34 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = 
 #'   \code{\link[keras]{compile.keras.engine.training.Model}}.
 #'
 #' @examples
-build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden, dropout = NULL, output = c(1,"linear"),
+build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL, dropout = NULL, output = c(1, "linear"),
                        stateful = FALSE, return_sequences = FALSE,
                        loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
   lstm_model <- keras::keras_model_sequential()
-  h <- as.data.frame(hidden)
-  N <- NROW(h)
-  rs <- return_sequences
-  if (N == 1) rs <- F
-  if ((N > 1) && (stateful == T)) rs <- T
-  # First hidden layer
-  lstm_model %>% keras::layer_lstm(units = h[1, 1], input_shape = c(timesteps, features), batch_size = batch_size, activation = h[1, 2], stateful = stateful, return_sequences = rs)
-  d <- 1
-  D <- ifelse(!(is.null(dropout)),NROW(dropout),0)
-  if (D > 0) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
-  # Further hidden layers
-  i <- 1
-  while (i < N) {
-    if ((i == (N - 1)) && (rs == T)) { rs <- !rs }
-    lstm_model %>% keras::layer_lstm(units = h[i + 1, 1], activation = h[i + 1, 2], stateful = stateful, return_sequences = rs)
-    i <- i + 1
-    if (d <= D) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
+  if (is.null(hidden)) {
+    lstm_model %>% keras::layer_lstm(units = output[1], activation = output[2], input_shape = c(timesteps, features), batch_size = batch_size, stateful = stateful, return_sequences = return_sequences)
+  } else {
+    h <- as.data.frame(hidden)
+    N <- NROW(h)
+    # For stacked LSTM layers, each subsequent LSTM cell or layer needs a 3D input.
+    # Therefore, return_sequences must be set to TRUE with exception of the last layer.
+    rs <- ifelse(N <= 1, FALSE, TRUE)
+    # First hidden layer with input shape
+    lstm_model %>% keras::layer_lstm(units = h[1, 1], activation = h[1, 2], input_shape = c(timesteps, features), batch_size = batch_size, stateful = stateful, return_sequences = rs)
+    d <- 1
+    D <- ifelse(!(is.null(dropout)), NROW(dropout), 0)
+    if (D > 0) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
+    # Further hidden layers
+    i <- 2
+    while (i <= N) {
+      if (i == (N)) { rs <- !rs }
+      lstm_model %>% keras::layer_lstm(units = h[i, 1], activation = h[i, 2], stateful = stateful, return_sequences = rs)
+      i <- i + 1
+      if (d <= D) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
+    }
+    # Output layer
+    lstm_model %>% keras::layer_dense(units = output[1], activation = output[2])
   }
-  # Output layer
-  lstm_model %>% keras::layer_dense(units = output[1], activation = output[2])
-
   lstm_model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
   return(lstm_model)
 }
@@ -418,7 +421,7 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden, dropo
 #' @param dropout A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output.activation A name of the output activation function.
 #' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
-#' @param return_sequences A boolean that indicates whether outcome values are produced once (\code{FALSE}) or per each timestep (\code{TRUE}).
+#' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).
 #' @param loss Name of objective function or objective function. If the model has multiple outputs, 
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
@@ -438,7 +441,7 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden, dropo
 #' @examples
 fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1,FALSE), validation_split = 0.2,
                      k.fold = NULL, k.optimizer = NULL,
-                     hidden, dropout = NULL, output.activation = "linear",
+                     hidden = NULL, dropout = NULL, output.activation = "linear",
                      stateful = FALSE, return_sequences = FALSE,
                      loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
   l <- list() # result

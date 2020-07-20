@@ -109,7 +109,7 @@ get.MLP.Y.units <- function(Y.tensor) { return(NCOL(Y.tensor)) }
 #'   \code{\link[keras]{compile.keras.engine.training.Model}}.
 #'
 #' @examples
-build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1,"linear"), 
+build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "linear"), 
                       loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
   mlp_model <- keras::keras_model_sequential()
   # SLP
@@ -120,15 +120,15 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1,"lin
   else {
     h <- as.data.frame(hidden)
     N <- NROW(h)
-    # First hidden layer
+    # First hidden layer with input shape
     mlp_model %>% keras::layer_dense(units = h[1, 1], activation = h[1, 2], input_shape = features)
     d <- 1 # dropout layers to prevent overfitting
-    D <- ifelse(!(is.null(dropout)),NROW(dropout),0)
+    D <- ifelse(!(is.null(dropout)), NROW(dropout), 0)
     if (D > 0) { mlp_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
     # Further hidden layers
-    i <- 1 # hidden layers
-    while (i < N) {
-      mlp_model %>% keras::layer_dense(units = h[i + 1, 1], activation = h[i + 1, 2])
+    i <- 2 # hidden layers
+    while (i <= N) {
+      mlp_model %>% keras::layer_dense(units = h[i, 1], activation = h[i, 2])
       i <- i + 1
       if (d <= D) { mlp_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
     }

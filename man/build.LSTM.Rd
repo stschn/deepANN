@@ -8,7 +8,7 @@ build.LSTM(
   features,
   timesteps = 1,
   batch_size = NULL,
-  hidden,
+  hidden = NULL,
   dropout = NULL,
   output = c(1, "linear"),
   stateful = FALSE,
@@ -36,7 +36,7 @@ and the second element the output activation function.}
 
 \item{stateful}{A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).}
 
-\item{return_sequences}{A boolean that indicates whether outcome values are produced once (\code{FALSE}) or per each timestep (\code{TRUE}).}
+\item{return_sequences}{A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).}
 
 \item{loss}{Name of objective function or objective function. If the model has multiple outputs, 
 different loss on each output can be used by passing a dictionary or a list of objectives.
