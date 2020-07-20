@@ -11,8 +11,9 @@ get.LSTM.XY(
   other_columns = NULL,
   timesteps = 1,
   x.lag = 0,
-  y.lag = 0,
-  y.lag_type = c("none", "tsteps", "plain")
+  y_as_feature.type = c("none", "tsteps", "plain"),
+  y_as_feature.lag = 0,
+  y.sequence = FALSE
 )
 }
 \arguments{
@@ -30,13 +31,15 @@ get.LSTM.XY(
 For a multivariate time series no lag must be necessarily used. This argument can also be a vector of the same length as \code{x}.
 In that case, each feature can have its own specific lag.}
 
-\item{y.lag}{The considered lag on outcome side. If outcomes (\code{y}) should be treated as features, a lag for the outcomes must be specified.}
-
-\item{y.lag_type}{Indicates whether lagged y-variables are used as features in a multivariate time series.
-\code{none} doesn't include lagged y-variables.
+\item{y_as_feature.type}{Indicates whether lagged outcomes are used as features in a multivariate time series.
+\code{none} doesn't include lagged y-variables (default).
 \code{tsteps} The lagged y-variables retrieve in the periods (timesteps) of the later resampled feature matrix thru \code{as.LSTM.X}.
-  Therefore, only one lagged y-variable with a lag order of adjusted \code{lag} is chosen.
+  Therefore, only one lagged y-variable with a lag order of adjusted \code{y_as_feature.lag} is chosen.
 \code{plain} The number of included lagged y-variables is equal to the value of the \code{timesteps} argument.}
+
+\item{y_as_feature.lag}{The considered lag for lagged outcomes (\code{y}) as further features.}
+
+\item{y.sequence}{Boolean that indicates whether \code{y} per sample is a scalar or a sequence corresponding to the number of \code{timesteps}.}
 }
 \value{
 A list with named elements

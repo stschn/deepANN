@@ -4,15 +4,19 @@
 \alias{as.LSTM.Y}
 \title{Outcomes (Y) data format}
 \usage{
-as.LSTM.Y(Y)
+as.LSTM.Y(Y, timesteps = 1, forward = TRUE)
 }
 \arguments{
 \item{Y}{An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.}
+
+\item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.}
+
+\item{forward}{The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).}
 }
 \value{
-A two-dimensional array of the outcome \code{Y} needed within Tensorflow for recurrent neural networks, e.g. LSTM.
-  1. dimension: Samples = Number of records 
-  2. dimension: Outcomes = Number of output units
+Dependend on timesteps: 
+  \code{= 1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
+  \code{> 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
 }
 \description{
 Outcomes (Y) data format

@@ -16,12 +16,13 @@
 #' @param x.lag The considered lags on feature side. For a univariate time series at least a lag of 1 is needed.
 #'   For a multivariate time series no lag must be necessarily used. This argument can also be a vector of the same length as \code{x}.
 #'   In that case, each feature can have its own specific lag.
-#' @param y.lag The considered lag on outcome side. If outcomes (\code{y}) should be treated as features, a lag for the outcomes must be specified.
-#' @param y.lag_type Indicates whether lagged y-variables are used as features in a multivariate time series.
-#'   \code{none} doesn't include lagged y-variables.
+#' @param y_as_feature.type Indicates whether lagged outcomes are used as features in a multivariate time series.
+#'   \code{none} doesn't include lagged y-variables (default).
 #'   \code{tsteps} The lagged y-variables retrieve in the periods (timesteps) of the later resampled feature matrix thru \code{as.LSTM.X}.
-#'     Therefore, only one lagged y-variable with a lag order of adjusted \code{lag} is chosen.
+#'     Therefore, only one lagged y-variable with a lag order of adjusted \code{y_as_feature.lag} is chosen.
 #'   \code{plain} The number of included lagged y-variables is equal to the value of the \code{timesteps} argument.
+#' @param y_as_feature.lag The considered lag for lagged outcomes (\code{y}) as further features.
+#' @param y.sequence Boolean that indicates whether \code{y} per sample is a scalar or a sequence corresponding to the number of \code{timesteps}.
 #'
 #' @return A list with named elements
 #'   \code{X}: A feature matrix in LSTM compatible preformat for usage with \code{as.LSTM.X}.
@@ -32,7 +33,9 @@
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{as.LSTM.Y}}.
 #'
 #' @examples
-get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0, y.lag = 0, y.lag_type = c("none", "tsteps", "plain")) {
+get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0, 
+                        y_as_feature.type = c("none", "tsteps", "plain"), y_as_feature.lag = 0, 
+                        y.sequence = FALSE) {
   data_list <- list()
   df <- as.data.frame(dataset)
   timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
@@ -42,9 +45,15 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
     # univariate time series
     lag <- ifelse(max_lag <= 0, 1, max_lag) # at least a lag of 1 is needed
     data_list[[1]] <- df[1:(NROW(df) - lag), y, drop = FALSE]
-    data_list[[2]] <- df[(timesteps + lag):NROW(df), y, drop = FALSE]
-    data_list[[3]] <- NA
-    if (!is.null(other_columns)) data_list[[3]] <- df[(timesteps + lag):NROW(df), other_columns, drop = FALSE]
+    if (!y.sequence) { # scalar outcome
+      data_list[[2]] <- df[(timesteps + lag):NROW(df), y, drop = FALSE]
+      data_list[[3]] <- NA
+      if (!is.null(other_columns)) data_list[[3]] <- df[(timesteps + lag):NROW(df), other_columns, drop = FALSE]
+    } else { # sequence outcome; start at (timesteps + lag) - (timesteps - 1) = lag + 1
+      data_list[[2]] <- df[(lag + 1):NROW(df), y, drop = FALSE]
+      data_list[[3]] <- NA
+      if (!is.null(other_columns)) data_list[[3]] <- df[(lag + 1):NROW(df), other_columns, drop = FALSE]
+    }
   } else {
     # multivariate time series
     x_len <- length(x)
@@ -55,20 +64,20 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
     } else { # a lag for each feature
       if (x.lag_len != x_len ) { stop("length of specified lags (x.lag) must be equal to the length of specified features (x).") }
       X <- sapply(c(1:x_len), function(j) {
-        lagged_x <- df[x[j]]
-        lagged_x <- lagged_x[1:(NROW(df) - x.lag[j]), , drop = FALSE]
+        x_values <- df[x[j]]
+        lagged_x <- x_values[1:(NROW(df) - x.lag[j]), , drop = FALSE]
         lag_diff <- max_lag - x.lag[j]
         if (lag_diff > 0) { lagged_x <- lagged_x[-(1:lag_diff), , drop = FALSE] }
         lagged_x[, , drop = FALSE]
       })
       X <- do.call(cbind.data.frame, X)
     }
-    y.lag_type <- match.arg(y.lag_type)
-    if (y.lag_type != "none") { # include lagged y-variables as features
+    y_as_feature.type <- match.arg(y_as_feature.type)
+    if (y_as_feature.type != "none") { # include lagged y-variables as features
       Y <- df[y]
-      k <- ifelse(y.lag <= 0, 1, y.lag) # lag order for y
+      k <- ifelse(y_as_feature.lag <= 0, 1, y_as_feature.lag) # lag order for y
       k <- ifelse(k > max_lag, max_lag, k) # can not be higher than the maximum lag of the features
-      if (y.lag_type == "tsteps") { N <- 1 } else { N <- timesteps } # Number of lagged y
+      if (y_as_feature.type == "tsteps") { N <- 1 } else { N <- timesteps } # Number of lagged y
       cnames <- names(Y)
       cnames <- as.vector(sapply(cnames, function(cname) { rep(cname, N) }))
       cnames <- do.call(paste0, list(cnames, "_lag", c(k:(k + N - 1))))
@@ -83,9 +92,15 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
       X <- cbind(X, lagged_y_matrix)
     }
     data_list[[1]] <- X
-    data_list[[2]] <- df[(timesteps + max_lag):NROW(df), y, drop = FALSE]
-    data_list[[3]] <- NA
-    if (!is.null(other_columns)) data_list[[3]] <- df[(timesteps + max_lag):NROW(df), other_columns, drop = FALSE]
+    if (!y.sequence) { # scalar outcome
+      data_list[[2]] <- df[(timesteps + max_lag):NROW(df), y, drop = FALSE]
+      data_list[[3]] <- NA
+      if (!is.null(other_columns)) data_list[[3]] <- df[(timesteps + max_lag):NROW(df), other_columns, drop = FALSE]
+    } else { # sequence outcome
+      data_list[[2]] <- df[(max_lag + 1):NROW(df), y, drop = FALSE]
+      data_list[[3]] <- NA
+      if (!is.null(other_columns)) data_list[[3]] <- df[(max_lag + 1):NROW(df), other_columns, drop = FALSE]
+    }
   }
   names(data_list) <- c("X", "Y", "other_columns")
   return(data_list)
@@ -194,16 +209,7 @@ as.timesteps <- function(lag = 1, type = "univariate") {
 #' @examples
 as.LSTM.X <- function(X, timesteps = 1, forward = TRUE) {
   timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
-  m <- as.ANN.matrix(X)
-  features <- NCOL(m)
-  samples <- NROW(m) - timesteps + 1
-  feature_matrix <- sapply(1:features, function(j) {
-    feature_list <- sapply(1:samples, function(i) {
-      if (forward) { m[i:(i + timesteps - 1), j] } else { m[(i + timesteps - 1):i, j] }})
-  })
-  X.tensor <- array(NA, dim = c(samples, timesteps, features)) # feature array
-  for (i in 1:features) { X.tensor[, , i] <- matrix(feature_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
-  return(X.tensor)
+  return(as.tensor(data = X, adjust = NULL, rank = 3, timesteps = timesteps, forward = forward))
 }
 
 #' Outcomes (Y) data format
@@ -211,19 +217,24 @@ as.LSTM.X <- function(X, timesteps = 1, forward = TRUE) {
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
 #' @param Y An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.
+#' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.
+#' @param forward The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).
 #'
-#' @return A two-dimensional array of the outcome \code{Y} needed within Tensorflow for recurrent neural networks, e.g. LSTM.
-#'   1. dimension: Samples = Number of records 
-#'   2. dimension: Outcomes = Number of output units
+#' @return Dependend on timesteps: 
+#'   \code{= 1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
+#'   \code{> 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
 #' @export
 #' 
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}.
 #'
 #' @examples
-as.LSTM.Y <- function(Y) {
-  m <- as.ANN.matrix(Y, -1)
-  Y.tensor <- array(data = m, dim = c(NROW(m), NCOL(m)))
-  return(Y.tensor)
+as.LSTM.Y <- function(Y, timesteps = 1, forward = TRUE) {
+  timesteps <- ifelse(timesteps < 1, 1, timesteps)
+  if (timesteps == 1) {
+    return(as.tensor(data = Y, adjust = -1, rank = 2))
+  } else {
+    return(as.tensor(data = Y, adjust = -1, rank = 3, timesteps = timesteps, forward = forward))
+  }
 }
 
 #' Get number of input samples from 3-dimensional feature tensor
