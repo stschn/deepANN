@@ -81,6 +81,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>get.LSTM.X.timesteps()</code> returns the number of timesteps used within the resampled feature matrix.</li>
   <li><code>get.LSTM.X.units()</code> returns the number of feature units.</li>
   <li><code>get.LSTM.Y.samples()</code> returns the number of outcome samples.</li>
+  <li><code>get.LSTM.Y.timesteps()</code> returns the number of outcome timesteps if outcome is a sequence.</li>
   <li><code>get.LSTM.Y.units()</code> returns the number of outcome units.</li>
   <li><code>as.LSTM.data.frame()</code> restructures a resampled feature matrix and an outcome matrix to a data.frame.</li>
   <li><code>build.LSTM()</code> builds a sequential LSTM model with stacked LSTM layers and optionally dropout layers.</li>
