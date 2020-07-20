@@ -405,8 +405,8 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
     h <- as.data.frame(hidden)
     N <- NROW(h)
     # For stacked LSTM layers, each subsequent LSTM cell or layer needs a 3D input.
-    # Therefore, return_sequences must be set to TRUE with exception of the last layer.
-    rs <- ifelse(N <= 1, FALSE, TRUE)
+    # Therefore, return_sequences must be set to TRUE with exception of the last layer if no sequence outcome is produced.
+    rs <- ifelse(N <= 1, return_sequences, TRUE)
     # First hidden layer with input shape
     lstm_model %>% keras::layer_lstm(units = h[1, 1], activation = h[1, 2], input_shape = c(timesteps, features), batch_size = batch_size, stateful = stateful, return_sequences = rs)
     d <- 1
