@@ -415,13 +415,17 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
     # Further hidden layers
     i <- 2
     while (i <= N) {
-      if (i == (N)) { rs <- !rs }
+      if ((i == (N)) && (!return_sequences)) { rs <- !rs }
       lstm_model %>% keras::layer_lstm(units = h[i, 1], activation = h[i, 2], stateful = stateful, return_sequences = rs)
       i <- i + 1
       if (d <= D) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
     }
     # Output layer
-    lstm_model %>% keras::layer_dense(units = output[1], activation = output[2])
+    if (!return_sequences) {
+      lstm_model %>% keras::layer_dense(units = output[1], activation = output[2])
+    } else {
+      lstm_model %>% keras::time_distributed(keras::layer_dense(units = output[1], activation = output[2]))
+    }
   }
   lstm_model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
   return(lstm_model)
@@ -465,7 +469,7 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #'   \code{\link[keras]{compile.keras.engine.training.Model}}, \code{\link[keras]{fit.keras.engine.training.Model}}.
 #'
 #' @examples
-fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1,FALSE), validation_split = 0.2,
+fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE), validation_split = 0.2,
                      k.fold = NULL, k.optimizer = NULL,
                      hidden = NULL, dropout = NULL, output.activation = "linear",
                      stateful = FALSE, return_sequences = FALSE,
@@ -485,7 +489,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1,FALSE),
   names(l[[1]]) <- l_hyperparameter_names
 
   # Should batch size also be used for specifying the input shape?
-  if (batch_size[2] == F) { input_batch_size <- NULL} else {input_batch_size <- batch_size[1] }
+  if (batch_size[2] == F) { input_batch_size <- NULL } else {input_batch_size <- batch_size[1] }
 
   # Build model procedure
   build_lstm_model <- function() {
