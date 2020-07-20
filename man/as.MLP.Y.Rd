@@ -21,6 +21,7 @@ Outcomes data format
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as.ANN.matrix}()},
 \code{\link{as.MLP.X}()},
+\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},

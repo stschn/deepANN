@@ -9,7 +9,7 @@ as.ANN.matrix(X, adjust = NULL)
 \arguments{
 \item{X}{A data set.}
 
-\item{adjust}{A number that is added to or subtracted from a factor level value, or even not (\code{NULL})}
+\item{adjust}{A number that is added to or subtracted from a factor level value, or even not (\code{NULL}).}
 }
 \value{
 A matrix with only numbers.
@@ -21,6 +21,7 @@ Converts a matrix to an ANN compatible matrix with only numbers
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as.MLP.X}()},
 \code{\link{as.MLP.Y}()},
+\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},

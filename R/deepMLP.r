@@ -3,7 +3,7 @@
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param X A data set.
-#' @param adjust A number that is added to or subtracted from a factor level value, or even not (\code{NULL})
+#' @param adjust A number that is added to or subtracted from a factor level value, or even not (\code{NULL}).
 #'
 #' @return A matrix with only numbers.
 #' @export
@@ -19,6 +19,44 @@ as.ANN.matrix <- function(X, adjust = NULL) {
   })
   m <- as.matrix(m)
   return(m)
+}
+
+#' Converts data to a tensor with specific rank.
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param data The data, usually a matrix or data.frame.
+#' @param adjust A number that is added to or subtracted from a factor level value within \code{data}, or even not (\code{NULL}).
+#' @param rank The rank or number of dimensions of the tensor.
+#' @param timesteps The number of timesteps; different periods within one sample (record) of the resampled \code{data}.
+#' @param forward The resampled \code{data} consists of its values forward or backward in time/period.
+#'
+#' @return A tensor with specific rank.
+#' @export
+#'
+#' @seealso \code{\link{as.ANN.matrix}}.
+#'
+#' @examples
+as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = 1, forward = TRUE) {
+  tensor <- NULL
+  m <- as.ANN.matrix(data, adjust)
+  if (rank == 1) {
+    tensor <- array(data = m)
+  } else {
+  if (rank == 2) {
+    tensor <- array(data = m, dim = c(NROW(m), NCOL(m)))
+  } else {
+  if (rank == 3) {
+    variables <- NCOL(m)
+    samples <- NROW(m) - timesteps + 1
+    variable_matrix <- sapply(1:variables, function(j) {
+      variable_list <- sapply(1:samples, function(i) {
+        if (forward) { m[i:(i + timesteps - 1), j] } else { m[(i + timesteps - 1):i, j] }})
+    })
+    tensor <- array(NA, dim = c(samples, timesteps, variables))
+    for (i in 1:variables) { tensor[, , i] <- matrix(variable_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
+  }}}
+  return(tensor)
 }
 
 #' Features data format
