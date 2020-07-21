@@ -480,7 +480,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 
   # LSTM data format
   X.train <- as.LSTM.X(X, timesteps)
-  Y.train <- as.LSTM.Y(Y)
+  Y.train <- as.LSTM.Y(Y, timesteps)
 
   # Calculated Hyperparameters
   X.units <- get.LSTM.X.units(X.train) # Number of features
