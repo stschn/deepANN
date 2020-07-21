@@ -360,7 +360,7 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = 
 
   timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
   X.tensor <- as.LSTM.X(X, timesteps)
-  Y.tensor <- as.LSTM.Y(Y, ifelse(!y.sequences, 1, timesteps))
+  Y.tensor <- as.LSTM.Y(Y, ifelse(!y.sequence, 1, timesteps))
   dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
   if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1], dim(Y.tensor)[2] * dim(Y.tensor)[3]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
