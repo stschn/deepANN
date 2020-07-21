@@ -524,11 +524,11 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
         # By default, Keras will shuffle the rows within each batch, which will destroy the alignment
         # that is needed for a stateful RNN to learn effectively [Culli/Pal (2017:211)].
         # Therefore, shuffle must be set to false to keep alignment alive.
-        l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], verbose = 1, shuffle = FALSE)
+        l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], validation_split = validation_split, verbose = 1, shuffle = FALSE)
         l[[2]] %>% keras::reset_states()
       }
     } else {
-      l[[2]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size[1])
+      l[[2]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size[1], validation_split = validation_split)
     }
   }
   else {
@@ -585,7 +585,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       l[[2]] <- build_lstm_model()
       if (stateful == T) {
         for (i in 1:opt_epochs) {
-          l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], verbose = 1, shuffle = FALSE)
+          l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], validation_split = validation_split, verbose = 1, shuffle = FALSE)
           l[[2]] %>% keras::reset_states()
         }
       } else {
