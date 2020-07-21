@@ -11,6 +11,7 @@ as.LSTM.data.frame(
   names_Y,
   timesteps = 1,
   forward = TRUE,
+  y.sequence = TRUE,
   suffix = "_t"
 )
 }
@@ -28,6 +29,8 @@ as.LSTM.data.frame(
 \item{forward}{The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).}
 
 \item{suffix}{The suffix for every feature per timestep or period.}
+
+\item{y.sequences}{Boolean that indicates whether \code{Y} is a scalar or a sequence corresponding to the number of \code{timesteps}.}
 }
 \value{
 A data.frame with outcome column(s) and a further resampled feature matrix.

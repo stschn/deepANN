@@ -335,6 +335,7 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 
 #' @param names_Y Names of the outcomes.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.
 #' @param forward The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).
+#' @param y.sequences Boolean that indicates whether \code{Y} is a scalar or a sequence corresponding to the number of \code{timesteps}.
 #' @param suffix The suffix for every feature per timestep or period.
 #'
 #' @return A data.frame with outcome column(s) and a further resampled feature matrix.
@@ -345,20 +346,28 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 
 #' @seealso \code{\link{get.LSTM.XY}}.
 #'
 #' @examples
-as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = TRUE, suffix = "_t") {
+as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = TRUE, y.sequence = TRUE, suffix = "_t") {
+  
+  gen_colnames_timesteps <- function(caption) {
+    if (forward) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
+    cnames <- unlist(lapply(caption, function(cname) { paste0(cname, suffix, "%d") }))
+    cnames <- unlist(lapply(cnames, function(cname) { unlist(lapply(tsteps, function(t) { sprintf(cname, t) })) }))
+    # cnames <- unlist(lapply(caption, function(cname) { paste0(cname, suffix, "%d") }))
+    # cnames <- unlist(lapply(cnames, function(cname) { rep(cname, timesteps) }))
+    # cnames <- do.call(sprintf, list(cnames, tsteps))
+    return(cnames)
+  }
+
   timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
   X.tensor <- as.LSTM.X(X, timesteps)
-  Y.tensor <- as.LSTM.Y(Y)
+  Y.tensor <- as.LSTM.Y(Y, ifelse(!y.sequences, 1, timesteps))
   dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
+  if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1], dim(Y.tensor)[2] * dim(Y.tensor)[3]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
-  # Inclusion of periods in the names of features
-  if (forward) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
-  cnames <- unlist(lapply(names_X, function(cname) { paste0(cname, suffix, "%d") }))
-  cnames <- unlist(lapply(cnames, function(cname) { unlist(lapply(tsteps, function(t) { sprintf(cname, t) })) }))
-  # cnames <- unlist(lapply(names_X, function(cname) { paste0(cname, suffix, "%d") }))
-  # cnames <- unlist(lapply(cnames, function(cname) { rep(cname, timesteps) }))
-  # cnames <- do.call(sprintf, list(cnames, tsteps))
-  colnames(dataset) <- c(names_Y, cnames)
+
+  names_X <- gen_colnames_timesteps(names_X)  
+  if (y.sequence) { names_Y <- gen_colnames_timesteps(names_Y) }
+  colnames(dataset) <- c(names_Y, names_X)
   return(dataset)
 }
 
@@ -480,7 +489,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 
   # LSTM data format
   X.train <- as.LSTM.X(X, timesteps)
-  Y.train <- as.LSTM.Y(Y, timesteps)
+  Y.train <- as.LSTM.Y(Y, ifelse(!return_sequences, 1, timesteps))
 
   # Calculated Hyperparameters
   X.units <- get.LSTM.X.units(X.train) # Number of features
@@ -536,9 +545,9 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
     for (i in 1:(k-1)) {
       # Extract training and validation fold
       x.train.fold <- as.LSTM.X(x.fold_datasets[[i]], timesteps)
-      y.train.fold <- as.LSTM.Y(y.fold_datasets[[i]])
+      y.train.fold <- as.LSTM.Y(y.fold_datasets[[i]], ifelse(!return_sequences, 1, timesteps))
       x.val.fold <- as.LSTM.X(x.fold_datasets[[i + 1]], timesteps)
-      y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1]])
+      y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1]], ifelse(!return_sequences, 1, timesteps))
 
       # Build model
       l[[2]] <- build_lstm_model()
