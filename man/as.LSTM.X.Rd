@@ -4,14 +4,14 @@
 \alias{as.LSTM.X}
 \title{Features (X) data format for LSTM}
 \usage{
-as.LSTM.X(X, timesteps = 1, forward = TRUE)
+as.LSTM.X(X, timesteps = 1, reverse = FALSE)
 }
 \arguments{
 \item{X}{A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.}
 
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.}
 
-\item{forward}{The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).}
+\item{reverse}{Controls the order of the values in the resampled feature matrix \code{X}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).}
 }
 \value{
 A three-dimensional array of the resampled feature matrix \code{X} needed within Tensorflow for recurrent neural networks, e.g. LSTM.

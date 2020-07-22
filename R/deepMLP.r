@@ -29,7 +29,7 @@ as.ANN.matrix <- function(X, adjust = NULL) {
 #' @param adjust A number that is added to or subtracted from a factor level value within \code{data}, or even not (\code{NULL}).
 #' @param rank The rank or number of dimensions of the tensor.
 #' @param timesteps The number of timesteps; different periods within one sample (record) of the resampled \code{data}.
-#' @param forward The resampled \code{data} consists of its values forward or backward in time/period.
+#' @param reverse Controls the order of the values in the resampled \code{data}. By default they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A tensor with specific rank.
 #' @export
@@ -37,21 +37,25 @@ as.ANN.matrix <- function(X, adjust = NULL) {
 #' @seealso \code{\link{as.ANN.matrix}}.
 #'
 #' @examples
-as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = 1, forward = TRUE) {
+as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = NULL, reverse = FALSE) {
   tensor <- NULL
   m <- as.ANN.matrix(data, adjust)
   if (rank == 1) {
+    m <- c(t(m))
+    if (reverse) { m <- rev(m) }
     tensor <- array(data = m)
   } else {
   if (rank == 2) {
+    if (reverse) { m <- apply(m, 2, rev) }
     tensor <- array(data = m, dim = c(NROW(m), NCOL(m)))
   } else {
   if (rank == 3) {
+    if ((is.null(timesteps)) || (timesteps < 1)) { timesteps <- 1 }
     variables <- NCOL(m)
     samples <- NROW(m) - timesteps + 1
     variable_matrix <- sapply(1:variables, function(j) {
       variable_list <- sapply(1:samples, function(i) {
-        if (forward) { m[i:(i + timesteps - 1), j] } else { m[(i + timesteps - 1):i, j] }})
+        if (!reverse) { m[i:(i + timesteps - 1), j] } else { m[(i + timesteps - 1):i, j] }})
     })
     tensor <- array(NA, dim = c(samples, timesteps, variables))
     for (i in 1:variables) { tensor[, , i] <- matrix(variable_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
@@ -65,7 +69,7 @@ as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = 1, forward = TR
 #'
 #' @param x A numerical vector.
 #' @param timesteps The number of timesteps. A timestep denotes a period within a row.
-#' @param reverse Controls the order of the values in the transformed vector. Usually they are used as in the given order or in reverse order.
+#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return The transformed or resampled vector \code{x}.
 #' @export
@@ -89,7 +93,7 @@ as.vector.timesteps <- function(x, timesteps = 1, reverse = FALSE) {
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param data A dataset, usually a matrix or data.frame.
-#' @param reverse Controls the order of the values in the transformed tensor. Usually they are used as in the given order or in reverse order.
+#' @param reverse Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A 1D-tensor (one-dimensional array equal to a vector).
 #' @export
@@ -109,7 +113,7 @@ as.tensor.1D <- function(data, reverse = FALSE) {
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param data A dataset, usually a matrix or data.frame.
-#' @param reverse Controls the order of the values in the transformed tensor. Usually they are used as in the given order or in reverse order.
+#' @param reverse Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A 2D-tensor (two-dimensional array equal to a matrix).
 #' @export
@@ -129,7 +133,7 @@ as.tensor.2D <- function(data, reverse = FALSE) {
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param data A dataset, usually a matrix or data.frame.
-#' @param reverse Controls the order of the values in the transformed tensor. Usually they are used as in the given order or in reverse order.
+#' @param reverse Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A 3D-tensor (three-dimensional array).
 #' @export

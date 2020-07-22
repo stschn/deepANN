@@ -11,7 +11,7 @@
 
 \item{timesteps}{The number of timesteps. A timestep denotes a period within a row.}
 
-\item{reverse}{Controls the order of the values in the transformed vector. Usually they are used as in the given order or in reverse order.}
+\item{reverse}{Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.}
 }
 \value{
 The transformed or resampled vector \code{x}.

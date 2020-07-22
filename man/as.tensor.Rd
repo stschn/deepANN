@@ -4,7 +4,7 @@
 \alias{as.tensor}
 \title{Converts data to a tensor with specific rank.}
 \usage{
-as.tensor(data, adjust = NULL, rank = 2, timesteps = 1, forward = TRUE)
+as.tensor(data, adjust = NULL, rank = 2, timesteps = NULL, reverse = FALSE)
 }
 \arguments{
 \item{data}{The data, usually a matrix or data.frame.}
@@ -15,7 +15,7 @@ as.tensor(data, adjust = NULL, rank = 2, timesteps = 1, forward = TRUE)
 
 \item{timesteps}{The number of timesteps; different periods within one sample (record) of the resampled \code{data}.}
 
-\item{forward}{The resampled \code{data} consists of its values forward or backward in time/period.}
+\item{reverse}{Controls the order of the values in the resampled \code{data}. By default they are used in the given order, but they can also be used in reverse order.}
 }
 \value{
 A tensor with specific rank.

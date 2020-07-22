@@ -4,14 +4,14 @@
 \alias{as.LSTM.Y}
 \title{Outcomes (Y) data format}
 \usage{
-as.LSTM.Y(Y, timesteps = 1, forward = TRUE)
+as.LSTM.Y(Y, timesteps = 1, reverse = FALSE)
 }
 \arguments{
 \item{Y}{An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.}
 
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{Y}.}
 
-\item{forward}{The resampled outcome matrix \code{Y} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).}
+\item{reverse}{Controls the order of the values in the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).}
 }
 \value{
 Dependent on timesteps: 

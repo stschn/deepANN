@@ -195,7 +195,7 @@ as.timesteps <- function(lag = 1, type = "univariate") {
 #'
 #' @param X A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.
-#' @param forward The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).
+#' @param reverse Controls the order of the values in the resampled feature matrix \code{X}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #'
 #' @return A three-dimensional array of the resampled feature matrix \code{X} needed within Tensorflow for recurrent neural networks, e.g. LSTM.
 #'   1. dimension: Samples (s) = Number of records 
@@ -207,9 +207,9 @@ as.timesteps <- function(lag = 1, type = "univariate") {
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.Y}}, \code{\link{as.ANN.matrix}}.
 #'
 #' @examples
-as.LSTM.X <- function(X, timesteps = 1, forward = TRUE) {
+as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
   timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
-  return(as.tensor(data = X, adjust = NULL, rank = 3, timesteps = timesteps, forward = forward))
+  return(as.tensor(data = X, adjust = NULL, rank = 3, timesteps = timesteps, reverse = reverse))
 }
 
 #' Outcomes (Y) data format
@@ -218,7 +218,7 @@ as.LSTM.X <- function(X, timesteps = 1, forward = TRUE) {
 #'
 #' @param Y An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{Y}.
-#' @param forward The resampled outcome matrix \code{Y} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).
+#' @param reverse Controls the order of the values in the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #'
 #' @return Dependent on timesteps: 
 #'   \code{= 1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
@@ -228,12 +228,12 @@ as.LSTM.X <- function(X, timesteps = 1, forward = TRUE) {
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}.
 #'
 #' @examples
-as.LSTM.Y <- function(Y, timesteps = 1, forward = TRUE) {
+as.LSTM.Y <- function(Y, timesteps = 1, reverse = FALSE) {
   timesteps <- ifelse(timesteps < 1, 1, timesteps)
   if (timesteps == 1) {
     return(as.tensor(data = Y, adjust = -1, rank = 2))
   } else {
-    return(as.tensor(data = Y, adjust = -1, rank = 3, timesteps = timesteps, forward = forward))
+    return(as.tensor(data = Y, adjust = -1, rank = 3, timesteps = timesteps, reverse = reverse))
   }
 }
 
@@ -334,7 +334,7 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 
 #' @param names_X Names of the features.
 #' @param names_Y Names of the outcomes.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.
-#' @param forward The resampled feature matrix \code{X} consists of its values forward in time/period (\code{TRUE}) or backward in time (\code{FALSE}).
+#' @param reverse Controls the order of the values in the resampled feature matrix \code{X} and the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #' @param y.sequences Boolean that indicates whether \code{Y} is a scalar or a sequence corresponding to the number of \code{timesteps}.
 #' @param suffix The suffix for every feature per timestep or period.
 #'
@@ -346,10 +346,10 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 
 #' @seealso \code{\link{get.LSTM.XY}}.
 #'
 #' @examples
-as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = TRUE, y.sequence = TRUE, suffix = "_t") {
+as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = FALSE, y.sequence = TRUE, suffix = "_t") {
   
   gen_colnames_timesteps <- function(caption) {
-    if (forward) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
+    if (!reverse) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
     cnames <- unlist(lapply(caption, function(cname) { paste0(cname, suffix, "%d") }))
     cnames <- unlist(lapply(cnames, function(cname) { unlist(lapply(tsteps, function(t) { sprintf(cname, t) })) }))
     # cnames <- unlist(lapply(caption, function(cname) { paste0(cname, suffix, "%d") }))
@@ -359,8 +359,8 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, forward = 
   }
 
   timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
-  X.tensor <- as.LSTM.X(X, timesteps)
-  Y.tensor <- as.LSTM.Y(Y, ifelse(!y.sequence, 1, timesteps))
+  X.tensor <- as.LSTM.X(X, timesteps, reverse)
+  Y.tensor <- as.LSTM.Y(Y, ifelse(!y.sequence, 1, timesteps), reverse)
   dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
   if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1], dim(Y.tensor)[2] * dim(Y.tensor)[3]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
