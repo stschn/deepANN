@@ -4,12 +4,14 @@
 \alias{outlier}
 \title{Definition and detection of outliers}
 \usage{
-outlier(x, type = c("tukey"), ...)
+outlier(x, type = c("tukey", "mle"), ...)
 }
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{type}{The type of outlier definition and detection. \code{tukey} refers to the method of Tukey (1977).}
+\item{type}{The type of outlier definition and detection. 
+\code{tukey} refers to the method of Tukey (1977).
+\code{mle} denotes maximum likelihood estimation.}
 
 \item{...}{Depends on the type value. For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.}
 }

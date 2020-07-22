@@ -3,7 +3,9 @@
 #' @family Outlier
 #'
 #' @param x A numeric vector.
-#' @param type The type of outlier definition and detection. \code{tukey} refers to the method of Tukey (1977).
+#' @param type The type of outlier definition and detection. 
+#'   \code{tukey} refers to the method of Tukey (1977).
+#'   \code{mle} denotes maximum likelihood estimation.
 #' @param ... Depends on the type value. For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
 #'
 #' @return A named list of lower and upper boundaries and values.
@@ -15,26 +17,32 @@
 #' @seealso \code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{winsorize}}.
 #'
 #' @examples
-outlier <- function(x, type = c("tukey"), ...) {
+outlier <- function(x, type = c("tukey", "mle"), ...) {
   type <- match.arg(type)
   params <- list(...)
-  outs <- NULL
   if (type == "tukey") {
     k <- ifelse(length(params) == 0, 1.5, params[[1]])
-    q1 <- quantile(x, probs = 0.25)
-    q3 <- quantile(x, probs = 0.75)
+    q1 <- quantile(x, probs = 0.25, na.rm = T)
+    q3 <- quantile(x, probs = 0.75, na.rm = T)
     lower_boundary <- q1 - (k * IQR(x))
-    lower_values <- x[x < lower_boundary]
-    if (length(lower_values) == 0) { lower_values <- NA }
     upper_boundary <- q3 + (k * IQR(x))
-    upper_values <- x[x > upper_boundary]
-    if (length(upper_values) == 0) { upper_values <- NA }
-    outs <- list(list(lower_boundary, lower_values), 
-                 list(upper_boundary, upper_values))
-    names(outs) <- c("lower","upper")
-    names(outs[[1]]) <- c("boundary","values")
-    names(outs[[2]]) <- names(outs[[1]])
-  }
+  } else {
+  if (type == "mle") {
+    k <- ifelse(length(params) == 0, 2, params[[1]])
+    m <- mean(x, na.rm = T)
+    s <- sd(x, na.rm = T)
+    lower_boundary <- m - (k * s)
+    upper_boundary <- m + (k * s)
+  }}
+  lower_values <- x[x < lower_boundary]
+  if (length(lower_values) == 0) { lower_values <- NA }
+  upper_values <- x[x > upper_boundary]
+  if (length(upper_values) == 0) { upper_values <- NA }
+  outs <- list(list(lower_boundary, lower_values), 
+               list(upper_boundary, upper_values))
+  names(outs) <- c("lower", "upper")
+  names(outs[[1]]) <- c("boundary", "values")
+  names(outs[[2]]) <- names(outs[[1]])
   return(outs)
 }
 

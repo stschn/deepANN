@@ -16,7 +16,7 @@ This R library is currently structured in form of the following functional famil
 
 <b>Outlier</b>
 <ul>
-  <li><code>outlier()</code> detects outlier thru the standard method from Tukey (1977).</li>
+  <li><code>outlier()</code> detects outlier thru methods like from Tukey (1977) or maximum likelihood estimation.</li>
   <li><code>winsorize()</code> winsorizes a numerical vector.</li>
 </ul>
 
