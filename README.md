@@ -59,6 +59,10 @@ This R library is currently structured in form of the following functional famil
 <ul>
   <li><code>as.ANN.matrix()</code> converts a data set into a matrix with adjusted character values and factor levels to their numeric indices if necessary.</li>
   <li><code>as.tensor()</code> converts data into a tensor with specific rank.</li>
+  <li><code>as.vector.timesteps()</code> transforms a vector into a vector with timesteps.</li>
+  <li><code>as.tensor.1D()</code> transforms data into a one-dimensional tensor (vector).</li>
+  <li><code>as.tensor.2D()</code> transforms data into a two-dimensional tensor (matrix).</li>
+  <li><code>as.tensor.3D()</code> transforms data into a three-dimensional tensor.</li>
   <li><code>as.MLP.X()</code> creates a 2-dimensional feature array with the dimensions samples and units.</li>
   <li><code>as.MLP.Y()</code> creates a 2-dimensional outcome array with the dimensions samples and units.</li>
   <li><code>get.MLP.X.units()</code> returns the number of feature units.</li>

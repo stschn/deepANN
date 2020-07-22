@@ -13,7 +13,7 @@ as.ANN.matrix <- function(X, adjust = NULL) {
   X <- as.data.frame(X)
   m <- sapply(X, function(column) {
     if (is.character(column)) { column <- as.factor(column) }
-    if (is.factor(column)) { 
+    if (is.factor(column)) {
       if (is.null(adjust)) { as.integer(column) } else { as.integer(column) + as.integer(adjust) }
     } else { column }
   })
@@ -59,6 +59,91 @@ as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = 1, forward = TR
   return(tensor)
 }
 
+#' Transform a vector into a vector with timesteps
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param x A numerical vector.
+#' @param timesteps The number of timesteps. A timestep denotes a period within a row.
+#' @param reverse Controls the order of the values in the transformed vector. Usually they are used as in the given order or in reverse order.
+#'
+#' @return The transformed or resampled vector \code{x}.
+#' @export
+#'
+#' @seealso \code{\link{as.tensor.3D}}.
+#'
+#' @examples
+as.vector.timesteps <- function(x, timesteps = 1, reverse = FALSE) {
+  x <- c(t(x))
+  N <- NROW(x) - timesteps + 1
+  return(do.call(rbind, lapply(c(1:N), function(i) {
+    start <- i
+    end <- i + timesteps - 1
+    if (!reverse) out <- x[start:end] else out <- x[end:start]
+    out
+  })))
+}
+
+#' Transform data into a tensor with one rank or dimension.
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param data A dataset, usually a matrix or data.frame.
+#' @param reverse Controls the order of the values in the transformed tensor. Usually they are used as in the given order or in reverse order.
+#'
+#' @return A 1D-tensor (one-dimensional array equal to a vector).
+#' @export
+#'
+#' @seealso \code{\link{as.tensor.2D}}, \code{\link{as.tensor.3D}}.
+#'
+#' @examples
+as.tensor.1D <- function(data, reverse = FALSE) {
+  data <- c(t(data))
+  if (reverse) { data <- rev(data) }
+  tensor <- array(data)
+  return(tensor)
+}
+
+#' Transform data into a tensor with two ranks or dimensions.
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param data A dataset, usually a matrix or data.frame.
+#' @param reverse Controls the order of the values in the transformed tensor. Usually they are used as in the given order or in reverse order.
+#'
+#' @return A 2D-tensor (two-dimensional array equal to a matrix).
+#' @export
+#'
+#' @seealso \code{\link{as.tensor.1D}}, \code{\link{as.tensor.3D}}.
+#'
+#' @examples
+as.tensor.2D <- function(data, reverse = FALSE) {
+  m <- as.matrix(data)
+  if (reverse) { m <- apply(m, 2, rev) }
+  tensor <- array(m, dim = c(NROW(m), NCOL(m)))
+  return(tensor)
+}
+
+#' Transform data into a tensor with three ranks or dimensions.
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param data A dataset, usually a matrix or data.frame.
+#' @param reverse Controls the order of the values in the transformed tensor. Usually they are used as in the given order or in reverse order.
+#'
+#' @return A 3D-tensor (three-dimensional array).
+#' @export
+#'
+#' @seealso \code{\link{as.tensor.1D}}, \code{\link{as.tensor.2D}}.
+#'
+#' @examples
+as.tensor.3D <- function(data, timesteps = 1, reverse = FALSE) {
+  m <- as.matrix(data)
+  m <- apply(m, 2, as.vector.timesteps, timesteps, reverse)
+  tensor <- array(m, dim = c(NROW(m) / timesteps, timesteps, NCOL(m)))
+  return(tensor)
+}
+
 #' Features data format
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
@@ -67,7 +152,7 @@ as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = 1, forward = TR
 #'
 #' @return A two-dimensional array of the feature matrix \code{X} needed within Tensorflow for feedforward SLP or MLP.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.MLP.Y}}, \code{\link{as.ANN.matrix}}.
 #'
 #' @examples
@@ -84,7 +169,7 @@ as.MLP.X <- function(X) {
 #'
 #' @return A two-dimensional array of the outcome \code{Y} needed within Tensorflow for feedforward SLP or MLP.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.MLP.X}}, \code{\link{as.ANN.matrix}}.
 #'
 #' @examples
@@ -101,7 +186,7 @@ as.MLP.Y <- function(Y) {
 #'
 #' @return Number of input units or features.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.MLP.X}}, \code{\link{get.MLP.Y.units}}.
 #'
 #' @examples
@@ -115,7 +200,7 @@ get.MLP.X.units <- function(X.tensor) { return(NCOL(X.tensor)) }
 #'
 #' @return Number of output units or outcomes.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.MLP.Y}}, \code{\link{get.MLP.X.units}}.
 #'
 #' @examples
@@ -128,12 +213,12 @@ get.MLP.Y.units <- function(Y.tensor) { return(NCOL(Y.tensor)) }
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param features Number of features, returned by \code{get.MLP.X.units}.
-#' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units 
+#' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.MLP.Y.units},
 #'   and the second element the output activation function.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, 
+#' @param loss Name of objective function or objective function. If the model has multiple outputs,
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
 #' @param optimizer Name of optimizer or optimizer instance.
@@ -141,13 +226,13 @@ get.MLP.Y.units <- function(Y.tensor) { return(NCOL(Y.tensor)) }
 #'
 #' @return A model object with stacked dense layers and dropout layers.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{get.MLP.X.units}}, \code{\link{get.MLP.Y.units}},
 #'   \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}},
 #'   \code{\link[keras]{compile.keras.engine.training.Model}}.
 #'
 #' @examples
-build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "linear"), 
+build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "linear"),
                       loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
   mlp_model <- keras::keras_model_sequential()
   # SLP
@@ -190,11 +275,11 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
 #' @param validation_split Fraction of the training data used as validation data.
 #' @param k.fold Number of folds within k-fold cross validation or \code{NULL} if no grid search is desired.
 #' @param k.optimizer Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.
-#' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units 
+#' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output.activation A name of the output activation function.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, 
+#' @param loss Name of objective function or objective function. If the model has multiple outputs,
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
 #' @param optimizer Name of optimizer or optimizer instance.
@@ -203,10 +288,10 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
 #' @return A list with named elements
 #'   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
 #'   \code{model}: A trained model object with stacked layers.
-#'   \code{avg_qual}: Only if k-fold cross validation is used. A data.frame with two columns whereby the 
+#'   \code{avg_qual}: Only if k-fold cross validation is used. A data.frame with two columns whereby the
 #'                    first columns stores the epoch number and the second column the mean of the underpinned quality metric.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{build.MLP}}, \code{\link[keras]{compile.keras.engine.training.Model}}, \code{\link[keras]{fit.keras.engine.training.Model}}.
 #'
 #' @examples
@@ -319,7 +404,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
 #'
 #' @return A matrix with predicted outcome values per column.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{fit.MLP}}, \code{\link[stats]{predict}}, \code{\link{scale.datasets}}.
 #'
 #' @examples

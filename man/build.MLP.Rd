@@ -17,7 +17,7 @@ build.MLP(
 \arguments{
 \item{features}{Number of features, returned by \code{get.MLP.X.units}.}
 
-\item{hidden}{A data.frame with two columns whereby the first column contains the number of hidden units 
+\item{hidden}{A data.frame with two columns whereby the first column contains the number of hidden units
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
 \item{dropout}{A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
@@ -25,7 +25,7 @@ and the second column the activation function. The number of rows determines the
 \item{output}{A vector with two elements whereby the first element determines the number of output units, returned by \code{get.MLP.Y.units},
 and the second element the output activation function.}
 
-\item{loss}{Name of objective function or objective function. If the model has multiple outputs, 
+\item{loss}{Name of objective function or objective function. If the model has multiple outputs,
 different loss on each output can be used by passing a dictionary or a list of objectives.
 The loss value that will be minimized by the model will then be the sum of all individual losses.}
 
@@ -48,7 +48,11 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.ANN.matrix}()},
 \code{\link{as.MLP.X}()},
 \code{\link{as.MLP.Y}()},
+\code{\link{as.tensor.1D}()},
+\code{\link{as.tensor.2D}()},
+\code{\link{as.tensor.3D}()},
 \code{\link{as.tensor}()},
+\code{\link{as.vector.timesteps}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},
