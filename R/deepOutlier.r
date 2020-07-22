@@ -6,9 +6,12 @@
 #' @param type The type of outlier definition and detection. 
 #'   \code{tukey} refers to the method of Tukey (1977).
 #'   \code{mle} denotes maximum likelihood estimation.
-#' @param ... Depends on the type value. For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
+#' @param na.replace Boolean that indicates whether outliers should be replaced by \code{NA}.
+#' @param ... Depends on the type value. 
+#'   For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
+#'   For \code{mle} the constant \code{k} can be specified, otherwise it's value is \code{2}.
 #'
-#' @return A named list of lower and upper boundaries and values.
+#' @return A named list of lower and upper boundaries and values, and of \code{x} with replaced outliers where appropriate.
 #' @export
 #' 
 #' @references
@@ -17,7 +20,7 @@
 #' @seealso \code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{winsorize}}.
 #'
 #' @examples
-outlier <- function(x, type = c("tukey", "mle"), ...) {
+outlier <- function(x, type = c("tukey", "mle"), na.replace = FALSE, ...) {
   type <- match.arg(type)
   params <- list(...)
   if (type == "tukey") {
@@ -43,6 +46,18 @@ outlier <- function(x, type = c("tukey", "mle"), ...) {
   names(outs) <- c("lower", "upper")
   names(outs[[1]]) <- c("boundary", "values")
   names(outs[[2]]) <- names(outs[[1]])
+  if (na.replace) {
+    replaced <- NULL
+    if (length(lower_values) > 0) { replaced <- x; replaced[x < lower_boundary] <- NA }
+    if (length(upper_values) > 0) { 
+      if (length(replaced) == 0) { replaced <- x }
+      replaced[x > upper_boundary] <- NA
+    }
+    if (length(replaced) > 0) {
+      outs[[3]] <- replaced
+      names(outs)[3] <- c("replaced")
+    }
+  }
   return(outs)
 }
 
