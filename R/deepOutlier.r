@@ -73,6 +73,7 @@ outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
 #'   For \code{ml} the constant \code{k} can be specified, otherwise it's value is \code{2}.
 #'
 #' @return
+#'   The \code{dataset} with replaced outliers.
 #' @export
 #'
 #' @seealso \code{\link{outlier}}.

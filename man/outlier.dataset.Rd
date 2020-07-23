@@ -20,7 +20,7 @@ For \code{tukey} the constant \code{k} can be specified, otherwise it's value is
 For \code{ml} the constant \code{k} can be specified, otherwise it's value is \code{2}.}
 }
 \value{
-
+The \code{dataset} with replaced outliers.
 }
 \description{
 Replace outliers in columns of a data set with \code{NA}
