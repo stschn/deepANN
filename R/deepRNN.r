@@ -221,18 +221,18 @@ as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
 #' @param reverse Controls the order of the values in the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #'
 #' @return Dependent on timesteps: 
-#'   \code{= 1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
-#'   \code{> 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
+#'   \code{= NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
+#'   \code{>= 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
 #' @export
 #' 
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}.
 #'
 #' @examples
-as.LSTM.Y <- function(Y, timesteps = 1, reverse = FALSE) {
-  timesteps <- ifelse(timesteps < 1, 1, timesteps)
-  if (timesteps == 1) {
+as.LSTM.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
+  if (is.null(timesteps)) {
     return(as.tensor(data = Y, adjust = -1, rank = 2))
   } else {
+    timesteps <- ifelse(timesteps < 1, 1, timesteps)
     return(as.tensor(data = Y, adjust = -1, rank = 3, timesteps = timesteps, reverse = reverse))
   }
 }
@@ -308,7 +308,7 @@ get.LSTM.Y.samples <- function(Y.tensor) { return(dim(Y.tensor)[1]) }
 #'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 #'
 #' @examples
-get.LSTM.Y.timesteps <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 3, dim(Y.tensor)[2], NA)) }
+get.LSTM.Y.timesteps <- function(Y.tensor) { return(if (length(dim(Y.tensor)) == 3) dim(Y.tensor)[2] else NULL) }
 
 #' Get number of output units from outcome tensor
 #'
@@ -346,7 +346,7 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 
 #' @seealso \code{\link{get.LSTM.XY}}.
 #'
 #' @examples
-as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = FALSE, y.sequence = TRUE, suffix = "_t") {
+as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = FALSE, y.sequence = FALSE, suffix = "_t") {
   
   gen_colnames_timesteps <- function(caption) {
     if (!reverse) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
@@ -360,7 +360,7 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
 
   timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
   X.tensor <- as.LSTM.X(X, timesteps, reverse)
-  Y.tensor <- as.LSTM.Y(Y, ifelse(!y.sequence, 1, timesteps), reverse)
+  Y.tensor <- as.LSTM.Y(Y, switch(y.sequence + 1, NULL, timesteps), reverse)
   dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
   if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1], dim(Y.tensor)[2] * dim(Y.tensor)[3]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
@@ -489,7 +489,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 
   # LSTM data format
   X.train <- as.LSTM.X(X, timesteps)
-  Y.train <- as.LSTM.Y(Y, ifelse(!return_sequences, 1, timesteps))
+  Y.train <- as.LSTM.Y(Y, switch(return_sequences + 1, NULL, timesteps))
 
   # Calculated Hyperparameters
   X.units <- get.LSTM.X.units(X.train) # Number of features
@@ -545,9 +545,9 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
     for (i in 1:(k-1)) {
       # Extract training and validation fold
       x.train.fold <- as.LSTM.X(x.fold_datasets[[i]], timesteps)
-      y.train.fold <- as.LSTM.Y(y.fold_datasets[[i]], ifelse(!return_sequences, 1, timesteps))
+      y.train.fold <- as.LSTM.Y(y.fold_datasets[[i]], switch(return_sequences + 1, NULL, timesteps))
       x.val.fold <- as.LSTM.X(x.fold_datasets[[i + 1]], timesteps)
-      y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1]], ifelse(!return_sequences, 1, timesteps))
+      y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1]], switch(return_sequences + 1, NULL, timesteps))
 
       # Build model
       l[[2]] <- build_lstm_model()
@@ -615,8 +615,8 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
 #'
 #' @return A two- or three-dimensional array with predicted outcome values.
-#'   A two-dimensional array results if \code{return_sequences=FALSE} was set at \code{fit.LSTM}.
-#'   A three-dimensional array results if \code{return_sequences=TRUE} was set at \code{fit.LSTM}.
+#'   A two-dimensional array results if \code{return_sequences = FALSE} was set at \code{fit.LSTM}.
+#'   A three-dimensional array results if \code{return_sequences = TRUE} was set at \code{fit.LSTM}.
 #' @export
 #' 
 #' @seealso \code{\link{fit.LSTM}}, \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}},

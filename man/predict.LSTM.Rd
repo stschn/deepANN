@@ -45,8 +45,8 @@ z-score scaling needs a list with vectors with mean and sd values for each outco
 }
 \value{
 A two- or three-dimensional array with predicted outcome values.
-  A two-dimensional array results if \code{return_sequences=FALSE} was set at \code{fit.LSTM}.
-  A three-dimensional array results if \code{return_sequences=TRUE} was set at \code{fit.LSTM}.
+  A two-dimensional array results if \code{return_sequences = FALSE} was set at \code{fit.LSTM}.
+  A three-dimensional array results if \code{return_sequences = TRUE} was set at \code{fit.LSTM}.
 }
 \description{
 Predict with LSTM model

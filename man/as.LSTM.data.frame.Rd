@@ -11,7 +11,7 @@ as.LSTM.data.frame(
   names_Y,
   timesteps = 1,
   reverse = FALSE,
-  y.sequence = TRUE,
+  y.sequence = FALSE,
   suffix = "_t"
 )
 }

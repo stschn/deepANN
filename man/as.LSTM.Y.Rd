@@ -4,7 +4,7 @@
 \alias{as.LSTM.Y}
 \title{Outcomes (Y) data format}
 \usage{
-as.LSTM.Y(Y, timesteps = 1, reverse = FALSE)
+as.LSTM.Y(Y, timesteps = NULL, reverse = FALSE)
 }
 \arguments{
 \item{Y}{An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.}
@@ -15,8 +15,8 @@ as.LSTM.Y(Y, timesteps = 1, reverse = FALSE)
 }
 \value{
 Dependent on timesteps: 
-  \code{= 1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
-  \code{> 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
+  \code{= NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
+  \code{>= 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
 }
 \description{
 Outcomes (Y) data format
