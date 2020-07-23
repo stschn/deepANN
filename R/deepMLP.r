@@ -67,7 +67,7 @@ as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = NULL, reverse =
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param x A numerical vector.
+#' @param x A numeric vector.
 #' @param timesteps The number of timesteps. A timestep denotes a period within a row.
 #' @param reverse Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.
 #'
@@ -78,6 +78,10 @@ as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = NULL, reverse =
 #'
 #' @examples
 as.vector.timesteps <- function(x, timesteps = 1, reverse = FALSE) {
+  # For fast transferring a list into a matrix
+  # https://stackoverflow.com/questions/13224553/how-to-convert-a-huge-list-of-vector-to-a-matrix-more-efficiently
+  # https://stackoverflow.com/questions/17752830/r-reshape-a-vector-into-multiple-columns
+
   # do.call(rbind, ...) is a much more slower approach
   # return(do.call(rbind, lapply(c(1:N), function(i) {
   #   ...
@@ -90,6 +94,8 @@ as.vector.timesteps <- function(x, timesteps = 1, reverse = FALSE) {
     if (!reverse) out <- x[start:end] else out <- x[end:start]
     out
   })
+  # m <- matrix(unlist(l), ncol = N)
+  # m <- t(m)
   m <- matrix(unlist(l), nrow = N, byrow = T)
   return(m)
 }
@@ -98,7 +104,7 @@ as.vector.timesteps <- function(x, timesteps = 1, reverse = FALSE) {
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param data A dataset, usually a matrix or data.frame.
+#' @param data Usually a numeric vector.
 #' @param reverse Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A 1D-tensor (one-dimensional array equal to a vector).
@@ -229,7 +235,7 @@ get.MLP.Y.units <- function(Y.tensor) { return(NCOL(Y.tensor)) }
 #' @param features Number of features, returned by \code{get.MLP.X.units}.
 #' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
-#' @param dropout A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
+#' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.MLP.Y.units},
 #'   and the second element the output activation function.
 #' @param loss Name of objective function or objective function. If the model has multiple outputs,
@@ -291,7 +297,7 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
 #' @param k.optimizer Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.
 #' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
-#' @param dropout A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
+#' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output.activation A name of the output activation function.
 #' @param loss Name of objective function or objective function. If the model has multiple outputs,
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.

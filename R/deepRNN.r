@@ -385,7 +385,7 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
 #'   A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211), Culli/Kapoor/Pal (2019:290).
 #' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units 
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
-#' @param dropout A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
+#' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.LSTM.Y.units},
 #'   and the second element the output activation function.
 #' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
@@ -457,7 +457,7 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #' @param k.optimizer Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.
 #' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units 
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
-#' @param dropout A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
+#' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output.activation A name of the output activation function.
 #' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
 #' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).

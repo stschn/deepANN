@@ -7,9 +7,9 @@
 rmse(actual, predicted)
 }
 \arguments{
-\item{actual}{A vector with to-be values.}
+\item{actual}{A numeric vector with to-be values.}
 
-\item{predicted}{A vector with as-is values.}
+\item{predicted}{A numeric vector with as-is values.}
 }
 \value{
 Root mean square error (RMSE).

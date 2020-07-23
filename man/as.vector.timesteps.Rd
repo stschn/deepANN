@@ -7,7 +7,7 @@
 \method{as.vector}{timesteps}(x, timesteps = 1, reverse = FALSE)
 }
 \arguments{
-\item{x}{A numerical vector.}
+\item{x}{A numeric vector.}
 
 \item{timesteps}{The number of timesteps. A timestep denotes a period within a row.}
 

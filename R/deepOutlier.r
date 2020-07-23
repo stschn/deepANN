@@ -19,12 +19,13 @@
 #' @references
 #'   Tukey, John W. (1977): Exploratory Data Analysis. 1977. Reading: Addison-Wesley.
 #' 
-#' @seealso \code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{winsorize}}.
+#' @seealso \code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{outlier.dataset}}, \code{\link{winsorize}}.
 #'
 #' @examples
 outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
   type <- match.arg(type)
   params <- list(...)
+  x <- c(t(x))
   if (type == "tukey") {
     k <- ifelse(length(params) == 0, 1.5, params[[1]])
     q1 <- quantile(x, probs = 0.25, na.rm = T)
@@ -56,6 +57,40 @@ outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
     if (length(upper_values) > 0) { replaced[x > upper_boundary] <- NA }
     return(replaced)
   }
+}
+
+#' Replace outliers in columns of a data set with \code{NA}
+#'
+#' @family Outlier
+#' 
+#' @param dataset A data set, usually a data.frame.
+#' @param columns The names of the columns whose outlier values are to be replaced. if \code{NULL} (default), all corresponding columns are examined.
+#' @param type The type of outlier definition and detection. 
+#'   \code{tukey} refers to the method of Tukey (1977).
+#'   \code{ml} denotes maximum likelihood estimation.
+#' @param ... Dependent on \code{type}. 
+#'   For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
+#'   For \code{ml} the constant \code{k} can be specified, otherwise it's value is \code{2}.
+#'
+#' @return
+#' @export
+#'
+#' @seealso \code{\link{outlier}}.
+#'
+#' @examples
+outlier.dataset <- function(dataset, columns = NULL, type = c("tukey", "ml"), ...) {
+  if (!is.null(columns)) {
+    col_names <- columns
+    if (!all(col_names %in% names(dataset)))
+      stop("columns are not in dataset.")
+  } else {
+    all_classes <- sapply(dataset, class)
+    col_classes <- all_classes[all_classes %in% c("integer", "numeric", "complex", "raw")]
+    col_names <- names(col_classes)
+  }
+  replaced <- as.data.frame(lapply(dataset[col_names], outlier, type = type, na.replace = T, ...))
+  dataset[col_names] <- replaced
+  return(dataset)
 }
 
 #' Winsorize outliers

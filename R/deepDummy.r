@@ -5,7 +5,7 @@
 #' @family Dummyfication
 #' 
 #' @param dataset A data set with factor and/or character variables.
-#' @param columns The column names of the variables which shell be dummyfied; if \code{NULL} all corresponding columns are encoded.
+#' @param columns The name of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.
 #' @param remove_level Controls which level of a factor or character variable is removed.
 #'   \code{first} removes the first level.
 #'   \code{last} removes the last level.

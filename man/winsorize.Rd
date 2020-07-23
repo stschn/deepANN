@@ -21,6 +21,7 @@ A winsorized version of the given \code{x} vector.
 \code{\link[stats]{quantile}}, \code{\link{outlier}}.
 
 Other Outlier: 
+\code{\link{outlier.dataset}()},
 \code{\link{outlier}()}
 }
 \concept{Outlier}

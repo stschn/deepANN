@@ -72,8 +72,8 @@ naive_forecast <- function(x, drift = 0, na = NA) {
 #'
 #' @family Machine Learning
 #'
-#' @param x1 A numerical vector.
-#' @param x2 A numerical vector.
+#' @param x1 A numeric vector.
+#' @param x2 A numeric vector.
 #'
 #' @return The euclidean distance between these two vectors.
 #' @export

@@ -29,7 +29,7 @@ A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211
 \item{hidden}{A data.frame with two columns whereby the first column contains the number of hidden units 
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
-\item{dropout}{A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
+\item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
 
 \item{output}{A vector with two elements whereby the first element determines the number of output units, returned by \code{get.LSTM.Y.units},
 and the second element the output activation function.}

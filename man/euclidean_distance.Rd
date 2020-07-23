@@ -7,9 +7,9 @@
 euclidean_distance(x1, x2)
 }
 \arguments{
-\item{x1}{A numerical vector.}
+\item{x1}{A numeric vector.}
 
-\item{x2}{A numerical vector.}
+\item{x2}{A numeric vector.}
 }
 \value{
 The euclidean distance between these two vectors.

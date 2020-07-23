@@ -31,9 +31,10 @@ Definition and detection of outliers
 Tukey, John W. (1977): Exploratory Data Analysis. 1977. Reading: Addison-Wesley.
 }
 \seealso{
-\code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{winsorize}}.
+\code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{outlier.dataset}}, \code{\link{winsorize}}.
 
 Other Outlier: 
+\code{\link{outlier.dataset}()},
 \code{\link{winsorize}()}
 }
 \concept{Outlier}

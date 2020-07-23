@@ -110,17 +110,17 @@ scale.log <- function(x, invert = FALSE) {
   return(scaled)
 }
 
-#' Scaling of a numerical vector
+#' Scaling of a numeric vector
 #'
 #' @family Scaling
 #'
-#' @param x A numerical vector whose elements shell be scaled.
+#' @param x A numeric vector whose elements shell be scaled.
 #' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
 #' @param use.attr A boolean that controls whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.
 #' @param invert A boolean that indicates the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
 #' @param ... Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.
 #'
-#' @return The scaled or re-scaled (inverted) numerical vector \code{x}.
+#' @return The scaled or re-scaled (inverted) numeric vector \code{x}.
 #' @export
 #'
 #' @seealso \code{\link{scale.minmax}}, \code{\link{scale.zscore}}, \code{\link{scale.log}}.

@@ -38,7 +38,7 @@ fit.MLP(
 \item{hidden}{A data.frame with two columns whereby the first column contains the number of hidden units
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
-\item{dropout}{A numerical vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
+\item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
 
 \item{output.activation}{A name of the output activation function.}
 

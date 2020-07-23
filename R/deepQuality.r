@@ -4,8 +4,8 @@
 #'
 #' @family Quality
 #'   
-#' @param actual A vector with to-be values.
-#' @param predicted A vector with as-is values.
+#' @param actual A numeric vector with to-be values.
+#' @param predicted A numeric vector with as-is values.
 #'
 #' @return Mean absolute error (MAE).
 #' @export
@@ -25,8 +25,8 @@ mae <- function(actual, predicted) {
 #'
 #' @family Quality
 #'  
-#' @param actual A vector with to-be values.
-#' @param predicted A vector with as-is values.
+#' @param actual A numeric vector with to-be values.
+#' @param predicted A numeric vector with as-is values.
 #'
 #' @return Mean absolute percentage error (MAPE).
 #' @export
@@ -46,8 +46,8 @@ mape <- function(actual, predicted){
 #'
 #' \code{mse} calculates the mean squared error.
 #' 
-#' @param actual A vector with to-be values.
-#' @param predicted A vector with as-is values.
+#' @param actual A numeric vector with to-be values.
+#' @param predicted A numeric vector with as-is values.
 #'
 #' @return Mean squared error (MSE).
 #' @export
@@ -67,8 +67,8 @@ mse <- function(actual, predicted) {
 #' 
 #' @family Quality
 #' 
-#' @param actual A vector with to-be values.
-#' @param predicted A vector with as-is values.
+#' @param actual A numeric vector with to-be values.
+#' @param predicted A numeric vector with as-is values.
 #'
 #' @return Root mean square error (RMSE).
 #' @export
@@ -88,8 +88,8 @@ rmse <- function(actual, predicted) {
 #' 
 #' @family Quality
 #' 
-#' @param actual A vector with to-be values.
-#' @param predicted A vector with as-is values.
+#' @param actual A numeric vector with to-be values.
+#' @param predicted A numeric vector with as-is values.
 #'
 #' @return Variance coefficient (VC).
 #' @export

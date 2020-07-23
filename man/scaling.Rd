@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepScaling.r
 \name{scaling}
 \alias{scaling}
-\title{Scaling of a numerical vector}
+\title{Scaling of a numeric vector}
 \usage{
 scaling(
   x,
@@ -13,7 +13,7 @@ scaling(
 )
 }
 \arguments{
-\item{x}{A numerical vector whose elements shell be scaled.}
+\item{x}{A numeric vector whose elements shell be scaled.}
 
 \item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).}
 
@@ -24,10 +24,10 @@ scaling(
 \item{...}{Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.}
 }
 \value{
-The scaled or re-scaled (inverted) numerical vector \code{x}.
+The scaled or re-scaled (inverted) numeric vector \code{x}.
 }
 \description{
-Scaling of a numerical vector
+Scaling of a numeric vector
 }
 \seealso{
 \code{\link{scale.minmax}}, \code{\link{scale.zscore}}, \code{\link{scale.log}}.

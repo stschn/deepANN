@@ -7,7 +7,7 @@
 as.tensor.1D(data, reverse = FALSE)
 }
 \arguments{
-\item{data}{A dataset, usually a matrix or data.frame.}
+\item{data}{Usually a numeric vector.}
 
 \item{reverse}{Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.}
 }
