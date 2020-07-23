@@ -15,7 +15,7 @@ dummify(
 \arguments{
 \item{dataset}{A data set with factor and/or character variables.}
 
-\item{columns}{The column names of the variables which should be dummified; if \code{NULL} all corresponding columns are encoded.}
+\item{columns}{The column names of the variables which shell be dummyfied; if \code{NULL} all corresponding columns are encoded.}
 
 \item{remove_level}{Controls which level of a factor or character variable is removed.
 \code{first} removes the first level.
@@ -26,7 +26,7 @@ dummify(
 
 \item{effectcoding}{Instead of using default 0/1 value pairs for dummy variables, effectcoding allows to set -1/1 pairs.}
 
-\item{remove_columns}{Controls whether the factor/character variables should be removed from the data set after they are encoded in dummy variables.}
+\item{remove_columns}{Controls whether the factor/character variables shell be removed from the data set after they are encoded in dummy variables.}
 }
 \value{
 The data set with encoded dummy variables.

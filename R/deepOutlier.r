@@ -5,13 +5,15 @@
 #' @param x A numeric vector.
 #' @param type The type of outlier definition and detection. 
 #'   \code{tukey} refers to the method of Tukey (1977).
-#'   \code{mle} denotes maximum likelihood estimation.
-#' @param na.replace Boolean that indicates whether outliers should be replaced by \code{NA}.
-#' @param ... Depends on the type value. 
+#'   \code{ml} denotes maximum likelihood estimation.
+#' @param na.replace Boolean that indicates whether outliers shell be replaced by \code{NA}.
+#' @param ... Dependent on \code{type}. 
 #'   For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
-#'   For \code{mle} the constant \code{k} can be specified, otherwise it's value is \code{2}.
+#'   For \code{ml} the constant \code{k} can be specified, otherwise it's value is \code{2}.
 #'
-#' @return A named list of lower and upper boundaries and values, and of \code{x} with replaced outliers where appropriate.
+#' @return Dependent on \code{na.replace}
+#'   By default (\code{FALSE}), a named list of lower and upper boundaries and values.
+#'   Otherwise, the vector \code{x} with replaced outliers.
 #' @export
 #' 
 #' @references
@@ -20,7 +22,7 @@
 #' @seealso \code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{winsorize}}.
 #'
 #' @examples
-outlier <- function(x, type = c("tukey", "mle"), na.replace = FALSE, ...) {
+outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
   type <- match.arg(type)
   params <- list(...)
   if (type == "tukey") {
@@ -30,7 +32,7 @@ outlier <- function(x, type = c("tukey", "mle"), na.replace = FALSE, ...) {
     lower_boundary <- q1 - (k * IQR(x))
     upper_boundary <- q3 + (k * IQR(x))
   } else {
-  if (type == "mle") {
+  if (type == "ml") {
     k <- ifelse(length(params) == 0, 2, params[[1]])
     m <- mean(x, na.rm = T)
     s <- sd(x, na.rm = T)
@@ -41,24 +43,19 @@ outlier <- function(x, type = c("tukey", "mle"), na.replace = FALSE, ...) {
   if (length(lower_values) == 0) { lower_values <- NA }
   upper_values <- x[x > upper_boundary]
   if (length(upper_values) == 0) { upper_values <- NA }
-  outs <- list(list(lower_boundary, lower_values), 
-               list(upper_boundary, upper_values))
-  names(outs) <- c("lower", "upper")
-  names(outs[[1]]) <- c("boundary", "values")
-  names(outs[[2]]) <- names(outs[[1]])
-  if (na.replace) {
-    replaced <- NULL
-    if (length(lower_values) > 0) { replaced <- x; replaced[x < lower_boundary] <- NA }
-    if (length(upper_values) > 0) { 
-      if (length(replaced) == 0) { replaced <- x }
-      replaced[x > upper_boundary] <- NA
-    }
-    if (length(replaced) > 0) {
-      outs[[3]] <- replaced
-      names(outs)[3] <- c("replaced")
-    }
+  if (!na.replace) {
+    outs <- list(list(lower_boundary, lower_values), 
+                 list(upper_boundary, upper_values))
+    names(outs) <- c("lower", "upper")
+    names(outs[[1]]) <- c("boundary", "values")
+    names(outs[[2]]) <- names(outs[[1]])
+    return(outs)
+  } else {
+    replaced <- x
+    if (length(lower_values) > 0) { replaced[x < lower_boundary] <- NA }
+    if (length(upper_values) > 0) { replaced[x > upper_boundary] <- NA }
+    return(replaced)
   }
-  return(outs)
 }
 
 #' Winsorize outliers

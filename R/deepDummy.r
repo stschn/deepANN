@@ -5,7 +5,7 @@
 #' @family Dummyfication
 #' 
 #' @param dataset A data set with factor and/or character variables.
-#' @param columns The column names of the variables which should be dummified; if \code{NULL} all corresponding columns are encoded.
+#' @param columns The column names of the variables which shell be dummyfied; if \code{NULL} all corresponding columns are encoded.
 #' @param remove_level Controls which level of a factor or character variable is removed.
 #'   \code{first} removes the first level.
 #'   \code{last} removes the last level.
@@ -13,7 +13,7 @@
 #'   \code{least} removes the level with the least occurrences within the samples.
 #'   \code{none} removes none of the levels.
 #' @param effectcoding Instead of using default 0/1 value pairs for dummy variables, effectcoding allows to set -1/1 pairs.
-#' @param remove_columns Controls whether the factor/character variables should be removed from the data set after they are encoded in dummy variables.
+#' @param remove_columns Controls whether the factor/character variables shell be removed from the data set after they are encoded in dummy variables.
 #'
 #' @return The data set with encoded dummy variables.
 #' @export
@@ -104,11 +104,12 @@ effectcoding <- function(x) {
 #'
 #' @examples
 one_hot_encode <- function(x) {
+  x <- c(t(x))
   f <- as.factor(x)
   n <- nlevels(f)
   m <- matrix(0, nrow = NROW(x), ncol = n)
   colnames(m) <- levels(f)
-  for (i in 1:NROW(x)){
+  for (i in 1:NROW(x)) {
     m[i, f[[i]]] <- 1
   }
   return(m)

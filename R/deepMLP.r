@@ -78,14 +78,20 @@ as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = NULL, reverse =
 #'
 #' @examples
 as.vector.timesteps <- function(x, timesteps = 1, reverse = FALSE) {
+  # do.call(rbind, ...) is a much more slower approach
+  # return(do.call(rbind, lapply(c(1:N), function(i) {
+  #   ...
+  # })))
   x <- c(t(x))
   N <- NROW(x) - timesteps + 1
-  return(do.call(rbind, lapply(c(1:N), function(i) {
+  l <- lapply(c(1:N), function(i) {
     start <- i
     end <- i + timesteps - 1
     if (!reverse) out <- x[start:end] else out <- x[end:start]
     out
-  })))
+  })
+  m <- matrix(unlist(l), nrow = N, byrow = T)
+  return(m)
 }
 
 #' Transform data into a tensor with one rank or dimension.
@@ -142,6 +148,10 @@ as.tensor.2D <- function(data, reverse = FALSE) {
 #'
 #' @examples
 as.tensor.3D <- function(data, timesteps = 1, reverse = FALSE) {
+  # M <- NCOL(m)
+  # N <- NROW(m) - timesteps + 1
+  # tensor <- array(NA, dim = c(N, timesteps, M))
+  # for (j in 1:M) { tensor[, , j] <- as.vector.timesteps(m[, j], timesteps, reverse) }
   m <- as.matrix(data)
   m <- apply(m, 2, as.vector.timesteps, timesteps, reverse)
   tensor <- array(m, dim = c(NROW(m) / timesteps, timesteps, NCOL(m)))

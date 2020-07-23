@@ -7,7 +7,7 @@
 \method{scale}{zscore}(x, use.attr = TRUE, invert = FALSE, meanx = NULL, sdx = NULL)
 }
 \arguments{
-\item{x}{A numeric vector whose elements should be scaled thru z-score scaling.}
+\item{x}{A numeric vector whose elements shell be scaled thru z-score scaling.}
 
 \item{use.attr}{A boolean that controls whether scaling factors \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.}
 

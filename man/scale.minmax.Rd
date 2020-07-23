@@ -7,7 +7,7 @@
 \method{scale}{minmax}(x, use.attr = TRUE, invert = FALSE, minx = NULL, maxx = NULL)
 }
 \arguments{
-\item{x}{A numeric vector whose elements should be scaled thru min-max scaling.}
+\item{x}{A numeric vector whose elements shell be scaled thru min-max scaling.}
 
 \item{use.attr}{A boolean that controls whether scaling factors \code{min} and \code{max} are stored as named attributes of the scaled vector \code{x}.}
 

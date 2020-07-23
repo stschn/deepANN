@@ -497,7 +497,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
   l[[1]] <- list(X.units, Y.units)
   names(l[[1]]) <- l_hyperparameter_names
 
-  # Should batch size also be used for specifying the input shape?
+  # Shell batch size also be used for specifying the input shape?
   if (batch_size[2] == F) { input_batch_size <- NULL } else {input_batch_size <- batch_size[1] }
 
   # Build model procedure

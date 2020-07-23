@@ -4,23 +4,25 @@
 \alias{outlier}
 \title{Definition and detection of outliers}
 \usage{
-outlier(x, type = c("tukey", "mle"), na.replace = FALSE, ...)
+outlier(x, type = c("tukey", "ml"), na.replace = FALSE, ...)
 }
 \arguments{
 \item{x}{A numeric vector.}
 
 \item{type}{The type of outlier definition and detection. 
 \code{tukey} refers to the method of Tukey (1977).
-\code{mle} denotes maximum likelihood estimation.}
+\code{ml} denotes maximum likelihood estimation.}
 
-\item{na.replace}{Boolean that indicates whether outliers should be replaced by \code{NA}.}
+\item{na.replace}{Boolean that indicates whether outliers shell be replaced by \code{NA}.}
 
-\item{...}{Depends on the type value. 
+\item{...}{Dependent on \code{type}. 
 For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
-For \code{mle} the constant \code{k} can be specified, otherwise it's value is \code{2}.}
+For \code{ml} the constant \code{k} can be specified, otherwise it's value is \code{2}.}
 }
 \value{
-A named list of lower and upper boundaries and values, and of \code{x} with replaced outliers where appropriate.
+Dependent on \code{na.replace}
+  By default (\code{FALSE}), a named list of lower and upper boundaries and values.
+  Otherwise, the vector \code{x} with replaced outliers.
 }
 \description{
 Definition and detection of outliers

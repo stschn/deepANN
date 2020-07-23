@@ -13,7 +13,7 @@ scaling(
 )
 }
 \arguments{
-\item{x}{A numerical vector whose elements should be scaled.}
+\item{x}{A numerical vector whose elements shell be scaled.}
 
 \item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).}
 
