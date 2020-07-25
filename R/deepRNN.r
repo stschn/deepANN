@@ -536,7 +536,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
         l[[2]] %>% keras::reset_states()
       }
     } else {
-      l[[2]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size[1], validation_split = validation_split)
+      l[[2]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size[1], validation_split = validation_split, verbose = verbose)
     }
   }
   else {
