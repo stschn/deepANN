@@ -12,8 +12,7 @@ get.LSTM.XY(
   timesteps = 1,
   x.lag = 0,
   y_as_feature.type = c("none", "plain", "timesteps"),
-  y_as_feature.lag = 0,
-  y.sequence = FALSE
+  y_as_feature.lag = 0
 )
 }
 \arguments{
@@ -27,9 +26,9 @@ get.LSTM.XY(
 
 \item{timesteps}{A number or vector of timesteps for \code{x} and \code{y}. A timestep denotes the number of different periods of the values within one sample.
 A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
-If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X} and, 
-if \code{y.sequence = T}, also for resampled outcome tensor produced by \code{as.LSTM.Y}. If two values are given, the first value is used
-for the resampled feature tensor and the second for the resampled outcome tensor (sequence or multi-step outcome).}
+If only one value is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. In this case, \code{y} will
+be treated as a scalar outcome. If two values are given, the first value is used as before and the second value is the number of timesteps for the resampled
+sequence or multi-step outcome produced by \code{as.LSTM.Y}.}
 
 \item{x.lag}{The considered lags on feature side. For a univariate time series at least a lag of 1 is needed.
 For a multivariate time series no lag must be necessarily used. This argument can also be a vector of the same length as \code{x}.
@@ -42,14 +41,12 @@ In that case, each feature can have its own specified lag.}
 \code{timesteps} The number of included lagged y-variables is equal to the value of the \code{timesteps} argument.}
 
 \item{y_as_feature.lag}{The considered lag for lagged outcomes (\code{y}) as further features.}
-
-\item{y.sequence}{Boolean that indicates whether \code{y} is a scalar or a sequence.}
 }
 \value{
 A list with named elements
   \code{X}: A feature matrix in LSTM compatible preformat for usage with \code{as.LSTM.X}.
   \code{Y}: An outcome matrix in LSTM compatible preformat for usage with \code{as.LSTM.Y}.
-  \code{other_columns}: A vector, matrix or data.frame of the selected \code{other_columns}.
+  \code{other_columns}: A data.frame of the selected \code{other_columns}.
 }
 \description{
 \code{get.LSTM.XY} extracts features and outcomes from a data/time series in a LSTM compatible preformat.

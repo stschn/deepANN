@@ -11,7 +11,6 @@ as.LSTM.data.frame(
   names_Y,
   timesteps = 1,
   reverse = FALSE,
-  y.sequence = FALSE,
   suffix = "_t"
 )
 }
@@ -29,8 +28,6 @@ as.LSTM.data.frame(
 \item{reverse}{Controls the order of the values in the resampled feature matrix \code{X} and the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).}
 
 \item{suffix}{The suffix for every feature per timestep or period.}
-
-\item{y.sequences}{Boolean that indicates whether \code{Y} is a scalar or a sequence corresponding to the number of \code{timesteps}.}
 }
 \value{
 A data.frame with outcome column(s) and a further resampled feature matrix.

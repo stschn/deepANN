@@ -31,9 +31,8 @@ fit.LSTM(
 
 \item{timesteps}{A number or vector of timesteps for \code{X} and \code{Y}. A timestep denotes the number of different periods of the values within one sample.
 A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
-If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X} and, 
-if \code{return.sequences = T}, also for resampled outcome tensor produced by \code{as.LSTM.Y}. If two values are given, the first value is used
-for the resampled feature tensor and the second for the resampled outcome tensor (sequence or multi-step outcome).}
+If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. If two values are given, 
+the first value is used as before and the second value for the resampled sequence or multi-step outcome tensor produced by \code{as.LSTM.Y}.}
 
 \item{epochs}{The number of epochs.}
 
@@ -55,7 +54,7 @@ and the second column the activation function. The number of rows determines the
 
 \item{stateful}{A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).}
 
-\item{return_sequences}{A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).}
+\item{return_sequences}{A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).}
 
 \item{loss}{Name of objective function or objective function. If the model has multiple outputs, 
 different loss on each output can be used by passing a dictionary or a list of objectives.

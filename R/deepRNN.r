@@ -14,9 +14,9 @@
 #' @param other_columns The column indices of other columns which play an important role, e.g. a datetime column.
 #' @param timesteps A number or vector of timesteps for \code{x} and \code{y}. A timestep denotes the number of different periods of the values within one sample.
 #'   A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
-#'   If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X} and, 
-#'   if \code{y.sequence = T}, also for resampled outcome tensor produced by \code{as.LSTM.Y}. If two values are given, the first value is used
-#'   for the resampled feature tensor and the second for the resampled outcome tensor (sequence or multi-step outcome).
+#'   If only one value is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. In this case, \code{y} will
+#'   be treated as a scalar outcome. If two values are given, the first value is used as before and the second value is the number of timesteps for the resampled
+#'   sequence or multi-step outcome produced by \code{as.LSTM.Y}.
 #' @param x.lag The considered lags on feature side. For a univariate time series at least a lag of 1 is needed.
 #'   For a multivariate time series no lag must be necessarily used. This argument can also be a vector of the same length as \code{x}.
 #'   In that case, each feature can have its own specified lag.
@@ -26,31 +26,26 @@
 #'     Therefore, only one lagged y-variable with a lag order of adjusted \code{y_as_feature.lag} is chosen.
 #'   \code{timesteps} The number of included lagged y-variables is equal to the value of the \code{timesteps} argument.
 #' @param y_as_feature.lag The considered lag for lagged outcomes (\code{y}) as further features.
-#' @param y.sequence Boolean that indicates whether \code{y} is a scalar or a sequence.
 #'
 #' @return A list with named elements
 #'   \code{X}: A feature matrix in LSTM compatible preformat for usage with \code{as.LSTM.X}.
 #'   \code{Y}: An outcome matrix in LSTM compatible preformat for usage with \code{as.LSTM.Y}.
-#'   \code{other_columns}: A vector, matrix or data.frame of the selected \code{other_columns}.
+#'   \code{other_columns}: A data.frame of the selected \code{other_columns}.
 #' @export
 #' 
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{as.LSTM.Y}}.
 #'
 #' @examples
 get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0, 
-                        y_as_feature.type = c("none", "plain", "timesteps"), y_as_feature.lag = 0, 
-                        y.sequence = FALSE) {
+                        y_as_feature.type = c("none", "plain", "timesteps"), y_as_feature.lag = 0) {
   data_list <- list()
+  y.sequence <- FALSE
   df <- as.data.frame(dataset)
-  if (length(timesteps) == 1) {
-    x.steps <- timesteps
-    y.steps <- timesteps
-  } else {
-    x.steps <- timesteps[1]
-    y.steps <- timesteps[2]
+  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1] < 1), 1, timesteps[1]) # at least a timestep of 1 is needed for x
+  if (length(timesteps) >= 2) {
+    y.sequence <- TRUE
+    y.steps <- ifelse(timesteps[2] < 2, 2, timesteps[2]) # at least a timestep of 2 is needed for sequence outcome y
   }
-  x.steps <- ifelse(x.steps < 1, 1, x.steps) # at least a timestep of 1 is needed for x
-  y.steps <- ifelse(y.steps < 2, 2, y.steps) # at least a timestep of 2 is needed for sequence outcome y
   max_lag <- max(x.lag)
   max_lag <- ifelse(max_lag < 0, 0, max_lag)
   if ((is.null(x)) || (x == y)) {
@@ -336,7 +331,6 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 
 #' @param names_Y Names of the outcomes.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.
 #' @param reverse Controls the order of the values in the resampled feature matrix \code{X} and the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
-#' @param y.sequences Boolean that indicates whether \code{Y} is a scalar or a sequence corresponding to the number of \code{timesteps}.
 #' @param suffix The suffix for every feature per timestep or period.
 #'
 #' @return A data.frame with outcome column(s) and a further resampled feature matrix.
@@ -347,7 +341,7 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 
 #' @seealso \code{\link{get.LSTM.XY}}.
 #'
 #' @examples
-as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = FALSE, y.sequence = FALSE, suffix = "_t") {
+as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = FALSE, suffix = "_t") {
   
   gen_colnames_timesteps <- function(caption) {
     if (!reverse) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
@@ -359,8 +353,15 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
     return(cnames)
   }
 
-  X.tensor <- as.LSTM.X(X, timesteps[1], reverse)
-  Y.tensor <- as.LSTM.Y(Y, switch(y.sequence + 1, NULL, ifelse(length(timesteps < 2), 2, timesteps[2])), reverse)
+  y.sequence <- FALSE
+  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1] < 1), 1, timesteps[1])
+  if (length(timesteps) >= 2) {
+    y.sequence <- TRUE
+    y.steps <- ifelse(timesteps[2] < 2, 2, timesteps[2])
+  }
+
+  X.tensor <- as.LSTM.X(X, x.steps, reverse)
+  Y.tensor <- as.LSTM.Y(Y, switch(y.sequence + 1, NULL, y.steps), reverse)
   dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
   if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1], dim(Y.tensor)[2] * dim(Y.tensor)[3]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
@@ -450,9 +451,8 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #' @param Y n outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.
 #' @param timesteps A number or vector of timesteps for \code{X} and \code{Y}. A timestep denotes the number of different periods of the values within one sample.
 #'   A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
-#'   If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X} and, 
-#'   if \code{return.sequences = T}, also for resampled outcome tensor produced by \code{as.LSTM.Y}. If two values are given, the first value is used
-#'   for the resampled feature tensor and the second for the resampled outcome tensor (sequence or multi-step outcome).
+#'   If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. If two values are given, 
+#'   the first value is used as before and the second value for the resampled sequence or multi-step outcome tensor produced by \code{as.LSTM.Y}.
 #' @param epochs The number of epochs.
 #' @param batch_size A vector with two elements. The first element holds the batch size, the number of samples used per gradient update.
 #'   The second element is boolean to indicate whether the batch size is used for input layer too (\code{TRUE}).
@@ -464,7 +464,7 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output.activation A name of the output activation function.
 #' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
-#' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).
+#' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).
 #' @param loss Name of objective function or objective function. If the model has multiple outputs, 
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
@@ -494,8 +494,8 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
   l_hyperparameter_names <- c("features", "output_units")
 
   # LSTM data format
-  X.steps <- timesteps[1]
-  Y.steps <- switch(return_sequences + 1, NULL, ifelse(length(timesteps < 2), 2, timesteps[2]))
+  X.steps <- ifelse((length(timesteps) == 0) || (timesteps[1] < 1), 1, timesteps[1]) # at least a timestep of 1 is needed for x
+  Y.steps <- switch(return_sequences + 1, NULL, ifelse((length(timesteps < 2)) || (timesteps[2] < 2), 2, timesteps[2]))
   X.train <- as.LSTM.X(X, X.steps)
   Y.train <- as.LSTM.Y(Y, Y.steps)
 
