@@ -20,7 +20,8 @@ fit.LSTM(
   return_sequences = FALSE,
   loss = "mean_squared_error",
   optimizer = "adam",
-  metrics = c("mean_absolute_error")
+  metrics = c("mean_absolute_error"),
+  verbose = 1
 )
 }
 \arguments{
@@ -28,7 +29,11 @@ fit.LSTM(
 
 \item{Y}{n outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.}
 
-\item{timesteps}{The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix, returned by \code{as.LSTM.X}.}
+\item{timesteps}{A number or vector of timesteps for \code{X} and \code{Y}. A timestep denotes the number of different periods of the values within one sample.
+A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
+If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X} and, 
+if \code{return.sequences = T}, also for resampled outcome tensor produced by \code{as.LSTM.Y}. If two values are given, the first value is used
+for the resampled feature tensor and the second for the resampled outcome tensor (sequence or multi-step outcome).}
 
 \item{epochs}{The number of epochs.}
 
@@ -59,6 +64,8 @@ The loss value that will be minimized by the model will then be the sum of all i
 \item{optimizer}{Name of optimizer or optimizer instance.}
 
 \item{metrics}{Vector or list of metrics to be evaluated by the model during training and testing.}
+
+\item{verbose}{Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) determines how the training progress is visualized.}
 }
 \value{
 A list with named elements

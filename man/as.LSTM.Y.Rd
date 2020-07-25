@@ -16,7 +16,7 @@ as.LSTM.Y(Y, timesteps = NULL, reverse = FALSE)
 \value{
 Dependent on timesteps: 
   \code{= NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
-  \code{>= 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
+  \code{>= 2} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 }
 \description{
 Outcomes (Y) data format

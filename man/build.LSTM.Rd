@@ -21,7 +21,7 @@ build.LSTM(
 \arguments{
 \item{features}{Number of features, returned by \code{get.LSTM.X.units}.}
 
-\item{timesteps}{The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix returned by \code{as.LSTM.X}.}
+\item{timesteps}{The number of timesteps.}
 
 \item{batch_size}{Batch size, the number of samples used per gradient update.
 A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211), Culli/Kapoor/Pal (2019:290).}

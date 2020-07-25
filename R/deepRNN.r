@@ -12,17 +12,21 @@
 #' @param x The column indices which spawn the feature matrix.
 #' @param y The column indices of the outcomes.
 #' @param other_columns The column indices of other columns which play an important role, e.g. a datetime column.
-#' @param timesteps The number of timesteps, is the number of different periods within one sample of upcoming resampled feature matrix produced by \code{as.LSTM.X}.
+#' @param timesteps A number or vector of timesteps for \code{x} and \code{y}. A timestep denotes the number of different periods of the values within one sample.
+#'   A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
+#'   If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X} and, 
+#'   if \code{y.sequence = T}, also for resampled outcome tensor produced by \code{as.LSTM.Y}. If two values are given, the first value is used
+#'   for the resampled feature tensor and the second for the resampled outcome tensor (sequence or multi-step outcome).
 #' @param x.lag The considered lags on feature side. For a univariate time series at least a lag of 1 is needed.
 #'   For a multivariate time series no lag must be necessarily used. This argument can also be a vector of the same length as \code{x}.
-#'   In that case, each feature can have its own specific lag.
+#'   In that case, each feature can have its own specified lag.
 #' @param y_as_feature.type Indicates whether lagged outcomes are used as features in a multivariate time series.
 #'   \code{none} doesn't include lagged y-variables (default).
-#'   \code{tsteps} The lagged y-variables retrieve in the periods (timesteps) of the later resampled feature matrix thru \code{as.LSTM.X}.
+#'   \code{plain} The lagged y-variables retrieve in the periods (timesteps) of the later resampled feature matrix thru \code{as.LSTM.X}.
 #'     Therefore, only one lagged y-variable with a lag order of adjusted \code{y_as_feature.lag} is chosen.
-#'   \code{plain} The number of included lagged y-variables is equal to the value of the \code{timesteps} argument.
+#'   \code{timesteps} The number of included lagged y-variables is equal to the value of the \code{timesteps} argument.
 #' @param y_as_feature.lag The considered lag for lagged outcomes (\code{y}) as further features.
-#' @param y.sequence Boolean that indicates whether \code{y} per sample is a scalar or a sequence corresponding to the number of \code{timesteps}.
+#' @param y.sequence Boolean that indicates whether \code{y} is a scalar or a sequence.
 #'
 #' @return A list with named elements
 #'   \code{X}: A feature matrix in LSTM compatible preformat for usage with \code{as.LSTM.X}.
@@ -34,36 +38,38 @@
 #'
 #' @examples
 get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0, 
-                        y_as_feature.type = c("none", "tsteps", "plain"), y_as_feature.lag = 0, 
+                        y_as_feature.type = c("none", "plain", "timesteps"), y_as_feature.lag = 0, 
                         y.sequence = FALSE) {
   data_list <- list()
   df <- as.data.frame(dataset)
-  timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
+  if (length(timesteps) == 1) {
+    x.steps <- timesteps
+    y.steps <- timesteps
+  } else {
+    x.steps <- timesteps[1]
+    y.steps <- timesteps[2]
+  }
+  x.steps <- ifelse(x.steps < 1, 1, x.steps) # at least a timestep of 1 is needed for x
+  y.steps <- ifelse(y.steps < 2, 2, y.steps) # at least a timestep of 2 is needed for sequence outcome y
   max_lag <- max(x.lag)
   max_lag <- ifelse(max_lag < 0, 0, max_lag)
   if ((is.null(x)) || (x == y)) {
     # univariate time series
     lag <- ifelse(max_lag <= 0, 1, max_lag) # at least a lag of 1 is needed
     data_list[[1]] <- df[1:(NROW(df) - lag), y, drop = FALSE]
-    if (!y.sequence) { # scalar outcome
-      data_list[[2]] <- df[(timesteps + lag):NROW(df), y, drop = FALSE]
-      data_list[[3]] <- NA
-      if (!is.null(other_columns)) data_list[[3]] <- df[(timesteps + lag):NROW(df), other_columns, drop = FALSE]
-    } else { # sequence outcome; start at (timesteps + lag) - (timesteps - 1) = lag + 1
-      data_list[[2]] <- df[(lag + 1):NROW(df), y, drop = FALSE]
-      data_list[[3]] <- NA
-      if (!is.null(other_columns)) data_list[[3]] <- df[(lag + 1):NROW(df), other_columns, drop = FALSE]
-    }
+    data_list[[2]] <- df[(x.steps + lag):NROW(df), y, drop = FALSE]
+    data_list[[3]] <- NA
+    if (!is.null(other_columns)) data_list[[3]] <- df[(x.steps + lag):NROW(df), other_columns, drop = FALSE]
+    if (y.sequence) { data_list[[1]] <- head(data_list[[1]], -(y.steps - 1)) }
   } else {
     # multivariate time series
-    x_len <- length(x)
+    x.len <- length(x)
     x.lag_len <- length(x.lag)
     if (x.lag_len == 1) { # one lag for all features
-      lag <- max_lag # a lag of 0 is allowed
-      X <- df[1:(NROW(df) - lag), x, drop = FALSE]
+      X <- df[1:(NROW(df) - max_lag), x, drop = FALSE]
     } else { # a lag for each feature
-      if (x.lag_len != x_len ) { stop("length of specified lags (x.lag) must be equal to the length of specified features (x).") }
-      X <- sapply(c(1:x_len), function(j) {
+      if (x.lag_len != x.len ) { stop("length of specified lags (x.lag) must be equal to the length of specified features (x).") }
+      X <- sapply(c(1:x.len), function(j) {
         x_values <- df[x[j]]
         lagged_x <- x_values[1:(NROW(df) - x.lag[j]), , drop = FALSE]
         lag_diff <- max_lag - x.lag[j]
@@ -77,7 +83,7 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
       Y <- df[y]
       k <- ifelse(y_as_feature.lag <= 0, 1, y_as_feature.lag) # lag order for y
       k <- ifelse(k > max_lag, max_lag, k) # can not be higher than the maximum lag of the features
-      if (y_as_feature.type == "tsteps") { N <- 1 } else { N <- timesteps } # Number of lagged y
+      if (y_as_feature.type == "plain") { N <- 1 } else { N <- timesteps } # Number of lagged y
       cnames <- names(Y)
       cnames <- as.vector(sapply(cnames, function(cname) { rep(cname, N) }))
       cnames <- do.call(paste0, list(cnames, "_lag", c(k:(k + N - 1))))
@@ -92,15 +98,10 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
       X <- cbind(X, lagged_y_matrix)
     }
     data_list[[1]] <- X
-    if (!y.sequence) { # scalar outcome
-      data_list[[2]] <- df[(timesteps + max_lag):NROW(df), y, drop = FALSE]
-      data_list[[3]] <- NA
-      if (!is.null(other_columns)) data_list[[3]] <- df[(timesteps + max_lag):NROW(df), other_columns, drop = FALSE]
-    } else { # sequence outcome
-      data_list[[2]] <- df[(max_lag + 1):NROW(df), y, drop = FALSE]
-      data_list[[3]] <- NA
-      if (!is.null(other_columns)) data_list[[3]] <- df[(max_lag + 1):NROW(df), other_columns, drop = FALSE]
-    }
+    data_list[[2]] <- df[(x.steps + max_lag):NROW(df), y, drop = FALSE]
+    data_list[[3]] <- NA
+    if (!is.null(other_columns)) data_list[[3]] <- df[(x.steps + max_lag):NROW(df), other_columns, drop = FALSE]
+    if (y.sequence) { data_list[[1]] <- head(data_list[[1]], -(y.steps - 1)) }
   }
   names(data_list) <- c("X", "Y", "other_columns")
   return(data_list)
@@ -222,7 +223,7 @@ as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
 #'
 #' @return Dependent on timesteps: 
 #'   \code{= NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
-#'   \code{>= 1} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence outcome \code{Y}.
+#'   \code{>= 2} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 #' @export
 #' 
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}.
@@ -232,7 +233,7 @@ as.LSTM.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
   if (is.null(timesteps)) {
     return(as.tensor(data = Y, adjust = -1, rank = 2))
   } else {
-    timesteps <- ifelse(timesteps < 1, 1, timesteps)
+    timesteps <- ifelse(timesteps < 2, 2, timesteps)
     return(as.tensor(data = Y, adjust = -1, rank = 3, timesteps = timesteps, reverse = reverse))
   }
 }
@@ -358,9 +359,8 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
     return(cnames)
   }
 
-  timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
-  X.tensor <- as.LSTM.X(X, timesteps, reverse)
-  Y.tensor <- as.LSTM.Y(Y, switch(y.sequence + 1, NULL, timesteps), reverse)
+  X.tensor <- as.LSTM.X(X, timesteps[1], reverse)
+  Y.tensor <- as.LSTM.Y(Y, switch(y.sequence + 1, NULL, ifelse(length(timesteps < 2), 2, timesteps[2])), reverse)
   dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
   if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1], dim(Y.tensor)[2] * dim(Y.tensor)[3]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
@@ -380,7 +380,7 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
 #' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
 #'
 #' @param features Number of features, returned by \code{get.LSTM.X.units}.
-#' @param timesteps The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix returned by \code{as.LSTM.X}.
+#' @param timesteps The number of timesteps.
 #' @param batch_size Batch size, the number of samples used per gradient update.
 #'   A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211), Culli/Kapoor/Pal (2019:290).
 #' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units 
@@ -448,7 +448,11 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #'
 #' @param X A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.
 #' @param Y n outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.
-#' @param timesteps The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix, returned by \code{as.LSTM.X}.
+#' @param timesteps A number or vector of timesteps for \code{X} and \code{Y}. A timestep denotes the number of different periods of the values within one sample.
+#'   A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
+#'   If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X} and, 
+#'   if \code{return.sequences = T}, also for resampled outcome tensor produced by \code{as.LSTM.Y}. If two values are given, the first value is used
+#'   for the resampled feature tensor and the second for the resampled outcome tensor (sequence or multi-step outcome).
 #' @param epochs The number of epochs.
 #' @param batch_size A vector with two elements. The first element holds the batch size, the number of samples used per gradient update.
 #'   The second element is boolean to indicate whether the batch size is used for input layer too (\code{TRUE}).
@@ -466,6 +470,7 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
 #' @param optimizer Name of optimizer or optimizer instance.
 #' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param verbose Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) determines how the training progress is visualized.
 #'
 #' @return A list with named elements
 #'   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
@@ -482,14 +487,17 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
                      k.fold = NULL, k.optimizer = NULL,
                      hidden = NULL, dropout = NULL, output.activation = "linear",
                      stateful = FALSE, return_sequences = FALSE,
-                     loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
+                     loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error'),
+                     verbose = 1) {
   l <- list() # result
   l_names <- c("hyperparameter", "model", "avg_qual")
   l_hyperparameter_names <- c("features", "output_units")
 
   # LSTM data format
-  X.train <- as.LSTM.X(X, timesteps)
-  Y.train <- as.LSTM.Y(Y, switch(return_sequences + 1, NULL, timesteps))
+  X.steps <- timesteps[1]
+  Y.steps <- switch(return_sequences + 1, NULL, ifelse(length(timesteps < 2), 2, timesteps[2]))
+  X.train <- as.LSTM.X(X, X.steps)
+  Y.train <- as.LSTM.Y(Y, Y.steps)
 
   # Calculated Hyperparameters
   X.units <- get.LSTM.X.units(X.train) # Number of features
@@ -503,7 +511,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
   # Build model procedure
   build_lstm_model <- function() {
     lstm_model <- build.LSTM(features = X.units,
-                             timesteps = timesteps,
+                             timesteps = X.steps,
                              batch_size = input_batch_size,
                              hidden = hidden,
                              dropout = dropout,
@@ -524,7 +532,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
         # By default, Keras will shuffle the rows within each batch, which will destroy the alignment
         # that is needed for a stateful RNN to learn effectively [Culli/Pal (2017:211)].
         # Therefore, shuffle must be set to false to keep alignment alive.
-        l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], validation_split = validation_split, verbose = 1, shuffle = FALSE)
+        l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
         l[[2]] %>% keras::reset_states()
       }
     } else {
@@ -544,10 +552,10 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
     # Folds loop
     for (i in 1:(k-1)) {
       # Extract training and validation fold
-      x.train.fold <- as.LSTM.X(x.fold_datasets[[i]], timesteps)
-      y.train.fold <- as.LSTM.Y(y.fold_datasets[[i]], switch(return_sequences + 1, NULL, timesteps))
-      x.val.fold <- as.LSTM.X(x.fold_datasets[[i + 1]], timesteps)
-      y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1]], switch(return_sequences + 1, NULL, timesteps))
+      x.train.fold <- as.LSTM.X(x.fold_datasets[[i]], X.steps)
+      y.train.fold <- as.LSTM.Y(y.fold_datasets[[i]], Y.steps)
+      x.val.fold <- as.LSTM.X(x.fold_datasets[[i + 1]], X.steps)
+      y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1]], Y.steps)
 
       # Build model
       l[[2]] <- build_lstm_model()
@@ -555,7 +563,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       # Train/fit model
       history <- l[[2]] %>%
         keras::fit(x = x.train.fold, y = y.train.fold, epochs = epochs, batch_size = batch_size[1],
-            validation_data = list(x.val.fold, y.val.fold))
+            validation_data = list(x.val.fold, y.val.fold), verbose = verbose)
 
       # Store training results
       results <- l[[2]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size[1], verbose = 0)
@@ -585,11 +593,11 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       l[[2]] <- build_lstm_model()
       if (stateful == T) {
         for (i in 1:opt_epochs) {
-          l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], validation_split = validation_split, verbose = 1, shuffle = FALSE)
+          l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
           l[[2]] %>% keras::reset_states()
         }
       } else {
-        l[[2]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size[1], validation_split = validation_split)
+        l[[2]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size[1], validation_split = validation_split, verbose = verbose)
       }
     }
   }
@@ -626,7 +634,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch_size = 1,
                          scale_type = NULL, scaler = NULL,
                          invert_first_row = NULL, Y.actual = NULL, type = "univariate") {
-  X.tensor <- as.LSTM.X(X, timesteps)
+  X.tensor <- as.LSTM.X(X, timesteps[1])
   Y.predict <- lstm %>% predict(X.tensor, batch_size = batch_size)
   dim_predict <- length(dim(Y.predict)) # 2 without timesteps, 3 with timesteps
   if (dim_predict == 2) {
