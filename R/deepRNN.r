@@ -495,7 +495,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 
   # LSTM data format
   X.steps <- ifelse((length(timesteps) == 0) || (timesteps[1] < 1), 1, timesteps[1]) # at least a timestep of 1 is needed for x
-  Y.steps <- switch(return_sequences + 1, NULL, ifelse((length(timesteps) < 2) || (timesteps[2] < 2), 2, timesteps[2]))
+  Y.steps <- switch(return_sequences + 1, NULL, ifelse(((length(timesteps) < 2) || (timesteps[2] < 2)), 2, timesteps[2]))
   X.train <- as.LSTM.X(X, X.steps)
   Y.train <- as.LSTM.Y(Y, Y.steps)
 

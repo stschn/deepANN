@@ -86,6 +86,11 @@ as.vector.timesteps <- function(x, timesteps = 1, reverse = FALSE) {
   # return(do.call(rbind, lapply(c(1:N), function(i) {
   #   ...
   # })))
+  
+  # Identical fast is
+  # l <- sapply(...)
+  # ...
+  # return(t(l))
   x <- c(t(x))
   N <- NROW(x) - timesteps + 1
   l <- lapply(c(1:N), function(i) {
