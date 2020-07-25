@@ -343,7 +343,7 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(dim(Y.tensor)) == 
 #' @examples
 as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = FALSE, suffix = "_t") {
   
-  gen_colnames_timesteps <- function(caption) {
+  gen_colnames_timesteps <- function(caption, timesteps) {
     if (!reverse) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
     cnames <- unlist(lapply(caption, function(cname) { paste0(cname, suffix, "%d") }))
     cnames <- unlist(lapply(cnames, function(cname) { unlist(lapply(tsteps, function(t) { sprintf(cname, t) })) }))
@@ -366,8 +366,8 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
   if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1], dim(Y.tensor)[2] * dim(Y.tensor)[3]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
 
-  names_X <- gen_colnames_timesteps(names_X)  
-  if (y.sequence) { names_Y <- gen_colnames_timesteps(names_Y) }
+  names_X <- gen_colnames_timesteps(names_X, timesteps[1])
+  if (y.sequence) { names_Y <- gen_colnames_timesteps(names_Y, timesteps[2]) }
   colnames(dataset) <- c(names_Y, names_X)
   return(dataset)
 }
