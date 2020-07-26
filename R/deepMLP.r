@@ -63,45 +63,53 @@ as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = NULL, reverse =
   return(tensor)
 }
 
-#' Transform a vector into a vector with timesteps
+#' Transform a vector into a ANN compatible matrix
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param x A numeric vector.
-#' @param timesteps The number of timesteps. A timestep denotes a period within a row.
+#' @param ncol The number of columns in the resulting matrix. If \code{by = step}, the number of columns is equal to the number of timesteps used for a LSTM.
 #' @param reverse Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.
+#' @param by Controls the transformation process. The options \code{row} and \code{col} lead to a matrix whereby the values are structured row-wise or column-wise.
+#'   The option \code{step} stands for a stepwise order of the values row by row (e.g. 1 2 3, 2 3 4, 4 5 6 etc.).
 #'
-#' @return The transformed or resampled vector \code{x}.
+#' @return The transformed or resampled vector \code{x} into a matrix.
 #' @export
 #'
 #' @seealso \code{\link{as.tensor.3D}}.
 #'
 #' @examples
-as.vector.timesteps <- function(x, timesteps = 1, reverse = FALSE) {
+vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "col", "step")) {
   # For fast transferring a list into a matrix
   # https://stackoverflow.com/questions/13224553/how-to-convert-a-huge-list-of-vector-to-a-matrix-more-efficiently
   # https://stackoverflow.com/questions/17752830/r-reshape-a-vector-into-multiple-columns
-
-  # do.call(rbind, ...) is a much more slower approach
-  # return(do.call(rbind, lapply(c(1:N), function(i) {
-  #   ...
-  # })))
-  
-  # Identical fast is
-  # l <- sapply(...)
-  # ...
-  # return(t(l))
   x <- c(t(x))
-  N <- NROW(x) - timesteps + 1
-  l <- lapply(c(1:N), function(i) {
-    start <- i
-    end <- i + timesteps - 1
-    if (!reverse) out <- x[start:end] else out <- x[end:start]
-    out
-  })
-  # m <- matrix(unlist(l), ncol = N)
-  # m <- t(m)
-  m <- matrix(unlist(l), nrow = N, byrow = T)
+  by <- match.arg(by)
+  if (by %in% c("row", "col")) {
+    if (reverse) { x <- rev(x) }
+    m <- matrix(x, ncol = ncol, byrow = ifelse((by == "row"), TRUE, FALSE))
+  } else {
+  if (by == "step") {
+    # do.call(rbind, ...) is a much more slower approach
+    # return(do.call(rbind, lapply(c(1:N), function(i) {
+    #   ...
+    # })))
+
+    # Identical fast is
+    # l <- sapply(...)
+    # ...
+    # return(t(l))
+    N <- NROW(x) - ncol + 1
+    l <- lapply(c(1:N), function(i) {
+      start <- i
+      end <- i + ncol - 1
+      if (!reverse) out <- x[start:end] else out <- x[end:start]
+      out
+    })
+    # m <- matrix(unlist(l), ncol = N)
+    # m <- t(m)
+    m <- matrix(unlist(l), nrow = N, byrow = T)
+  }}
   return(m)
 }
 
@@ -155,17 +163,17 @@ as.tensor.2D <- function(data, reverse = FALSE) {
 #' @return A 3D-tensor (three-dimensional array).
 #' @export
 #'
-#' @seealso \code{\link{as.tensor.1D}}, \code{\link{as.tensor.2D}}.
+#' @seealso \code{\link{as.tensor.1D}}, \code{\link{as.tensor.2D}}, \code{\link{vector.as.ANN.matrix}}.
 #'
 #' @examples
-as.tensor.3D <- function(data, timesteps = 1, reverse = FALSE) {
+as.tensor.3D <- function(data, ncol = 1, reverse = FALSE, by = c("row", "col", "step")) {
   # M <- NCOL(m)
   # N <- NROW(m) - timesteps + 1
   # tensor <- array(NA, dim = c(N, timesteps, M))
   # for (j in 1:M) { tensor[, , j] <- as.vector.timesteps(m[, j], timesteps, reverse) }
   m <- as.matrix(data)
-  m <- apply(m, 2, as.vector.timesteps, timesteps, reverse)
-  tensor <- array(m, dim = c(NROW(m) / timesteps, timesteps, NCOL(m)))
+  m <- apply(m, 2, vector.as.ANN.matrix, ncol, reverse, by)
+  tensor <- array(m, dim = c(NROW(m) / ncol, ncol, NCOL(m)))
   return(tensor)
 }
 

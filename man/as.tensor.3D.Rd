@@ -4,7 +4,7 @@
 \alias{as.tensor.3D}
 \title{Transform data into a tensor with three ranks or dimensions.}
 \usage{
-as.tensor.3D(data, timesteps = 1, reverse = FALSE)
+as.tensor.3D(data, ncol = 1, reverse = FALSE, by = c("row", "col", "step"))
 }
 \arguments{
 \item{data}{A dataset, usually a matrix or data.frame.}
@@ -18,7 +18,7 @@ A 3D-tensor (three-dimensional array).
 Transform data into a tensor with three ranks or dimensions.
 }
 \seealso{
-\code{\link{as.tensor.1D}}, \code{\link{as.tensor.2D}}.
+\code{\link{as.tensor.1D}}, \code{\link{as.tensor.2D}}, \code{\link{vector.as.ANN.matrix}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as.ANN.matrix}()},
@@ -27,11 +27,11 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor}()},
-\code{\link{as.vector.timesteps}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},
-\code{\link{predict.MLP}()}
+\code{\link{predict.MLP}()},
+\code{\link{vector.as.ANN.matrix}()}
 }
 \concept{Single & Multi Layer Perceptron (SLP, MLP)}

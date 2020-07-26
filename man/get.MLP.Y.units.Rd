@@ -26,10 +26,10 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
 \code{\link{as.tensor}()},
-\code{\link{as.vector.timesteps}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},
-\code{\link{predict.MLP}()}
+\code{\link{predict.MLP}()},
+\code{\link{vector.as.ANN.matrix}()}
 }
 \concept{Single & Multi Layer Perceptron (SLP, MLP)}
