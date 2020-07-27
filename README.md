@@ -80,7 +80,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>start.invert_differencing()</code> determines the start index for invert differencing.</li>
   <li><code>as.lag()</code> transfers a lag from ARIMA(X) to a corresponding lag used for LSTM modeling.</li>
   <li><code>as.timesteps()</code> transfers a lag to a corresponding timesteps value.</li>
-  <li><code>as.LSTM.X()</code> resamples a feature matrix into a 3-dimensional feature array with the dimensions samples, timesteps, and units.</li>
+  <li><code>as.LSTM.X()</code> resamples a feature matrix into a 3-dimensional feature array with the dimensions samples, timesteps and units.</li>
   <li><code>as.LSTM.Y()</code> creates a 2-dimensional outcome array with the dimensions samples and units.</li>
   <li><code>get.LSTM.X.samples()</code> returns the number of feature samples.</li>
   <li><code>get.LSTM.X.timesteps()</code> returns the number of timesteps used within the resampled feature matrix.</li>
@@ -97,7 +97,7 @@ This R library is currently structured in form of the following functional famil
 
 <b>Convolutional Neural Network (CNN)</b>
 <ul>
-  <li><code>load.image_features()</code> loads images from storage medium and creates a 4-dimensional array with the dimensions samples, height, width, and channels.</li>
+  <li><code>load.image_features()</code> loads images from storage medium and creates a 4-dimensional array with the dimensions samples, height, width and channels.</li>
 </ul>
 
 <b>Self-Organizing Map (SOM)</b>
