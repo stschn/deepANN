@@ -21,9 +21,9 @@ fit.MLP(
 )
 }
 \arguments{
-\item{X}{A feature data set, usually a matrix or data.frame.}
+\item{X}{A feature data set, usually a matrix or data frame.}
 
-\item{Y}{An outcome data set, usually a vector, matrix or data.frame.}
+\item{Y}{An outcome data set, usually a vector, matrix or data frame.}
 
 \item{epochs}{Number of epochs to train the model.}
 
@@ -35,7 +35,7 @@ fit.MLP(
 
 \item{k.optimizer}{Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.}
 
-\item{hidden}{A data.frame with two columns whereby the first column contains the number of hidden units
+\item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
 \item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
@@ -54,7 +54,7 @@ The loss value that will be minimized by the model will then be the sum of all i
 A list with named elements
   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
   \code{model}: A trained model object with stacked layers.
-  \code{avg_qual}: Only if k-fold cross validation is used. A data.frame with two columns whereby the
+  \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the
                    first columns stores the epoch number and the second column the mean of the underpinned quality metric.
 }
 \description{
@@ -70,7 +70,6 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
-\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},

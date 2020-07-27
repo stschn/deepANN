@@ -72,7 +72,7 @@ lags <- function(x, k = 1, between = FALSE, na = NA) {
 #'
 #' @family TimeSeries
 #'   
-#' @param dataset A data set, usually a data.frame.
+#' @param dataset A data set, usually a data frame.
 #' @param y The indices of the columns which are used to build stationary series.
 #' @param differences The number of differences for building stationary series.
 #' @param suffix The suffix for every newly created column of the stationary series.
@@ -141,7 +141,7 @@ invert_differencing <- function(delta, origin) {
 #'
 #' @family TimeSeries
 #'
-#' @param dataset A data set or time series, usually a data.frame.
+#' @param dataset A data set or time series, usually a data frame.
 #' @param p The index of the periodic column.
 #' @param type Different subsetting types
 #'   \code{seq} A sequence specified thru start index and increment passed in \code{...} as numbers.

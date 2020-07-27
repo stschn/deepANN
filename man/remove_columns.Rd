@@ -7,7 +7,7 @@
 remove_columns(dataset, value = 0)
 }
 \arguments{
-\item{dataset}{A data set, usually a data.frame.}
+\item{dataset}{A data set, usually a data frame.}
 
 \item{value}{The specified value searched for.}
 }

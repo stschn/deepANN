@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepRNN.r
 \name{as.LSTM.data.frame}
 \alias{as.LSTM.data.frame}
-\title{Recreation of a data.frame based on preformatted X and Y data sets}
+\title{Recreation of a data frame based on preformatted X and Y data sets}
 \usage{
 as.LSTM.data.frame(
   X,
@@ -15,9 +15,9 @@ as.LSTM.data.frame(
 )
 }
 \arguments{
-\item{X}{A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.}
+\item{X}{A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.}
 
-\item{Y}{An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.}
+\item{Y}{An outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.}
 
 \item{names_X}{Names of the features.}
 
@@ -30,12 +30,12 @@ as.LSTM.data.frame(
 \item{suffix}{The suffix for every feature per timestep or period.}
 }
 \value{
-A data.frame with outcome column(s) and a further resampled feature matrix.
-  The feature matrix within this data.frame has the following forward oriented form:
+A data frame with outcome column(s) and a further resampled feature matrix.
+  The feature matrix within this data frame has the following forward oriented form:
   x1(t1), x1(t2), x1(t3)...x2(t1), x2(t2), x2(t3)...x3(t1), x3(t2), x3(t3)...
 }
 \description{
-Recreation of a data.frame based on preformatted X and Y data sets
+Recreation of a data frame based on preformatted X and Y data sets
 }
 \seealso{
 \code{\link{get.LSTM.XY}}.
@@ -55,8 +55,8 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
-\code{\link{get.LSTM.period_shift}()},
+\code{\link{get.period_shift}()},
 \code{\link{predict.LSTM}()},
-\code{\link{start.LSTM.invert_differencing}()}
+\code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}

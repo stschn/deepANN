@@ -63,7 +63,7 @@ outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
 #'
 #' @family Outlier
 #' 
-#' @param dataset A data set, usually a data.frame.
+#' @param dataset A data set, usually a data frame.
 #' @param columns The names of the columns whose outlier values are to be replaced. if \code{NULL} (default), all corresponding columns are examined.
 #' @param type The type of outlier definition and detection. 
 #'   \code{tukey} refers to the method of Tukey (1977).

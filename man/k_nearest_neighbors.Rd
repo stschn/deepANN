@@ -7,9 +7,9 @@
 k_nearest_neighbors(y, X, test, k = 1)
 }
 \arguments{
-\item{y}{A column vector of the categories within a feature matrix or data.frame.}
+\item{y}{A column vector of the categories within a feature matrix or data frame.}
 
-\item{X}{Matrix or data.frame with feature values.}
+\item{X}{Matrix or data frame with feature values.}
 
 \item{test}{The query or test instance.}
 

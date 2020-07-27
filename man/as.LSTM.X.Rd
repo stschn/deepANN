@@ -7,7 +7,7 @@
 as.LSTM.X(X, timesteps = 1, reverse = FALSE)
 }
 \arguments{
-\item{X}{A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.}
+\item{X}{A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.}
 
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.}
 
@@ -24,7 +24,7 @@ A three-dimensional array of the resampled feature matrix \code{X} needed within
 Features (X) data format for LSTM
 }
 \seealso{
-\code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.Y}}, \code{\link{as.ANN.matrix}}.
+\code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.Y}}, \code{\link{as.ANN.matrix}}, \code{\link{as.tensor.3D}}.
 
 Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
 \code{\link{as.LSTM.Y}()},
@@ -41,8 +41,8 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
-\code{\link{get.LSTM.period_shift}()},
+\code{\link{get.period_shift}()},
 \code{\link{predict.LSTM}()},
-\code{\link{start.LSTM.invert_differencing}()}
+\code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}

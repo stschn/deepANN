@@ -7,7 +7,7 @@
 cross_validation_split(dataset, folds = 3, foldname = "fold", shuffle = FALSE)
 }
 \arguments{
-\item{dataset}{A data set, usually a data.frame.}
+\item{dataset}{A data set, usually a data frame.}
 
 \item{folds}{Number of created folds.}
 

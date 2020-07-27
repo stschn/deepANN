@@ -10,7 +10,7 @@
 #'   Primary colors can be mixed to produce any color. 
 #'   A channel equal \code{1} indicates a grayscaled image, \code{3} a colored image.
 #'
-#' @return A 4-dimensional array with the dimensions samples (number of images), height, width, and channel.
+#' @return A 4-dimensional array with the dimensions samples (number of images), height, width and channel.
 #' @export
 #' 
 #' @seealso \code{\link[base]{list.files}},

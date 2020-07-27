@@ -9,7 +9,7 @@
 \arguments{
 \item{mlp}{A model object, returned by \code{fit.MLP} in the list element \code{model}.}
 
-\item{X}{A feature data set, usually a matrix or data.frame.}
+\item{X}{A feature data set, usually a matrix or data frame.}
 
 \item{batch_size}{Batch size, the number of samples used per gradient update.}
 
@@ -35,7 +35,6 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
-\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},

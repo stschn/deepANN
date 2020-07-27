@@ -16,7 +16,7 @@ get.LSTM.XY(
 )
 }
 \arguments{
-\item{dataset}{A data set, usually a matrix or data.frame.}
+\item{dataset}{A data set, usually a matrix or data frame.}
 
 \item{x}{The column indices which spawn the feature matrix.}
 
@@ -46,7 +46,7 @@ In that case, each feature can have its own specified lag.}
 A list with named elements
   \code{X}: A feature matrix in LSTM compatible preformat for usage with \code{as.LSTM.X}.
   \code{Y}: An outcome matrix in LSTM compatible preformat for usage with \code{as.LSTM.Y}.
-  \code{other_columns}: A data.frame of the selected \code{other_columns}.
+  \code{other_columns}: A data frame of the selected \code{other_columns}.
 }
 \description{
 \code{get.LSTM.XY} extracts features and outcomes from a data/time series in a LSTM compatible preformat.
@@ -73,8 +73,8 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
-\code{\link{get.LSTM.period_shift}()},
+\code{\link{get.period_shift}()},
 \code{\link{predict.LSTM}()},
-\code{\link{start.LSTM.invert_differencing}()}
+\code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}

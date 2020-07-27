@@ -2,12 +2,12 @@
 % Please edit documentation in R/deepMLP.r
 \name{as.ANN.matrix}
 \alias{as.ANN.matrix}
-\title{Converts a matrix to an ANN compatible matrix with only numbers}
+\title{Converts data into an ANN compatible matrix with only numbers}
 \usage{
-as.ANN.matrix(X, adjust = NULL)
+as.ANN.matrix(data, adjust = NULL)
 }
 \arguments{
-\item{X}{A data set.}
+\item{data}{A data set, usually a matrix or data frame.}
 
 \item{adjust}{A number that is added to or subtracted from a factor level value, or even not (\code{NULL}).}
 }
@@ -15,7 +15,7 @@ as.ANN.matrix(X, adjust = NULL)
 A matrix with only numbers.
 }
 \description{
-Converts a matrix to an ANN compatible matrix with only numbers
+Converts data into an ANN compatible matrix with only numbers
 }
 \seealso{
 Other Single & Multi Layer Perceptron (SLP, MLP): 
@@ -24,7 +24,6 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
-\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},

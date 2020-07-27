@@ -17,7 +17,7 @@ build.MLP(
 \arguments{
 \item{features}{Number of features, returned by \code{get.MLP.X.units}.}
 
-\item{hidden}{A data.frame with two columns whereby the first column contains the number of hidden units
+\item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
 \item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
@@ -51,7 +51,6 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
-\code{\link{as.tensor}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},

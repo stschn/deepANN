@@ -7,7 +7,7 @@
 as.LSTM.Y(Y, timesteps = NULL, reverse = FALSE)
 }
 \arguments{
-\item{Y}{An outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.}
+\item{Y}{An outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.}
 
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{Y}.}
 
@@ -16,13 +16,14 @@ as.LSTM.Y(Y, timesteps = NULL, reverse = FALSE)
 \value{
 Dependent on timesteps: 
   \code{= NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
-  \code{>= 2} a 3D-array with the dimensions (1) samples, (2) timesteps, and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
+  \code{>= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 }
 \description{
 Outcomes (Y) data format
 }
 \seealso{
-\code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}.
+\code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}, 
+  \code{\link{as.tensor.2D}}, \code{\link{as.tensor.3D}}.
 
 Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
 \code{\link{as.LSTM.X}()},
@@ -39,8 +40,8 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
-\code{\link{get.LSTM.period_shift}()},
+\code{\link{get.period_shift}()},
 \code{\link{predict.LSTM}()},
-\code{\link{start.LSTM.invert_differencing}()}
+\code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}

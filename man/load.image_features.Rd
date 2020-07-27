@@ -19,7 +19,7 @@ Primary colors can be mixed to produce any color.
 A channel equal \code{1} indicates a grayscaled image, \code{3} a colored image.}
 }
 \value{
-A 4-dimensional array with the dimensions samples (number of images), height, width, and channel.
+A 4-dimensional array with the dimensions samples (number of images), height, width and channel.
 }
 \description{
 Load images from files and create a 4-dimensional image array

@@ -7,7 +7,7 @@
 as.tensor.2D(data, reverse = FALSE)
 }
 \arguments{
-\item{data}{A dataset, usually a matrix or data.frame.}
+\item{data}{A dataset, usually a matrix or data frame.}
 
 \item{reverse}{Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.}
 }
@@ -26,7 +26,6 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.MLP.Y}()},
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.3D}()},
-\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},

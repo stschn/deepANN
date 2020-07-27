@@ -12,7 +12,7 @@ period(
 )
 }
 \arguments{
-\item{dataset}{A data set or time series, usually a data.frame.}
+\item{dataset}{A data set or time series, usually a data frame.}
 
 \item{p}{The index of the periodic column.}
 

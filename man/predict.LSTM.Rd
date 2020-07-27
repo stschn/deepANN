@@ -21,7 +21,7 @@
 \arguments{
 \item{lstm}{A model object, returned by \code{fit.LSTM} in the list element \code{model}.}
 
-\item{X}{A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.}
+\item{X}{A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.}
 
 \item{timesteps}{The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix, returned by \code{as.LSTM.X}.}
 
@@ -39,7 +39,7 @@ z-score scaling needs a list with vectors with mean and sd values for each outco
 
 \item{invert_first_row}{The row index of the first row of the training or test data set regarding to the raw data set before differencing.}
 
-\item{Y.actual}{A vector, matrix or data.frame of raw data outcome values used for invert differencing.}
+\item{Y.actual}{A vector, matrix or data frame of raw data outcome values used for invert differencing.}
 
 \item{type}{The type of time series: \code{univariate} or \code{multivariate}.}
 }
@@ -71,7 +71,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
-\code{\link{get.LSTM.period_shift}()},
-\code{\link{start.LSTM.invert_differencing}()}
+\code{\link{get.period_shift}()},
+\code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}

@@ -59,7 +59,6 @@ This R library is currently structured in form of the following functional famil
 <b>Single & Multi Layer Perceptron (SLP, MLP)</b>
 <ul>
   <li><code>as.ANN.matrix()</code> converts a data set into a matrix with adjusted character values and factor levels to their numeric indices if necessary.</li>
-  <li><code>as.tensor()</code> converts data into a tensor with specific rank.</li>
   <li><code>vector.as.ANN.matrix()</code> transforms a vector into a ANN compatible matrix.</li>
   <li><code>as.tensor.1D()</code> transforms data into a one-dimensional tensor (vector).</li>
   <li><code>as.tensor.2D()</code> transforms data into a two-dimensional tensor (matrix).</li>
@@ -76,8 +75,8 @@ This R library is currently structured in form of the following functional famil
 <b>Reccurent Neural Network (RNN), Long Short-Term Memory (LSTM)</b>
 <ul>
   <li><code>get.LSTM.XY()</code> extracts features and outcomes from a data set in a LSTM compatible preformat.</li>
-  <li><code>get.LSTM.period_shift()</code> calculates the period shift for a univariate and multivariate time series.</li>
-  <li><code>start.LSTM.invert_differencing()</code> determines the start index for invert differencing.</li>
+  <li><code>get.period_shift()</code> calculates the period shift for a univariate and multivariate time series.</li>
+  <li><code>start.invert_differencing()</code> determines the start index for invert differencing.</li>
   <li><code>as.lag()</code> transfers a lag from ARIMA(X) to a corresponding lag used for LSTM modeling.</li>
   <li><code>as.timesteps()</code> transfers a lag to a corresponding timesteps value.</li>
   <li><code>as.LSTM.X()</code> resamples a feature matrix into a 3-dimensional feature array with the dimensions samples, timesteps, and units.</li>

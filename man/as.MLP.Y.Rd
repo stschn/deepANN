@@ -7,7 +7,7 @@
 as.MLP.Y(Y)
 }
 \arguments{
-\item{Y}{An outcome data set, usually a vector, matrix or data.frame.}
+\item{Y}{An outcome data set, usually a vector, matrix or data frame.}
 }
 \value{
 A two-dimensional array of the outcome \code{Y} needed within Tensorflow for feedforward SLP or MLP.
@@ -24,7 +24,6 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
-\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},

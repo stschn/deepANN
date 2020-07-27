@@ -140,7 +140,7 @@ one_hot_decode <- function(x_encoded) {
 #'
 #' @family Dummyfication
 #'   
-#' @param dataset An imbalanced data set, usually a data.frame.
+#' @param dataset An imbalanced data set, usually a data frame.
 #' @param x The column indices which spawn the feature matrix.
 #' @param y The column index of the target vector with class labels (categories).
 #' @param n The number of newly created samples or the percentage of deleted samples.
@@ -236,7 +236,7 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
 #'
 #' @family Dummyfication
 #' 
-#' @param dataset A data set, usually a data.frame.
+#' @param dataset A data set, usually a data frame.
 #' @param value The specified value searched for.
 #'
 #' @return The dataset without those columns that contain only one specific value.

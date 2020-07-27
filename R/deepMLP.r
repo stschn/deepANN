@@ -1,17 +1,17 @@
-#' Converts a matrix to an ANN compatible matrix with only numbers
+#' Converts data into an ANN compatible matrix with only numbers
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param X A data set.
+#' @param data A data set, usually a matrix or data frame.
 #' @param adjust A number that is added to or subtracted from a factor level value, or even not (\code{NULL}).
 #'
 #' @return A matrix with only numbers.
 #' @export
 #'
 #' @examples
-as.ANN.matrix <- function(X, adjust = NULL) {
-  X <- as.data.frame(X)
-  m <- sapply(X, function(column) {
+as.ANN.matrix <- function(data, adjust = NULL) {
+  data <- as.data.frame(data)
+  m <- sapply(data, function(column) {
     if (is.character(column)) { column <- as.factor(column) }
     if (is.factor(column)) {
       if (is.null(adjust)) { as.integer(column) } else { as.integer(column) + as.integer(adjust) }
@@ -19,48 +19,6 @@ as.ANN.matrix <- function(X, adjust = NULL) {
   })
   m <- as.matrix(m)
   return(m)
-}
-
-#' Converts data to a tensor with specific rank.
-#'
-#' @family Single & Multi Layer Perceptron (SLP, MLP)
-#'
-#' @param data The data, usually a matrix or data.frame.
-#' @param adjust A number that is added to or subtracted from a factor level value within \code{data}, or even not (\code{NULL}).
-#' @param rank The rank or number of dimensions of the tensor.
-#' @param timesteps The number of timesteps; different periods within one sample (record) of the resampled \code{data}.
-#' @param reverse Controls the order of the values in the resampled \code{data}. By default they are used in the given order, but they can also be used in reverse order.
-#'
-#' @return A tensor with specific rank.
-#' @export
-#'
-#' @seealso \code{\link{as.ANN.matrix}}.
-#'
-#' @examples
-as.tensor <- function(data, adjust = NULL, rank = 2, timesteps = NULL, reverse = FALSE) {
-  tensor <- NULL
-  m <- as.ANN.matrix(data, adjust)
-  if (rank == 1) {
-    m <- c(t(m))
-    if (reverse) { m <- rev(m) }
-    tensor <- array(data = m)
-  } else {
-  if (rank == 2) {
-    if (reverse) { m <- apply(m, 2, rev) }
-    tensor <- array(data = m, dim = c(NROW(m), NCOL(m)))
-  } else {
-  if (rank == 3) {
-    if ((is.null(timesteps)) || (timesteps < 1)) { timesteps <- 1 }
-    variables <- NCOL(m)
-    samples <- NROW(m) - timesteps + 1
-    variable_matrix <- sapply(1:variables, function(j) {
-      variable_list <- sapply(1:samples, function(i) {
-        if (!reverse) { m[i:(i + timesteps - 1), j] } else { m[(i + timesteps - 1):i, j] }})
-    })
-    tensor <- array(NA, dim = c(samples, timesteps, variables))
-    for (i in 1:variables) { tensor[, , i] <- matrix(variable_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
-  }}}
-  return(tensor)
 }
 
 #' Transform a vector into a ANN compatible matrix
@@ -137,7 +95,7 @@ as.tensor.1D <- function(data, reverse = FALSE) {
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param data A dataset, usually a matrix or data.frame.
+#' @param data A dataset, usually a matrix or data frame.
 #' @param reverse Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A 2D-tensor (two-dimensional array equal to a matrix).
@@ -157,8 +115,11 @@ as.tensor.2D <- function(data, reverse = FALSE) {
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param data A dataset, usually a matrix or data.frame.
-#' @param reverse Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.
+#' @param data A dataset, usually a matrix or data frame.
+#' @param ncol The number of columns in the resulting tensor. If \code{by = step}, the number of columns is equal to the number of timesteps used for a RNN respectively LSTM.
+#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.
+#' @param by Controls the transformation process. The options \code{row} and \code{col} lead to a matrix whereby the values are structured row-wise or column-wise.
+#'   The option \code{step} stands for a stepwise order of the values row by row (e.g. 1 2 3, 2 3 4, 4 5 6 etc.).
 #'
 #' @return A 3D-tensor (three-dimensional array).
 #' @export
@@ -168,9 +129,9 @@ as.tensor.2D <- function(data, reverse = FALSE) {
 #' @examples
 as.tensor.3D <- function(data, ncol = 1, reverse = FALSE, by = c("row", "col", "step")) {
   # M <- NCOL(m)
-  # N <- NROW(m) - timesteps + 1
-  # tensor <- array(NA, dim = c(N, timesteps, M))
-  # for (j in 1:M) { tensor[, , j] <- as.vector.timesteps(m[, j], timesteps, reverse) }
+  # N <- NROW(m) - ncol + 1
+  # tensor <- array(NA, dim = c(N, ncol, M))
+  # for (j in 1:M) { tensor[, , j] <- vector.as.matrix(m[, j], ncol, reverse, by) }
   m <- as.matrix(data)
   m <- apply(m, 2, vector.as.ANN.matrix, ncol, reverse, by)
   tensor <- array(m, dim = c(NROW(m) / ncol, ncol, NCOL(m)))
@@ -181,7 +142,7 @@ as.tensor.3D <- function(data, ncol = 1, reverse = FALSE, by = c("row", "col", "
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param X A feature data set, usually a matrix or data.frame.
+#' @param X A feature data set, usually a matrix or data frame.
 #'
 #' @return A two-dimensional array of the feature matrix \code{X} needed within Tensorflow for feedforward SLP or MLP.
 #' @export
@@ -198,7 +159,7 @@ as.MLP.X <- function(X) {
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param Y An outcome data set, usually a vector, matrix or data.frame.
+#' @param Y An outcome data set, usually a vector, matrix or data frame.
 #'
 #' @return A two-dimensional array of the outcome \code{Y} needed within Tensorflow for feedforward SLP or MLP.
 #' @export
@@ -246,7 +207,7 @@ get.MLP.Y.units <- function(Y.tensor) { return(NCOL(Y.tensor)) }
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param features Number of features, returned by \code{get.MLP.X.units}.
-#' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units
+#' @param hidden A data frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.MLP.Y.units},
@@ -301,14 +262,14 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param X A feature data set, usually a matrix or data.frame.
-#' @param Y An outcome data set, usually a vector, matrix or data.frame.
+#' @param X A feature data set, usually a matrix or data frame.
+#' @param Y An outcome data set, usually a vector, matrix or data frame.
 #' @param epochs Number of epochs to train the model.
 #' @param batch_size Batch size, the number of samples used per gradient update.
 #' @param validation_split Fraction of the training data used as validation data.
 #' @param k.fold Number of folds within k-fold cross validation or \code{NULL} if no grid search is desired.
 #' @param k.optimizer Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.
-#' @param hidden A data.frame with two columns whereby the first column contains the number of hidden units
+#' @param hidden A data frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output.activation A name of the output activation function.
@@ -321,7 +282,7 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
 #' @return A list with named elements
 #'   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
 #'   \code{model}: A trained model object with stacked layers.
-#'   \code{avg_qual}: Only if k-fold cross validation is used. A data.frame with two columns whereby the
+#'   \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the
 #'                    first columns stores the epoch number and the second column the mean of the underpinned quality metric.
 #' @export
 #'
@@ -428,7 +389,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param mlp A model object, returned by \code{fit.MLP} in the list element \code{model}.
-#' @param X A feature data set, usually a matrix or data.frame.
+#' @param X A feature data set, usually a matrix or data frame.
 #' @param batch_size Batch size, the number of samples used per gradient update.
 #' @param scale_type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
 #'   Per default (\code{NULL}) no inverted scaling is done.

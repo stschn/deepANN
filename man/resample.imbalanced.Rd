@@ -7,7 +7,7 @@
 resample.imbalanced(dataset, x, y, n = 1, k = 1, type = "smote")
 }
 \arguments{
-\item{dataset}{An imbalanced data set, usually a data.frame.}
+\item{dataset}{An imbalanced data set, usually a data frame.}
 
 \item{x}{The column indices which spawn the feature matrix.}
 

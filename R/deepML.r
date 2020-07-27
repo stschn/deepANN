@@ -4,7 +4,7 @@
 #'
 #' @family Machine Learning
 #'   
-#' @param dataset A data set, usually a data.frame.
+#' @param dataset A data set, usually a data frame.
 #' @param folds Number of created folds.
 #' @param foldname A prefix name for each created fold followed by a number, e.g. 1,2,3.
 #' @param shuffle Controls whether the samples of the data set should be randomly shuffled before fold creation.
@@ -87,8 +87,8 @@ euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 #'
 #' @family Machine Learning
 #'
-#' @param y A column vector of the categories within a feature matrix or data.frame.
-#' @param X Matrix or data.frame with feature values.
+#' @param y A column vector of the categories within a feature matrix or data frame.
+#' @param X Matrix or data frame with feature values.
 #' @param test The query or test instance.
 #' @param k Number of samples resp. categories used to determine the majority category; default \code{1}.
 #'
@@ -100,8 +100,8 @@ euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 #' @examples
 k_nearest_neighbors <- function(y, X, test, k = 1) {
   distances <- apply(X, 1, euclidean_distance, x2 = test) # calculate euclidean distances (ed)
-  df <- data.frame(index = c(1:NROW(distances)), ed = distances) # build up data.frame with index and ed
-  df <- df[order(df$ed), ] # reorder data.frame in ascending order for ed
+  df <- data.frame(index = c(1:NROW(distances)), ed = distances) # build up data frame with index and ed
+  df <- df[order(df$ed), ] # reorder data frame in ascending order for ed
   idx <- df$index[(1:k)] # extract k minimum indices
   neighbors <- y[idx] # get k target classes/categories
   n_neighbors <- table(neighbors) # number of instances of each class

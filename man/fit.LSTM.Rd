@@ -25,9 +25,9 @@ fit.LSTM(
 )
 }
 \arguments{
-\item{X}{A feature data set, usually a matrix or data.frame, returned by \code{get.LSTM.XY}.}
+\item{X}{A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.}
 
-\item{Y}{n outcome data set, usually a vector, matrix or data.frame, returned by \code{get.LSTM.XY}.}
+\item{Y}{n outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.}
 
 \item{timesteps}{A number or vector of timesteps for \code{X} and \code{Y}. A timestep denotes the number of different periods of the values within one sample.
 A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
@@ -45,7 +45,7 @@ The second element is boolean to indicate whether the batch size is used for inp
 
 \item{k.optimizer}{Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.}
 
-\item{hidden}{A data.frame with two columns whereby the first column contains the number of hidden units 
+\item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units 
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
 \item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
@@ -70,7 +70,7 @@ The loss value that will be minimized by the model will then be the sum of all i
 A list with named elements
   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
   \code{model}: A trained model object with stacked layers.
-  \code{avg_qual}: Only if k-fold cross validation is used. A data.frame with two columns whereby the 
+  \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the 
                    first columns stores the epoch number and the second column the mean of the underpinned quality metric.
 }
 \description{
@@ -95,8 +95,8 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
-\code{\link{get.LSTM.period_shift}()},
+\code{\link{get.period_shift}()},
 \code{\link{predict.LSTM}()},
-\code{\link{start.LSTM.invert_differencing}()}
+\code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}

@@ -15,9 +15,9 @@
 }
 \value{
 A named list dependent on the \code{type}.
-  \code{minmax}: The first element stores the min value, the second element the max value, the third element the scaled train dataset, and the fourth element the scaled test data set.
-  \code{zscore}: The first element stores the mean value, the second element the sd value, the third element the scaled train dataset, and the fourth element the scaled test data set.
-  \code{log}: The first element stores the scaled train dataset, and the second element the scaled test data set.
+  \code{minmax}: The first element stores the min value, the second element the max value, the third element the scaled train dataset and the fourth element the scaled test data set.
+  \code{zscore}: The first element stores the mean value, the second element the sd value, the third element the scaled train dataset and the fourth element the scaled test data set.
+  \code{log}: The first element stores the scaled train dataset and the second element the scaled test data set.
 }
 \description{
 Scaling of a train and test data set

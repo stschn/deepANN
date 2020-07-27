@@ -13,7 +13,7 @@ build.stationary(
 )
 }
 \arguments{
-\item{dataset}{A data set, usually a data.frame.}
+\item{dataset}{A data set, usually a data frame.}
 
 \item{y}{The indices of the columns which are used to build stationary series.}
 

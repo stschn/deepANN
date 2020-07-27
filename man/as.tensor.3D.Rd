@@ -7,9 +7,14 @@
 as.tensor.3D(data, ncol = 1, reverse = FALSE, by = c("row", "col", "step"))
 }
 \arguments{
-\item{data}{A dataset, usually a matrix or data.frame.}
+\item{data}{A dataset, usually a matrix or data frame.}
 
-\item{reverse}{Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.}
+\item{ncol}{The number of columns in the resulting tensor. If \code{by = step}, the number of columns is equal to the number of timesteps used for a RNN respectively LSTM.}
+
+\item{reverse}{Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.}
+
+\item{by}{Controls the transformation process. The options \code{row} and \code{col} lead to a matrix whereby the values are structured row-wise or column-wise.
+The option \code{step} stands for a stepwise order of the values row by row (e.g. 1 2 3, 2 3 4, 4 5 6 etc.).}
 }
 \value{
 A 3D-tensor (three-dimensional array).
@@ -26,7 +31,6 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.MLP.Y}()},
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
-\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},

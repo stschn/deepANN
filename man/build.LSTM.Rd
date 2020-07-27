@@ -26,7 +26,7 @@ build.LSTM(
 \item{batch_size}{Batch size, the number of samples used per gradient update.
 A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211), Culli/Kapoor/Pal (2019:290).}
 
-\item{hidden}{A data.frame with two columns whereby the first column contains the number of hidden units 
+\item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units 
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
 \item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
@@ -47,10 +47,10 @@ The loss value that will be minimized by the model will then be the sum of all i
 \item{metrics}{Vector or list of metrics to be evaluated by the model during training and testing.}
 }
 \value{
-A model object with stacked lstm layers, an output dense layer, and optional dropout layers.
+A model object with stacked lstm layers, an output dense layer and optional dropout layers.
 }
 \description{
-\code{build.LSTM} creates a sequential ANN model with stacked lstm layers, an output dense layer, and optional dropout layers.
+\code{build.LSTM} creates a sequential ANN model with stacked lstm layers, an output dense layer and optional dropout layers.
   For a univariate time series, usually \code{stateful=TRUE} and \code{batch_size=1} with \code{return_sequences = FALSE}.
   For a multivariate time series, usually \code{stateful=FALSE} and \code{batch_size=NULL} with \code{return_sequences = TRUE}.
 }
@@ -74,8 +74,8 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
-\code{\link{get.LSTM.period_shift}()},
+\code{\link{get.period_shift}()},
 \code{\link{predict.LSTM}()},
-\code{\link{start.LSTM.invert_differencing}()}
+\code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}
