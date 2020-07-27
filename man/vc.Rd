@@ -22,6 +22,7 @@ Variance coefficient (VC).
   \code{\link{mse}} for mean squared error, \code{\link{rmse}} for root mean square error.
 
 Other Quality: 
+\code{\link{accuracy}()},
 \code{\link{mae}()},
 \code{\link{mape}()},
 \code{\link{rmse}()}

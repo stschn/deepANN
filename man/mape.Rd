@@ -22,6 +22,7 @@ Mean absolute percentage error (MAPE).
   \code{\link{rmse}} for root mean square error, \code{\link{vc}} for variance coefficient.
 
 Other Quality: 
+\code{\link{accuracy}()},
 \code{\link{mae}()},
 \code{\link{rmse}()},
 \code{\link{vc}()}

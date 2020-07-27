@@ -46,6 +46,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>mse()</code> calculates the mean squared error.</li>
   <li><code>rmse()</code> calculates the root mean square error.</li>
   <li><code>vc()</code> calculates the variance coefficient.</li>
+  <li><code>accuracy()</code> calculates the fraction of corrects predictions.</li>
 </ul>
 
 <b>Machine Learning (ML)</b>
