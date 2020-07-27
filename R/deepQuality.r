@@ -118,10 +118,10 @@ vc <- function(actual, predicted) {
 #'
 #' @examples
 accuracy <- function(actual, predicted) {
-  stopifnot(identical(dim(actual), dim(predicted)), identical(length(actual), length(predicted)))
   if (is.null(dim(actual)) && (is.null(dim(predicted)))) {
     actual <- c(t(actual))
     predicted <- c(t(predicted))
   }
+  stopifnot(identical(dim(actual), dim(predicted)), identical(length(actual), length(predicted)))
   return(sum(actual == predicted, na.rm = T) / length(predicted))
 }
