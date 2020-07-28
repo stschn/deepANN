@@ -42,6 +42,7 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
   # https://stackoverflow.com/questions/13224553/how-to-convert-a-huge-list-of-vector-to-a-matrix-more-efficiently
   # https://stackoverflow.com/questions/17752830/r-reshape-a-vector-into-multiple-columns
   x <- c(t(x))
+  if ((l <- length(x)) < ncol) stop(sprintf("A vector of length %d cannot be arranged over %d columns of a matrix or array. Hint: reduce the value for ncol.", l, ncol))
   by <- match.arg(by)
   if (by %in% c("row", "col")) {
     if (reverse) { x <- rev(x) }
