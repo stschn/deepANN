@@ -7,9 +7,9 @@
 accuracy(actual, predicted)
 }
 \arguments{
-\item{actual}{A vector, matrix or n-dimensional array with to-be values}
+\item{actual}{Numeric data (vector, array, matrix, data frame or list) with to-be values}
 
-\item{predicted}{A vector, matrix or n-dimensional array with as-is values}
+\item{predicted}{Numeric data (vector, array, matrix, data frame or list) with as-is values}
 }
 \value{
 The fraction of right predictions within total predictions.

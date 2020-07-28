@@ -103,12 +103,38 @@ vc <- function(actual, predicted) {
   return(sqrt(mean(error^2)) / mean(actual))
 }
 
+#' Coerce data to an array or matrix with no trailing dimension of 1
+#'
+#' @param x A data structure like vector, matrix, array, data frame or list.
+#'
+#' @return The coerced data structure with no trailing dimension of 1.
+#'
+#' @examples
+coerce_dimension <- function(x) {
+  if (is.null(dim(x))) {
+    x <- as.array(x)
+  } else {
+    if (c("data.frame") %in% class(x)) { 
+      x <- as.matrix(x)
+    } else {
+      if (c("list") %in% class(x)) {
+        x <- matrix(unlist(x), ncol = length(x))
+      }}}
+  x <- as.array(x)
+  # cut off last dimension, if last dimension is 1
+  if (length(dim(x)) >= 2L) {
+    while (dim(x)[length(dim(x))] == 1L) {
+      dim(x) <- sapply(1:(length(dim(x)) - 1), function(i) { dim(x)[i] })
+    }}
+  return(x)
+}
+
 #' Classification accuracy
 #'
 #' @family Quality
 #'
-#' @param actual A vector, matrix or n-dimensional array with to-be values
-#' @param predicted A vector, matrix or n-dimensional array with as-is values
+#' @param actual Numeric data (vector, array, matrix, data frame or list) with to-be values
+#' @param predicted Numeric data (vector, array, matrix, data frame or list) with as-is values
 #'
 #' @return The fraction of right predictions within total predictions.
 #' @export
@@ -118,10 +144,8 @@ vc <- function(actual, predicted) {
 #'
 #' @examples
 accuracy <- function(actual, predicted) {
-  if (is.null(dim(actual)) && (is.null(dim(predicted)))) {
-    actual <- c(t(actual))
-    predicted <- c(t(predicted))
-  }
+  actual <- coerce_dimension(actual)
+  predicted <- coerce_dimension(predicted)
   stopifnot(identical(dim(actual), dim(predicted)), identical(length(actual), length(predicted)))
   return(sum(actual == predicted, na.rm = T) / length(predicted))
 }
