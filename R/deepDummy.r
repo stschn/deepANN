@@ -248,10 +248,12 @@ remove_columns <- function(dataset, value = 0) {
   all_classes <- sapply(dataset, class)
   # Detect numeric related columns with the searched value
   col_classes <- all_classes[all_classes %in% c("numeric", "complex", "integer", "logical")]
-  if (length(col_classes) > 0) {
-    cs <- colSums(dataset[names(col_classes)], na.rm = T)
-    col_name <- names(cs[cs == value])
-    if (length(col_name) > 0) { del_columns <- c(del_columns, col_name) }
+  col_names <- names(col_classes)
+  for (col_name in col_names) {
+    values <- unique(dataset[[col_name]])
+    if ((length(values) == 1) && (values == value)) {
+      del_columns <- c(del_columns, col_name)
+    }
   }
   # Detect character and factor columns with the searched value
   col_classes <- all_classes[all_classes %in% c("character", "factor")]

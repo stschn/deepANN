@@ -114,18 +114,19 @@ coerce_dimension <- function(x) {
   if (is.null(dim(x))) {
     x <- as.array(x)
   } else {
-    if (c("data.frame") %in% class(x)) { 
-      x <- as.matrix(x)
-    } else {
-      if (c("list") %in% class(x)) {
-        x <- matrix(unlist(x), ncol = length(x))
-      }}}
+  if (c("data.frame") %in% class(x)) { 
+    x <- as.matrix(x)
+  } else {
+  if (c("list") %in% class(x)) {
+    x <- matrix(unlist(x), ncol = length(x))
+  }}}
   x <- as.array(x)
   # cut off last dimension, if last dimension is 1
   if (length(dim(x)) >= 2L) {
     while (dim(x)[length(dim(x))] == 1L) {
       dim(x) <- sapply(1:(length(dim(x)) - 1), function(i) { dim(x)[i] })
-    }}
+    }
+  }
   return(x)
 }
 
