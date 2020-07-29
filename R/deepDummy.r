@@ -237,7 +237,7 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
 #' @family Dummyfication
 #' 
 #' @param dataset A data set, usually a data frame.
-#' @param value The specified value searched for.
+#' @param value The specified values searched for.
 #'
 #' @return The dataset without those columns that contain only one specific value.
 #' @export
@@ -251,7 +251,7 @@ remove_columns <- function(dataset, value = 0) {
   col_names <- names(col_classes)
   for (col_name in col_names) {
     values <- unique(dataset[[col_name]])
-    if ((length(values) == 1) && (values == value)) {
+    if ((length(values) == 1) && (values %in% value)) {
       del_columns <- c(del_columns, col_name)
     }
   }
@@ -260,7 +260,7 @@ remove_columns <- function(dataset, value = 0) {
   col_names <- names(col_classes)
   for (col_name in col_names) {
     values <- unique(as.character(dataset[[col_name]]))
-    if ((length(values) == 1) && (as.numeric(values) == value)) {
+    if ((length(values) == 1) && (as.numeric(values) %in% value)) {
       del_columns <- c(del_columns, col_name)
     }
   }

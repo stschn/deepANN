@@ -9,7 +9,7 @@ remove_columns(dataset, value = 0)
 \arguments{
 \item{dataset}{A data set, usually a data frame.}
 
-\item{value}{The specified value searched for.}
+\item{value}{The specified values searched for.}
 }
 \value{
 The dataset without those columns that contain only one specific value.
