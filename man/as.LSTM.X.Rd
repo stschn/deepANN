@@ -15,7 +15,7 @@ as.LSTM.X(X, timesteps = 1, reverse = FALSE)
 }
 \value{
 A three-dimensional array of the resampled feature matrix \code{X} needed within Tensorflow for recurrent neural networks, e.g. LSTM.
-  1. dimension: Samples (s) = Number of records 
+  1. dimension: Samples (s) = Number of records
   2. dimension: Timesteps (t) = Number of different periods within one record
   3. dimension: Features (f) = Number of features within a sequence of a period
   Note: A 3D-array with dimensions (s x t x f) can be interpret as f (s x t)-matrices.
@@ -26,7 +26,7 @@ Features (X) data format for LSTM
 \seealso{
 \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.Y}}, \code{\link{as.ANN.matrix}}, \code{\link{as.tensor.3D}}.
 
-Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
+Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.Y}()},
 \code{\link{as.LSTM.data.frame}()},
 \code{\link{as.LSTM.period_outcome}()},
@@ -42,7 +42,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
-\code{\link{predict.LSTM}()},
+\code{\link{predict.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
-\concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}
+\concept{Recurrent Neural Network (RNN)}

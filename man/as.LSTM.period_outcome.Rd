@@ -27,7 +27,7 @@ as.LSTM.period_outcome(
 \item{type}{The type of time series: \code{univariate} or \code{multivariate}.}
 }
 \value{
-A data frame with period and actual outcome values that can be used for quality assurance or 
+A data frame with period and actual outcome values that can be used for quality assurance or
   for graphical representation together with the predicted values produced by \code{predict.LSTM}.
 }
 \description{
@@ -36,7 +36,7 @@ Combination of periods and actual outcome values within a matrix for quality con
 \seealso{
 \code{\link{as.LSTM.X}}, \code{\link{predict.LSTM}}.
 
-Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
+Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},
 \code{\link{as.LSTM.Y}()},
 \code{\link{as.LSTM.data.frame}()},
@@ -52,7 +52,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
-\code{\link{predict.LSTM}()},
+\code{\link{predict.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
-\concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}
+\concept{Recurrent Neural Network (RNN)}

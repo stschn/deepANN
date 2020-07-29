@@ -70,10 +70,9 @@ This R library is currently structured in form of the following functional famil
   <li><code>get.MLP.Y.units()</code> returns the number of outcome units.</li>
   <li><code>build.MLP()</code> builds a sequential SLP/MLP model with stacked dense layers and optionally dropout layers.</li>
   <li><code>fit.MLP()</code> encapsulates building and fitting a SLP/MLP model.</li>
-  <li><code>predict.MLP()</code> predicts values with prior invert scaling if wished.</li>
 </ul>
 
-<b>Reccurent Neural Network (RNN), Long Short-Term Memory (LSTM)</b>
+<b>Reccurent Neural Network (RNN)</b>
 <ul>
   <li><code>get.LSTM.XY()</code> extracts features and outcomes from a data set in a LSTM compatible preformat.</li>
   <li><code>get.period_shift()</code> calculates the period shift for a univariate and multivariate time series.</li>
@@ -91,7 +90,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>as.LSTM.data.frame()</code> restructures a resampled feature matrix and an outcome matrix to a data.frame.</li>
   <li><code>build.LSTM()</code> builds a sequential LSTM model with stacked LSTM layers and optionally dropout layers.</li>
   <li><code>fit.LSTM()</code> encapsulates building and fitting a LSTM model.</li>
-  <li><code>predict.LSTM()</code> predicts values with prior invert scaling and invert differencing if wished.</li>
+  <li><code>predict.ANN()</code> predicts with different ANN models like SLP/MLP or LSTM.</li>
   <li><code>as.LSTM.period_outcome()</code> returns a data.frame with period column and actual outcome column for quality assurance and graphical illustration purposes.</li>
 </ul>
 

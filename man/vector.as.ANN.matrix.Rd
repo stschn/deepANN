@@ -41,6 +41,6 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},
-\code{\link{predict.MLP}()}
+\code{\link{predict.ANN}()}
 }
 \concept{Single & Multi Layer Perceptron (SLP, MLP)}

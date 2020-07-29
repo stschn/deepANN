@@ -1,12 +1,12 @@
 #' Extract features (X) and outcome (Y) vector or matrix from data/time series in LSTM preformat
 #'
-#' \code{get.LSTM.XY} extracts features and outcomes from a data/time series in a LSTM compatible preformat.
+#' \code{get.LSTM.XY} extracts features and outcomes from a data/time series in a Long Short-Term Memory (LSTM) compatible preformat.
 #'   Within a univariate time series, y(t) is explained by past y(t-1), y(t-2) etc. Therefore the last sample of the
 #'   feature set must be deleted, because there is no Y-value for it. Resampling of the Y-values must start at timesteps + 1.
 #'   That is different to a multivariate time series. For y(t), the corresponding features at time t are already given.
 #'   Resampling must start at timesteps.
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param dataset A data set, usually a matrix or data frame.
 #' @param x The column indices which spawn the feature matrix.
@@ -32,11 +32,11 @@
 #'   \code{Y}: An outcome matrix in LSTM compatible preformat for usage with \code{as.LSTM.Y}.
 #'   \code{other_columns}: A data frame of the selected \code{other_columns}.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{as.LSTM.Y}}.
 #'
 #' @examples
-get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0, 
+get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0,
                         y_as_feature.type = c("none", "plain", "timesteps"), y_as_feature.lag = 0) {
   data_list <- list()
   y.sequence <- FALSE
@@ -108,7 +108,7 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
 #'   A period shift denotes the number of periods to go backwards to get features (X) for outcomes (Y).
 #'   In other words: how many samples get lost respectively must be used as X for Y description/prediction?
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param timesteps The number of timesteps.
 #' @param lag The number of considered lags on feature side.
@@ -128,7 +128,7 @@ get.period_shift <- function(timesteps = 1, lag = 0, type = "univariate") {
 #'
 #' \code{start.invert_differencing} calculates the row index where to start invert differencing.
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param invert_first_row The row index of the first row of the training or test data set regarding to the raw data set before differencing.
 #' @param differences The number of differences.
@@ -138,7 +138,7 @@ get.period_shift <- function(timesteps = 1, lag = 0, type = "univariate") {
 #'
 #' @return The start row index of raw data outcome values before differencing.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{get.period_shift}}.
 #'
 #' @examples
@@ -146,9 +146,9 @@ start.invert_differencing <- function(invert_first_row, differences = 1, timeste
   return(invert_first_row + get.period_shift(timesteps, lag, type) - differences)
 }
 
-#' Get ANN lag from ARIMA(X) lag 
+#' Get ANN lag from ARIMA(X) lag
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param arima_lag The lag or p-Value from an ARIMA(X) (p-d-q) model.
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
@@ -166,16 +166,16 @@ as.lag <- function(arima_lag = 0, type = "univariate") {
   return(l)
 }
 
-#' Get ANN timesteps from ANN lag 
+#' Get ANN timesteps from ANN lag
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param lag The ANN lag, returned by \code{as.lag}.
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
 #'
 #' @return The timesteps number for a LSTM.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.lag}}
 #'
 #' @examples
@@ -187,19 +187,19 @@ as.timesteps <- function(lag = 1, type = "univariate") {
 
 #' Features (X) data format for LSTM
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param X A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}.
 #' @param reverse Controls the order of the values in the resampled feature matrix \code{X}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #'
 #' @return A three-dimensional array of the resampled feature matrix \code{X} needed within Tensorflow for recurrent neural networks, e.g. LSTM.
-#'   1. dimension: Samples (s) = Number of records 
+#'   1. dimension: Samples (s) = Number of records
 #'   2. dimension: Timesteps (t) = Number of different periods within one record
 #'   3. dimension: Features (f) = Number of features within a sequence of a period
 #'   Note: A 3D-array with dimensions (s x t x f) can be interpret as f (s x t)-matrices.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.Y}}, \code{\link{as.ANN.matrix}}, \code{\link{as.tensor.3D}}.
 #'
 #' @examples
@@ -219,18 +219,18 @@ as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
 
 #' Outcomes (Y) data format
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param Y An outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{Y}.
 #' @param reverse Controls the order of the values in the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #'
-#' @return Dependent on timesteps: 
+#' @return Dependent on timesteps:
 #'   \code{= NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
 #'   \code{>= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 #' @export
-#' 
-#' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}, 
+#'
+#' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}},
 #'   \code{\link{as.tensor.2D}}, \code{\link{as.tensor.3D}}.
 #'
 #' @examples
@@ -246,12 +246,12 @@ as.LSTM.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
 
 #' Get number of input samples from feature tensor
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param X.tensor A tensor of the resampled feature matrix produced by \code{as.LSTM.X}.
 #' @return Number of input samples.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}},
 #'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
@@ -260,13 +260,13 @@ get.LSTM.X.samples <- function(X.tensor) { return(dim(X.tensor)[1L]) }
 
 #' Get number of input timesteps from feature tensor
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param X.tensor A tensor of the resampled feature matrix produced by \code{as.LSTM.X}.
 #'
 #' @return Number of input timesteps; number of different periods within one sample of the resampled feature matrix.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.units}},
 #'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
@@ -275,13 +275,13 @@ get.LSTM.X.timesteps <- function(X.tensor) { return(dim(X.tensor)[2L]) }
 
 #' Get number of input units from feature tensor
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param X.tensor A tensor of the resampled feature matrix produced by \code{as.LSTM.X}.
 #' @return Number of input units or features.
 #' @export
-#' 
-#' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, 
+#'
+#' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}},
 #'   \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
 #' @examples
@@ -289,13 +289,13 @@ get.LSTM.X.units <- function(X.tensor) { return(dim(X.tensor)[3L]) }
 
 #' Get number of output samples from outcome tensor
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param Y.tensor A tensor of the outcome produced by \code{as.LSTM.Y}.
 #'
 #' @return Number of output samples.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.units}},
 #'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 #'
@@ -304,13 +304,13 @@ get.LSTM.Y.samples <- function(Y.tensor) { return(dim(Y.tensor)[1L]) }
 
 #' Get number of timesteps from outcome tensor if outcome is a sequence
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param Y.tensor A tensor of the outcome produced by \code{as.LSTM.Y}.
 #'
 #' @return Number of output timesteps.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}},
 #'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 #'
@@ -319,13 +319,13 @@ get.LSTM.Y.timesteps <- function(Y.tensor) { return(if (length(d <- dim(Y.tensor
 
 #' Get number of output units from outcome tensor
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param Y.tensor A tensor of the outcome produced by \code{as.LSTM.Y}.
 #'
 #' @return Number of output units or outcomes.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}},
 #'   \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 #'
@@ -334,7 +334,7 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.tensor)
 
 #' Recreation of a data frame based on preformatted X and Y data sets
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param X A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.
 #' @param Y An outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.
@@ -348,12 +348,12 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.tensor)
 #'   The feature matrix within this data frame has the following forward oriented form:
 #'   x1(t1), x1(t2), x1(t3)...x2(t1), x2(t2), x2(t3)...x3(t1), x3(t2), x3(t3)...
 #' @export
-#' 
+#'
 #' @seealso \code{\link{get.LSTM.XY}}.
 #'
 #' @examples
 as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = FALSE, suffix = "_t") {
-  
+
   gen_colnames_timesteps <- function(caption, timesteps) {
     if (!reverse) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
     cnames <- unlist(lapply(caption, function(cname) { paste0(cname, suffix, "%d") }))
@@ -389,20 +389,20 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
 #'   For a univariate time series, usually \code{stateful=TRUE} and \code{batch_size=1} with \code{return_sequences = FALSE}.
 #'   For a multivariate time series, usually \code{stateful=FALSE} and \code{batch_size=NULL} with \code{return_sequences = TRUE}.
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param features Number of features, returned by \code{get.LSTM.X.units}.
 #' @param timesteps The number of timesteps.
 #' @param batch_size Batch size, the number of samples used per gradient update.
 #'   A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211), Culli/Kapoor/Pal (2019:290).
-#' @param hidden A data frame with two columns whereby the first column contains the number of hidden units 
+#' @param hidden A data frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.LSTM.Y.units},
 #'   and the second element the output activation function.
 #' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
 #' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, 
+#' @param loss Name of objective function or objective function. If the model has multiple outputs,
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
 #' @param optimizer Name of optimizer or optimizer instance.
@@ -410,7 +410,7 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
 #'
 #' @return A model object with stacked lstm layers, an output dense layer and optional dropout layers.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.units}}, \code{\link{get.LSTM.Y.units}},
 #'   \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}}, \code{\link[keras]{layer_lstm}}
 #'   \code{\link[keras]{compile.keras.engine.training.Model}}.
@@ -456,13 +456,13 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #'
 #' \code{fit.LSTM} is a wrapper function for building and fitting a LSTM model.
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param X A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.
 #' @param Y n outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.
 #' @param timesteps A number or vector of timesteps for \code{X} and \code{Y}. A timestep denotes the number of different periods of the values within one sample.
 #'   A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
-#'   If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. If two values are given, 
+#'   If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. If two values are given,
 #'   the first value is used as before and the second value for the resampled sequence or multi-step outcome tensor produced by \code{as.LSTM.Y}.
 #' @param epochs The number of epochs.
 #' @param batch_size A vector with two elements. The first element holds the batch size, the number of samples used per gradient update.
@@ -470,13 +470,13 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #' @param validation_split Fraction of the training data used as validation data.
 #' @param k.fold Number of folds within k-fold cross validation or \code{NULL} if no grid search is desired.
 #' @param k.optimizer Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.
-#' @param hidden A data frame with two columns whereby the first column contains the number of hidden units 
+#' @param hidden A data frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output.activation A name of the output activation function.
 #' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
 #' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, 
+#' @param loss Name of objective function or objective function. If the model has multiple outputs,
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
 #' @param optimizer Name of optimizer or optimizer instance.
@@ -486,10 +486,10 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #' @return A list with named elements
 #'   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
 #'   \code{model}: A trained model object with stacked layers.
-#'   \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the 
+#'   \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the
 #'                    first columns stores the epoch number and the second column the mean of the underpinned quality metric.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{build.LSTM}}, \code{\link{get.LSTM.XY}},
 #'   \code{\link[keras]{compile.keras.engine.training.Model}}, \code{\link[keras]{fit.keras.engine.training.Model}}.
 #'
@@ -615,51 +615,51 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
   return(l)
 }
 
-#' Predict with LSTM model
+#' Predict with ANN model
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#' @family Recurrent Neural Network (RNN)
 #'
-#' @param lstm A model object, returned by \code{fit.LSTM} in the list element \code{model}.
-#' @param X A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.
-#' @param timesteps The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix, returned by \code{as.LSTM.X}.
-#' @param lag The number of considered lags on feature side.
-#' @param differences The number of differences.
+#' @param model A model object, returned by \code{fit.MLP} or \code{fit.LSTM} in the list element \code{model}.
+#' @param X.tensor A feature tensor returned by \code{as.MLP.X} or \code{as.LSTM.X}.
 #' @param batch_size Batch size, the number of samples used per gradient update.
 #' @param scale_type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
 #'   Per default (\code{NULL}) no inverted scaling is done.
 #' @param scaler Scaling factors for the different scaling types. The type min-max scaling needs a list with vectors with min and max values for each outcome,
 #'   z-score scaling needs a list with vectors with mean and sd values for each outcome, log transformation needs no scaler.
+#' @param timesteps The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix, returned by \code{as.LSTM.X}.
+#' @param lag The number of considered lags on feature side.
+#' @param differences The number of differences.
 #' @param invert_first_row The row index of the first row of the training or test data set regarding to the raw data set before differencing.
 #' @param Y.actual A vector, matrix or data frame of raw data outcome values used for invert differencing.
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
 #'
 #' @return A two- or three-dimensional array with predicted outcome values.
-#'   A two-dimensional array results if \code{return_sequences = FALSE} was set at \code{fit.LSTM}.
-#'   A three-dimensional array results if \code{return_sequences = TRUE} was set at \code{fit.LSTM}.
+#'   A two-dimensional array results for \code{fit.MLP} or for \code{fit.LSTM} if \code{return_sequences = FALSE}.
+#'   A three-dimensional array results for \code{fit.LSTM} if \code{return_sequences = TRUE}.
 #' @export
-#' 
-#' @seealso \code{\link{fit.LSTM}}, \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}},
+#'
+#' @seealso \code{\link{fit.MLP}}, \code{\link{as.MLP.X}}, \code{\link{fit.LSTM}}, \code{\link{as.LSTM.X}},
 #'   \code{\link[stats]{predict}}, \code{\link{scale.datasets}}.
 #'
 #' @examples
-predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch_size = 1,
-                         scale_type = NULL, scaler = NULL,
-                         invert_first_row = NULL, Y.actual = NULL, type = "univariate") {
-  X.tensor <- as.LSTM.X(X, timesteps[1])
-  Y.predict <- lstm %>% predict(X.tensor, batch_size = batch_size)
+predict.ANN <- function(model, X.tensor, batch_size = 1, scale_type = NULL, scaler = NULL,
+                        timesteps = 1, lag = 0, differences = 1,
+                        invert_first_row = NULL, Y.actual = NULL, type = "univariate") {
+  Y.predict <- model %>% predict(X.tensor, batch_size = batch_size)
   dim_predict <- length(dim(Y.predict)) # 2 without timesteps, 3 with timesteps
-  if (dim_predict == 2) {
-    if (!is.null(scale_type)) { 
+  if (dim_predict == 2) { # useful for e.g. MLP or LSTM without sequence outcome
+    if (!is.null(scale_type)) {
       if (scale_type == "minmax") {
         if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
-        minx <- scaler[[1]]
-        maxx <- scaler[[2]]
+        minx <- scaler[[1L]]
+        maxx <- scaler[[2L]]
         Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T, minx, maxx))
       } else {
       if (scale_type == "zscore") {
         if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
-        meanx <- scaler[[1]]
-        sdx <- scaler[[2]]
+        meanx <- scaler[[1L]]
+        sdx <- scaler[[2L]]
         Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T, meanx, sdx))
       } else {
       if (scale_type == "log") {
@@ -667,7 +667,7 @@ predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch
       }}}
     }
     if (!is.null(invert_first_row)) {
-      i <- start.invert_differencing(invert_first_row, differences, timesteps, lag, type)
+      i <- start.invert_differencing(invert_first_row, differences, timesteps[1L], max(lag), type)
       actuals <- as.matrix(Y.actual)
       m <- matrix(data = NA, nrow = NROW(Y.predict), ncol = NCOL(Y.predict))
       for (j in 1:NCOL(Y.predict)) {
@@ -679,29 +679,29 @@ predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch
   } else {
   if (dim_predict == 3) {
     a <- Y.predict
-    rows <- dim(a)[1]
-    tsteps <- dim(a)[2]
-    outcomes <- dim(a)[3]
+    rows <- dim(a)[1L]
+    tsteps <- dim(a)[2L]
+    outcomes <- dim(a)[3L]
     for (y in 1:outcomes) {
       if (!is.null(scale_type)) {
         if (scale_type == "minmax") {
           if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
-          minx <- scaler[[1]]
-          maxx <- scaler[[2]]
-          a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
-      } else {
-      if (scale_type == "zscore") {
-        if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
-        meanx <- scaler[[1]]
-        sdx <- scaler[[2]]
-        a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
-      } else {
-      if (scale_type == "log") {
-        a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T))
-      }}}
+            minx <- scaler[[1L]]
+            maxx <- scaler[[2L]]
+            a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
+        } else {
+        if (scale_type == "zscore") {
+          if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
+          meanx <- scaler[[1L]]
+          sdx <- scaler[[2L]]
+          a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
+        } else {
+        if (scale_type == "log") {
+          a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T))
+        }}}
       }
       if (!is.null(invert_first_row)) {
-        i <- start.invert_differencing(invert_first_row, differences, timesteps, lag, type)
+        i <- start.invert_differencing(invert_first_row, differences, timesteps[1L], max(lag), type)
         actuals <- as.matrix(Y.actual[, , y])
         m <- matrix(data = NA, nrow = rows, ncol = tsteps)
         for (j in 1:tsteps) {
@@ -718,7 +718,7 @@ predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch
 
 #' Combination of periods and actual outcome values within a matrix for quality control or graphical representation
 #'
-#' @family Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)
+#' @family Recurrent Neural Network (RNN)
 #'
 #' @param dataset A matrix or data frame with training or test data.
 #' @param p The column index for the period variable.
@@ -727,10 +727,10 @@ predict.LSTM <- function(lstm, X, timesteps = 1, lag = 0, differences = 1, batch
 #' @param lag The number of considered lags on feature side.
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
 #'
-#' @return A data frame with period and actual outcome values that can be used for quality assurance or 
+#' @return A data frame with period and actual outcome values that can be used for quality assurance or
 #'   for graphical representation together with the predicted values produced by \code{predict.LSTM}.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{predict.LSTM}}.
 #'
 #' @examples

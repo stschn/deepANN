@@ -49,7 +49,7 @@ A list with named elements
   \code{other_columns}: A data frame of the selected \code{other_columns}.
 }
 \description{
-\code{get.LSTM.XY} extracts features and outcomes from a data/time series in a LSTM compatible preformat.
+\code{get.LSTM.XY} extracts features and outcomes from a data/time series in a Long Short-Term Memory (LSTM) compatible preformat.
   Within a univariate time series, y(t) is explained by past y(t-1), y(t-2) etc. Therefore the last sample of the
   feature set must be deleted, because there is no Y-value for it. Resampling of the Y-values must start at timesteps + 1.
   That is different to a multivariate time series. For y(t), the corresponding features at time t are already given.
@@ -58,7 +58,7 @@ A list with named elements
 \seealso{
 \code{\link{as.LSTM.X}}, \code{\link{as.LSTM.Y}}.
 
-Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
+Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},
 \code{\link{as.LSTM.Y}()},
 \code{\link{as.LSTM.data.frame}()},
@@ -74,7 +74,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
-\code{\link{predict.LSTM}()},
+\code{\link{predict.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
-\concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}
+\concept{Recurrent Neural Network (RNN)}

@@ -40,7 +40,7 @@ Recreation of a data frame based on preformatted X and Y data sets
 \seealso{
 \code{\link{get.LSTM.XY}}.
 
-Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
+Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},
 \code{\link{as.LSTM.Y}()},
 \code{\link{as.LSTM.period_outcome}()},
@@ -56,7 +56,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
-\code{\link{predict.LSTM}()},
+\code{\link{predict.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
-\concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}
+\concept{Recurrent Neural Network (RNN)}

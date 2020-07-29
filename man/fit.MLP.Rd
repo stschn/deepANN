@@ -73,7 +73,7 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{build.MLP}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},
-\code{\link{predict.MLP}()},
+\code{\link{predict.ANN}()},
 \code{\link{vector.as.ANN.matrix}()}
 }
 \concept{Single & Multi Layer Perceptron (SLP, MLP)}

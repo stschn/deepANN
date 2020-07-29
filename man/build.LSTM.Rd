@@ -26,7 +26,7 @@ build.LSTM(
 \item{batch_size}{Batch size, the number of samples used per gradient update.
 A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211), Culli/Kapoor/Pal (2019:290).}
 
-\item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units 
+\item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
 \item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
@@ -38,7 +38,7 @@ and the second element the output activation function.}
 
 \item{return_sequences}{A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).}
 
-\item{loss}{Name of objective function or objective function. If the model has multiple outputs, 
+\item{loss}{Name of objective function or objective function. If the model has multiple outputs,
 different loss on each output can be used by passing a dictionary or a list of objectives.
 The loss value that will be minimized by the model will then be the sum of all individual losses.}
 
@@ -59,7 +59,7 @@ A model object with stacked lstm layers, an output dense layer and optional drop
   \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}}, \code{\link[keras]{layer_lstm}}
   \code{\link[keras]{compile.keras.engine.training.Model}}.
 
-Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM): 
+Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},
 \code{\link{as.LSTM.Y}()},
 \code{\link{as.LSTM.data.frame}()},
@@ -75,7 +75,7 @@ Other Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
-\code{\link{predict.LSTM}()},
+\code{\link{predict.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
-\concept{Recurrent Neural Network (RNN), Long Short-Term Memory (LSTM)}
+\concept{Recurrent Neural Network (RNN)}
