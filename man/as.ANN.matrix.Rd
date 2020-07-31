@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepMLP.r
 \name{as.ANN.matrix}
 \alias{as.ANN.matrix}
-\title{Converts data into an ANN compatible matrix with only numbers}
+\title{Convert data into an ANN compatible matrix with only numbers}
 \usage{
 as.ANN.matrix(data, adjust = NULL)
 }
@@ -15,7 +15,7 @@ as.ANN.matrix(data, adjust = NULL)
 A matrix with only numbers.
 }
 \description{
-Converts data into an ANN compatible matrix with only numbers
+Convert data into an ANN compatible matrix with only numbers
 }
 \seealso{
 Other Single & Multi Layer Perceptron (SLP, MLP): 

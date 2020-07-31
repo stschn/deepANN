@@ -7,7 +7,7 @@
 as.tensor.3D(data, ncol = 1, reverse = FALSE, by = c("row", "col", "step"))
 }
 \arguments{
-\item{data}{A dataset, usually a matrix or data frame.}
+\item{data}{A data set, usually a matrix or data frame.}
 
 \item{ncol}{The number of columns in the resulting tensor. If \code{by = step}, the number of columns is equal to the number of timesteps used for a RNN respectively LSTM.}
 

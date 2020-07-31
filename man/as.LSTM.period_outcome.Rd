@@ -34,7 +34,7 @@ A data frame with period and actual outcome values that can be used for quality 
 Combination of periods and actual outcome values within a matrix for quality control or graphical representation
 }
 \seealso{
-\code{\link{as.LSTM.X}}, \code{\link{predict.LSTM}}.
+\code{\link{as.LSTM.X}}, \code{\link{predict.ANN}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},

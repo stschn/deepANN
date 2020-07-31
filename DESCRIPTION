@@ -10,6 +10,7 @@ License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Imports:
+   reticulate (>= 1.16),
    tensorflow (>= 2.0.0),
    keras (>= 2.3.0.0),
    kohonen (>= 3.0.10)

@@ -59,8 +59,10 @@ This R library is currently structured in form of the following functional famil
 
 <b>Single & Multi Layer Perceptron (SLP, MLP)</b>
 <ul>
+  <li><code>vector.as.numeric()</code> converts a vector into a vector with numeric values.</li>
   <li><code>as.ANN.matrix()</code> converts a data set into a matrix with adjusted character values and factor levels to their numeric indices if necessary.</li>
   <li><code>vector.as.ANN.matrix()</code> transforms a vector into a ANN compatible matrix.</li>
+  <li><code>as.tensor</code> transforms data into a n-dimensional tensor (array).</li>
   <li><code>as.tensor.1D()</code> transforms data into a one-dimensional tensor (vector).</li>
   <li><code>as.tensor.2D()</code> transforms data into a two-dimensional tensor (matrix).</li>
   <li><code>as.tensor.3D()</code> transforms data into a three-dimensional tensor.</li>

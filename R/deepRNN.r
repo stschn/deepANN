@@ -731,7 +731,7 @@ predict.ANN <- function(model, X.tensor, batch_size = 1, scale_type = NULL, scal
 #'   for graphical representation together with the predicted values produced by \code{predict.LSTM}.
 #' @export
 #'
-#' @seealso \code{\link{as.LSTM.X}}, \code{\link{predict.LSTM}}.
+#' @seealso \code{\link{as.LSTM.X}}, \code{\link{predict.ANN}}.
 #'
 #' @examples
 as.LSTM.period_outcome <- function(dataset, p, y, timesteps = 1, lag = 0, type = "univariate") {
