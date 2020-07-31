@@ -4,7 +4,7 @@
 \alias{as.tensor}
 \title{Create a (reshaped) tensor (n-dimensional array)}
 \usage{
-as.tensor(data, dim = NULL, byrow = F, adjust = NULL)
+as.tensor(data, dim = NULL, byrow = FALSE, numeric = TRUE, adjust = NULL)
 }
 \arguments{
 \item{data}{A data set, e.g. vector, array, matrix, data frame.}
@@ -14,6 +14,8 @@ as.tensor(data, dim = NULL, byrow = F, adjust = NULL)
 \item{byrow}{The order in which elements of data should be read during rearrangement. 
 \code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
 \code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.}
+
+\item{numeric}{A boolean that indicates whether the elements should be coerced as numeric elements.}
 
 \item{adjust}{A number that is added to or subtracted from a factor level element, or even not (\code{NULL}).}
 }
