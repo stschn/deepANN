@@ -128,7 +128,7 @@ as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse =
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
   if (c("data.frame") %in% class(data)) {
-    if (numeric) { data <- sapply(data, vector.as.numeric, adjust = adjust) }
+    if (numeric) { data <- sapply(data, vector.as.numeric, adjust = adjust) } else { data <- as.matrix(data) }
     if (reverse[1L]) {
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
