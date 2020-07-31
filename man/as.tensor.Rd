@@ -29,7 +29,7 @@ as.tensor(
 \item{adjust}{A number that is added to or subtracted from a factor level element, or even not (\code{NULL}).}
 }
 \value{
-The (reshaped) data set.
+The (reshaped) \code{data} as a tensor.
 }
 \description{
 Create a (reshaped) tensor (n-dimensional array)

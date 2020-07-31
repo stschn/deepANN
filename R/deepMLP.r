@@ -103,7 +103,7 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #' @details The function \code{array_reshape} from reticulate package differs from the base function \code{dim}. 
 #'   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
 #'
-#' @return The (reshaped) data set.
+#' @return The (reshaped) \code{data} as a tensor.
 #' @export
 #'
 #' @seealso \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
