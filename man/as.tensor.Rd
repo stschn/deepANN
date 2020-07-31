@@ -4,7 +4,14 @@
 \alias{as.tensor}
 \title{Create a (reshaped) tensor (n-dimensional array)}
 \usage{
-as.tensor(data, dim = NULL, byrow = FALSE, numeric = TRUE, adjust = NULL)
+as.tensor(
+  data,
+  dim = NULL,
+  byrow = FALSE,
+  numeric = TRUE,
+  reverse = FALSE,
+  adjust = NULL
+)
 }
 \arguments{
 \item{data}{A data set, e.g. vector, array, matrix, data frame.}
@@ -16,6 +23,8 @@ as.tensor(data, dim = NULL, byrow = FALSE, numeric = TRUE, adjust = NULL)
 \code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.}
 
 \item{numeric}{A boolean that indicates whether the elements should be coerced as numeric elements.}
+
+\item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.}
 
 \item{adjust}{A number that is added to or subtracted from a factor level element, or even not (\code{NULL}).}
 }

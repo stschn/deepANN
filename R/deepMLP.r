@@ -97,6 +97,7 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #'   \code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
 #'   \code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #' @param numeric A boolean that indicates whether the elements should be coerced as numeric elements.
+#' @param reverse Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.
 #' @param adjust A number that is added to or subtracted from a factor level element, or even not (\code{NULL}).
 #'
 #' @details The function \code{array_reshape} from reticulate package differs from the base function \code{dim}. 
@@ -108,28 +109,32 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #' @seealso \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
 #'
 #' @examples
-as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, adjust = NULL) {
+as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse = FALSE, adjust = NULL) {
   datadim <- dim(data)
   if (is.null(datadim)) {
+    if (reverse) { data <- rev(data) }
     if (numeric) {
       data <- as.array(vector.as.numeric(data))
     } else {
       data <- as.array(data)
     }
   } else {
-  if ((c("matrix") %in% class(data)) && (numeric)) { 
-      data <- as.matrix(sapply(data, vector.as.numeric, adjust))
+  if (c("matrix") %in% class(data)) {
+    if (numeric) { data <- apply(data, 2, vector.as.numeric, adjust) }
+    if (reverse) { data <- apply(data, 2, rev) }
+    data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
   if (c("data.frame") %in% class(data)) { 
-    if (numeric) { 
-      data <- as.matrix(sapply(data, vector.as.numeric, adjust)) 
-    } else {
-      data <- as.matrix(data)
-    }
+    data <- as.matrix(data)
+    if (numeric) { data <- apply(data, 2, vector.as.numeric, adjust) } 
+    if (reverse) { data <- apply(data, 2, rev) }
+    data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
   if (c("list") %in% class(data)) {
     if (numeric) { data <- lapply(data, vector.as.numeric, adjust) }
     data <- matrix(unlist(data), ncol = length(data))
+    if (reverse) { data <- apply(data, 2, rev) }
+    data <- array(data, dim = c(NROW(data), NCOL(data)))
   }}}}
   if ((!is.null(dim)) && (!identical(datadim, d <- as.integer(dim)))) {
     data <- keras::array_reshape(data, dim = d, order = ifelse(!byrow, "F", "C"))
