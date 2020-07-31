@@ -93,14 +93,15 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #'
 #' @param data A data set, e.g. vector, array, matrix, data frame.
 #' @param dim The new dimensions to be set on the tensor.
-#' @param byrow The order in which elements of data should be read during rearrangement. 
+#' @param byrow The order in which elements of data should be read during rearrangement.
 #'   \code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
 #'   \code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #' @param numeric A boolean that indicates whether the elements should be coerced as numeric elements.
 #' @param reverse Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.
+#'   The second parameter value indicates a row-wise reverse order (\code{1}) or a column-wise reverse order (\code{2}).
 #' @param adjust A number that is added to or subtracted from a factor level element, or even not (\code{NULL}).
 #'
-#' @details The function \code{array_reshape} from reticulate package differs from the base function \code{dim}. 
+#' @details The function \code{array_reshape} from reticulate package differs from the base function \code{dim}.
 #'   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
 #'
 #' @return The (reshaped) \code{data} as a tensor.
@@ -109,10 +110,10 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #' @seealso \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
 #'
 #' @examples
-as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse = FALSE, adjust = NULL) {
+as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse = c(FALSE, 2), adjust = NULL) {
   datadim <- dim(data)
   if (is.null(datadim)) {
-    if (reverse) { data <- rev(data) }
+    if (reverse[1L]) { data <- rev(data) }
     if (numeric) {
       data <- as.array(vector.as.numeric(data))
     } else {
@@ -120,20 +121,23 @@ as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse =
     }
   } else {
   if (c("matrix") %in% class(data)) {
-    if (numeric) { data <- apply(data, 2, vector.as.numeric, adjust) }
-    if (reverse) { data <- apply(data, 2, rev) }
+    data <- as.matrix(data)
+    if (numeric) { data <- apply(data, 2, vector.as.numeric, adjust = adjust) }
+    if (reverse[1L]) {
+      if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
-  if (c("data.frame") %in% class(data)) { 
-    data <- as.matrix(data)
-    if (numeric) { data <- apply(data, 2, vector.as.numeric, adjust) } 
-    if (reverse) { data <- apply(data, 2, rev) }
+  if (c("data.frame") %in% class(data)) {
+    if (numeric) { data <- sapply(data, vector.as.numeric, adjust = adjust) }
+    if (reverse[1L]) {
+      if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
   if (c("list") %in% class(data)) {
-    if (numeric) { data <- lapply(data, vector.as.numeric, adjust) }
+    if (numeric) { data <- lapply(data, vector.as.numeric, adjust = adjust) }
     data <- matrix(unlist(data), ncol = length(data))
-    if (reverse) { data <- apply(data, 2, rev) }
+    if (reverse[1L]) {
+      if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   }}}}
   if ((!is.null(dim)) && (!identical(datadim, d <- as.integer(dim)))) {

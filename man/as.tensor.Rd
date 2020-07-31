@@ -9,7 +9,7 @@ as.tensor(
   dim = NULL,
   byrow = FALSE,
   numeric = TRUE,
-  reverse = FALSE,
+  reverse = c(FALSE, 2),
   adjust = NULL
 )
 }
@@ -18,13 +18,14 @@ as.tensor(
 
 \item{dim}{The new dimensions to be set on the tensor.}
 
-\item{byrow}{The order in which elements of data should be read during rearrangement. 
+\item{byrow}{The order in which elements of data should be read during rearrangement.
 \code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
 \code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.}
 
 \item{numeric}{A boolean that indicates whether the elements should be coerced as numeric elements.}
 
-\item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.}
+\item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.
+The second parameter value indicates a row-wise reverse order (\code{1}) or a column-wise reverse order (\code{2}).}
 
 \item{adjust}{A number that is added to or subtracted from a factor level element, or even not (\code{NULL}).}
 }
@@ -35,7 +36,7 @@ The (reshaped) \code{data} as a tensor.
 Create a (reshaped) tensor (n-dimensional array)
 }
 \details{
-The function \code{array_reshape} from reticulate package differs from the base function \code{dim}. 
+The function \code{array_reshape} from reticulate package differs from the base function \code{dim}.
   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
 }
 \seealso{
