@@ -41,7 +41,8 @@ get.season <- function(dates) {
 #'
 #' @examples
 lags <- function(x, k = 1, between = FALSE, na = NA) {
-  N <- NROW(x)
+  x <- c(t(x))
+  N <- length(x)
   if (!between) {
     if (k > 0) {
       return(c(rep(na, k), x)[1:N])
@@ -49,20 +50,17 @@ lags <- function(x, k = 1, between = FALSE, na = NA) {
     else {
       return(c(x[(-k + 1):N], rep(na, -k)))
     }
-  }
-  else {
-    l <- list()
+  } else {
     if (k > 0) {
-      for (i in 1:k) {
-        l[[i]] <- c(rep(na, i), x)[1:N]
-      }
+      return(sapply(1:k, function(l) {
+        c(rep(na, l), x)[1:N]
+      }))
     }
     else {
-      for (i in 1:abs(k)) {
-        l[[i]] <- c(x[(i + 1):N], rep(na, i))
-      }
+      return(sapply(1:abs(k), function(l) {
+        c(x[(l + 1):N], rep(na, l))
+      }))
     }
-    return(do.call(cbind, l))
   }
 }
 
