@@ -27,14 +27,14 @@ outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
   params <- list(...)
   x <- c(t(x))
   if (type == "tukey") {
-    k <- ifelse(length(params) == 0, 1.5, params[[1]])
+    k <- ifelse(length(params) == 0, 1.5, params[[1L]])
     q1 <- quantile(x, probs = 0.25, na.rm = T)
     q3 <- quantile(x, probs = 0.75, na.rm = T)
     lower_boundary <- q1 - (k * IQR(x))
     upper_boundary <- q3 + (k * IQR(x))
   } else {
   if (type == "ml") {
-    k <- ifelse(length(params) == 0, 2, params[[1]])
+    k <- ifelse(length(params) == 0, 2, params[[1L]])
     m <- mean(x, na.rm = T)
     s <- sd(x, na.rm = T)
     lower_boundary <- m - (k * s)
@@ -48,8 +48,8 @@ outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
     outs <- list(list(lower_boundary, lower_values), 
                  list(upper_boundary, upper_values))
     names(outs) <- c("lower", "upper")
-    names(outs[[1]]) <- c("boundary", "values")
-    names(outs[[2]]) <- names(outs[[1]])
+    names(outs[[1L]]) <- c("boundary", "values")
+    names(outs[[2L]]) <- names(outs[[1L]])
     return(outs)
   } else {
     replaced <- x
@@ -114,7 +114,7 @@ winsorize <- function(x, quantile.low = .05) {
     stop("bad value for lower quantile limit.")
   }
   lim <- quantile(x, probs = c(quantile.low, 1 - quantile.low))
-  x[x < lim[1]] <- lim[1]
-  x[x > lim[2]] <- lim[2]
+  x[x < lim[1L]] <- lim[1L]
+  x[x > lim[2L]] <- lim[2L]
   return(x)
 }

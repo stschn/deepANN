@@ -41,21 +41,21 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
   data_list <- list()
   y.sequence <- FALSE
   df <- as.data.frame(dataset)
-  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1] < 1), 1, timesteps[1]) # at least a timestep of 1 is needed for x
+  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1L] < 1), 1, timesteps[1L]) # at least a timestep of 1 is needed for x
   if (length(timesteps) >= 2) {
     y.sequence <- TRUE
-    y.steps <- ifelse(timesteps[2] < 2, 2, timesteps[2]) # at least a timestep of 2 is needed for sequence outcome y
+    y.steps <- ifelse(timesteps[2L] < 2, 2, timesteps[2L]) # at least a timestep of 2 is needed for sequence outcome y
   }
   max_lag <- max(x.lag)
   max_lag <- ifelse(max_lag < 0, 0, max_lag)
   if ((is.null(x)) || (x == y)) {
     # univariate time series
     lag <- ifelse(max_lag <= 0, 1, max_lag) # at least a lag of 1 is needed
-    data_list[[1]] <- df[1:(NROW(df) - lag), y, drop = FALSE]
-    data_list[[2]] <- df[(x.steps + lag):NROW(df), y, drop = FALSE]
-    data_list[[3]] <- NA
-    if (!is.null(other_columns)) data_list[[3]] <- df[(x.steps + lag):NROW(df), other_columns, drop = FALSE]
-    if (y.sequence) { data_list[[1]] <- head(data_list[[1]], -(y.steps - 1)) }
+    data_list[[1L]] <- df[1:(NROW(df) - lag), y, drop = FALSE]
+    data_list[[2L]] <- df[(x.steps + lag):NROW(df), y, drop = FALSE]
+    data_list[[3L]] <- NA
+    if (!is.null(other_columns)) data_list[[3L]] <- df[(x.steps + lag):NROW(df), other_columns, drop = FALSE]
+    if (y.sequence) { data_list[[1L]] <- head(data_list[[1L]], -(y.steps - 1)) }
   } else {
     # multivariate time series
     x.len <- length(x)
@@ -92,11 +92,11 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
       colnames(lagged_y_matrix) <- cnames
       X <- cbind(X, lagged_y_matrix)
     }
-    data_list[[1]] <- X
-    data_list[[2]] <- df[(x.steps + max_lag):NROW(df), y, drop = FALSE]
-    data_list[[3]] <- NA
-    if (!is.null(other_columns)) data_list[[3]] <- df[(x.steps + max_lag):NROW(df), other_columns, drop = FALSE]
-    if (y.sequence) { data_list[[1]] <- head(data_list[[1]], -(y.steps - 1)) }
+    data_list[[1L]] <- X
+    data_list[[2L]] <- df[(x.steps + max_lag):NROW(df), y, drop = FALSE]
+    data_list[[3L]] <- NA
+    if (!is.null(other_columns)) data_list[[3L]] <- df[(x.steps + max_lag):NROW(df), other_columns, drop = FALSE]
+    if (y.sequence) { data_list[[1L]] <- head(data_list[[1L]], -(y.steps - 1)) }
   }
   names(data_list) <- c("X", "Y", "other_columns")
   return(data_list)
@@ -365,20 +365,20 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
   }
 
   y.sequence <- FALSE
-  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1] < 1), 1, timesteps[1])
+  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1L] < 1), 1, timesteps[1L])
   if (length(timesteps) >= 2) {
     y.sequence <- TRUE
-    y.steps <- ifelse(timesteps[2] < 2, 2, timesteps[2])
+    y.steps <- ifelse(timesteps[2L] < 2, 2, timesteps[2L])
   }
 
   X.tensor <- as.LSTM.X(X, x.steps, reverse)
   Y.tensor <- as.LSTM.Y(Y, switch(y.sequence + 1, NULL, y.steps), reverse)
-  dim(X.tensor) <- c(dim(X.tensor)[1], dim(X.tensor)[2] * dim(X.tensor)[3])
-  if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1], dim(Y.tensor)[2] * dim(Y.tensor)[3]) }
+  dim(X.tensor) <- c(dim(X.tensor)[1L], dim(X.tensor)[2L] * dim(X.tensor)[3L])
+  if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1L], dim(Y.tensor)[2L] * dim(Y.tensor)[3L]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
 
-  names_X <- gen_colnames_timesteps(names_X, timesteps[1])
-  if (y.sequence) { names_Y <- gen_colnames_timesteps(names_Y, timesteps[2]) }
+  names_X <- gen_colnames_timesteps(names_X, timesteps[1L])
+  if (y.sequence) { names_Y <- gen_colnames_timesteps(names_Y, timesteps[2L]) }
   colnames(dataset) <- c(names_Y, names_X)
   return(dataset)
 }
@@ -429,7 +429,7 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
     # Therefore, return_sequences must be set to TRUE with exception of the last layer if no sequence outcome is produced.
     rs <- ifelse(N <= 1, return_sequences, TRUE)
     # First hidden layer with input shape
-    lstm_model %>% keras::layer_lstm(units = h[1, 1], activation = h[1, 2], input_shape = c(timesteps, features), batch_size = batch_size, stateful = stateful, return_sequences = rs)
+    lstm_model %>% keras::layer_lstm(units = h[1L, 1L], activation = h[1L, 2L], input_shape = c(timesteps, features), batch_size = batch_size, stateful = stateful, return_sequences = rs)
     d <- 1
     D <- ifelse(!(is.null(dropout)), NROW(dropout), 0)
     if (D > 0) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
@@ -437,15 +437,15 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
     i <- 2
     while (i <= N) {
       if ((i == (N)) && (!return_sequences)) { rs <- !rs }
-      lstm_model %>% keras::layer_lstm(units = h[i, 1], activation = h[i, 2], stateful = stateful, return_sequences = rs)
+      lstm_model %>% keras::layer_lstm(units = h[i, 1L], activation = h[i, 2L], stateful = stateful, return_sequences = rs)
       i <- i + 1
       if (d <= D) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
     }
     # Output layer
     if (!return_sequences) {
-      lstm_model %>% keras::layer_dense(units = output[1], activation = output[2])
+      lstm_model %>% keras::layer_dense(units = output[1L], activation = output[2L])
     } else {
-      lstm_model %>% keras::time_distributed(keras::layer_dense(units = output[1], activation = output[2]))
+      lstm_model %>% keras::time_distributed(keras::layer_dense(units = output[1L], activation = output[2L]))
     }
   }
   lstm_model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
@@ -505,19 +505,19 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
   l_hyperparameter_names <- c("features", "output_units")
 
   # LSTM data format
-  X.steps <- ifelse((length(timesteps) == 0) || (timesteps[1] < 1), 1, timesteps[1]) # at least a timestep of 1 is needed for x
-  Y.steps <- switch(return_sequences + 1, NULL, ifelse(((length(timesteps) < 2) || (timesteps[2] < 2)), 2, timesteps[2]))
+  X.steps <- ifelse((length(timesteps) == 0) || (timesteps[1L] < 1), 1, timesteps[1L]) # at least a timestep of 1 is needed for x
+  Y.steps <- switch(return_sequences + 1, NULL, ifelse(((length(timesteps) < 2) || (timesteps[2L] < 2)), 2, timesteps[2L]))
   X.train <- as.LSTM.X(X, X.steps)
   Y.train <- as.LSTM.Y(Y, Y.steps)
 
   # Calculated Hyperparameters
   X.units <- get.LSTM.X.units(X.train) # Number of features
   Y.units <- get.LSTM.Y.units(Y.train) # Number of output units
-  l[[1]] <- list(X.units, Y.units)
-  names(l[[1]]) <- l_hyperparameter_names
+  l[[1L]] <- list(X.units, Y.units)
+  names(l[[1L]]) <- l_hyperparameter_names
 
   # Shell batch size also be used for specifying the input shape?
-  if (batch_size[2] == F) { input_batch_size <- NULL } else {input_batch_size <- batch_size[1] }
+  if (batch_size[2L] == F) { input_batch_size <- NULL } else {input_batch_size <- batch_size[1L] }
 
   # Build model procedure
   build_lstm_model <- function() {
@@ -536,18 +536,18 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 
   if (is.null(k.fold)) {
     # Build and fit the model
-    l[[2]] <- build_lstm_model()
+    l[[2L]] <- build_lstm_model()
     names(l) <- l_names[1:2]
     if (stateful == T) {
       for (i in 1:epochs) {
         # By default, Keras will shuffle the rows within each batch, which will destroy the alignment
         # that is needed for a stateful RNN to learn effectively [Culli/Pal (2017:211)].
         # Therefore, shuffle must be set to false to keep alignment alive.
-        l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
-        l[[2]] %>% keras::reset_states()
+        l[[2L]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
+        l[[2L]] %>% keras::reset_states()
       }
     } else {
-      l[[2]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size[1], validation_split = validation_split, verbose = verbose)
+      l[[2L]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose)
     }
   }
   else {
@@ -569,18 +569,18 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1]], Y.steps)
 
       # Build model
-      l[[2]] <- build_lstm_model()
+      l[[2L]] <- build_lstm_model()
 
       # Train/fit model
-      history <- l[[2]] %>%
-        keras::fit(x = x.train.fold, y = y.train.fold, epochs = epochs, batch_size = batch_size[1],
+      history <- l[[2L]] %>%
+        keras::fit(x = x.train.fold, y = y.train.fold, epochs = epochs, batch_size = batch_size[1L],
             validation_data = list(x.val.fold, y.val.fold), verbose = verbose)
 
       # Store training results
-      results <- l[[2]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size[1], verbose = 0)
-      m <- l[[2]]$metrics_names[2]
+      results <- l[[2L]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size[1L], verbose = 0)
+      m <- l[[2L]]$metrics_names[2]
       all_scores <- c(all_scores, results$m)
-      qual_history <- history$metrics[[4]]
+      qual_history <- history$metrics[[4L]]
       all_qual_histories <- rbind(all_qual_histories, qual_history)
     }
 
@@ -590,7 +590,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       validation_qual = apply(all_qual_histories, 2, mean)
     )
 
-    l[[3]] <- average_qual_history
+    l[[3L]] <- average_qual_history
     names(l) <- l_names
 
     # Train/Fit the final or generalized model
@@ -604,11 +604,11 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       l[[2]] <- build_lstm_model()
       if (stateful == T) {
         for (i in 1:opt_epochs) {
-          l[[2]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
-          l[[2]] %>% keras::reset_states()
+          l[[2L]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
+          l[[2L]] %>% keras::reset_states()
         }
       } else {
-        l[[2]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size[1], validation_split = validation_split, verbose = verbose)
+        l[[2L]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose)
       }
     }
   }

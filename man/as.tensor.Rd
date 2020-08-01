@@ -14,7 +14,7 @@ as.tensor(
 )
 }
 \arguments{
-\item{data}{A data set, e.g. vector, array, matrix, data frame.}
+\item{data}{A data set, e.g. vector, array, matrix, data frame, tibble, data.table.}
 
 \item{dim}{The new dimensions to be set on the tensor.}
 

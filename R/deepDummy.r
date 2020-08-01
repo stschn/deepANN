@@ -167,20 +167,20 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
   target <- df[, y] # Extract target vector
   n_target <- table(target) # Number of instances of each class
   # Oversampling
-  if (type == type_names[1]) {
+  if (type == type_names[1L]) {
     min_class <- names(which.min(n_target)) # Name of minority class
     X_min_all <- subset(df, target == min_class) # under-represented categories
     df <- rbind(df, do.call(rbind, replicate(n, X_min_all, simplify = F)))
   } else {
   # Undersampling
-  if (type == type_names[2]) {
+  if (type == type_names[2L]) {
     max_class <- names(which.max(n_target)) # Name of majority class
     N <- nrow(df[target == max_class, ]) # number of over-represented categories
     n_ <- round(N * n, digits = 0)
     df <- df[-c(sort(sample(which(target == max_class), n_, replace = F), decreasing = F)), ]
   } else {
   # SMOTE
-  if (type == type_names[3]) {
+  if (type == type_names[3L]) {
     min_class <- names(which.min(n_target)) # Name of minority class
     X_min_all <- subset(X, target == min_class)[sample(min(n_target)), ] # all minority feature values in shuffled order
     x1 <- X_min_all[1, ] # reference sample with feature values

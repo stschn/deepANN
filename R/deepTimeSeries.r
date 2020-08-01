@@ -19,9 +19,9 @@ get.season <- function(dates) {
   # Convert dates from any year to 2012 dates
   d <- as.Date(strftime(dates, format = "2012-%m-%d"))
   
-  ifelse (d >= WS | d < SE, season_names[1],
-    ifelse (d >= SE & d < SS, season_names[2],
-      ifelse (d >= SS & d < FE, season_names[3], season_names[4])))
+  ifelse (d >= WS | d < SE, season_names[1L],
+    ifelse (d >= SE & d < SS, season_names[2L],
+      ifelse (d >= SS & d < FE, season_names[3L], season_names[4L])))
 }
 
 #' Build a lagged data set or series
@@ -171,14 +171,14 @@ period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week"
   periods <- dataset[[p]] # extract periods as row vector
   if (type == "seq") {
     if (length(params) < 2) { stop("specify start index and increment of the sequence.") }
-    start <- params[[1]]
-    each  <- params[[2]]
+    start <- params[[1L]]
+    each  <- params[[2L]]
     n <- ceiling((NROW(dataset) - start + 1) / each)
     dataset <- dataset[seq(from = start, to = (n - 1) * each + start, by = each), , drop = F]
   } else {
   if (type == "weekday") {
     if (length(params) < 1) { stop("specify days of week.") }
-    days_of_week <- params[[1]]
+    days_of_week <- params[[1L]]
     days_idx <- which(ts.day.name %in% days_of_week)
     rows <- as.integer(strftime(periods, format = "%u")) # in opposite to "%w": Sun = 0...
     rows <- which(rows %in% days_idx)
@@ -186,21 +186,21 @@ period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week"
   } else {
   if (type == "monthday") {
     if (length(params) < 1) { stop("specify days of month.") }
-    days_of_month <- params[[1]]
+    days_of_month <- params[[1L]]
     rows <- as.integer(strftime(periods, format = "%d"))
     rows <- which(rows %in% days_of_month)
     dataset <- dataset[rows, , drop = F]
   } else {
   if (type == "week") {
     if (length(params) < 1) { stop("specify weeks of year.") }
-    weeks_of_year <- params[[1]]
+    weeks_of_year <- params[[1L]]
     rows <- as.integer(strftime(periods, format = "%V"))
     rows <- which(rows %in% weeks_of_year)
     dataset <- dataset[rows, , drop = F]
   } else {
   if (type == "month") {
     if (length(params) < 1) { stop("specify months of year.") }
-    months_of_year <- params[[1]]
+    months_of_year <- params[[1L]]
     months_idx <- which(ts.month.name %in% months_of_year)
     rows <- as.integer(strftime(periods, format = "%m"))
     rows <- which(rows %in% months_idx)
@@ -208,14 +208,14 @@ period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week"
   } else {
   if (type == "quarter") {
     if (length(params) < 1) { stop("specify quarters of year.") }
-    quarters_of_year <- params[[1]]
+    quarters_of_year <- params[[1L]]
     rows <- as.integer(substr(quarters(periods), 2, 2))
     rows <- which(rows %in% quarters_of_year)
     dataset <- dataset[rows, , drop = F]
   } else {
   if (type == "season") {
     if (length(params) < 1) { stop("specify seasons of year.") }
-    seasons_of_year <- params[[1]]
+    seasons_of_year <- params[[1L]]
     seasons <- get.season(periods)
     rows <- which(seasons %in% seasons_of_year)
     dataset <- dataset[rows, , drop = F]

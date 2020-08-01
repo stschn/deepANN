@@ -26,13 +26,13 @@ scale.minmax <- function(x, use.attr = TRUE, invert = FALSE, minx = NULL, maxx =
     }
     scaled <- (x - minx) / (maxx - minx)
     if (use.attr) {
-      attr(scaled, attr.name[1]) <- minx
-      attr(scaled, attr.name[2]) <- maxx
+      attr(scaled, attr.name[1L]) <- minx
+      attr(scaled, attr.name[2L]) <- maxx
     }
   } else {
     if (use.attr) {
-      minx <- attr(x, attr.name[1])
-      maxx <- attr(x, attr.name[2])
+      minx <- attr(x, attr.name[1L])
+      maxx <- attr(x, attr.name[2L])
     } else {
       if (is.null(minx) || is.null(maxx)) { stop("minmax scaling needs a min and max argument.") }
       minx <- minx
@@ -71,13 +71,13 @@ scale.zscore <- function(x, use.attr = TRUE, invert = FALSE, meanx = NULL, sdx =
     }
     scaled <- (x - meanx) / sdx
     if (use.attr) {
-      attr(scaled, attr.name[1]) <- meanx
-      attr(scaled, attr.name[2]) <- sdx
+      attr(scaled, attr.name[1L]) <- meanx
+      attr(scaled, attr.name[2L]) <- sdx
     }
   } else {
     if (use.attr) {
-      meanx <- attr(x, attr.name[1])
-      sdx <- attr(x, attr.name[2])
+      meanx <- attr(x, attr.name[1L])
+      sdx <- attr(x, attr.name[2L])
     } else {
       if (is.null(meanx) || is.null(sdx)) { stop("zscore scaling needs a mean and sd argument.") }
       meanx <- meanx
@@ -134,8 +134,8 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
     minx <- NULL
     maxx <- NULL
     if (length(params) == 2) {
-      minx <- params[[1]]
-      maxx <- params[[2]]
+      minx <- params[[1L]]
+      maxx <- params[[2L]]
     }
     scaled <- scale.minmax(x, use.attr, invert, minx, maxx)
   } else {
@@ -143,8 +143,8 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
     meanx <- NULL
     sdx <- NULL
     if (length(params) == 2) {
-      meanx <- params[[1]]
-      sdx <- params[[2]]
+      meanx <- params[[1L]]
+      sdx <- params[[2L]]
     }
     scaled <- scale.zscore(x, use.attr, invert, meanx, sdx)
   } else {
@@ -180,14 +180,14 @@ scale.datasets <- function(trainset, testset, type = c("minmax", "zscore", "log"
     l[[1]] <- sapply(trainset, min)
     l[[2]] <- sapply(trainset, max)
     l[[3]] <- as.data.frame(sapply(trainset, scaling, type = type, use.attr = F, invert = F))
-    l[[4]] <- as.data.frame(mapply(scaling, testset, type = type, use.attr = F, invert = F, l[[1]], l[[2]]))
+    l[[4]] <- as.data.frame(mapply(scaling, testset, type = type, use.attr = F, invert = F, l[[1L]], l[[2L]]))
     names(l) <- c("min", "max", "train", "test")
   } else {
   if (type == "zscore") {
     l[[1]] <- sapply(trainset, mean)
     l[[2]] <- sapply(trainset, sd)
     l[[3]] <- as.data.frame(sapply(trainset, scaling, type = type, use.attr = F, invert = F))
-    l[[4]] <- as.data.frame(mapply(scaling, testset, type = type, use.attr = F, invert = F, l[[1]], l[[2]]))
+    l[[4]] <- as.data.frame(mapply(scaling, testset, type = type, use.attr = F, invert = F, l[[1L]], l[[2L]]))
     names(l) <- c("mean", "sd", "train", "test")
   } else {
   if (type == "log") {

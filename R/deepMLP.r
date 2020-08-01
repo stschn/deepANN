@@ -91,7 +91,7 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 
 #' Create a (reshaped) tensor (n-dimensional array)
 #'
-#' @param data A data set, e.g. vector, array, matrix, data frame.
+#' @param data A data set, e.g. vector, array, matrix, data frame, tibble, data.table.
 #' @param dim The new dimensions to be set on the tensor.
 #' @param byrow The order in which elements of data should be read during rearrangement.
 #'   \code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
@@ -127,7 +127,7 @@ as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse =
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
-  if (c("data.frame") %in% class(data)) {
+  if (length(base::intersect(class(data), c("data.frame", "tbl_df", "tbl", "data.table"))) > 0) {
     if (numeric) { data <- sapply(data, vector.as.numeric, adjust = adjust) } else { data <- as.matrix(data) }
     if (reverse[1L]) {
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
@@ -306,26 +306,26 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
   mlp_model <- keras::keras_model_sequential()
   # SLP
   if (is.null(hidden)) {
-    mlp_model %>% keras::layer_dense(units = output[1], activation = output[2], input_shape = features)
+    mlp_model %>% keras::layer_dense(units = output[1L], activation = output[2L], input_shape = features)
   }
   # MLP
   else {
     h <- as.data.frame(hidden)
     N <- NROW(h)
     # First hidden layer with input shape
-    mlp_model %>% keras::layer_dense(units = h[1, 1], activation = h[1, 2], input_shape = features)
+    mlp_model %>% keras::layer_dense(units = h[1L, 1L], activation = h[1L, 2L], input_shape = features)
     d <- 1 # dropout layers to prevent overfitting
     D <- ifelse(!(is.null(dropout)), NROW(dropout), 0)
     if (D > 0) { mlp_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
     # Further hidden layers
     i <- 2 # hidden layers
     while (i <= N) {
-      mlp_model %>% keras::layer_dense(units = h[i, 1], activation = h[i, 2])
+      mlp_model %>% keras::layer_dense(units = h[i, 1], activation = h[i, 2L])
       i <- i + 1
       if (d <= D) { mlp_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
     }
     # Output layer
-    mlp_model %>% keras::layer_dense(units = output[1], activation = output[2])
+    mlp_model %>% keras::layer_dense(units = output[1], activation = output[2L])
   }
   mlp_model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
   return(mlp_model)
@@ -379,8 +379,8 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
   # Calculated Hyperparameters
   X.units <- get.MLP.X.units(X.train) # Number of features
   Y.units <- get.MLP.Y.units(Y.train) # Number of output units
-  l[[1]] <- list(X.units, Y.units)
-  names(l[[1]]) <- l_hyperparameter_names
+  l[[1L]] <- list(X.units, Y.units)
+  names(l[[1L]]) <- l_hyperparameter_names
 
   # Build model procedure
   build_mlp_model <- function() {
@@ -395,9 +395,9 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
 
   if (is.null(k.fold)) {
     # Build model
-    l[[2]] <- build_mlp_model()
+    l[[2L]] <- build_mlp_model()
     # Train/Fit the model
-    l[[2]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size, validation_split = validation_split)
+    l[[2L]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size, validation_split = validation_split)
     # Named list
     names(l) <- l_names[1:2]
   }
@@ -420,7 +420,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
       y.val.fold <- as.MLP.Y(y.fold_datasets[[i + 1]])
 
       # Build model
-      l[[2]] <- build_mlp_model()
+      l[[2L]] <- build_mlp_model()
 
       # Train/fit model
       history <- l[[2]] %>%
@@ -428,10 +428,10 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
             validation_data = list(x.val.fold, y.val.fold))
 
       # Store training results
-      results <- l[[2]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size, verbose = 0)
-      m <- l[[2]]$metrics_names[2]
+      results <- l[[2L]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size, verbose = 0)
+      m <- l[[2L]]$metrics_names[2]
       all_scores <- c(all_scores, results$m) #$mean_absolute_error
-      qual_history <- history$metrics[[4]] #$val_mean_absolute_error
+      qual_history <- history$metrics[[4L]] #$val_mean_absolute_error
       all_qual_histories <- rbind(all_qual_histories, qual_history)
     }
 
@@ -441,7 +441,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
       validation_qual = apply(all_qual_histories, 2, mean)
     )
 
-    l[[3]] <- average_qual_history
+    l[[3L]] <- average_qual_history
     names(l) <- l_names
 
     # Train/Fit the final or generalized model
@@ -452,8 +452,8 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
       } else {
         opt_epochs <- average_qual_history$epoch[which.max(average_qual_history$validation_qual)]
       }
-      l[[2]] <- build_mlp_model()
-      l[[2]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size, validation_split = validation_split)
+      l[[2L]] <- build_mlp_model()
+      l[[2L]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size, validation_split = validation_split)
     }
   }
   return(l)
