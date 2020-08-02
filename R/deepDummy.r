@@ -104,7 +104,6 @@ effectcoding <- function(x) {
 #'
 #' @examples
 one_hot_encode <- function(x) {
-  x <- c(t(x))
   f <- as.factor(x)
   n <- nlevels(f)
   m <- matrix(0, nrow = NROW(x), ncol = n)
