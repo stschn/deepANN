@@ -140,8 +140,8 @@ as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse =
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   }}}}
-  if ((!is.null(dim)) && (!identical(datadim, d <- as.integer(dim)))) {
-    data <- keras::array_reshape(data, dim = d, order = ifelse(!byrow, "F", "C"))
+  if ((!is.null(dim)) && (!isTRUE(all.equal(datadim, dim)))) {
+    data <- keras::array_reshape(data, dim = dim, order = ifelse(!byrow, "F", "C"))
   }
   return(data)
 }
