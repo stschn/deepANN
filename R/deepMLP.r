@@ -315,17 +315,17 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
     # First hidden layer with input shape
     mlp_model %>% keras::layer_dense(units = h[1L, 1L], activation = h[1L, 2L], input_shape = features)
     d <- 1 # dropout layers to prevent overfitting
-    D <- ifelse(!(is.null(dropout)), NROW(dropout), 0)
+    D <- ifelse(!(is.null(dropout)), NROW(dropout), 0L)
     if (D > 0) { mlp_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
     # Further hidden layers
     i <- 2 # hidden layers
     while (i <= N) {
-      mlp_model %>% keras::layer_dense(units = h[i, 1], activation = h[i, 2L])
+      mlp_model %>% keras::layer_dense(units = h[i, 1L], activation = h[i, 2L])
       i <- i + 1
       if (d <= D) { mlp_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
     }
     # Output layer
-    mlp_model %>% keras::layer_dense(units = output[1], activation = output[2L])
+    mlp_model %>% keras::layer_dense(units = output[1L], activation = output[2L])
   }
   mlp_model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
   return(mlp_model)
@@ -423,14 +423,14 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
       l[[2L]] <- build_mlp_model()
 
       # Train/fit model
-      history <- l[[2]] %>%
+      history <- l[[2L]] %>%
         keras::fit(x = x.train.fold, y = y.train.fold, epochs = epochs, batch_size = batch_size,
             validation_data = list(x.val.fold, y.val.fold))
 
       # Store training results
       results <- l[[2L]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size, verbose = 0)
-      m <- l[[2L]]$metrics_names[2]
-      all_scores <- c(all_scores, results$m) #$mean_absolute_error
+      m <- l[[2L]]$metrics_names[2L]
+      all_scores <- c(all_scores, results[m]) #$mean_absolute_error
       qual_history <- history$metrics[[4L]] #$val_mean_absolute_error
       all_qual_histories <- rbind(all_qual_histories, qual_history)
     }
@@ -438,7 +438,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
     # Build up history of successively mean k-fold Validation scores
     average_qual_history <- data.frame(
       epoch = seq(1: ncol(all_qual_histories)),
-      validation_qual = apply(all_qual_histories, 2, mean)
+      validation_qual = apply(all_qual_histories, 2L, mean)
     )
 
     l[[3L]] <- average_qual_history

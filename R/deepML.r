@@ -23,7 +23,7 @@ cross_validation_split <- function(dataset, folds = 3, foldname = "fold", shuffl
   for (i in 1:folds) {
     fold_list[[i]] <- head(df, n = fold_size)
     df <- tail(df, -fold_size)
-    listnames <- c(listnames, sprintf(fmt = paste(foldname, "%d", sep = ""), i))
+    listnames <- c(listnames, sprintf(fmt = paste0(foldname, "%d"), i))
   }
   names(fold_list) <- listnames
   return(fold_list)

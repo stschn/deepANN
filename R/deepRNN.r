@@ -579,7 +579,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       # Store training results
       results <- l[[2L]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size[1L], verbose = 0)
       m <- l[[2L]]$metrics_names[2]
-      all_scores <- c(all_scores, results$m)
+      all_scores <- c(all_scores, results[m])
       qual_history <- history$metrics[[4L]]
       all_qual_histories <- rbind(all_qual_histories, qual_history)
     }
@@ -587,7 +587,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
     # Build up history of successively mean k-fold Validation scores
     average_qual_history <- data.frame(
       epoch = seq(1: ncol(all_qual_histories)),
-      validation_qual = apply(all_qual_histories, 2, mean)
+      validation_qual = apply(all_qual_histories, 2L, mean)
     )
 
     l[[3L]] <- average_qual_history
@@ -601,7 +601,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       } else {
         opt_epochs <- average_qual_history$epoch[which.max(average_qual_history$validation_qual)]
       }
-      l[[2]] <- build_lstm_model()
+      l[[2L]] <- build_lstm_model()
       if (stateful == T) {
         for (i in 1:opt_epochs) {
           l[[2L]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
