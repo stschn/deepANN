@@ -1,9 +1,9 @@
 #' Dummyfication of categorical (nominal or ordinal) variables
-#' 
+#'
 #' \code{dummify} encodes non-metric variables within a data set.
 #'
 #' @family Dummyfication
-#' 
+#'
 #' @param dataset A data set with factor and/or character variables.
 #' @param columns The name of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.
 #' @param remove_level Controls which level of a factor or character variable is removed.
@@ -17,7 +17,7 @@
 #'
 #' @return The data set with encoded dummy variables.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{effectcoding}}.
 #'
 #' @examples
@@ -36,7 +36,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
   zero_value <- ifelse(!effectcoding, 0, -1)
   for (col_name in col_names) {
     if (is.factor(dataset[[col_name]])) {
-      lvl <- levels(dataset[[col_name]]) 
+      lvl <- levels(dataset[[col_name]])
     } else {
       lvl <- unique(dataset[[col_name]])
       lvl <- sort(lvl, na.last = TRUE)
@@ -69,18 +69,18 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 }
 
 #' Effectcoding
-#'  
+#'
 #' \code{effectcoding} encodes an already binary encoded variable with 0/1 value pairs into -1/1 pairs.
 #'
 #' @family Dummyfication
-#' 
+#'
 #' @param x An already binary encoded variable with 0/1 value pairs.
 #'
 #' @return A binary encoded variable with -1/1 value pairs.
 #' @export
-#' 
+#'
 #' @references \url{http://www.faqs.org/faqs/ai-faq/neural-nets/part2/}.
-#' 
+#'
 #' @seealso \code{\link{dummify}}.
 #'
 #' @examples
@@ -90,16 +90,16 @@ effectcoding <- function(x) {
 
 #' One-hot encoding
 #'
-#' \code{one_hot_encode} rebuilds a categorical variable to a so-called 'one hot vector';
+#' \code{one_hot_encode} rebuilds a categorical variable to a so-called 'one-hot vector';
 #'   within a sample (row) of a one-hot-vector each level of the variable is rebuild in the form \code{(0|1,0|1,0|1,...)}.
 #'
 #' @family Dummyfication
-#' 
+#'
 #' @param x A vector with categorical values, so-called levels, of a non-metric variable.
 #'
 #' @return A matrix with all levels as columns with either 0 or 1 values.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{one_hot_decode}}.
 #'
 #' @examples
@@ -119,12 +119,12 @@ one_hot_encode <- function(x) {
 #' \code{one_hot_decode} builds back an already one-hot encoded variable into its original value form.
 #'
 #' @family Dummyfication
-#' 
+#'
 #' @param x_encoded An already one-hot encoded variable; the outcome from \code{one_hot_encode}.
 #'
 #' @return A vector with the original levels (categories) of a non-metric variable.
 #' @export
-#' 
+#'
 #' @seealso \code{\link{one_hot_encode}}.
 #'
 #' @examples
@@ -138,7 +138,7 @@ one_hot_decode <- function(x_encoded) {
 #' \code{resample.imbalanced} resamples an imbalanced data set to get a balanced data set.
 #'
 #' @family Dummyfication
-#'   
+#'
 #' @param dataset An imbalanced data set, usually a data frame.
 #' @param x The column indices which spawn the feature matrix.
 #' @param y The column index of the target vector with class labels (categories).
@@ -151,7 +151,7 @@ one_hot_decode <- function(x_encoded) {
 #'
 #' @return A balanced data set.
 #' @export
-#' 
+#'
 #' @references
 #'  Chawla, Nitesh V., Bowyer, Kevin W., Hall, Lawrence O., Kegelmeyer, W. Philip (2002): SMOTE: Synthetic Minority Over-sampling Technique. In: Journal of Artificial Intelligence Research, 16 (2002), 321-357. https://doi.org/10.1613/jair.953;
 #'  \url{https://www.cs.cmu.edu/afs/cs/project/jair/pub/volume16/chawla02a-html/chawla2002.html},
@@ -184,13 +184,13 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
     X_min_all <- subset(X, target == min_class)[sample(min(n_target)), ] # all minority feature values in shuffled order
     x1 <- X_min_all[1, ] # reference sample with feature values
     X_min <- X_min_all[-1, ] # remaining minority samples with feature values
-        
+
     distances <- apply(X_min, 1, euclidean_distance, x2 = x1) # euclidean distances from reference sample to all other samples
     dist_inst <- data.frame(index=c(1:NROW(distances)), ed = distances) # euclidean distances and row indices
     dist_inst <- dist_inst[order(dist_inst$ed), ] # ascending ordering
     idx <- dist_inst$index[(1:k)] # indices of k nearest neighbors
     X_nearest_neighbors <- X_min[idx, ] # k nearest neighbors
-        
+
     fl <- list()
     for (i in 1:n) {
       x2 <- X_nearest_neighbors[sample(NROW(X_nearest_neighbors), 1), ] # random remaining sample of feature values
@@ -212,7 +212,7 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
     # l[[2]] <- as.data.frame(new_feature_values)
     # names(l) <- c("minority_class","feature_values")
     # return(l)
-      
+
     cbind.columns <- function(dataset, new_column, after) {
       if (after == 0) {
         return(cbind.data.frame(new_column, dataset))
@@ -223,7 +223,7 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
         return(cbind.data.frame(d[, 1:(after), drop = F], y, d[, (after + 1):length(d), drop = F]))
       }}
     }
-      
+
     new_subset <- (cbind.columns(new_feature_values, rep(min_class, NROW(new_feature_values)), (y - 1)))
     colnames(new_subset) <- cnames
     df <- rbind(df, new_subset)
@@ -234,7 +234,7 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
 #' Remove columns with only one specific value
 #'
 #' @family Dummyfication
-#' 
+#'
 #' @param dataset A data set, usually a data frame.
 #' @param value The specified values searched for.
 #'

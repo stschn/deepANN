@@ -13,7 +13,7 @@ one_hot_encode(x)
 A matrix with all levels as columns with either 0 or 1 values.
 }
 \description{
-\code{one_hot_encode} rebuilds a categorical variable to a so-called 'one hot vector';
+\code{one_hot_encode} rebuilds a categorical variable to a so-called 'one-hot vector';
   within a sample (row) of a one-hot-vector each level of the variable is rebuild in the form \code{(0|1,0|1,0|1,...)}.
 }
 \seealso{

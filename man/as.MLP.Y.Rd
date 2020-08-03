@@ -10,13 +10,13 @@ as.MLP.Y(Y)
 \item{Y}{An outcome data set, usually a vector, matrix or data frame.}
 }
 \value{
-A two-dimensional array of the outcome \code{Y} needed within Tensorflow for feedforward SLP or MLP.
+A two-dimensional array of the outcome \code{Y}. For a factor outcome, the result is a one-hot vector.
 }
 \description{
 Outcomes data format
 }
 \seealso{
-\code{\link{as.MLP.X}}, \code{\link{as.ANN.matrix}}.
+\code{\link{as.MLP.X}}, \code{\link{as.ANN.matrix}}, \code{\link{one_hot_encode}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as.ANN.matrix}()},
@@ -24,11 +24,13 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
+\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},
 \code{\link{predict.ANN}()},
-\code{\link{vector.as.ANN.matrix}()}
+\code{\link{vector.as.ANN.matrix}()},
+\code{\link{vector.as.numeric}()}
 }
 \concept{Single & Multi Layer Perceptron (SLP, MLP)}

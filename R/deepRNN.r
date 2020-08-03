@@ -225,22 +225,32 @@ as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{Y}.
 #' @param reverse Controls the order of the values in the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #'
-#' @return Dependent on timesteps:
-#'   \code{= NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
-#'   \code{>= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
+#' @return Dependent on the type of \code{Y} and timesteps. If \code{Y} is a factor, the result is a one-hot-vector.
+#'   If \code{timesteps = NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y},
+#'   if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 #' @export
 #'
-#' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}},
+#' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}, \code{\link{one_hot_encode}},
 #'   \code{\link{as.tensor.2D}}, \code{\link{as.tensor.3D}}.
 #'
 #' @examples
 as.LSTM.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
-  m <- as.ANN.matrix(Y, adjust = -1)
-  if (is.null(timesteps)) {
-    return(as.tensor.2D(data = m, reverse = reverse))
-  } else {
-    timesteps <- ifelse(timesteps < 2, 2, timesteps)
-    return(as.tensor.3D(data = m, ncol = timesteps, reverse = reverse, by = c("step")))
+  # Factor outcome must be rebuild as a one-hot vector
+  if (isTRUE(NCOL(f <- Filter(is.factor, Y)) > 0L)) {
+    f <- as.data.frame(f)
+    m <- lapply(f, one_hot_encode)
+    m <- do.call(cbind, m)
+    return(m)
+  }
+  # Metric outcome
+  else {
+    m <- as.ANN.matrix(Y)
+    if (is.null(timesteps)) {
+      return(as.tensor.2D(data = m, reverse = reverse))
+    } else {
+      timesteps <- ifelse(timesteps < 2, 2, timesteps)
+      return(as.tensor.3D(data = m, ncol = timesteps, reverse = reverse, by = c("step")))
+    }
   }
 }
 
@@ -707,6 +717,7 @@ predict.ANN <- function(model, X.tensor, batch_size = 1, scale_type = NULL, scal
         for (j in 1:tsteps) {
           origin <- actuals[i:(i + rows - 1), j]
           m[, j] <- invert_differencing(a[, j, y], origin)
+          i <- i + 1
         }
         a[, , y] <- m
       }

@@ -14,15 +14,15 @@ as.LSTM.Y(Y, timesteps = NULL, reverse = FALSE)
 \item{reverse}{Controls the order of the values in the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).}
 }
 \value{
-Dependent on timesteps:
-  \code{= NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y}.
-  \code{>= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
+Dependent on the type of \code{Y} and timesteps. If \code{Y} is a factor, the result is a one-hot-vector.
+  If \code{timesteps = NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y},
+  if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 }
 \description{
 Outcomes (Y) data format
 }
 \seealso{
-\code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}},
+\code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}, \code{\link{one_hot_encode}},
   \code{\link{as.tensor.2D}}, \code{\link{as.tensor.3D}}.
 
 Other Recurrent Neural Network (RNN): 

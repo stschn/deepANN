@@ -9,8 +9,7 @@ as.tensor(
   dim = NULL,
   byrow = FALSE,
   numeric = TRUE,
-  reverse = c(FALSE, 2),
-  adjust = NULL
+  reverse = c(FALSE, 2)
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ as.tensor(
 
 \item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.
 The second parameter value indicates a row-wise reverse order (\code{1}) or a column-wise reverse order (\code{2}).}
-
-\item{adjust}{A number that is added to or subtracted from a factor level element, or even not (\code{NULL}).}
 }
 \value{
 The (reshaped) \code{data} as a tensor.
@@ -41,4 +38,20 @@ The function \code{array_reshape} from reticulate package differs from the base 
 }
 \seealso{
 \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
+
+Other Single & Multi Layer Perceptron (SLP, MLP): 
+\code{\link{as.ANN.matrix}()},
+\code{\link{as.MLP.X}()},
+\code{\link{as.MLP.Y}()},
+\code{\link{as.tensor.1D}()},
+\code{\link{as.tensor.2D}()},
+\code{\link{as.tensor.3D}()},
+\code{\link{build.MLP}()},
+\code{\link{fit.MLP}()},
+\code{\link{get.MLP.X.units}()},
+\code{\link{get.MLP.Y.units}()},
+\code{\link{predict.ANN}()},
+\code{\link{vector.as.ANN.matrix}()},
+\code{\link{vector.as.numeric}()}
 }
+\concept{Single & Multi Layer Perceptron (SLP, MLP)}

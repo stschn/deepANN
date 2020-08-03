@@ -4,12 +4,10 @@
 \alias{vector.as.numeric}
 \title{Transform a vector to a numeric vector}
 \usage{
-vector.as.numeric(x, adjust = NULL)
+vector.as.numeric(x)
 }
 \arguments{
 \item{x}{A vector.}
-
-\item{adjust}{A number that is added to or subtracted from a factor level value, or even not (\code{NULL}).}
 }
 \value{
 The vector \code{x} as numeric vector.
@@ -17,3 +15,20 @@ The vector \code{x} as numeric vector.
 \description{
 Transform a vector to a numeric vector
 }
+\seealso{
+Other Single & Multi Layer Perceptron (SLP, MLP): 
+\code{\link{as.ANN.matrix}()},
+\code{\link{as.MLP.X}()},
+\code{\link{as.MLP.Y}()},
+\code{\link{as.tensor.1D}()},
+\code{\link{as.tensor.2D}()},
+\code{\link{as.tensor.3D}()},
+\code{\link{as.tensor}()},
+\code{\link{build.MLP}()},
+\code{\link{fit.MLP}()},
+\code{\link{get.MLP.X.units}()},
+\code{\link{get.MLP.Y.units}()},
+\code{\link{predict.ANN}()},
+\code{\link{vector.as.ANN.matrix}()}
+}
+\concept{Single & Multi Layer Perceptron (SLP, MLP)}

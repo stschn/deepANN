@@ -1,17 +1,16 @@
 #' Transform a vector to a numeric vector
 #'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
 #' @param x A vector.
-#' @param adjust A number that is added to or subtracted from a factor level value, or even not (\code{NULL}).
 #'
 #' @return The vector \code{x} as numeric vector.
 #' @export
 #'
 #' @examples
-vector.as.numeric <- function(x, adjust = NULL) {
+vector.as.numeric <- function(x) {
   if (is.character(x)) { x <- as.factor(x) }
-  if (is.factor(x)) {
-    if (is.null(adjust)) { x <- as.integer(x) } else { x <- as.integer(x) + as.integer(adjust) }
-  }
+  if (is.factor(x)) { x <- as.integer(x) }
   return(x)
 }
 
@@ -20,20 +19,14 @@ vector.as.numeric <- function(x, adjust = NULL) {
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param data A data set, usually a matrix or data frame.
-#' @param adjust A number that is added to or subtracted from a factor level value, or even not (\code{NULL}).
 #'
 #' @return A matrix with only numbers.
 #' @export
 #'
 #' @examples
-as.ANN.matrix <- function(data, adjust = NULL) {
+as.ANN.matrix <- function(data) {
   data <- as.data.frame(data)
-  m <- sapply(data, function(column) {
-    if (is.character(column)) { column <- as.factor(column) }
-    if (is.factor(column)) {
-      if (is.null(adjust)) { as.integer(column) } else { as.integer(column) + as.integer(adjust) }
-    } else { column }
-  })
+  m <- sapply(data, vector.as.numeric)
   m <- as.matrix(m)
   return(m)
 }
@@ -91,6 +84,8 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 
 #' Create a (reshaped) tensor (n-dimensional array)
 #'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
 #' @param data A data set, e.g. vector, array, matrix, data frame, tibble, data.table.
 #' @param dim The new dimensions to be set on the tensor.
 #' @param byrow The order in which elements of data should be read during rearrangement.
@@ -99,7 +94,6 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #' @param numeric A boolean that indicates whether the elements should be coerced as numeric elements.
 #' @param reverse Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.
 #'   The second parameter value indicates a row-wise reverse order (\code{1}) or a column-wise reverse order (\code{2}).
-#' @param adjust A number that is added to or subtracted from a factor level element, or even not (\code{NULL}).
 #'
 #' @details The function \code{array_reshape} from reticulate package differs from the base function \code{dim}.
 #'   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
@@ -110,7 +104,7 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #' @seealso \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
 #'
 #' @examples
-as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse = c(FALSE, 2), adjust = NULL) {
+as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse = c(FALSE, 2)) {
   datadim <- dim(data)
   if (is.null(datadim)) {
     if (reverse[1L]) { data <- rev(data) }
@@ -122,19 +116,20 @@ as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse =
   } else {
   if (c("matrix") %in% class(data)) {
     data <- as.matrix(data)
-    if (numeric) { data <- apply(data, 2, vector.as.numeric, adjust = adjust) }
+    if (numeric) { data <- apply(data, 2, vector.as.numeric) }
     if (reverse[1L]) {
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
   if (length(base::intersect(class(data), c("data.frame", "tbl_df", "tbl", "data.table"))) > 0) {
-    if (numeric) { data <- sapply(data, vector.as.numeric, adjust = adjust) } else { data <- as.matrix(data) }
+    if (numeric) { data <- sapply(data, vector.as.numeric) }
+    data <- as.matrix(data)
     if (reverse[1L]) {
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
   if (c("list") %in% class(data)) {
-    if (numeric) { data <- lapply(data, vector.as.numeric, adjust = adjust) }
+    if (numeric) { data <- lapply(data, vector.as.numeric) }
     data <- matrix(unlist(data), ncol = length(data))
     if (reverse[1L]) {
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
@@ -219,15 +214,14 @@ as.tensor.3D <- function(data, ncol = 1, reverse = FALSE, by = c("row", "col", "
 #'
 #' @param X A feature data set, usually a matrix or data frame.
 #'
-#' @return A two-dimensional array of the feature matrix \code{X} needed within Tensorflow for feedforward SLP or MLP.
+#' @return A two-dimensional array of the feature matrix \code{X}.
 #' @export
 #'
 #' @seealso \code{\link{as.MLP.Y}}, \code{\link{as.ANN.matrix}}.
 #'
 #' @examples
 as.MLP.X <- function(X) {
-  X.tensor <- as.ANN.matrix(X)
-  return(X.tensor)
+  return(as.tensor.2D(as.ANN.matrix(X)))
 }
 
 #' Outcomes data format
@@ -236,15 +230,22 @@ as.MLP.X <- function(X) {
 #'
 #' @param Y An outcome data set, usually a vector, matrix or data frame.
 #'
-#' @return A two-dimensional array of the outcome \code{Y} needed within Tensorflow for feedforward SLP or MLP.
+#' @return A two-dimensional array of the outcome \code{Y}. For a factor outcome, the result is a one-hot vector.
 #' @export
 #'
-#' @seealso \code{\link{as.MLP.X}}, \code{\link{as.ANN.matrix}}.
+#' @seealso \code{\link{as.MLP.X}}, \code{\link{as.ANN.matrix}}, \code{\link{one_hot_encode}}.
 #'
 #' @examples
 as.MLP.Y <- function(Y) {
-  Y.tensor <- as.ANN.matrix(Y, -1)
-  return(Y.tensor)
+  # Factor outcome must be rebuild as a one-hot vector
+  if (isTRUE(NCOL(f <- Filter(is.factor, Y)) > 0L)) {
+    f <- as.data.frame(f)
+    m <- lapply(f, one_hot_encode)
+    m <- do.call(cbind, m)
+    return(m)
+  }
+  # Metric outcome
+  else { return(as.tensor.2D(as.ANN.matrix(Y))) }
 }
 
 #' Get number of input units from 2-dimensional feature tensor
@@ -259,7 +260,7 @@ as.MLP.Y <- function(Y) {
 #' @seealso \code{\link{as.MLP.X}}, \code{\link{get.MLP.Y.units}}.
 #'
 #' @examples
-get.MLP.X.units <- function(X.tensor) { return(NCOL(X.tensor)) }
+get.MLP.X.units <- function(X.tensor) { return(dim(X.tensor)[2L]) }
 
 #' Get number of output units from 2-dimensional outcome tensor
 #'
@@ -273,7 +274,7 @@ get.MLP.X.units <- function(X.tensor) { return(NCOL(X.tensor)) }
 #' @seealso \code{\link{as.MLP.Y}}, \code{\link{get.MLP.X.units}}.
 #'
 #' @examples
-get.MLP.Y.units <- function(Y.tensor) { return(NCOL(Y.tensor)) }
+get.MLP.Y.units <- function(Y.tensor) { return(dim(Y.tensor)[2L]) }
 
 #' Build SLP/MLP architecture
 #'

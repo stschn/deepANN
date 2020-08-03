@@ -2,9 +2,7 @@
 % Please edit documentation in R/deepDummy.r
 \name{effectcoding}
 \alias{effectcoding}
-\title{Effectcoding
- 
-\code{effectcoding} encodes an already binary encoded variable with 0/1 value pairs into -1/1 pairs.}
+\title{Effectcoding}
 \usage{
 effectcoding(x)
 }
@@ -15,8 +13,6 @@ effectcoding(x)
 A binary encoded variable with -1/1 value pairs.
 }
 \description{
-Effectcoding
- 
 \code{effectcoding} encodes an already binary encoded variable with 0/1 value pairs into -1/1 pairs.
 }
 \references{

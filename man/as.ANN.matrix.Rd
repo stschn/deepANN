@@ -4,12 +4,10 @@
 \alias{as.ANN.matrix}
 \title{Convert data into an ANN compatible matrix with only numbers}
 \usage{
-as.ANN.matrix(data, adjust = NULL)
+as.ANN.matrix(data)
 }
 \arguments{
 \item{data}{A data set, usually a matrix or data frame.}
-
-\item{adjust}{A number that is added to or subtracted from a factor level value, or even not (\code{NULL}).}
 }
 \value{
 A matrix with only numbers.
@@ -24,11 +22,13 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
+\code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},
 \code{\link{predict.ANN}()},
-\code{\link{vector.as.ANN.matrix}()}
+\code{\link{vector.as.ANN.matrix}()},
+\code{\link{vector.as.numeric}()}
 }
 \concept{Single & Multi Layer Perceptron (SLP, MLP)}
