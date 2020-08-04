@@ -25,6 +25,11 @@ A lagged data series or a lagged data set.
 \seealso{
 Other TimeSeries: 
 \code{\link{build.stationary}()},
+\code{\link{diff.log}()},
+\code{\link{diff.percentage}()},
+\code{\link{diffinv.log}()},
+\code{\link{diffinv.percentage}()},
+\code{\link{diffinv.simple}()},
 \code{\link{get.season}()},
 \code{\link{invert_differencing}()},
 \code{\link{period}()}

@@ -2,26 +2,33 @@
 % Please edit documentation in R/deepTimeSeries.r
 \name{invert_differencing}
 \alias{invert_differencing}
-\title{Invert a differenced data series}
+\title{Invert a differentiated data series}
 \usage{
-invert_differencing(delta, origin)
+invert_differencing(delta, origin, type = c("simple", "log", "percentage"))
 }
 \arguments{
-\item{delta}{A stationary or differenced data series.}
+\item{delta}{A differentiated numeric vector.}
 
-\item{origin}{A scalar or vector with original value(s) to invert the stationary series.}
+\item{origin}{A scalar or numeric vector with original value(s) to invert \code{delta}.}
+
+\item{type}{The type of differentiation to be used. Available types are \code{simple}, \code{log} and \code{percentage}.}
 }
 \value{
-A vector whose elements are the cumulative sums of \code{delta} and \code{origin}.
+An inverted vector of \code{delta}.
 }
 \description{
-\code{invert_differencing} inverts a differenced data series.
+Invert a differentiated data series
 }
 \seealso{
-\code{\link{build.stationary}}, \code{\link[base]{cumsum}}.
+\code{\link{build.stationary}}.
 
 Other TimeSeries: 
 \code{\link{build.stationary}()},
+\code{\link{diff.log}()},
+\code{\link{diff.percentage}()},
+\code{\link{diffinv.log}()},
+\code{\link{diffinv.percentage}()},
+\code{\link{diffinv.simple}()},
 \code{\link{get.season}()},
 \code{\link{lags}()},
 \code{\link{period}()}

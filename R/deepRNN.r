@@ -637,11 +637,13 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 #'   Per default (\code{NULL}) no inverted scaling is done.
 #' @param scaler Scaling factors for the different scaling types. The type min-max scaling needs a list with vectors with min and max values for each outcome,
 #'   z-score scaling needs a list with vectors with mean and sd values for each outcome, log transformation needs no scaler.
+#' @param diff_type Type of differentiation with supported techniques simple-differentiation (\code{simple}), log-differentiation (\code{log}) and percentage-differentiation (\code{percentage}).
+#'   \code{NULL} (default) indicates that no inverted differentiation is done.
 #' @param timesteps The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix, returned by \code{as.LSTM.X}.
 #' @param lag The number of considered lags on feature side.
 #' @param differences The number of differences.
 #' @param invert_first_row The row index of the first row of the training or test data set regarding to the raw data set before differencing.
-#' @param Y.actual A vector, matrix or data frame of raw data outcome values used for invert differencing.
+#' @param Y.actual A vector, matrix or data frame of raw data outcome values used for invert differentiation.
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
 #'
 #' @return A two- or three-dimensional array with predicted outcome values.
@@ -653,9 +655,10 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 #'   \code{\link[stats]{predict}}, \code{\link{scale.datasets}}.
 #'
 #' @examples
-predict.ANN <- function(model, X.tensor, batch_size = 1, scale_type = NULL, scaler = NULL,
-                        timesteps = 1, lag = 0, differences = 1,
-                        invert_first_row = NULL, Y.actual = NULL, type = "univariate") {
+predict.ANN <- function(model, X.tensor, batch_size = 1,
+                        scale_type = NULL, scaler = NULL,
+                        diff_type = NULL, timesteps = 1, lag = 0, differences = 1, invert_first_row = NULL, Y.actual = NULL,
+                        type = "univariate") {
   Y.predict <- model %>% predict(X.tensor, batch_size = batch_size)
   dim_predict <- length(dim(Y.predict)) # 2 without timesteps, 3 with timesteps
   if (dim_predict == 2) { # useful for e.g. MLP or LSTM without sequence outcome
@@ -676,13 +679,13 @@ predict.ANN <- function(model, X.tensor, batch_size = 1, scale_type = NULL, scal
         Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T))
       }}}
     }
-    if (!is.null(invert_first_row)) {
+    if (!is.null(diff_type)) {
       i <- start.invert_differencing(invert_first_row, differences, timesteps[1L], max(lag), type)
       actuals <- as.matrix(Y.actual)
       m <- matrix(data = NA, nrow = NROW(Y.predict), ncol = NCOL(Y.predict))
       for (j in 1:NCOL(Y.predict)) {
         origin <- actuals[i:(i + NROW(Y.predict) - 1), j]
-        m[, j] <- invert_differencing(Y.predict[, j], origin)
+        m[, j] <- invert_differencing(Y.predict[, j], origin, type = diff_type)
       }
       Y.predict <- m
     }
@@ -710,13 +713,13 @@ predict.ANN <- function(model, X.tensor, batch_size = 1, scale_type = NULL, scal
           a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T))
         }}}
       }
-      if (!is.null(invert_first_row)) {
+      if (!is.null(diff_type)) {
         i <- start.invert_differencing(invert_first_row, differences, timesteps[1L], max(lag), type)
         actuals <- as.matrix(Y.actual[, , y])
         m <- matrix(data = NA, nrow = rows, ncol = tsteps)
         for (j in 1:tsteps) {
           origin <- actuals[i:(i + rows - 1), j]
-          m[, j] <- invert_differencing(a[, j, y], origin)
+          m[, j] <- invert_differencing(a[, j, y], origin, type = diff_type)
           i <- i + 1
         }
         a[, , y] <- m

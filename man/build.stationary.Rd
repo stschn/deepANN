@@ -2,10 +2,11 @@
 % Please edit documentation in R/deepTimeSeries.r
 \name{build.stationary}
 \alias{build.stationary}
-\title{Build a stationary data series thru differencing within a data set}
+\title{Build a stationary data series thru differentiation within a data set}
 \usage{
 build.stationary(
   dataset,
+  type = c("simple", "log", "percentage"),
   y = 2,
   differences = 1,
   suffix = "_delta",
@@ -14,6 +15,8 @@ build.stationary(
 }
 \arguments{
 \item{dataset}{A data set, usually a data frame.}
+
+\item{type}{The type of differentiation to be used. Available types are \code{simple}, \code{log} and \code{percentage}.}
 
 \item{y}{The indices of the columns which are used to build stationary series.}
 
@@ -29,12 +32,23 @@ of the stationary data series (\code{TRUE}).}
 The data set with newly created columns for the stationary data series.
 }
 \description{
-\code{build.stationary} builds a differenced data series.
+Build a stationary data series thru differentiation within a data set
+}
+\details{
+The equations for the different types of differentiation are
+  \code{simple}: d(t) = x(t) - x(t-1). 
+  \code{log}: d(t) = ln(x(t) / x(t-1)) = ln(x(t)) - ln(x(t-1)). 
+  \code{percentage}: d(t) = (x(t) / x(t-1)) - 1.
 }
 \seealso{
 \code{\link{invert_differencing}}.
 
 Other TimeSeries: 
+\code{\link{diff.log}()},
+\code{\link{diff.percentage}()},
+\code{\link{diffinv.log}()},
+\code{\link{diffinv.percentage}()},
+\code{\link{diffinv.simple}()},
 \code{\link{get.season}()},
 \code{\link{invert_differencing}()},
 \code{\link{lags}()},

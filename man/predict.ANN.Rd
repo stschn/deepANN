@@ -10,6 +10,7 @@
   batch_size = 1,
   scale_type = NULL,
   scaler = NULL,
+  diff_type = NULL,
   timesteps = 1,
   lag = 0,
   differences = 1,
@@ -31,6 +32,9 @@ Per default (\code{NULL}) no inverted scaling is done.}
 \item{scaler}{Scaling factors for the different scaling types. The type min-max scaling needs a list with vectors with min and max values for each outcome,
 z-score scaling needs a list with vectors with mean and sd values for each outcome, log transformation needs no scaler.}
 
+\item{diff_type}{Type of differentiation with supported techniques simple-differentiation (\code{simple}), log-differentiation (\code{log}) and percentage-differentiation (\code{percentage}).
+\code{NULL} (default) indicates that no inverted differentiation is done.}
+
 \item{timesteps}{The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix, returned by \code{as.LSTM.X}.}
 
 \item{lag}{The number of considered lags on feature side.}
@@ -39,7 +43,7 @@ z-score scaling needs a list with vectors with mean and sd values for each outco
 
 \item{invert_first_row}{The row index of the first row of the training or test data set regarding to the raw data set before differencing.}
 
-\item{Y.actual}{A vector, matrix or data frame of raw data outcome values used for invert differencing.}
+\item{Y.actual}{A vector, matrix or data frame of raw data outcome values used for invert differentiation.}
 
 \item{type}{The type of time series: \code{univariate} or \code{multivariate}.}
 }
