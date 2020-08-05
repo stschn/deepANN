@@ -2,25 +2,25 @@
 % Please edit documentation in R/deepTimeSeries.r
 \name{diffinv.simple}
 \alias{diffinv.simple}
-\title{Invert a simple-differentiated vector}
+\title{Invert a simple-differenced vector}
 \usage{
 \method{diffinv}{simple}(delta, origin)
 }
 \arguments{
-\item{delta}{A simple-differentiated numeric vector.}
+\item{delta}{A simple-differenced numeric vector.}
 
-\item{origin}{A scalar or numeric vector with original value(s) to invert the differentiated data series.}
+\item{origin}{A scalar or numeric vector with original value(s) to invert \code{delta}.}
 }
 \value{
 A vector whose elements are the cumulative sums of \code{delta} and \code{origin}.
 }
 \description{
-Invert a simple-differentiated vector
+Invert a simple-differenced vector
 }
 \seealso{
 \code{\link{build.stationary}}, \code{\link[base]{cumsum}}.
 
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.log}()},
 \code{\link{diff.percentage}()},
@@ -31,4 +31,4 @@ Other TimeSeries:
 \code{\link{lags}()},
 \code{\link{period}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}

@@ -2,25 +2,25 @@
 % Please edit documentation in R/deepTimeSeries.r
 \name{diffinv.percentage}
 \alias{diffinv.percentage}
-\title{Invert a percentage-differentiated vector}
+\title{Invert a percentage-differenced vector}
 \usage{
 \method{diffinv}{percentage}(delta, origin)
 }
 \arguments{
-\item{delta}{A percentage-differentiated numeric vector.}
+\item{delta}{A percentage-differenced numeric vector.}
 
-\item{origin}{A scalar or numeric vector with original value(s) to invert the differentiated data series.}
+\item{origin}{A scalar or numeric vector with original value(s) to invert \code{delta}.}
 }
 \value{
-The inverted percentage-differentiation \code{delta}.
+The inverted \code{delta}.
 }
 \description{
-Invert a percentage-differentiated vector
+Invert a percentage-differenced vector
 }
 \seealso{
 \code{\link{diff.percentage}}.
 
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.log}()},
 \code{\link{diff.percentage}()},
@@ -31,4 +31,4 @@ Other TimeSeries:
 \code{\link{lags}()},
 \code{\link{period}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}

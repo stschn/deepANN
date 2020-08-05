@@ -34,7 +34,7 @@ A subset of dataset with periodically specified data.
 Subset data set/time series to specific periodically data
 }
 \seealso{
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.log}()},
 \code{\link{diff.percentage}()},
@@ -45,4 +45,4 @@ Other TimeSeries:
 \code{\link{invert_differencing}()},
 \code{\link{lags}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}

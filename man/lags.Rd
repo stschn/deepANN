@@ -23,7 +23,7 @@ A lagged data series or a lagged data set.
 \code{lags} builds a lagged data series or entire data set.
 }
 \seealso{
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.log}()},
 \code{\link{diff.percentage}()},
@@ -34,4 +34,4 @@ Other TimeSeries:
 \code{\link{invert_differencing}()},
 \code{\link{period}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}

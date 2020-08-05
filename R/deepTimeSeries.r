@@ -1,6 +1,6 @@
 #' Get season from given dates
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'
 #' @param dates A vector with date values.
 #' @return A vector with same length as \code{dates} with seasonal values \code{Winter,Spring,Summer,Fall}.
@@ -28,7 +28,7 @@ get.season <- function(dates) {
 #'
 #' \code{lags} builds a lagged data series or entire data set.
 #' 
-#' @family TimeSeries
+#' @family Time Series
 #' 
 #' @param x A vector for building a lagged data series or an entire data set.
 #' @param k The amount of period shifts (lags).
@@ -64,20 +64,20 @@ lags <- function(x, k = 1, between = FALSE, na = NA) {
   }
 }
 
-#' Build a stationary data series thru differentiation within a data set
+#' Build a stationary data series thru differencing
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'   
 #' @param dataset A data set, usually a data frame.
-#' @param type The type of differentiation to be used. Available types are \code{simple}, \code{log} and \code{percentage}.
+#' @param type The type of differencing to be used. Available types are \code{simple}, \code{log} and \code{percentage}.
 #' @param y The indices of the columns which are used to build stationary series.
-#' @param differences The number of differences for building stationary series.
+#' @param differences The number of differences for building stationary series. That's only relevant for the \code{simple} type.
 #' @param suffix The suffix for every newly created column of the stationary series.
 #' @param adjust Controls whether NA values are included to fill up the entire data set in the newly
 #'   created columns for the stationary series (\code{FALSE}) or the entire data set is shorten to the length
 #'   of the stationary data series (\code{TRUE}).
 #'
-#' @details The equations for the different types of differentiation are
+#' @details Differencing is a method of transforming a time series data set. The equations for the different types of differencing are
 #'   \code{simple}: d(t) = x(t) - x(t-1). 
 #'   \code{log}: d(t) = ln(x(t) / x(t-1)) = ln(x(t)) - ln(x(t-1)). 
 #'   \code{percentage}: d(t) = (x(t) / x(t-1)) - 1.
@@ -111,15 +111,15 @@ build.stationary <- function(dataset, type = c("simple", "log", "percentage"), y
   return(dataset)
 }
 
-#' Invert a differentiated data series
+#' Invert a differenced data series
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'   
-#' @param delta A differentiated numeric vector.
+#' @param delta A differenced numeric vector.
 #' @param origin A scalar or numeric vector with original value(s) to invert \code{delta}.
-#' @param type The type of differentiation to be used. Available types are \code{simple}, \code{log} and \code{percentage}.
+#' @param type The type of differencing to be used. Available types are \code{simple}, \code{log} and \code{percentage}.
 #'
-#' @return An inverted vector of \code{delta}.
+#' @return The inverted \code{delta}.
 #' @export
 #' 
 #' @seealso \code{\link{build.stationary}}.
@@ -138,12 +138,12 @@ invert_differencing <- function(delta, origin, type = c("simple", "log", "percen
   }}}
 }
 
-#' Invert a simple-differentiated vector
+#' Invert a simple-differenced vector
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'   
-#' @param delta A simple-differentiated numeric vector.
-#' @param origin A scalar or numeric vector with original value(s) to invert the differentiated data series.
+#' @param delta A simple-differenced numeric vector.
+#' @param origin A scalar or numeric vector with original value(s) to invert \code{delta}.
 #'
 #' @return A vector whose elements are the cumulative sums of \code{delta} and \code{origin}.
 #' @export
@@ -162,7 +162,7 @@ diffinv.simple <- function(delta, origin) {
     sums <- diffinv(delta, xi = origin) #cumsum(c(origin,deltas))
     sums <- sums[-1L]
   }
-  # The original series is iteratively be used for invert differentiation
+  # The original series is iteratively be used for invert differencing
   else {
     if (lo != ld) stop("length of deltas and origins are not equal.")
     sums <- numeric(ld)
@@ -171,13 +171,13 @@ diffinv.simple <- function(delta, origin) {
   return(sums)
 }
 
-#' Log-differentiation of a numeric vector
+#' Log-differencing of a numeric vector
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'
 #' @param x A numeric vector.
 #'
-#' @return The log-differentiation of \code{x}.
+#' @return The log-differenced \code{x}.
 #' @export
 #'
 #' @seealso \code{\link{build.stationary}}, \code{\link{diffinv.log}}.
@@ -192,14 +192,14 @@ diff.log <- function(x) {
   return(diff(log(x)))
 }
 
-#' Invert a log-differentiated vector
+#' Invert a log-differenced vector
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'
-#' @param delta A log-differentiated numeric vector.
-#' @param origin A scalar or numeric vector with original value(s) to invert the differentiated data series.
+#' @param delta A log-differenced numeric vector.
+#' @param origin A scalar or numeric vector with original value(s) to invert \code{delta}.
 #'
-#' @return The inverted log-differentiated \code{delta}.
+#' @return The inverted \code{delta}.
 #' @export
 #'
 #' @seealso \code{\link{diff.log}}.
@@ -216,7 +216,7 @@ diffinv.log <- function(delta, origin) {
     invs[1L] <- exp(log(origin[1L]) + delta[1L])
     for (i in 2L:ld) { invs[i] <- exp(log(invs[i - 1L]) + delta[i]) }
   }
-  # The original series is iteratively be used for invert differentiation
+  # The original series is iteratively be used for invert differencing
   else {
     if (lo != ld) stop("length of deltas and origins are not equal.")
     invs <- numeric(ld)
@@ -225,13 +225,13 @@ diffinv.log <- function(delta, origin) {
   return(invs)
 }
 
-#' Percentage-differentiation of a numeric vector
+#' Percentage-differencing of a numeric vector
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'
 #' @param x A numeric vector.
 #'
-#' @return The percentage-differentiation of \code{x}.
+#' @return The percentage-differenced \code{x}.
 #' @export
 #'
 #' @seealso \code{\link{build.stationary}}, \code{\link{diffinv.percentage}}.
@@ -245,14 +245,14 @@ diff.percentage <- function(x) {
   return(v)
 }
 
-#' Invert a percentage-differentiated vector
+#' Invert a percentage-differenced vector
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'
-#' @param delta A percentage-differentiated numeric vector.
-#' @param origin A scalar or numeric vector with original value(s) to invert the differentiated data series.
+#' @param delta A percentage-differenced numeric vector.
+#' @param origin A scalar or numeric vector with original value(s) to invert \code{delta}.
 #'
-#' @return The inverted percentage-differentiation \code{delta}.
+#' @return The inverted \code{delta}.
 #' @export
 #'
 #' @seealso \code{\link{diff.percentage}}.
@@ -269,7 +269,7 @@ diffinv.percentage <- function(delta, origin) {
     invs[1L] <- (delta[1L] + 1) * origin[1L]
     for (i in 2L:ld) { invs[i] <- (delta[i] + 1) * invs[i - 1L] }
   }
-  # The original series is iteratively be used for invert differentiation
+  # The original series is iteratively be used for invert differencing
   else {
     if (lo != ld) stop("length of deltas and origins are not equal.")
     invs <- numeric(ld)
@@ -280,7 +280,7 @@ diffinv.percentage <- function(delta, origin) {
 
 #' Subset data set/time series to specific periodically data
 #'
-#' @family TimeSeries
+#' @family Time Series
 #'
 #' @param dataset A data set or time series, usually a data frame.
 #' @param p The index of the periodic column.

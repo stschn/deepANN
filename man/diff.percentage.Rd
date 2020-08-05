@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepTimeSeries.r
 \name{diff.percentage}
 \alias{diff.percentage}
-\title{Percentage-differentiation of a numeric vector}
+\title{Percentage-differencing of a numeric vector}
 \usage{
 \method{diff}{percentage}(x)
 }
@@ -10,15 +10,15 @@
 \item{x}{A numeric vector.}
 }
 \value{
-The percentage-differentiation of \code{x}.
+The percentage-differenced \code{x}.
 }
 \description{
-Percentage-differentiation of a numeric vector
+Percentage-differencing of a numeric vector
 }
 \seealso{
 \code{\link{build.stationary}}, \code{\link{diffinv.percentage}}.
 
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.log}()},
 \code{\link{diffinv.log}()},
@@ -29,4 +29,4 @@ Other TimeSeries:
 \code{\link{lags}()},
 \code{\link{period}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}

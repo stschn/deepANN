@@ -19,7 +19,7 @@ Get season from given dates
 \url{https://stackoverflow.com/questions/9500114/find-which-season-a-particular-date-belongs-to}.
 }
 \seealso{
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.log}()},
 \code{\link{diff.percentage}()},
@@ -30,4 +30,4 @@ Other TimeSeries:
 \code{\link{lags}()},
 \code{\link{period}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}

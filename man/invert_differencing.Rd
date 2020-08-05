@@ -2,27 +2,27 @@
 % Please edit documentation in R/deepTimeSeries.r
 \name{invert_differencing}
 \alias{invert_differencing}
-\title{Invert a differentiated data series}
+\title{Invert a differenced data series}
 \usage{
 invert_differencing(delta, origin, type = c("simple", "log", "percentage"))
 }
 \arguments{
-\item{delta}{A differentiated numeric vector.}
+\item{delta}{A differenced numeric vector.}
 
 \item{origin}{A scalar or numeric vector with original value(s) to invert \code{delta}.}
 
-\item{type}{The type of differentiation to be used. Available types are \code{simple}, \code{log} and \code{percentage}.}
+\item{type}{The type of differencing to be used. Available types are \code{simple}, \code{log} and \code{percentage}.}
 }
 \value{
-An inverted vector of \code{delta}.
+The inverted \code{delta}.
 }
 \description{
-Invert a differentiated data series
+Invert a differenced data series
 }
 \seealso{
 \code{\link{build.stationary}}.
 
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.log}()},
 \code{\link{diff.percentage}()},
@@ -33,4 +33,4 @@ Other TimeSeries:
 \code{\link{lags}()},
 \code{\link{period}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepTimeSeries.r
 \name{diff.log}
 \alias{diff.log}
-\title{Log-differentiation of a numeric vector}
+\title{Log-differencing of a numeric vector}
 \usage{
 \method{diff}{log}(x)
 }
@@ -10,15 +10,15 @@
 \item{x}{A numeric vector.}
 }
 \value{
-The log-differentiation of \code{x}.
+The log-differenced \code{x}.
 }
 \description{
-Log-differentiation of a numeric vector
+Log-differencing of a numeric vector
 }
 \seealso{
 \code{\link{build.stationary}}, \code{\link{diffinv.log}}.
 
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.percentage}()},
 \code{\link{diffinv.log}()},
@@ -29,4 +29,4 @@ Other TimeSeries:
 \code{\link{lags}()},
 \code{\link{period}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}

@@ -30,17 +30,17 @@ This R library is currently structured in form of the following functional famil
   <li><code>scale.datasets()</code> scales a train and a test data set with a specific scale type.</li>
 </ul>
 
-<b>TimeSeries</b>
+<b>Time Series</b>
 <ul>
   <li><code>get.season()</code> delivers corresponding seasons for a given date vector.</li>
   <li><code>lags()</code> builds a lagged data set.</li>
-  <li><code>build.stationary()</code> creates a stationary data series thru differentiation.</li>
-  <li><code>invert_differencing()</code> inverts a differentiated data series.</li>
-  <li><code>diffinv.simple()</code> inverts a simple-differentiated data series.</li>
-  <li><code>diff.log()</code> creates a log-differentiated data series.</li>
-  <li><code>diffinv.log()</code> inverts a log-differentiated data series.</li>
-  <li><code>diff.percentage()</code> creates a percentage-differentiated data series.</li>
-  <li><code>diffinv.percentage()</code> inverts a percentage-differentiated data series.</li>
+  <li><code>build.stationary()</code> creates a stationary data series thru differencing.</li>
+  <li><code>invert_differencing()</code> inverts a differenced data series.</li>
+  <li><code>diffinv.simple()</code> inverts a simple-differenced data series.</li>
+  <li><code>diff.log()</code> creates a log-differenced data series.</li>
+  <li><code>diffinv.log()</code> inverts a log-differenced data series.</li>
+  <li><code>diff.percentage()</code> creates a percentage-differenced data series.</li>
+  <li><code>diffinv.percentage()</code> inverts a percentage-differenced data series.</li>
   <li><code>period()</code>subsets a data set to periodically specified values.</li>
 </ul>
 

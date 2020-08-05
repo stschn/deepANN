@@ -2,25 +2,25 @@
 % Please edit documentation in R/deepTimeSeries.r
 \name{diffinv.log}
 \alias{diffinv.log}
-\title{Invert a log-differentiated vector}
+\title{Invert a log-differenced vector}
 \usage{
 \method{diffinv}{log}(delta, origin)
 }
 \arguments{
-\item{delta}{A log-differentiated numeric vector.}
+\item{delta}{A log-differenced numeric vector.}
 
-\item{origin}{A scalar or numeric vector with original value(s) to invert the differentiated data series.}
+\item{origin}{A scalar or numeric vector with original value(s) to invert \code{delta}.}
 }
 \value{
-The inverted log-differentiated \code{delta}.
+The inverted \code{delta}.
 }
 \description{
-Invert a log-differentiated vector
+Invert a log-differenced vector
 }
 \seealso{
 \code{\link{diff.log}}.
 
-Other TimeSeries: 
+Other Time Series: 
 \code{\link{build.stationary}()},
 \code{\link{diff.log}()},
 \code{\link{diff.percentage}()},
@@ -31,4 +31,4 @@ Other TimeSeries:
 \code{\link{lags}()},
 \code{\link{period}()}
 }
-\concept{TimeSeries}
+\concept{Time Series}
