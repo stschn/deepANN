@@ -158,28 +158,28 @@ one_hot_decode <- function(x_encoded) {
 #'  \url{http://rikunert.com/SMOTE_explained}.
 #'
 #' @examples
-resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
-  type_names <- c("oversampling","undersampling","smote")
+resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = c("oversampling", "undersampling", "smote")) {
+  type <- match.arg(type)
   df <- as.data.frame(dataset)
   cnames <- colnames(df)
   X <- df[, x] # Extract feature matrix
   target <- df[, y] # Extract target vector
   n_target <- table(target) # Number of instances of each class
   # Oversampling
-  if (type == type_names[1L]) {
+  if (type == "oversampling") {
     min_class <- names(which.min(n_target)) # Name of minority class
     X_min_all <- subset(df, target == min_class) # under-represented categories
     df <- rbind(df, do.call(rbind, replicate(n, X_min_all, simplify = F)))
   } else {
   # Undersampling
-  if (type == type_names[2L]) {
+  if (type == "undersampling") {
     max_class <- names(which.max(n_target)) # Name of majority class
     N <- nrow(df[target == max_class, ]) # number of over-represented categories
     n_ <- round(N * n, digits = 0)
     df <- df[-c(sort(sample(which(target == max_class), n_, replace = F), decreasing = F)), ]
   } else {
   # SMOTE
-  if (type == type_names[3L]) {
+  if (type == "smote") {
     min_class <- names(which.min(n_target)) # Name of minority class
     X_min_all <- subset(X, target == min_class)[sample(min(n_target)), ] # all minority feature values in shuffled order
     x1 <- X_min_all[1, ] # reference sample with feature values
@@ -194,12 +194,11 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = "smote") {
     fl <- list()
     for (i in 1:n) {
       x2 <- X_nearest_neighbors[sample(NROW(X_nearest_neighbors), 1), ] # random remaining sample of feature values
-      v <- c()
+      v <- numeric(length(x1)) # pre-allocate memory for vector
       for (j in 1:length(x1)) {
-        v1 <- as.numeric(x1[j]) # feature value boundary 1 of minority class
-        v2 <- as.numeric(x2[j]) # feature value boundary 2 of minority class
-        random_value <- sample(v1:v2, 1)
-        v <- c(v, random_value)
+        v1 <- as.numeric(x1[j])  # feature value boundary 1 of minority class
+        v2 <- as.numeric(x2[j])  # feature value boundary 2 of minority class
+        v[j] <- sample(v1:v2, 1) # random value
       }
       fl[[i]] <- v
     }
