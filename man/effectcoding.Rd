@@ -22,6 +22,7 @@ A binary encoded variable with -1/1 value pairs.
 \code{\link{dummify}}.
 
 Other Dummyfication: 
+\code{\link{append_rows}()},
 \code{\link{dummify}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},

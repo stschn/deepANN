@@ -1,6 +1,4 @@
-#' Dummyfication of categorical (nominal or ordinal) variables
-#'
-#' \code{dummify} encodes non-metric variables within a data set.
+#' Create dummy variables for categorical (nominal or ordinal) columns
 #'
 #' @family Dummyfication
 #'
@@ -18,7 +16,7 @@
 #' @return The data set with encoded dummy variables.
 #' @export
 #'
-#' @seealso \code{\link{effectcoding}}.
+#' @seealso \code{\link{effectcoding}}, \code{\link{append_rows}}.
 #'
 #' @examples
 dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "most", "least", "none"), effectcoding = FALSE, remove_columns = FALSE) {
@@ -65,6 +63,60 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
     dataset <- cbind(dataset, dummies)
     if (remove_columns == TRUE) dataset[[col_name]] <- NULL
   }
+  return(dataset)
+}
+
+#' Append dummy rows
+#'
+#' @family Dummyfication
+#' 
+#' @param dataset A data set, usually a data frame.
+#' @param columns The names or indices of the columns which shell be included for creating dummy rows.
+#' @param n The number of repeating sample blocks or new samples.
+#' @param type The type of creating dummy rows.
+#'   \code{copy} The mode copy repeats the entire dataset n times.
+#'   \code{minmax} The mode minmax creates n synthetic rows based upon the minimum and maximum values of each column.
+#'
+#' @return The dataset consisting of selected columns with dummy rows.
+#' @export
+#'
+#' @seealso \code{\link{dummify}}.
+#' 
+#' @examples
+append_rows <- function(dataset, columns = NULL, n = 1, type = c("copy", "minmax")) {
+  if (is.null(columns)) {
+    dataset <- as.data.frame(dataset)
+  } else {
+  if (((is.numeric(columns)) && (!all(columns %in% c(1:NCOL(dataset))))) || 
+     (((is.character(columns))) && (!all(columns %in% names(dataset)))))
+       stop("columns are not in dataset.")
+    dataset <- dataset[, columns, drop = F]
+  }
+  type <- match.arg(type)
+  if (type == "copy") {
+    dataset <- dataset[rep(seq_len(NROW(dataset)), n + 1), , drop = F]
+    rownames(dataset) <- 1:NROW(dataset)
+  } else {
+  if (type == "minmax") {
+    all_classes <- sapply(dataset, class)
+    col_classes <- all_classes[!(all_classes %in% c("integer", "numeric", "complex", "raw"))]
+    if (length(col_classes) != 0)
+      stop("columns must be numeric for type minmax.")
+    minx <- sapply(dataset, min)
+    maxx <- sapply(dataset, max)
+    m <- lapply(1:n, function(i) {
+      sapply(seq_len(NCOL(dataset)), function(j) {
+        if (is.integer(dataset[, j])) {
+          ceiling(runif(1, minx[j], maxx[j]))
+        } else {
+          runif(1, minx[j], maxx[j])
+        }
+      })
+    })
+    m <- do.call(rbind, m)
+    colnames(m) <- colnames(dataset)
+    dataset <- rbind.data.frame(dataset, m)
+  }}
   return(dataset)
 }
 

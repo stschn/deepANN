@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepDummy.r
 \name{dummify}
 \alias{dummify}
-\title{Dummyfication of categorical (nominal or ordinal) variables}
+\title{Create dummy variables for categorical (nominal or ordinal) columns}
 \usage{
 dummify(
   dataset,
@@ -32,12 +32,13 @@ dummify(
 The data set with encoded dummy variables.
 }
 \description{
-\code{dummify} encodes non-metric variables within a data set.
+Create dummy variables for categorical (nominal or ordinal) columns
 }
 \seealso{
-\code{\link{effectcoding}}.
+\code{\link{effectcoding}}, \code{\link{append_rows}}.
 
 Other Dummyfication: 
+\code{\link{append_rows}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},

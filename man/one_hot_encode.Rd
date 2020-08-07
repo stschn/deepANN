@@ -20,6 +20,7 @@ A matrix with all levels as columns with either 0 or 1 values.
 \code{\link{one_hot_decode}}.
 
 Other Dummyfication: 
+\code{\link{append_rows}()},
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
