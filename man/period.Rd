@@ -7,7 +7,7 @@
 period(
   dataset,
   p = 1,
-  type = c("seq", "weekday", "monthday", "week", "month", "quarter", "season"),
+  type = c("seq", "weekday", "monthday", "week", "month", "quarter", "year", "season"),
   ...
 )
 }
@@ -23,6 +23,7 @@ period(
 \code{week} Certain weeks are extracted from the data set whereby the weeks are passed in \code{...} as numbers.
 \code{month} Certain months are extracted from the data set whereby the months are passed in \code{...} as strings.
 \code{quarter} Certain quarters are extracted from the data set whereby the quarters are passed in \code{...} as numbers.
+\code{year} Certain years are extracted from the data set whereby the years are passed in \code{...} as numbers.
 \code{season} Certain seasons are extracted from the data set whereby the seasons are passed in \code{...} as strings.}
 
 \item{...}{Arguments dependent from the \code{type}.}

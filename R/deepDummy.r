@@ -198,7 +198,9 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = c("oversampl
       for (j in 1:length(x1)) {
         v1 <- as.numeric(x1[j])  # feature value boundary 1 of minority class
         v2 <- as.numeric(x2[j])  # feature value boundary 2 of minority class
-        v[j] <- sample(v1:v2, 1) # random value
+        lower_boundary <- ifelse(v1 <= v2, v1, v2)
+        upper_boundary <- ifelse(v1 > v2, v1, v2)
+        v[j] <- runif(1, lower_boundary, upper_boundary) # random value between these two boundaries
       }
       fl[[i]] <- v
     }

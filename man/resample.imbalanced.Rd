@@ -4,7 +4,14 @@
 \alias{resample.imbalanced}
 \title{Resampling imbalanced data for classification problems}
 \usage{
-resample.imbalanced(dataset, x, y, n = 1, k = 1, type = "smote")
+resample.imbalanced(
+  dataset,
+  x,
+  y,
+  n = 1,
+  k = 1,
+  type = c("oversampling", "undersampling", "smote")
+)
 }
 \arguments{
 \item{dataset}{An imbalanced data set, usually a data frame.}

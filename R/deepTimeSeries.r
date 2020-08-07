@@ -291,6 +291,7 @@ diffinv.percentage <- function(delta, origin) {
 #'   \code{week} Certain weeks are extracted from the data set whereby the weeks are passed in \code{...} as numbers.
 #'   \code{month} Certain months are extracted from the data set whereby the months are passed in \code{...} as strings.
 #'   \code{quarter} Certain quarters are extracted from the data set whereby the quarters are passed in \code{...} as numbers.
+#'   \code{year} Certain years are extracted from the data set whereby the years are passed in \code{...} as numbers.
 #'   \code{season} Certain seasons are extracted from the data set whereby the seasons are passed in \code{...} as strings.
 #' @param ... Arguments dependent from the \code{type}.
 #'
@@ -298,7 +299,7 @@ diffinv.percentage <- function(delta, origin) {
 #' @export
 #'
 #' @examples
-period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week", "month", "quarter", "season"), ...) {
+period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week", "month", "quarter", "year", "season"), ...) {
   # internal constants for day of week and month of year
   ts.day.name <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
   ts.month.name <- month.name
@@ -323,21 +324,21 @@ period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week"
     days_idx <- which(ts.day.name %in% days_of_week)
     rows <- as.integer(strftime(periods, format = "%u")) # in opposite to "%w": Sun = 0...
     rows <- which(rows %in% days_idx)
-    dataset <- dataset[rows, , drop = F]
+    if (length(rows) > 0L) dataset <- dataset[rows, , drop = F]
   } else {
   if (type == "monthday") {
     if (length(params) < 1) { stop("specify days of month.") }
     days_of_month <- params[[1L]]
     rows <- as.integer(strftime(periods, format = "%d"))
     rows <- which(rows %in% days_of_month)
-    dataset <- dataset[rows, , drop = F]
+    if (length(rows) > 0L) dataset <- dataset[rows, , drop = F]
   } else {
   if (type == "week") {
     if (length(params) < 1) { stop("specify weeks of year.") }
     weeks_of_year <- params[[1L]]
     rows <- as.integer(strftime(periods, format = "%V"))
     rows <- which(rows %in% weeks_of_year)
-    dataset <- dataset[rows, , drop = F]
+    if (length(rows) > 0L) dataset <- dataset[rows, , drop = F]
   } else {
   if (type == "month") {
     if (length(params) < 1) { stop("specify months of year.") }
@@ -345,21 +346,28 @@ period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week"
     months_idx <- which(ts.month.name %in% months_of_year)
     rows <- as.integer(strftime(periods, format = "%m"))
     rows <- which(rows %in% months_idx)
-    dataset <- dataset[rows, , drop = F]
+    if (length(rows) > 0L) dataset <- dataset[rows, , drop = F]
   } else {
   if (type == "quarter") {
     if (length(params) < 1) { stop("specify quarters of year.") }
     quarters_of_year <- params[[1L]]
     rows <- as.integer(substr(quarters(periods), 2, 2))
     rows <- which(rows %in% quarters_of_year)
-    dataset <- dataset[rows, , drop = F]
+    if (length(rows) > 0L) dataset <- dataset[rows, , drop = F]
+  } else {
+  if (type == "year") {
+    if (length(params) < 1) { stop("specify years.") }
+    years <- params[[1L]]
+    rows <- as.integer(strftime(periods, format = "%Y"))
+    rows <- which(rows %in% years)
+    if (length(rows) > 0L) dataset <- dataset[rows, , drop = F]
   } else {
   if (type == "season") {
     if (length(params) < 1) { stop("specify seasons of year.") }
     seasons_of_year <- params[[1L]]
     seasons <- get.season(periods)
     rows <- which(seasons %in% seasons_of_year)
-    dataset <- dataset[rows, , drop = F]
-  }}}}}}}
+    if (length(rows) > 0L) dataset <- dataset[rows, , drop = F]
+  }}}}}}}}
   return(dataset)
 }
