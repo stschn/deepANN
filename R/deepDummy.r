@@ -191,28 +191,18 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = c("oversampl
     idx <- dist_inst$index[(1:k)] # indices of k nearest neighbors
     X_nearest_neighbors <- X_min[idx, ] # k nearest neighbors
 
-    fl <- list()
-    for (i in 1:n) {
+    dummy_features <- lapply(1:n, function(i) {
       x2 <- X_nearest_neighbors[sample(NROW(X_nearest_neighbors), 1), ] # random remaining sample of feature values
-      v <- numeric(length(x1)) # pre-allocate memory for vector
-      for (j in 1:length(x1)) {
-        v1 <- as.numeric(x1[j])  # feature value boundary 1 of minority class
-        v2 <- as.numeric(x2[j])  # feature value boundary 2 of minority class
+      sapply(1:length(x1), function(j) {
+        v1 <- as.numeric(x1[j]) # feature value boundary 1 of minority class
+        v2 <- as.numeric(x2[j]) # feature value boundary 2 of minority class
         lower_boundary <- ifelse(v1 <= v2, v1, v2)
         upper_boundary <- ifelse(v1 > v2, v1, v2)
-        v[j] <- runif(1, lower_boundary, upper_boundary) # random value between these two boundaries
-      }
-      fl[[i]] <- v
-    }
-    new_feature_values <- as.data.frame(do.call(rbind, fl))
-    colnames(new_feature_values) <- names(X)
-    # cn <- colnames(new_feature_values)
-    # get_index <- function(x) {return(which(colnames(df) == x))}
-    # idx <- unlist(lapply(as.list(cn), get_index)) # column indices of features
-    # l[[1]] <- min_class
-    # l[[2]] <- as.data.frame(new_feature_values)
-    # names(l) <- c("minority_class","feature_values")
-    # return(l)
+        runif(1, lower_boundary, upper_boundary) # random value between these two boundaries
+      })
+    })
+    dummy_features <- as.data.frame(do.call(rbind, dummy_features))
+    colnames(dummy_features) <- names(X)
 
     cbind.columns <- function(dataset, new_column, after) {
       if (after == 0) {
@@ -221,11 +211,11 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = c("oversampl
       if (after >= NCOL(dataset)) {
         return(cbind.data.frame(dataset, new_column))
       } else {
-        return(cbind.data.frame(d[, 1:(after), drop = F], y, d[, (after + 1):length(d), drop = F]))
+        return(cbind.data.frame(dataset[, 1:(after), drop = F], new_column, dataset[, (after + 1):NCOL(dataset), drop = F]))
       }}
     }
 
-    new_subset <- (cbind.columns(new_feature_values, rep(min_class, NROW(new_feature_values)), (y - 1)))
+    new_subset <- (cbind.columns(dummy_features, rep(min_class, NROW(dummy_features)), (y - 1)))
     colnames(new_subset) <- cnames
     df <- rbind(df, new_subset)
   }}}
