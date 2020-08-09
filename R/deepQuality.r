@@ -72,7 +72,7 @@ mse <- function(actual, predicted) {
 #'      
 #' @examples
 huber <- function(actual, predicted, delta = 1.0) {
-  if ((la <- length(act)) != (lp <- length(pred))) {
+  if ((la <- length(actual)) != (lp <- length(predicted))) {
     print("actual and predicted vectors must be of same length.") }
   m <- matrix(c(actual, predicted), ncol = 2)
   loss <- apply(m, 1, function(r) {
