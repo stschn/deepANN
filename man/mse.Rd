@@ -4,12 +4,12 @@
 \alias{mse}
 \title{Mean squared error}
 \usage{
-mse(actual, predicted)
+mse(y, yhat)
 }
 \arguments{
-\item{actual}{A numeric vector with to-be values.}
+\item{y}{A numeric vector with actual values (to-be values).}
 
-\item{predicted}{A numeric vector with as-is values.}
+\item{yhat}{A numeric vector with estimated values (as-is values).}
 }
 \value{
 Mean squared error (MSE).
@@ -18,15 +18,13 @@ Mean squared error (MSE).
 Mean squared error
 }
 \seealso{
-\code{\link{mae}} for mean absolute error, \code{\link{mape}} for mean absolute percentage error,
-  \code{\link{rmse}} for root mean square error, \code{\link{vc}} for variance coefficient.
-
 Other Quality: 
 \code{\link{accuracy}()},
 \code{\link{huber}()},
 \code{\link{log_cosh}()},
 \code{\link{mae}()},
 \code{\link{mape}()},
+\code{\link{quantile_loss}()},
 \code{\link{rmse}()},
 \code{\link{vc}()}
 }

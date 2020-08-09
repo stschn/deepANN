@@ -4,12 +4,12 @@
 \alias{log_cosh}
 \title{Log-Cosh loss}
 \usage{
-log_cosh(actual, predicted)
+log_cosh(y, yhat)
 }
 \arguments{
-\item{actual}{A numeric vector with to-be values.}
+\item{y}{A numeric vector with actual values (to-be values).}
 
-\item{predicted}{A numeric vector with as-is values.}
+\item{yhat}{A numeric vector with estimated values (as-is values).}
 }
 \value{
 Log-Cosh loss.
@@ -24,6 +24,7 @@ Other Quality:
 \code{\link{mae}()},
 \code{\link{mape}()},
 \code{\link{mse}()},
+\code{\link{quantile_loss}()},
 \code{\link{rmse}()},
 \code{\link{vc}()}
 }

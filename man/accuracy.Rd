@@ -4,12 +4,12 @@
 \alias{accuracy}
 \title{Classification accuracy}
 \usage{
-accuracy(actual, predicted)
+accuracy(y, yhat)
 }
 \arguments{
-\item{actual}{Numeric data (vector, array, matrix, data frame or list) with to-be values}
+\item{y}{Numeric data (vector, array, matrix, data frame or list) with actual values (to-be values).}
 
-\item{predicted}{Numeric data (vector, array, matrix, data frame or list) with as-is values}
+\item{yhat}{Numeric data (vector, array, matrix, data frame or list) with estimated values (as-is values).}
 }
 \value{
 The fraction of right predictions within total predictions.
@@ -27,6 +27,7 @@ Other Quality:
 \code{\link{mae}()},
 \code{\link{mape}()},
 \code{\link{mse}()},
+\code{\link{quantile_loss}()},
 \code{\link{rmse}()},
 \code{\link{vc}()}
 }

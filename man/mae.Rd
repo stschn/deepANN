@@ -4,12 +4,12 @@
 \alias{mae}
 \title{Mean absolute error}
 \usage{
-mae(actual, predicted)
+mae(y, yhat)
 }
 \arguments{
-\item{actual}{A numeric vector with to-be values.}
+\item{y}{A numeric vector with actual values (to-be values).}
 
-\item{predicted}{A numeric vector with as-is values.}
+\item{yhat}{A numeric vector with estimated values (as-is values).}
 }
 \value{
 Mean absolute error (MAE).
@@ -18,15 +18,13 @@ Mean absolute error (MAE).
 Mean absolute error
 }
 \seealso{
-\code{\link{mape}} for mean absolute percentage error, \code{\link{mse}} for mean squared error,
-  \code{\link{rmse}} for root mean square error, \code{\link{vc}} for variance coefficient.
-
 Other Quality: 
 \code{\link{accuracy}()},
 \code{\link{huber}()},
 \code{\link{log_cosh}()},
 \code{\link{mape}()},
 \code{\link{mse}()},
+\code{\link{quantile_loss}()},
 \code{\link{rmse}()},
 \code{\link{vc}()}
 }

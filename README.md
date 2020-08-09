@@ -53,6 +53,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>rmse()</code> calculates the root mean square error.</li>
   <li><code>huber()</code> calculates the Huber loss.</li>
   <li><code>log_cosh()</code> calculates the log-cosh loss.</li>
+  <li><code>quantile_loss()</code> calculates the quantile loss.</li>
   <li><code>vc()</code> calculates the variance coefficient.</li>
   <li><code>accuracy()</code> calculates the fraction of correct predictions.</li>
 </ul>

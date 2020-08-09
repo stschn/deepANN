@@ -2,18 +2,15 @@
 #'
 #' @family Quality
 #'
-#' @param actual A numeric vector with to-be values.
-#' @param predicted A numeric vector with as-is values.
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
 #'
 #' @return Mean absolute error (MAE).
 #' @export
 #'
-#' @seealso \code{\link{mape}} for mean absolute percentage error, \code{\link{mse}} for mean squared error,
-#'   \code{\link{rmse}} for root mean square error, \code{\link{vc}} for variance coefficient.
-#'
 #' @examples
-mae <- function(actual, predicted) {
-  error <- actual - predicted
+mae <- function(y, yhat) {
+  error <- y - yhat
   return(mean(abs(error)))
 }
 
@@ -21,37 +18,31 @@ mae <- function(actual, predicted) {
 #'
 #' @family Quality
 #'
-#' @param actual A numeric vector with to-be values.
-#' @param predicted A numeric vector with as-is values.
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
 #'
 #' @return Mean absolute percentage error (MAPE).
 #' @export
 #'
-#' @seealso \code{\link{mae}} for mean absolute error, \code{\link{mse}} for mean squared error,
-#'   \code{\link{rmse}} for root mean square error, \code{\link{vc}} for variance coefficient.
-#'
 #' @examples
-mape <- function(actual, predicted){
-  error <- actual - predicted
-  return(mean(abs(error / actual)) * 100)
+mape <- function(y, yhat){
+  error <- y - yhat
+  return(mean(abs(error / y)) * 100)
 }
 
 #' Mean squared error
 #'
 #' @family Quality
 #'
-#' @param actual A numeric vector with to-be values.
-#' @param predicted A numeric vector with as-is values.
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
 #'
 #' @return Mean squared error (MSE).
 #' @export
 #'
-#' @seealso \code{\link{mae}} for mean absolute error, \code{\link{mape}} for mean absolute percentage error,
-#'   \code{\link{rmse}} for root mean square error, \code{\link{vc}} for variance coefficient.
-#'
 #' @examples
-mse <- function(actual, predicted) {
-  error <- actual - predicted
+mse <- function(y, yhat) {
+  error <- y - yhat
   return(mean(error^2))
 }
 
@@ -59,8 +50,8 @@ mse <- function(actual, predicted) {
 #'
 #' @family Quality
 #' 
-#' @param actual A numeric vector with to-be values.
-#' @param predicted A numeric vector with as-is values.
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
 #' @param delta A parameter that shows the error difference and controls the calculation.
 #'
 #' @return Huber loss.
@@ -71,10 +62,10 @@ mse <- function(actual, predicted) {
 #'   Hasti, Trevor; Tibshirani, Robert; Friedman, Jerome (2009): The Elements of Statistical Learning. 2nd ed., 2009. New York: Springer. (p. 349).
 #'      
 #' @examples
-huber <- function(actual, predicted, delta = 1.0) {
-  if ((la <- length(actual)) != (lp <- length(predicted))) {
-    print("actual and predicted vectors must be of same length.") }
-  m <- matrix(c(actual, predicted), ncol = 2)
+huber <- function(y, yhat, delta = 1.0) {
+  if ((ly <- length(y)) != (lyh <- length(yhat))) {
+    print("y and yhat vectors must be of same length.") }
+  m <- matrix(c(y, yhat), ncol = 2)
   loss <- apply(m, 1, function(r) {
     error <- abs(r[1] - r[2])
     if (error <= delta) 
@@ -82,25 +73,22 @@ huber <- function(actual, predicted, delta = 1.0) {
     else 
       error <- (delta * error) - (0.5 * (delta^2))
   })
-  return(sum(loss) / la)
+  return(sum(loss) / ly)
 }
 
 #' Root mean square error
 #'
 #' @family Quality
 #'
-#' @param actual A numeric vector with to-be values.
-#' @param predicted A numeric vector with as-is values.
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
 #'
 #' @return Root mean square error (RMSE).
 #' @export
 #'
-#' @seealso \code{\link{mae}} for mean absolute error, \code{\link{mape}} for mean absolute percentage error,
-#'   \code{\link{mse}} for mean squared error, \code{\link{vc}} for variance coefficient.
-#'
 #' @examples
-rmse <- function(actual, predicted) {
-  error <- actual - predicted
+rmse <- function(y, yhat) {
+  error <- y - yhat
   return(sqrt(mean(error^2)))
 }
 
@@ -108,39 +96,59 @@ rmse <- function(actual, predicted) {
 #'
 #' @family Quality
 #'
-#' @param actual A numeric vector with to-be values.
-#' @param predicted A numeric vector with as-is values.
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
 #'
 #' @return Log-Cosh loss.
 #' @export
 #'
 #' @examples
-log_cosh <- function(actual, predicted) {
-  error <- predicted - actual
+log_cosh <- function(y, yhat) {
+  error <- yhat - y
   return(sum(log(cosh(error))))
+}
+
+#' Quantile loss
+#'
+#' @family Quality
+#'
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param q A quantile fraction between 0 and 1.
+#'
+#' @return Quantile loss.
+#' @export
+#'
+#' @examples
+quantile_loss <- function(y, yhat, q = 0.5) {
+  if ((ly <- length(y)) != (lyh <- length(yhat))) {
+    print("y and yhat vectors must be of same length.") }
+  m <- matrix(c(y, yhat), ncol = 2)
+  loss <- apply(m, 1, function(r) {
+    error <- r[2] - r[1]
+    error <- max(q * error, (q - 1) * error)
+  })
+  return(mean(loss))
 }
 
 #' Variance coefficient
 #'
 #' @family Quality
 #'
-#' @param actual A numeric vector with to-be values.
-#' @param predicted A numeric vector with as-is values.
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
 #'
 #' @return Variance coefficient (VC).
 #' @export
 #'
-#' @seealso \code{\link{mae}} for mean absolute error, \code{\link{mape}} for mean absolute percentage error,
-#'   \code{\link{mse}} for mean squared error, \code{\link{rmse}} for root mean square error.
-#'
 #' @examples
-vc <- function(actual, predicted) {
-  error <- actual - predicted
-  return(sqrt(mean(error^2)) / mean(actual))
+vc <- function(y, yhat) {
+  error <- y - yhat
+  return(sqrt(mean(error^2)) / mean(y))
 }
 
 #' Coerce data to an array or matrix with no trailing dimension of 1
-#'
+#'0
 #' @param x A data structure like vector, matrix, array, data frame or list.
 #'
 #' @return The coerced data structure with no trailing dimension of 1.
@@ -170,8 +178,8 @@ coerce_dimension <- function(x) {
 #'
 #' @family Quality
 #'
-#' @param actual Numeric data (vector, array, matrix, data frame or list) with to-be values
-#' @param predicted Numeric data (vector, array, matrix, data frame or list) with as-is values
+#' @param y Numeric data (vector, array, matrix, data frame or list) with actual values (to-be values).
+#' @param yhat Numeric data (vector, array, matrix, data frame or list) with estimated values (as-is values).
 #'
 #' @return The fraction of right predictions within total predictions.
 #' @export
@@ -180,9 +188,9 @@ coerce_dimension <- function(x) {
 #'   \eqn{Accuracy = Number of correct predictions / Total number of predictions}
 #'
 #' @examples
-accuracy <- function(actual, predicted) {
-  actual <- coerce_dimension(actual)
-  predicted <- coerce_dimension(predicted)
-  stopifnot(identical(dim(actual), dim(predicted)), identical(length(actual), length(predicted)))
-  return(sum(actual == predicted, na.rm = T) / length(predicted))
+accuracy <- function(y, yhat) {
+  y <- coerce_dimension(y)
+  yhat <- coerce_dimension(yhat)
+  stopifnot(identical(dim(y), dim(yhat)), identical(length(y), length(yhat)))
+  return(sum(y == yhat, na.rm = T) / length(yhat))
 }
