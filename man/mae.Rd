@@ -15,7 +15,7 @@ mae(actual, predicted)
 Mean absolute error (MAE).
 }
 \description{
-\code{mae} calculates the mean absolute error.
+Mean absolute error
 }
 \seealso{
 \code{\link{mape}} for mean absolute percentage error, \code{\link{mse}} for mean squared error,
@@ -23,7 +23,10 @@ Mean absolute error (MAE).
 
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{huber}()},
+\code{\link{log_cosh}()},
 \code{\link{mape}()},
+\code{\link{mse}()},
 \code{\link{rmse}()},
 \code{\link{vc}()}
 }

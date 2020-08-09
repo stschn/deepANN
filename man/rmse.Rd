@@ -15,7 +15,7 @@ rmse(actual, predicted)
 Root mean square error (RMSE).
 }
 \description{
-\code{rmse} calculates the root mean square error.
+Root mean square error
 }
 \seealso{
 \code{\link{mae}} for mean absolute error, \code{\link{mape}} for mean absolute percentage error,
@@ -23,8 +23,11 @@ Root mean square error (RMSE).
 
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{huber}()},
+\code{\link{log_cosh}()},
 \code{\link{mae}()},
 \code{\link{mape}()},
+\code{\link{mse}()},
 \code{\link{vc}()}
 }
 \concept{Quality}

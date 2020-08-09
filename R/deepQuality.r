@@ -1,7 +1,5 @@
 #' Mean absolute error
 #'
-#' \code{mae} calculates the mean absolute error.
-#'
 #' @family Quality
 #'
 #' @param actual A numeric vector with to-be values.
@@ -20,8 +18,6 @@ mae <- function(actual, predicted) {
 }
 
 #' Mean absolute percentage error
-#'
-#' \code{mape} calculates the mean absolute percentage error.
 #'
 #' @family Quality
 #'
@@ -44,8 +40,6 @@ mape <- function(actual, predicted){
 #'
 #' @family Quality
 #'
-#' \code{mse} calculates the mean squared error.
-#'
 #' @param actual A numeric vector with to-be values.
 #' @param predicted A numeric vector with as-is values.
 #'
@@ -61,9 +55,37 @@ mse <- function(actual, predicted) {
   return(mean(error^2))
 }
 
-#' Root mean square error
+#' Huber loss
 #'
-#' \code{rmse} calculates the root mean square error.
+#' @family Quality
+#' 
+#' @param actual A numeric vector with to-be values.
+#' @param predicted A numeric vector with as-is values.
+#' @param delta A parameter that shows the error difference and controls the calculation.
+#'
+#' @return Huber loss.
+#' @export
+#'
+#' @references
+#'   Huber, Peter J. (1964): Robust Estimation of a Location Parameter. In: Annals of Mathematical Statistics, 35 (1964) 1, 73-101.
+#'   Hasti, Trevor; Tibshirani, Robert; Friedman, Jerome (2009): The Elements of Statistical Learning. 2nd ed., 2009. New York: Springer. (p. 349).
+#'      
+#' @examples
+huber <- function(actual, predicted, delta = 1.0) {
+  if ((la <- length(act)) != (lp <- length(pred))) {
+    print("actual and predicted vectors must be of same length.") }
+  m <- matrix(c(actual, predicted), ncol = 2)
+  loss <- apply(m, 1, function(r) {
+    error <- abs(r[1] - r[2])
+    if (error <= delta) 
+      error <- 0.5 * (error^2) 
+    else 
+      error <- (delta * error) - (0.5 * (delta^2))
+  })
+  return(sum(loss) / la)
+}
+
+#' Root mean square error
 #'
 #' @family Quality
 #'
@@ -82,9 +104,23 @@ rmse <- function(actual, predicted) {
   return(sqrt(mean(error^2)))
 }
 
-#' Variance coefficient
+#' Log-Cosh loss
 #'
-#' \code{vc} calculates the variance coefficient.
+#' @family Quality
+#'
+#' @param actual A numeric vector with to-be values.
+#' @param predicted A numeric vector with as-is values.
+#'
+#' @return Log-Cosh loss.
+#' @export
+#'
+#' @examples
+log_cosh <- function(actual, predicted) {
+  error <- predicted - actual
+  return(sum(log(cosh(error))))
+}
+
+#' Variance coefficient
 #'
 #' @family Quality
 #'

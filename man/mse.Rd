@@ -20,7 +20,14 @@ Mean squared error
 \seealso{
 \code{\link{mae}} for mean absolute error, \code{\link{mape}} for mean absolute percentage error,
   \code{\link{rmse}} for root mean square error, \code{\link{vc}} for variance coefficient.
-}
-\concept{Quality
 
-\code{mse} calculates the mean squared error.}
+Other Quality: 
+\code{\link{accuracy}()},
+\code{\link{huber}()},
+\code{\link{log_cosh}()},
+\code{\link{mae}()},
+\code{\link{mape}()},
+\code{\link{rmse}()},
+\code{\link{vc}()}
+}
+\concept{Quality}

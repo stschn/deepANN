@@ -22,8 +22,11 @@ Classification accuracy
 }
 \seealso{
 Other Quality: 
+\code{\link{huber}()},
+\code{\link{log_cosh}()},
 \code{\link{mae}()},
 \code{\link{mape}()},
+\code{\link{mse}()},
 \code{\link{rmse}()},
 \code{\link{vc}()}
 }

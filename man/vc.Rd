@@ -15,7 +15,7 @@ vc(actual, predicted)
 Variance coefficient (VC).
 }
 \description{
-\code{vc} calculates the variance coefficient.
+Variance coefficient
 }
 \seealso{
 \code{\link{mae}} for mean absolute error, \code{\link{mape}} for mean absolute percentage error,
@@ -23,8 +23,11 @@ Variance coefficient (VC).
 
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{huber}()},
+\code{\link{log_cosh}()},
 \code{\link{mae}()},
 \code{\link{mape}()},
+\code{\link{mse}()},
 \code{\link{rmse}()}
 }
 \concept{Quality}

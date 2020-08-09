@@ -51,6 +51,8 @@ This R library is currently structured in form of the following functional famil
   <li><code>mape()</code> calculates the mean absolute percentage error.</li>
   <li><code>mse()</code> calculates the mean squared error.</li>
   <li><code>rmse()</code> calculates the root mean square error.</li>
+  <li><code>huber()</code> calculates the Huber loss.</li>
+  <li><code>log_cosh()</code> calculates the log-cosh loss.</li>
   <li><code>vc()</code> calculates the variance coefficient.</li>
   <li><code>accuracy()</code> calculates the fraction of correct predictions.</li>
 </ul>
