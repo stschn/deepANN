@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepQuality.r
 \name{mae}
 \alias{mae}
-\title{Mean absolute error}
+\title{Mean absolute error (MAE)}
 \usage{
 mae(y, yhat)
 }
@@ -12,10 +12,14 @@ mae(y, yhat)
 \item{yhat}{A numeric vector with estimated values (as-is values).}
 }
 \value{
-Mean absolute error (MAE).
+Mean absolute error.
 }
 \description{
-Mean absolute error
+Mean absolute error (MAE)
+}
+\details{
+In Machine and Deep Learning, MAE is also known as L1 loss function.
+  In opposite to MSE, MAE is more robust to outliers.
 }
 \seealso{
 Other Quality: 

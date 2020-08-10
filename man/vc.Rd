@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepQuality.r
 \name{vc}
 \alias{vc}
-\title{Variance coefficient}
+\title{Variance coefficient (VC)}
 \usage{
 vc(y, yhat)
 }
@@ -12,10 +12,10 @@ vc(y, yhat)
 \item{yhat}{A numeric vector with estimated values (as-is values).}
 }
 \value{
-Variance coefficient (VC).
+Variance coefficient.
 }
 \description{
-Variance coefficient
+Variance coefficient (VC)
 }
 \seealso{
 Other Quality: 

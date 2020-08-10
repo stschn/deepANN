@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepQuality.r
 \name{mape}
 \alias{mape}
-\title{Mean absolute percentage error}
+\title{Mean absolute percentage error (MAPE)}
 \usage{
 mape(y, yhat)
 }
@@ -12,10 +12,10 @@ mape(y, yhat)
 \item{yhat}{A numeric vector with estimated values (as-is values).}
 }
 \value{
-Mean absolute percentage error (MAPE).
+Mean absolute percentage error.
 }
 \description{
-Mean absolute percentage error
+Mean absolute percentage error (MAPE)
 }
 \seealso{
 Other Quality: 

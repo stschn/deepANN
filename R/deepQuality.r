@@ -1,11 +1,14 @@
-#' Mean absolute error
+#' Mean absolute error (MAE)
 #'
 #' @family Quality
 #'
 #' @param y A numeric vector with actual values (to-be values).
 #' @param yhat A numeric vector with estimated values (as-is values).
 #'
-#' @return Mean absolute error (MAE).
+#' @details In Machine and Deep Learning, MAE is also known as L1 loss function.
+#'   In opposite to MSE, MAE is more robust to outliers.
+#'
+#' @return Mean absolute error.
 #' @export
 #'
 #' @examples
@@ -14,14 +17,14 @@ mae <- function(y, yhat) {
   return(mean(abs(error)))
 }
 
-#' Mean absolute percentage error
+#' Mean absolute percentage error (MAPE)
 #'
 #' @family Quality
 #'
 #' @param y A numeric vector with actual values (to-be values).
 #' @param yhat A numeric vector with estimated values (as-is values).
 #'
-#' @return Mean absolute percentage error (MAPE).
+#' @return Mean absolute percentage error.
 #' @export
 #'
 #' @examples
@@ -30,14 +33,16 @@ mape <- function(y, yhat){
   return(mean(abs(error / y)) * 100)
 }
 
-#' Mean squared error
+#' Mean squared error (MSE)
 #'
 #' @family Quality
 #'
 #' @param y A numeric vector with actual values (to-be values).
 #' @param yhat A numeric vector with estimated values (as-is values).
 #'
-#' @return Mean squared error (MSE).
+#' @details In Machine and Deep Learning, MSE is also known as L2 loss function.
+#'
+#' @return Mean squared error.
 #' @export
 #'
 #' @examples
@@ -49,10 +54,12 @@ mse <- function(y, yhat) {
 #' Huber loss
 #'
 #' @family Quality
-#' 
+#'
 #' @param y A numeric vector with actual values (to-be values).
 #' @param yhat A numeric vector with estimated values (as-is values).
 #' @param delta A parameter that shows the error difference and controls the calculation.
+#'
+#' @details Huber loss is less sensitive to outliers than MSE.
 #'
 #' @return Huber loss.
 #' @export
@@ -60,7 +67,7 @@ mse <- function(y, yhat) {
 #' @references
 #'   Huber, Peter J. (1964): Robust Estimation of a Location Parameter. In: Annals of Mathematical Statistics, 35 (1964) 1, 73-101.
 #'   Hasti, Trevor; Tibshirani, Robert; Friedman, Jerome (2009): The Elements of Statistical Learning. 2nd ed., 2009. New York: Springer. (p. 349).
-#'      
+#'
 #' @examples
 huber <- function(y, yhat, delta = 1.0) {
   if ((ly <- length(y)) != (lyh <- length(yhat))) {
@@ -68,22 +75,22 @@ huber <- function(y, yhat, delta = 1.0) {
   m <- matrix(c(y, yhat), ncol = 2)
   loss <- apply(m, 1, function(r) {
     error <- abs(r[1] - r[2])
-    if (error <= delta) 
-      error <- 0.5 * (error^2) 
-    else 
+    if (error <= delta)
+      error <- 0.5 * (error^2)
+    else
       error <- (delta * error) - (0.5 * (delta^2))
   })
   return(sum(loss) / ly)
 }
 
-#' Root mean square error
+#' Root mean square error (RMSE)
 #'
 #' @family Quality
 #'
 #' @param y A numeric vector with actual values (to-be values).
 #' @param yhat A numeric vector with estimated values (as-is values).
 #'
-#' @return Root mean square error (RMSE).
+#' @return Root mean square error.
 #' @export
 #'
 #' @examples
@@ -116,13 +123,24 @@ log_cosh <- function(y, yhat) {
 #' @param yhat A numeric vector with estimated values (as-is values).
 #' @param q A quantile fraction between 0 and 1.
 #'
+#' @details This loss function tries to give different penalties to overestimation and underestimation.
+#'   For \code{q = 0.5}, overestimation and underestimation are penalized by the same factor and the median is obtained.
+#'   The larger the value of \code{q}, the more overestimation is penalized compared to underestimation. A model based on
+#'   it will then try to avoid overestimation.
+#'
 #' @return Quantile loss.
 #' @export
+#'
+#' @references
+#'   \url{https://www.evergreeninnovations.co/blog-quantile-loss-function-for-machine-learning/}
+#'   \url{https://heartbeat.fritz.ai/5-regression-loss-functions-all-machine-learners-should-know-4fb140e9d4b0}
 #'
 #' @examples
 quantile_loss <- function(y, yhat, q = 0.5) {
   if ((ly <- length(y)) != (lyh <- length(yhat))) {
     print("y and yhat vectors must be of same length.") }
+  q <- ifelse(q < 0, 0, q)
+  q <- ifelse(q > 1, 1, q)
   m <- matrix(c(y, yhat), ncol = 2)
   loss <- apply(m, 1, function(r) {
     error <- r[2] - r[1]
@@ -131,14 +149,14 @@ quantile_loss <- function(y, yhat, q = 0.5) {
   return(mean(loss))
 }
 
-#' Variance coefficient
+#' Variance coefficient (VC)
 #'
 #' @family Quality
 #'
 #' @param y A numeric vector with actual values (to-be values).
 #' @param yhat A numeric vector with estimated values (as-is values).
 #'
-#' @return Variance coefficient (VC).
+#' @return Variance coefficient.
 #' @export
 #'
 #' @examples
@@ -158,7 +176,7 @@ coerce_dimension <- function(x) {
   if (is.null(dim(x))) {
     x <- as.array(x)
   } else {
-  if (c("data.frame") %in% class(x)) { 
+  if (c("data.frame") %in% class(x)) {
     x <- as.matrix(x)
   } else {
   if (c("list") %in% class(x)) {

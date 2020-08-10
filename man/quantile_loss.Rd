@@ -19,6 +19,16 @@ Quantile loss.
 \description{
 Quantile loss
 }
+\details{
+This loss function tries to give different penalties to overestimation and underestimation.
+  For \code{q = 0.5}, overestimation and underestimation are penalized by the same factor and the median is obtained.
+  The larger the value of \code{q}, the more overestimation is penalized compared to underestimation. A model based on
+  it will then try to avoid overestimation.
+}
+\references{
+\url{https://www.evergreeninnovations.co/blog-quantile-loss-function-for-machine-learning/}
+  \url{https://heartbeat.fritz.ai/5-regression-loss-functions-all-machine-learners-should-know-4fb140e9d4b0}
+}
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},

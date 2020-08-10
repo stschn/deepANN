@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepQuality.r
 \name{mse}
 \alias{mse}
-\title{Mean squared error}
+\title{Mean squared error (MSE)}
 \usage{
 mse(y, yhat)
 }
@@ -12,10 +12,13 @@ mse(y, yhat)
 \item{yhat}{A numeric vector with estimated values (as-is values).}
 }
 \value{
-Mean squared error (MSE).
+Mean squared error.
 }
 \description{
-Mean squared error
+Mean squared error (MSE)
+}
+\details{
+In Machine and Deep Learning, MSE is also known as L2 loss function.
 }
 \seealso{
 Other Quality: 

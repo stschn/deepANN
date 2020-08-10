@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepQuality.r
 \name{rmse}
 \alias{rmse}
-\title{Root mean square error}
+\title{Root mean square error (RMSE)}
 \usage{
 rmse(y, yhat)
 }
@@ -12,10 +12,10 @@ rmse(y, yhat)
 \item{yhat}{A numeric vector with estimated values (as-is values).}
 }
 \value{
-Root mean square error (RMSE).
+Root mean square error.
 }
 \description{
-Root mean square error
+Root mean square error (RMSE)
 }
 \seealso{
 Other Quality: 
