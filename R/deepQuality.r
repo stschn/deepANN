@@ -51,6 +51,22 @@ mse <- function(y, yhat) {
   return(mean(error^2))
 }
 
+#' Root mean square error (RMSE)
+#'
+#' @family Quality
+#'
+#' @param y A numeric vector with actual values (to-be values).
+#' @param yhat A numeric vector with estimated values (as-is values).
+#'
+#' @return Root mean square error.
+#' @export
+#'
+#' @examples
+rmse <- function(y, yhat) {
+  error <- y - yhat
+  return(sqrt(mean(error^2)))
+}
+
 #' Huber loss
 #'
 #' @family Quality
@@ -72,31 +88,15 @@ mse <- function(y, yhat) {
 huber <- function(y, yhat, delta = 1.0) {
   if ((ly <- length(y)) != (lyh <- length(yhat))) {
     print("y and yhat vectors must be of same length.") }
-  m <- matrix(c(y, yhat), ncol = 2)
-  loss <- apply(m, 1, function(r) {
-    error <- abs(r[1] - r[2])
+  m <- matrix(c(y, yhat), ncol = 2L)
+  loss <- apply(m, 1L, function(r) {
+    error <- abs(r[1L] - r[2L])
     if (error <= delta)
       error <- 0.5 * (error^2)
     else
       error <- (delta * error) - (0.5 * (delta^2))
   })
   return(sum(loss) / ly)
-}
-
-#' Root mean square error (RMSE)
-#'
-#' @family Quality
-#'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
-#'
-#' @return Root mean square error.
-#' @export
-#'
-#' @examples
-rmse <- function(y, yhat) {
-  error <- y - yhat
-  return(sqrt(mean(error^2)))
 }
 
 #' Log-Cosh loss
@@ -141,9 +141,9 @@ quantile_loss <- function(y, yhat, q = 0.5) {
     print("y and yhat vectors must be of same length.") }
   q <- ifelse(q < 0, 0, q)
   q <- ifelse(q > 1, 1, q)
-  m <- matrix(c(y, yhat), ncol = 2)
-  loss <- apply(m, 1, function(r) {
-    error <- ifelse((error <- r[1] - r[2]) >= 0, q * abs(error), (1 - q) * abs(error))
+  m <- matrix(c(y, yhat), ncol = 2L)
+  loss <- apply(m, 1L, function(r) {
+    error <- ifelse((error <- r[1L] - r[2L]) >= 0, q * abs(error), (1 - q) * abs(error))
   })
   return(mean(loss))
 }
