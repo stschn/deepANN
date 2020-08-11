@@ -125,15 +125,15 @@ log_cosh <- function(y, yhat) {
 #'
 #' @details This loss function tries to give different penalties to overestimation and underestimation.
 #'   For \code{q = 0.5}, overestimation and underestimation are penalized by the same factor and the median is obtained.
-#'   The larger the value of \code{q}, the more overestimation is penalized compared to underestimation. A model based on
-#'   it will then try to avoid overestimation.
+#'   The smaller the value of \code{q}, the more overestimation is penalized compared to underestimation. A model based on
+#'   it will then try to avoid overestimation approximately \code{(1 - p) / p} times as hard as underestimation.
 #'
 #' @return Quantile loss.
 #' @export
 #'
 #' @references
-#'   \url{https://www.evergreeninnovations.co/blog-quantile-loss-function-for-machine-learning/}
 #'   \url{https://heartbeat.fritz.ai/5-regression-loss-functions-all-machine-learners-should-know-4fb140e9d4b0}
+#'   \url{https://www.evergreeninnovations.co/blog-quantile-loss-function-for-machine-learning/}
 #'
 #' @examples
 quantile_loss <- function(y, yhat, q = 0.5) {
@@ -143,8 +143,7 @@ quantile_loss <- function(y, yhat, q = 0.5) {
   q <- ifelse(q > 1, 1, q)
   m <- matrix(c(y, yhat), ncol = 2)
   loss <- apply(m, 1, function(r) {
-    error <- r[2] - r[1]
-    error <- max(q * error, (q - 1) * error)
+    error <- ifelse((error <- r[1] - r[2]) >= 0, q * abs(error), (1 - q) * abs(error))
   })
   return(mean(loss))
 }
