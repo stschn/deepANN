@@ -32,8 +32,8 @@ This loss function tries to give different penalties to overestimation and under
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
-\code{\link{huber}()},
-\code{\link{log_cosh}()},
+\code{\link{huber_loss}()},
+\code{\link{log_cosh_loss}()},
 \code{\link{mae}()},
 \code{\link{mape}()},
 \code{\link{mse}()},

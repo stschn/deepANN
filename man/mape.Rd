@@ -20,8 +20,8 @@ Mean absolute percentage error (MAPE)
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
-\code{\link{huber}()},
-\code{\link{log_cosh}()},
+\code{\link{huber_loss}()},
+\code{\link{log_cosh_loss}()},
 \code{\link{mae}()},
 \code{\link{mse}()},
 \code{\link{quantile_loss}()},

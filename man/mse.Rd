@@ -23,8 +23,8 @@ In Machine and Deep Learning, MSE is also known as L2 loss function.
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
-\code{\link{huber}()},
-\code{\link{log_cosh}()},
+\code{\link{huber_loss}()},
+\code{\link{log_cosh_loss}()},
 \code{\link{mae}()},
 \code{\link{mape}()},
 \code{\link{quantile_loss}()},

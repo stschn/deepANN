@@ -85,7 +85,7 @@ rmse <- function(y, yhat) {
 #'   Hasti, Trevor; Tibshirani, Robert; Friedman, Jerome (2009): The Elements of Statistical Learning. 2nd ed., 2009. New York: Springer. (p. 349).
 #'
 #' @examples
-huber <- function(y, yhat, delta = 1.0) {
+huber_loss <- function(y, yhat, delta = 1.0) {
   if ((ly <- length(y)) != (lyh <- length(yhat))) {
     print("y and yhat vectors must be of same length.") }
   m <- matrix(c(y, yhat), ncol = 2L)
@@ -110,7 +110,7 @@ huber <- function(y, yhat, delta = 1.0) {
 #' @export
 #'
 #' @examples
-log_cosh <- function(y, yhat) {
+log_cosh_loss <- function(y, yhat) {
   error <- yhat - y
   return(sum(log(cosh(error))))
 }
