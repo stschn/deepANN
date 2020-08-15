@@ -3,7 +3,7 @@
 #' @family Dummyfication
 #'
 #' @param dataset A data set with factor and/or character variables.
-#' @param columns The name of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.
+#' @param columns The names of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.
 #' @param remove_level Controls which level of a factor or character variable is removed.
 #'   \code{first} removes the first level.
 #'   \code{last} removes the last level.
@@ -71,7 +71,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 #' @family Dummyfication
 #' 
 #' @param dataset A data set, usually a data frame.
-#' @param columns The names or indices of the columns which shell be included for creating dummy rows.
+#' @param columns The names or indices of the columns to be included for creating dummy rows; if \code{NULL} (default), all columns are included.
 #' @param n The number of repeating sample blocks or new samples.
 #' @param type The type of creating dummy rows.
 #'   \code{copy} The mode copy repeats the entire dataset n times.
@@ -87,7 +87,7 @@ append_rows <- function(dataset, columns = NULL, n = 1, type = c("copy", "minmax
   if (is.null(columns)) {
     dataset <- as.data.frame(dataset)
   } else {
-  if (((is.numeric(columns)) && (!all(columns %in% c(1:NCOL(dataset))))) || 
+  if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(dataset))))) || 
      (((is.character(columns))) && (!all(columns %in% names(dataset)))))
        stop("columns are not in dataset.")
     dataset <- dataset[, columns, drop = F]

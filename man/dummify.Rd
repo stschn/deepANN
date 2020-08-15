@@ -15,7 +15,7 @@ dummify(
 \arguments{
 \item{dataset}{A data set with factor and/or character variables.}
 
-\item{columns}{The name of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.}
+\item{columns}{The names of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.}
 
 \item{remove_level}{Controls which level of a factor or character variable is removed.
 \code{first} removes the first level.

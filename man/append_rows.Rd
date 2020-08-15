@@ -9,7 +9,7 @@ append_rows(dataset, columns = NULL, n = 1, type = c("copy", "minmax"))
 \arguments{
 \item{dataset}{A data set, usually a data frame.}
 
-\item{columns}{The names or indices of the columns which shell be included for creating dummy rows.}
+\item{columns}{The names or indices of the columns to be included for creating dummy rows; if \code{NULL} (default), all columns are included.}
 
 \item{n}{The number of repeating sample blocks or new samples.}
 

@@ -4,12 +4,14 @@
 \alias{scale.datasets}
 \title{Scaling of a train and test data set}
 \usage{
-\method{scale}{datasets}(trainset, testset, type = c("minmax", "zscore", "log"))
+\method{scale}{datasets}(trainset, testset, columns = NULL, type = c("minmax", "zscore", "log"))
 }
 \arguments{
 \item{trainset}{A train dataset.}
 
 \item{testset}{A test dataset.}
+
+\item{columns}{The names or indices of the columns to be scaled.}
 
 \item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).}
 }

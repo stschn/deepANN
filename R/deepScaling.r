@@ -160,6 +160,7 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
 #'
 #' @param trainset A train dataset.
 #' @param testset A test dataset.
+#' @param columns The names or indices of the columns to be scaled.
 #' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
 #'
 #' @return A named list dependent on the \code{type}.
@@ -171,28 +172,52 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
 #' @seealso \code{\link{scaling}}
 #'
 #' @examples
-scale.datasets <- function(trainset, testset, type = c("minmax", "zscore", "log")) {
-  type <- match.arg(type)
+scale.datasets <- function(trainset, testset, columns = NULL, type = c("minmax", "zscore", "log")) {
   trainset <- as.data.frame(trainset)
   testset <- as.data.frame(testset)
+  if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(trainset))))) || 
+      (((is.character(columns))) && (!all(columns %in% names(trainset)))))
+    stop("columns are not in train data set.")
+  if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(testset))))) || 
+      (((is.character(columns))) && (!all(columns %in% names(testset)))))
+    stop("columns are not in test data set.")
+  cnames <- names(trainset)
+  if (is.null(columns)) { columns <- seq_along(trainset) } # use all columns
+  if (class(columns) %in% c("character")) {
+    columns_idx <- as.integer(which(cnames %in% columns))
+  } else {
+    columns_idx <- as.integer(columns)
+  }
+  remaining_trainset <- trainset[-columns_idx]
+  remaining_testset <- testset[-columns_idx]
+  type <- match.arg(type)
   l <- list()
   if (type == "minmax") {
-    l[[1]] <- sapply(trainset, min)
-    l[[2]] <- sapply(trainset, max)
-    l[[3]] <- as.data.frame(sapply(trainset, scaling, type = type, use.attr = F, invert = F))
-    l[[4]] <- as.data.frame(mapply(scaling, testset, type = type, use.attr = F, invert = F, l[[1L]], l[[2L]]))
+    l[[1L]] <- sapply(trainset[columns_idx], min)
+    l[[2L]] <- sapply(trainset[columns_idx], max)
+    l[[3L]] <- as.data.frame(sapply(trainset[columns_idx], scaling, type = type, use.attr = F, invert = F))
+    l[[4L]] <- as.data.frame(mapply(scaling, testset[columns_idx], type = type, use.attr = F, invert = F, l[[1L]], l[[2L]]))
+
+    l[[3L]] <- cbind.data.frame(remaining_trainset, l[[3L]])[cnames]
+    l[[4L]] <- cbind.data.frame(remaining_testset, l[[4L]])[cnames]
     names(l) <- c("min", "max", "train", "test")
   } else {
   if (type == "zscore") {
-    l[[1]] <- sapply(trainset, mean)
-    l[[2]] <- sapply(trainset, sd)
-    l[[3]] <- as.data.frame(sapply(trainset, scaling, type = type, use.attr = F, invert = F))
-    l[[4]] <- as.data.frame(mapply(scaling, testset, type = type, use.attr = F, invert = F, l[[1L]], l[[2L]]))
+    l[[1L]] <- sapply(trainset[columns_idx], mean)
+    l[[2L]] <- sapply(trainset[columns_idx], sd)
+    l[[3L]] <- as.data.frame(sapply(trainset[columns_idx], scaling, type = type, use.attr = F, invert = F))
+    l[[4L]] <- as.data.frame(mapply(scaling, testset[columns_idx], type = type, use.attr = F, invert = F, l[[1L]], l[[2L]]))
+
+    l[[3L]] <- cbind.data.frame(remaining_trainset, l[[3L]])[cnames]
+    l[[4L]] <- cbind.data.frame(remaining_testset, l[[4L]])[cnames]
     names(l) <- c("mean", "sd", "train", "test")
   } else {
   if (type == "log") {
-    l[[1]] <- as.data.frame(sapply(trainset, scaling, type = type, use.attr = F, invert = F))
-    l[[2]] <- as.data.frame(sapply(testset, scaling, type = type, use.attr = F, invert = F))
+    l[[1L]] <- as.data.frame(sapply(trainset[columns_idx], scaling, type = type, use.attr = F, invert = F))
+    l[[2L]] <- as.data.frame(sapply(testset[columns_idx], scaling, type = type, use.attr = F, invert = F))
+
+    l[[1L]] <- cbind.data.frame(remaining_trainset, l[[1L]])[cnames]
+    l[[2L]] <- cbind.data.frame(remaining_testset, l[[2L]])[cnames]
     names(l) <- c("train", "test")
   }}}
   return(l)
