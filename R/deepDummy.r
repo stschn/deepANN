@@ -157,12 +157,14 @@ effectcoding <- function(x) {
 #' @examples
 one_hot_encode <- function(x) {
   f <- as.factor(x)
-  n <- nlevels(f)
-  m <- matrix(0, nrow = NROW(x), ncol = n)
+  # n <- nlevels(f)
+  # m <- matrix(0, nrow = NROW(x), ncol = n)
+  # colnames(m) <- levels(f)
+  # for (i in 1:NROW(x)) {
+  #   m[i, f[[i]]] <- 1
+  # }
+  m <- model.matrix(~0 + f)
   colnames(m) <- levels(f)
-  for (i in 1:NROW(x)) {
-    m[i, f[[i]]] <- 1
-  }
   return(m)
 }
 
