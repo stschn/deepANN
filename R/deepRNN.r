@@ -703,24 +703,45 @@ predict.ANN <- function(model, X.tensor, batch_size = 1,
           minx <- scaler[[1L]]
           maxx <- scaler[[2L]]
           for (y in 1:outs) {
-            Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
+            #Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
+            Y.hat[, , y] <- sapply(as.data.frame(Y.hat[, , y]), scaling, type = scale_type, use.attr = F, invert = T, minx[y], maxx[y])
             colnames(Y.hat[, , y]) <- NULL
           }
+          # i <- 0L
+          # m <- apply(Y.hat, c(3L), function(m) {
+          #   i <<- i + 1
+          #   mapply(scaling, as.data.frame(m), type = scale_type, use.attr = F, invert = T, rep(minx[i], tsteps), rep(maxx[i], tsteps))
+          # })
+          # y.hat <- array(m, dim = c(rows, tsteps, outs))
       } else {
       if (scale_type == "zscore") {
         if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
         meanx <- scaler[[1L]]
         sdx <- scaler[[2L]]
         for (y in 1:outs) {
-          Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
+          #Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
+          Y.hat[, , y] <- sapply(as.data.frame(Y.hat[, , y]), scaling, type = scale_type, use.attr = F, invert = T, meanx[y], sdx[y])
           colnames(Y.hat[, , y]) <- NULL
         }
+        # i <- 0L
+        # m <- apply(Y.hat, c(3L), function(m) {
+        #   i <<- i + 1
+        #   mapply(scaling, as.data.frame(m), type = scale_type, use.attr = F, invert = T, rep(meanx[i], tsteps), rep(sdx[i], tsteps))
+        # })
+        # y.hat <- array(m, dim = c(rows, tsteps, outs))
       } else {
       if (scale_type == "log") {
         for (y in 1:outs) {
-          Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T))
+          #Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T))
+          Y.hat[, , y] <- sapply(as.data.frame(Y.hat[, , y]), scaling, type = scale_type, use.attr = F, invert = T)
           colnames(Y.hat[, , y]) <- NULL
         }
+        # i <- 0L
+        # m <- apply(Y.hat, c(3L), function(m) {
+        #   i <<- i + 1
+        #   mapply(scaling, as.data.frame(m), type = scale_type, use.attr = F, invert = T)
+        # })
+        # y.hat <- array(m, dim = c(rows, tsteps, outs))
       }}}
     }
     if (!is.null(diff_type)) {
