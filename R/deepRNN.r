@@ -659,79 +659,85 @@ predict.ANN <- function(model, X.tensor, batch_size = 1,
                         scale_type = NULL, scaler = NULL,
                         diff_type = NULL, timesteps = 1, lag = 0, differences = 1, invert_first_row = NULL, Y.actual = NULL,
                         type = "univariate") {
-  Y.predict <- model %>% predict(X.tensor, batch_size = batch_size)
-  dim_predict <- length(dim(Y.predict)) # 2 without timesteps, 3 with timesteps
+  Y.hat <- model %>% predict(X.tensor, batch_size = batch_size)
+  dim_predict <- length(dim(Y.hat)) # 2 without timesteps, 3 with timesteps
   if (dim_predict == 2) { # useful for e.g. MLP or LSTM without sequence outcome
     if (!is.null(scale_type)) {
       if (scale_type == "minmax") {
         if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
         minx <- scaler[[1L]]
         maxx <- scaler[[2L]]
-        Y.predict <- as.matrix(mapply(scaling, as.data.frame(Y.predict), type = scale_type, use.attr = F, invert = T, minx, maxx))
+        Y.hat <- as.matrix(mapply(scaling, as.data.frame(Y.hat), type = scale_type, use.attr = F, invert = T, minx, maxx))
+        colnames(Y.hat) <- NULL
       } else {
       if (scale_type == "zscore") {
         if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
         meanx <- scaler[[1L]]
         sdx <- scaler[[2L]]
-        Y.predict <- as.matrix(mapply(scaling, as.data.frame(Y.predict), type = scale_type, use.attr = F, invert = T, meanx, sdx))
+        Y.hat <- as.matrix(mapply(scaling, as.data.frame(Y.hat), type = scale_type, use.attr = F, invert = T, meanx, sdx))
+        colnames(Y.hat) <- NULL
       } else {
       if (scale_type == "log") {
-        Y.predict <- as.matrix(mapply(scaling, as.data.frame(Y.predict), type = scale_type, use.attr = F, invert = T))
+        Y.hat <- as.matrix(mapply(scaling, as.data.frame(Y.hat), type = scale_type, use.attr = F, invert = T))
+        colnames(Y.hat) <- NULL
       }}}
     }
     if (!is.null(diff_type)) {
       i <- start.invert_differencing(invert_first_row, differences, timesteps[1L], max(lag), type)
       actuals <- as.matrix(Y.actual)
-      m <- matrix(data = NA, nrow = NROW(Y.predict), ncol = NCOL(Y.predict))
-      for (j in 1:NCOL(Y.predict)) {
-        origin <- actuals[i:(i + NROW(Y.predict) - 1), j]
-        m[, j] <- invert_differencing(Y.predict[, j], origin, type = diff_type)
+      m <- matrix(data = NA, nrow = NROW(Y.hat), ncol = NCOL(Y.hat))
+      for (j in 1:NCOL(Y.hat)) {
+        origin <- actuals[i:(i + NROW(Y.hat) - 1), j]
+        m[, j] <- invert_differencing(Y.hat[, j], origin, type = diff_type)
       }
-      Y.predict <- m
+      Y.hat <- m
     }
   } else {
   if (dim_predict == 3) {
-    a <- Y.predict
-    rows <- dim(a)[1L]
-    tsteps <- dim(a)[2L]
-    outcomes <- dim(a)[3L]
-    for (y in 1:outcomes) {
-      if (!is.null(scale_type)) {
-        Y.hat <- as.data.frame(a[, , y])
-        if (scale_type == "minmax") {
-          if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
-            minx <- scaler[[1L]]
-            maxx <- scaler[[2L]]
-            a[, , y] <- as.matrix(mapply(scaling, Y.hat, type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
-            colnames(a[, , y]) <- NULL
-        } else {
-        if (scale_type == "zscore") {
-          if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
-          meanx <- scaler[[1L]]
-          sdx <- scaler[[2L]]
-          a[, , y] <- as.matrix(mapply(scaling, Y.hat, type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
-          colnames(a[, , y]) <- NULL
-        } else {
-        if (scale_type == "log") {
-          a[, , y] <- as.matrix(mapply(scaling, Y.hat, type = scale_type, use.attr = F, invert = T))
-          colnames(a[, , y]) <- NULL
-        }}}
-      }
-      if (!is.null(diff_type)) {
-        i <- start.invert_differencing(invert_first_row, differences, timesteps[1L], max(lag), type)
+    rows <- dim(Y.hat)[1L]
+    tsteps <- dim(Y.hat)[2L]
+    outs <- dim(Y.hat)[3L]
+    if (!is.null(scale_type)) {
+      if (scale_type == "minmax") {
+        if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
+          minx <- scaler[[1L]]
+          maxx <- scaler[[2L]]
+          for (y in 1:outs) {
+            Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
+            colnames(Y.hat[, , y]) <- NULL
+          }
+      } else {
+      if (scale_type == "zscore") {
+        if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
+        meanx <- scaler[[1L]]
+        sdx <- scaler[[2L]]
+        for (y in 1:outs) {
+          Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
+          colnames(Y.hat[, , y]) <- NULL
+        }
+      } else {
+      if (scale_type == "log") {
+        for (y in 1:outs) {
+          Y.hat[, , y] <- as.matrix(mapply(scaling, as.data.frame(Y.hat[, , y]), type = scale_type, use.attr = F, invert = T))
+          colnames(Y.hat[, , y]) <- NULL
+        }
+      }}}
+    }
+    if (!is.null(diff_type)) {
+      start_idx <- start.invert_differencing(invert_first_row, differences, timesteps[1L], max(lag), type)
+      for (y in 1:outs) {
+        i <- start_idx
         actuals <- as.matrix(Y.actual[, , y])
         m <- matrix(data = NA, nrow = rows, ncol = tsteps)
         for (j in 1:tsteps) {
           origin <- actuals[i:(i + rows - 1), j]
-          m[, j] <- invert_differencing(a[, j, y], origin, type = diff_type)
-          i <- i + 1
+          m[, j] <- invert_differencing(Y.hat[, j, y], origin, type = diff_type)
         }
-        a[, , y] <- m
+        Y.hat[, , y] <- m
       }
     }
-    Y.predict <- a
   }}
-  return(Y.predict)
+  return(Y.hat)
 }
 
 #' Combination of periods and actual outcome values within a matrix for quality control or graphical representation
