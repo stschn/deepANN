@@ -667,16 +667,16 @@ predict.ANN <- function(model, X.tensor, batch_size = 1,
         if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
         minx <- scaler[[1L]]
         maxx <- scaler[[2L]]
-        Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T, minx, maxx))
+        Y.predict <- as.matrix(mapply(scaling, as.data.frame(Y.predict), type = scale_type, use.attr = F, invert = T, minx, maxx))
       } else {
       if (scale_type == "zscore") {
         if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
         meanx <- scaler[[1L]]
         sdx <- scaler[[2L]]
-        Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T, meanx, sdx))
+        Y.predict <- as.matrix(mapply(scaling, as.data.frame(Y.predict), type = scale_type, use.attr = F, invert = T, meanx, sdx))
       } else {
       if (scale_type == "log") {
-        Y.predict <- as.matrix(mapply(scaling, Y.predict, type = scale_type, use.attr = F, invert = T))
+        Y.predict <- as.matrix(mapply(scaling, as.data.frame(Y.predict), type = scale_type, use.attr = F, invert = T))
       }}}
     }
     if (!is.null(diff_type)) {
@@ -697,20 +697,21 @@ predict.ANN <- function(model, X.tensor, batch_size = 1,
     outcomes <- dim(a)[3L]
     for (y in 1:outcomes) {
       if (!is.null(scale_type)) {
+        Y.hat_transpose <- t(a[, , y]) # to get each timesteps-sequence column-wise
         if (scale_type == "minmax") {
           if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
             minx <- scaler[[1L]]
             maxx <- scaler[[2L]]
-            a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
+            a[, , y] <- as.matrix(mapply(scaling, Y.hat_transpose, type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
         } else {
         if (scale_type == "zscore") {
           if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
           meanx <- scaler[[1L]]
           sdx <- scaler[[2L]]
-          a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
+          a[, , y] <- as.matrix(mapply(scaling, Y.hat_transpose, type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
         } else {
         if (scale_type == "log") {
-          a[, , y] <- as.matrix(mapply(scaling, a[, , y], type = scale_type, use.attr = F, invert = T))
+          a[, , y] <- as.matrix(mapply(scaling, Y.hat_transpose, type = scale_type, use.attr = F, invert = T))
         }}}
       }
       if (!is.null(diff_type)) {
