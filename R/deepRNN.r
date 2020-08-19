@@ -697,21 +697,24 @@ predict.ANN <- function(model, X.tensor, batch_size = 1,
     outcomes <- dim(a)[3L]
     for (y in 1:outcomes) {
       if (!is.null(scale_type)) {
-        Y.hat_transpose <- t(a[, , y]) # to get each timesteps-sequence column-wise
+        Y.hat <- as.data.frame(a[, , y])
         if (scale_type == "minmax") {
           if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
             minx <- scaler[[1L]]
             maxx <- scaler[[2L]]
-            a[, , y] <- as.matrix(mapply(scaling, Y.hat_transpose, type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
+            a[, , y] <- as.matrix(mapply(scaling, Y.hat, type = scale_type, use.attr = F, invert = T, rep(minx[y], tsteps), rep(maxx[y], tsteps)))
+            colnames(a[, , y]) <- NULL
         } else {
         if (scale_type == "zscore") {
           if (length(scaler) < 2) stop("z-score rescaling needs mean and sd scalers.")
           meanx <- scaler[[1L]]
           sdx <- scaler[[2L]]
-          a[, , y] <- as.matrix(mapply(scaling, Y.hat_transpose, type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
+          a[, , y] <- as.matrix(mapply(scaling, Y.hat, type = scale_type, use.attr = F, invert = T, rep(meanx[y], tsteps), rep(sdx[y], tsteps)))
+          colnames(a[, , y]) <- NULL
         } else {
         if (scale_type == "log") {
-          a[, , y] <- as.matrix(mapply(scaling, Y.hat_transpose, type = scale_type, use.attr = F, invert = T))
+          a[, , y] <- as.matrix(mapply(scaling, Y.hat, type = scale_type, use.attr = F, invert = T))
+          colnames(a[, , y]) <- NULL
         }}}
       }
       if (!is.null(diff_type)) {
