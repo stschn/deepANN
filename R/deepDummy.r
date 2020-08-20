@@ -84,14 +84,12 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 #' 
 #' @examples
 append_rows <- function(dataset, columns = NULL, n = 1, type = c("copy", "minmax")) {
-  if (is.null(columns)) {
-    dataset <- as.data.frame(dataset)
-  } else {
+  dataset <- as.data.frame(dataset)
   if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(dataset))))) || 
      (((is.character(columns))) && (!all(columns %in% names(dataset)))))
        stop("columns are not in dataset.")
+  if (!is.null(columns))
     dataset <- dataset[, columns, drop = F]
-  }
   type <- match.arg(type)
   if (type == "copy") {
     dataset <- dataset[rep(seq_len(NROW(dataset)), n + 1), , drop = F]
@@ -104,18 +102,15 @@ append_rows <- function(dataset, columns = NULL, n = 1, type = c("copy", "minmax
       stop("columns must be numeric for type minmax.")
     minx <- sapply(dataset, min)
     maxx <- sapply(dataset, max)
-    m <- lapply(1:n, function(i) {
-      sapply(seq_len(NCOL(dataset)), function(j) {
-        if (is.integer(dataset[, j])) {
-          ceiling(runif(1, minx[j], maxx[j]))
-        } else {
-          runif(1, minx[j], maxx[j])
-        }
-      })
+    m <- sapply(seq_along(dataset), function(j) {
+      if (is.integer(dataset[, j])) {
+        ceiling(runif(n, minx[j], maxx[j]))
+      } else {
+        runif(n, minx[j], maxx[j])
+      }
     })
-    m <- do.call(rbind, m)
     colnames(m) <- colnames(dataset)
-    dataset <- rbind.data.frame(dataset, m)
+    dataset <- rbind(dataset, m)
   }}
   return(dataset)
 }
