@@ -86,17 +86,13 @@ rmse <- function(y, yhat) {
 #'
 #' @examples
 huber_loss <- function(y, yhat, delta = 1.0) {
-  if ((ly <- length(y)) != (lyh <- length(yhat))) {
-    print("y and yhat vectors must be of same length.") }
-  m <- matrix(c(y, yhat), ncol = 2L)
-  loss <- apply(m, 1L, function(r) {
-    error <- abs(r[1L] - r[2L])
-    if (error <= delta)
-      error <- 0.5 * (error^2)
-    else
-      error <- (delta * error) - (0.5 * (delta^2))
-  })
-  return(sum(loss) / ly)
+  error <- abs(y - yhat)
+  e1 <- error[error <= delta]
+  e1 <- 0.5 * e1^2
+  e2 <- error[error > delta]
+  e2 <- (delta * e2) - (0.5 * (delta^2))
+  loss <- mean(c(e1, e2))
+  return(loss)
 }
 
 #' Log-Cosh loss
@@ -137,15 +133,15 @@ log_cosh_loss <- function(y, yhat) {
 #'
 #' @examples
 quantile_loss <- function(y, yhat, q = 0.5) {
-  if ((ly <- length(y)) != (lyh <- length(yhat))) {
-    print("y and yhat vectors must be of same length.") }
   q <- ifelse(q < 0, 0, q)
   q <- ifelse(q > 1, 1, q)
-  m <- matrix(c(y, yhat), ncol = 2L)
-  loss <- apply(m, 1L, function(r) {
-    error <- ifelse((error <- r[1L] - r[2L]) >= 0, q * abs(error), (1 - q) * abs(error))
-  })
-  return(mean(loss))
+  error <- y - yhat
+  e1 <- error[error >= 0]
+  e1 <- q * abs(e1)
+  e2 <- error[error < 0]
+  e2 <- (1 - q) * abs(e2)
+  loss <- mean(c(e1, e2))
+  return(loss)
 }
 
 #' Variance coefficient (VC)
@@ -160,6 +156,8 @@ quantile_loss <- function(y, yhat, q = 0.5) {
 #'
 #' @examples
 vc <- function(y, yhat) {
+  if (length(y) != length(yhat)) {
+    stop("y and yhat vectors must be of same length.") }
   error <- y - yhat
   return(sqrt(mean(error^2)) / mean(y))
 }
