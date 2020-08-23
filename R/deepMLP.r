@@ -136,7 +136,13 @@ as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse =
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   }}}}
   if ((!is.null(dim)) && (!isTRUE(all.equal(datadim, dim)))) {
-    data <- keras::array_reshape(data, dim = dim, order = ifelse(!byrow, "F", "C"))
+    if (!byrow) {
+      dim(data) <- dim
+    } else {
+      # array_reshape() shows a strange behavior in reshaping an array consisting only of NA or combined with logical values
+      # Each NA is transferred to TRUE, and not to NA in the reshaped array
+      data <- keras::array_reshape(data, dim = dim, order = ifelse(!byrow, "F", "C"))
+    }
   }
   return(data)
 }
