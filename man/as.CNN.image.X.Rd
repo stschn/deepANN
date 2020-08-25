@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepCNN.r
 \name{as.CNN.image.X}
 \alias{as.CNN.image.X}
-\title{Create a 4-dimensional image array}
+\title{Create a 4-dimensional array for image features (input)}
 \usage{
 as.CNN.image.X(images, width, height, channels = 3L)
 }
@@ -19,10 +19,10 @@ Primary colors can be mixed to produce any color.
 A channel equal \code{1} indicates a grayscale image, \code{3} a color image.}
 }
 \value{
-A 4D array with the dimensions samples (number of images), height, width and channel.
+A 4D feature array with the dimensions samples (number of images), height, width and channel.
 }
 \description{
-Create a 4-dimensional image array
+Create a 4-dimensional array for image features (input)
 }
 \seealso{
 \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}},

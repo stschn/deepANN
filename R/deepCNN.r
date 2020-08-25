@@ -1,4 +1,4 @@
-#' Create a 4-dimensional image array
+#' Create a 4-dimensional array for image features (input)
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -10,7 +10,7 @@
 #'   Primary colors can be mixed to produce any color. 
 #'   A channel equal \code{1} indicates a grayscale image, \code{3} a color image.
 #'
-#' @return A 4D array with the dimensions samples (number of images), height, width and channel.
+#' @return A 4D feature array with the dimensions samples (number of images), height, width and channel.
 #' @export
 #' 
 #' @seealso \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}},
@@ -103,7 +103,7 @@ get.CNN.image.X.width <- function(X.tensor) { return(ifelse(length(d <- dim(X.te
 #' @examples
 get.CNN.image.X.channels <- function(X.tensor) { return(ifelse(length(d <- dim(X.tensor)) == 4L, d[4L], 0L)) }
 
-#' Create a one-hot encoded vector for image labels
+#' Create a one-hot vector for image labels (output)
 #'
 #' @family Convolutional Neural Network (CNN)
 #'

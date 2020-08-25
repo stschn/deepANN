@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepCNN.r
 \name{as.CNN.image.Y}
 \alias{as.CNN.image.Y}
-\title{Create a one-hot encoded vector for image labels}
+\title{Create a one-hot vector for image labels (output)}
 \usage{
 as.CNN.image.Y(labels)
 }
@@ -13,7 +13,7 @@ as.CNN.image.Y(labels)
 A one-hot encoded vector for the image labels
 }
 \description{
-Create a one-hot encoded vector for image labels
+Create a one-hot vector for image labels (output)
 }
 \seealso{
 \code{\link{one_hot_encode}}, \code{\link{as.CNN.image.X}}
