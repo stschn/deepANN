@@ -109,6 +109,12 @@ This R library is currently structured in form of the following functional famil
 <ul>
   <li><code>as.CNN.image.X()</code> creates a 4D image array with the dimensions samples, height, width and channels either from already given image data or from images on a storage medium.</li>
   <li><code>as.CNN.image.Y()</code> creates a one-hot vector for the image labels.</li>
+  <li><code>get.CNN.image.X.samples()</code> returns the number of images (feature samples).</li>
+  <li><code>get.CNN.image.X.height()</code> returns the height of the images.</li>
+  <li><code>get.CNN.image.X.width()</code> returns the width of the images.</li>
+  <li><code>get.CNN.image.X.channels()</code> returns the number of color channels of the images.</li>
+  <li><code>get.CNN.image.Y.samples()</code> returns the number of image samples or labels.</li>
+  <li><code>get.CNN.image.Y.units()</code> returns the number of output units.</li>
 </ul>
 
 <b>Self-Organizing Map (SOM)</b>

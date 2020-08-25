@@ -47,6 +47,62 @@ as.CNN.image.X <- function(images, width, height, channels = 3L) {
   return(feature_array)
 }
 
+#' Get number of samples from image feature tensor
+#'
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param X.tensor A tensor of the image features produced by \code{as.CNN.image.X}.
+#'
+#' @return Number of images.
+#' @export
+#'
+#' @seealso \code{\link{as.CNN.image.X}}, \code{\link{get.CNN.image.X.height}}, \code{\link{get.CNN.image.X.width}}, \code{\link{get.CNN.image.X.channels}}.
+#'
+#' @examples
+get.CNN.image.X.samples <- function(X.tensor) { return(ifelse(length(d <- dim(X.tensor)) == 4L, d[1L], 0L)) }
+
+#' Get height from image feature tensor
+#'
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param X.tensor A tensor of the image features produced by \code{as.CNN.image.X}.
+#'
+#' @return Image height.
+#' @export
+#'
+#' @seealso \code{\link{as.CNN.image.X}}, \code{\link{get.CNN.image.X.samples}}, \code{\link{get.CNN.image.X.width}}, \code{\link{get.CNN.image.X.channels}}.
+#'
+#' @examples
+get.CNN.image.X.height <- function(X.tensor) { return(ifelse(length(d <- dim(X.tensor)) == 4L, d[2L], 0L)) }
+
+#' Get width from image feature tensor
+#'
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param X.tensor A tensor of the image features produced by \code{as.CNN.image.X}.
+#'
+#' @return Image width.
+#' @export
+#'
+#' @seealso \code{\link{as.CNN.image.X}}, \code{\link{get.CNN.image.X.samples}}, \code{\link{get.CNN.image.X.height}}, \code{\link{get.CNN.image.X.channels}}.
+#'
+#' @examples
+get.CNN.image.X.width <- function(X.tensor) { return(ifelse(length(d <- dim(X.tensor)) == 4L, d[3L], 0L)) }
+
+#' Get number of color channels from image feature tensor
+#'
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param X.tensor A tensor of the image features produced by \code{as.CNN.image.X}.
+#'
+#' @return Number of color channels.
+#' @export
+#'
+#' @seealso \code{\link{as.CNN.image.X}}, \code{\link{get.CNN.image.X.samples}}, \code{\link{get.CNN.image.X.height}}, \code{\link{get.CNN.image.X.width}}.
+#'
+#' @examples
+get.CNN.image.X.channels <- function(X.tensor) { return(ifelse(length(d <- dim(X.tensor)) == 4L, d[4L], 0L)) }
+
 #' Create a one-hot encoded vector for image labels
 #'
 #' @family Convolutional Neural Network (CNN)
@@ -62,3 +118,31 @@ as.CNN.image.X <- function(images, width, height, channels = 3L) {
 as.CNN.image.Y <- function(labels) {
   return(one_hot_encode(labels))
 }
+
+#' Get number of samples from image outcome tensor
+#'
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param Y.tensor A tensor of the outcome produced by \code{as.CNN.image.Y}.
+#'
+#' @return Number of output samples.
+#' @export
+#'
+#' @seealso \code{\link{as.CNN.image.Y}}, \code{\link{get.CNN.image.Y.units}}.
+#'
+#' @examples
+get.CNN.image.Y.samples <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.tensor)) == 2L, d[1L], 0L)) }
+
+#' Get number of units from image outcome tensor
+#'
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param Y.tensor A tensor of the outcome produced by \code{as.CNN.image.Y}.
+#'
+#' @return Number of output units.
+#' @export
+#'
+#' @seealso \code{\link{as.CNN.image.Y}}, \code{\link{get.CNN.image.Y.samples}}.
+#'
+#' @examples
+get.CNN.image.Y.units <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.tensor)) == 2L, d[2L], 0L)) }

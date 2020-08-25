@@ -29,6 +29,12 @@ Create a 4-dimensional image array
   \code{\link{as.CNN.image.Y}}.
 
 Other Convolutional Neural Network (CNN): 
-\code{\link{as.CNN.image.Y}()}
+\code{\link{as.CNN.image.Y}()},
+\code{\link{get.CNN.image.X.channels}()},
+\code{\link{get.CNN.image.X.height}()},
+\code{\link{get.CNN.image.X.samples}()},
+\code{\link{get.CNN.image.X.width}()},
+\code{\link{get.CNN.image.Y.samples}()},
+\code{\link{get.CNN.image.Y.units}()}
 }
 \concept{Convolutional Neural Network (CNN)}
