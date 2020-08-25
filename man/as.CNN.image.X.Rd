@@ -4,12 +4,10 @@
 \alias{as.CNN.image.X}
 \title{Create a 4-dimensional image array}
 \usage{
-as.CNN.image.X(images, from_file = TRUE, width, height, channels = 3L)
+as.CNN.image.X(images, width, height, channels = 3L)
 }
 \arguments{
 \item{images}{Image data either a 3D array or a list of file names, e.g. returned by \code{list.files}.}
-
-\item{from_file}{Boolean that indicates whether image data are stored in files (default) or already given.}
 
 \item{width}{The width of an image, equal to the number of columns.}
 
@@ -27,8 +25,8 @@ A 4D array with the dimensions samples (number of images), height, width and cha
 Create a 4-dimensional image array
 }
 \seealso{
-\code{\link[base]{list.files}},
-  \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}}.
+\code{\link[base]{list.files}}, \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}},
+  \code{\link{as.CNN.image.Y}}.
 
 Other Convolutional Neural Network (CNN): 
 \code{\link{as.CNN.image.Y}()}

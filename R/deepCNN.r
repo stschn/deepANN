@@ -3,7 +3,6 @@
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param images Image data either a 3D array or a list of file names, e.g. returned by \code{list.files}.
-#' @param from_file Boolean that indicates whether image data are stored in files (default) or already given.
 #' @param width The width of an image, equal to the number of columns.
 #' @param height The height of an image, equal to the number of rows.
 #' @param channels The number of channels of an image. A color channel is a primary color (like red, green and blue), 
@@ -14,18 +13,21 @@
 #' @return A 4D array with the dimensions samples (number of images), height, width and channel.
 #' @export
 #' 
-#' @seealso \code{\link[base]{list.files}},
-#'   \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}}.
+#' @seealso \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}},
+#'   \code{\link{as.CNN.image.Y}}.
 #'
 #' @examples
-as.CNN.image.X <- function(images, from_file = TRUE, width, height, channels = 3L) {
-  if (from_file) {
-    img_list <- lapply(images, function(imgname) {
-      keras::image_load(imgname, grayscale = ifelse(channels == 1L, T, F), target_size = c(height, width))
-    })
-    img_array <- lapply(img_list, function(img) {
-      keras::image_to_array(img) # The image is in format height x width x channels
-    })
+as.CNN.image.X <- function(images, width, height, channels = 3L) {
+  if (is.null(dim(images))) {
+    if (T %in% (files <- file.exists(images))) {
+      if (F %in% files) { stop("not all image files do exist.") }
+      img_list <- lapply(images, function(imgname) {
+        keras::image_load(imgname, grayscale = ifelse(channels == 1L, T, F), target_size = c(height, width))
+      })
+      img_array <- lapply(img_list, function(img) {
+        keras::image_to_array(img) # The image is in format height x width x channels
+      })
+    }
   } else {
     img_array <- images
   }
@@ -54,7 +56,7 @@ as.CNN.image.X <- function(images, from_file = TRUE, width, height, channels = 3
 #' @return A one-hot encoded vector for the image labels
 #' @export
 #' 
-#' @seealso \code{\link{one_hot_encode}}
+#' @seealso \code{\link{one_hot_encode}}, \code{\link{as.CNN.image.X}}
 #'
 #' @examples
 as.CNN.image.Y <- function(labels) {

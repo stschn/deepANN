@@ -16,7 +16,7 @@ A one-hot encoded vector for the image labels
 Create a one-hot encoded vector for image labels
 }
 \seealso{
-\code{\link{one_hot_encode}}
+\code{\link{one_hot_encode}}, \code{\link{as.CNN.image.X}}
 
 Other Convolutional Neural Network (CNN): 
 \code{\link{as.CNN.image.X}()}
