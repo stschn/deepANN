@@ -3,7 +3,7 @@
 #' @family Dummyfication
 #'
 #' @param dataset A data set with factor and/or character variables.
-#' @param columns The names of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.
+#' @param columns The names or indices of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.
 #' @param remove_level Controls which level of a factor or character variable is removed.
 #'   \code{first} removes the first level.
 #'   \code{last} removes the last level.
@@ -21,9 +21,17 @@
 #' @examples
 dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "most", "least", "none"), effectcoding = FALSE, remove_columns = FALSE) {
   if (!is.null(columns)) {
-    col_names <- columns
-    if (!all(col_names %in% names(dataset)))
-      stop("columns are not in dataset.")
+    cnames <- names(dataset)
+    if (!is.character(columns)) {
+      columns <- as.integer(columns)
+      if (!all(columns %in% c(1:NCOL(dataset))))
+        stop("column indices are not in dataset.")
+      col_names <- cnames[columns]
+    } else {
+      if (!all(columns %in% cnames))
+        stop("columns are not in dataset.")
+      col_names <- columns
+    }
   } else {
     all_classes <- sapply(dataset, class)
     col_classes <- all_classes[all_classes %in% c("factor", "character")]
