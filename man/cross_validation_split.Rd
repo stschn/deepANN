@@ -4,14 +4,12 @@
 \alias{cross_validation_split}
 \title{K-fold cross validation}
 \usage{
-cross_validation_split(dataset, folds = 3, foldname = "fold", shuffle = FALSE)
+cross_validation_split(dataset, folds = 3L, shuffle = FALSE)
 }
 \arguments{
 \item{dataset}{A data set, usually a data frame.}
 
 \item{folds}{Number of created folds.}
-
-\item{foldname}{A prefix name for each created fold followed by a number, e.g. 1,2,3.}
 
 \item{shuffle}{Controls whether the samples of the data set should be randomly shuffled before fold creation.
 For time series data, this argument must be set equal to \code{FALSE} because the order of the samples can't be changed.}

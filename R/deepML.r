@@ -6,7 +6,6 @@
 #'   
 #' @param dataset A data set, usually a data frame.
 #' @param folds Number of created folds.
-#' @param foldname A prefix name for each created fold followed by a number, e.g. 1,2,3.
 #' @param shuffle Controls whether the samples of the data set should be randomly shuffled before fold creation.
 #'   For time series data, this argument must be set equal to \code{FALSE} because the order of the samples can't be changed.
 #'
@@ -14,18 +13,16 @@
 #' @export
 #'
 #' @examples
-cross_validation_split <- function(dataset, folds = 3, foldname = "fold", shuffle = FALSE) {
-  df <- as.data.frame(dataset)
-  if (shuffle) df <- df[sample(1:NROW(df)), ]
-  fold_size <- as.integer(NROW(df) / folds)
-  fold_list <- list()
-  listnames <- c()
-  for (i in 1:folds) {
-    fold_list[[i]] <- head(df, n = fold_size)
-    df <- tail(df, -fold_size)
-    listnames <- c(listnames, sprintf(fmt = paste0(foldname, "%d"), i))
-  }
-  names(fold_list) <- listnames
+cross_validation_split <- function(dataset, folds = 3L, shuffle = FALSE) {
+  dataset <- as.data.frame(dataset)
+  if (shuffle) dataset <- dataset[sample(NROW(dataset)), ]
+  fold_size <- as.integer(NROW(dataset) / folds)
+  fold_list <- lapply(seq_len(folds), function(fold) {
+    start <- as.integer(((fold - 1) * fold_size) + 1L)
+    end <- as.integer(fold * fold_size)
+    dataset[start:end, , drop = F]
+  })
+  names(fold_list) <- do.call(sprintf, list("fold%d", seq_len(folds)))
   return(fold_list)
 }
 
