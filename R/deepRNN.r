@@ -48,7 +48,7 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
   }
   max_lag <- max(x.lag)
   max_lag <- ifelse(max_lag < 0, 0, max_lag)
-  if ((is.null(x)) || (x == y)) {
+  if (is.null(x) || setequal(x, y)) {
     # univariate time series
     lag <- ifelse(max_lag <= 0, 1, max_lag) # at least a lag of 1 is needed
     data_list[[1L]] <- df[1:(NROW(df) - lag), y, drop = FALSE]
