@@ -34,6 +34,7 @@ This loss function tries to give different penalties to overestimation and under
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},
 \code{\link{mae}()},

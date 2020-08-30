@@ -22,6 +22,7 @@ Log-Cosh loss
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{mae}()},
 \code{\link{mape}()},

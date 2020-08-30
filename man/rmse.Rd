@@ -22,6 +22,7 @@ Root mean square error (RMSE)
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},
 \code{\link{mae}()},

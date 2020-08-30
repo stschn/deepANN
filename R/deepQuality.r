@@ -263,3 +263,28 @@ accuracy <- function(actuals, preds, na.rm = FALSE) {
   stopifnot(identical(dim(actuals), dim(preds)), identical(length(actuals), length(preds)))
   return(sum(actuals == preds, na.rm = na.rm) / length(preds))
 }
+
+#' Gini impurity
+#'
+#' @family Quality
+#' 
+#' @param x A vector of values, usually character labels as raw instances or as class frequencies.
+#'
+#' @details Gini impurity is the probability of how often a randomly chosen element from a set \code{x} would be
+#'   incorrectly labeled if it was randomly labeled according to the distribution of labels in the set.
+#' 
+#' @return The Gini impurity.
+#' @export
+#' 
+#' @references
+#'   \url{https://victorzhou.com/blog/gini-impurity/}
+#'
+#' @examples
+#'   gini_impurity(c("dog", "dog", "cat", "mouse"))
+#'   gini_impurity(c(dog = 2, cat = 1, mouse = 1))
+gini_impurity <- function(x) {
+  if (is(x, "numeric")) occurences <- x else occurences <- table(x)
+  total <- sum(occurences)
+  probs <- occurences / total
+  return(sum(probs * (1 - probs)))
+}
