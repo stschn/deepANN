@@ -58,6 +58,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>quantile_loss()</code> calculates the quantile loss.</li>
   <li><code>vc()</code> calculates the variance coefficient.</li>
   <li><code>accuracy()</code> calculates the fraction of correct predictions.</li>
+  <li><code>gini_impurity()</code> calculates the Gini impurity.</li>
 </ul>
 
 <b>Machine Learning (ML)</b>
