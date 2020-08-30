@@ -39,7 +39,9 @@ Other Quality:
 \code{\link{mae}()},
 \code{\link{mape}()},
 \code{\link{mse}()},
+\code{\link{msle}()},
 \code{\link{rmse}()},
+\code{\link{rmsle}()},
 \code{\link{vc}()}
 }
 \concept{Quality}

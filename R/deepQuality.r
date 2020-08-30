@@ -54,6 +54,33 @@ mse <- function(actuals, preds, na.rm = FALSE) {
   return(mean(error^2, na.rm = na.rm))
 }
 
+#' Mean squared logarithmic error (MSLE)
+#'
+#' @family Quality
+#'
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param alpha A numeric value (default \code{1}) to prevent taking a negative or zero log.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
+#'
+#' @return Mean squared logarithmic error.
+#' @export
+#'
+#' @examples
+msle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
+  if (na.rm) {
+    idx <- sort(unique(c(which(is.na(actuals)), which(is.na(preds)))))
+    if (length(idx) >= 0L) {
+      actuals <- actuals[-idx]
+      preds <- preds[-idx]
+    }
+  }
+  if (any((x <- actuals + alpha) <= 0, na.rm = T)) stop("can't calculate the log because some actuals + alpha <= 0.")
+  if (any((xhat <- preds + alpha) <= 0, na.rm = T)) stop("can't calculate the log because some preds + alpha <= 0.")
+  error <- log(x) - log(xhat)
+  return(mean(error^2, na.rm = na.rm))
+}
+
 #' Root mean square error (RMSE)
 #'
 #' @family Quality
@@ -67,8 +94,24 @@ mse <- function(actuals, preds, na.rm = FALSE) {
 #'
 #' @examples
 rmse <- function(actuals, preds, na.rm = FALSE) {
-  error <- actuals - preds
-  return(sqrt(mean(error^2, na.rm = na.rm)))
+  return(sqrt(deepANN::mse(actuals = actuals, preds = preds, na.rm = na.rm)))
+}
+
+#' Root mean square logarithmic error (RMSLE)
+#'
+#' @family Quality
+#'
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param alpha A numeric value (default \code{1}) to prevent taking a negative or zero log.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
+#'
+#' @return Root mean square logarithmic error.
+#' @export
+#'
+#' @examples
+rmsle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
+  return(sqrt(deepANN::msle(actuals = actuals, preds = preds, alpha = alpha, na.rm = na.rm)))
 }
 
 #' Huber loss

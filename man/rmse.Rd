@@ -27,7 +27,9 @@ Other Quality:
 \code{\link{mae}()},
 \code{\link{mape}()},
 \code{\link{mse}()},
+\code{\link{msle}()},
 \code{\link{quantile_loss}()},
+\code{\link{rmsle}()},
 \code{\link{vc}()}
 }
 \concept{Quality}

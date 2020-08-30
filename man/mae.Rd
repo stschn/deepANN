@@ -30,8 +30,10 @@ Other Quality:
 \code{\link{log_cosh_loss}()},
 \code{\link{mape}()},
 \code{\link{mse}()},
+\code{\link{msle}()},
 \code{\link{quantile_loss}()},
 \code{\link{rmse}()},
+\code{\link{rmsle}()},
 \code{\link{vc}()}
 }
 \concept{Quality}
