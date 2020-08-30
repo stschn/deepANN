@@ -4,14 +4,16 @@
 \alias{quantile_loss}
 \title{Quantile loss}
 \usage{
-quantile_loss(y, yhat, q = 0.5)
+quantile_loss(actuals, preds, q = 0.5, na.rm = FALSE)
 }
 \arguments{
-\item{y}{A numeric vector with actual values (to-be values).}
+\item{actuals}{A numeric vector of actual values.}
 
-\item{yhat}{A numeric vector with estimated values (as-is values).}
+\item{preds}{A numeric vector of prediction values.}
 
 \item{q}{A quantile fraction between 0 and 1.}
+
+\item{na.rm}{A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.}
 }
 \value{
 Quantile loss.

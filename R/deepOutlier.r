@@ -6,7 +6,7 @@
 #' @param type The type of outlier definition and detection. 
 #'   \code{tukey} refers to the method of Tukey (1977).
 #'   \code{ml} denotes maximum likelihood estimation.
-#' @param na.replace Boolean that indicates whether outliers shell be replaced by \code{NA}.
+#' @param na.replace A logical value indicating whether outliers should be replaced by \code{NA}.
 #' @param ... Dependent on \code{type}. 
 #'   For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
 #'   For \code{ml} the constant \code{k} can be specified, otherwise it's value is \code{2}.

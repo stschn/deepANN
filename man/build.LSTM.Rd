@@ -34,9 +34,9 @@ and the second column the activation function. The number of rows determines the
 \item{output}{A vector with two elements whereby the first element determines the number of output units, returned by \code{get.LSTM.Y.units},
 and the second element the output activation function.}
 
-\item{stateful}{A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).}
+\item{stateful}{A logical value indicating whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).}
 
-\item{return_sequences}{A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).}
+\item{return_sequences}{A logical value indicating whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).}
 
 \item{loss}{Name of objective function or objective function. If the model has multiple outputs,
 different loss on each output can be used by passing a dictionary or a list of objectives.

@@ -37,7 +37,7 @@ the first value is used as before and the second value for the resampled sequenc
 \item{epochs}{The number of epochs.}
 
 \item{batch_size}{A vector with two elements. The first element holds the batch size, the number of samples used per gradient update.
-The second element is boolean to indicate whether the batch size is used for input layer too (\code{TRUE}).}
+The second element is a logical value indicating whether the batch size is used for input layer too (\code{TRUE}).}
 
 \item{validation_split}{Fraction of the training data used as validation data.}
 
@@ -52,9 +52,9 @@ and the second column the activation function. The number of rows determines the
 
 \item{output.activation}{A name of the output activation function.}
 
-\item{stateful}{A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).}
+\item{stateful}{A logical value indicating whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).}
 
-\item{return_sequences}{A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).}
+\item{return_sequences}{A logical value indicating whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).}
 
 \item{loss}{Name of objective function or objective function. If the model has multiple outputs,
 different loss on each output can be used by passing a dictionary or a list of objectives.

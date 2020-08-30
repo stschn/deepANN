@@ -13,7 +13,7 @@ outlier(x, type = c("tukey", "ml"), na.replace = FALSE, ...)
 \code{tukey} refers to the method of Tukey (1977).
 \code{ml} denotes maximum likelihood estimation.}
 
-\item{na.replace}{Boolean that indicates whether outliers shell be replaced by \code{NA}.}
+\item{na.replace}{A logical value indicating whether outliers should be replaced by \code{NA}.}
 
 \item{...}{Dependent on \code{type}. 
 For \code{tukey} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 

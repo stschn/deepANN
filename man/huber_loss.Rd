@@ -4,14 +4,16 @@
 \alias{huber_loss}
 \title{Huber loss}
 \usage{
-huber_loss(y, yhat, delta = 1)
+huber_loss(actuals, preds, delta = 1, na.rm = FALSE)
 }
 \arguments{
-\item{y}{A numeric vector with actual values (to-be values).}
+\item{actuals}{A numeric vector of actual values.}
 
-\item{yhat}{A numeric vector with estimated values (as-is values).}
+\item{preds}{A numeric vector of prediction values.}
 
 \item{delta}{A parameter that shows the error difference and controls the calculation.}
+
+\item{na.rm}{A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.}
 }
 \value{
 Huber loss.

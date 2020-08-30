@@ -4,15 +4,17 @@
 \alias{accuracy}
 \title{Classification accuracy}
 \usage{
-accuracy(y, yhat)
+accuracy(actuals, preds, na.rm = FALSE)
 }
 \arguments{
-\item{y}{Numeric data (vector, array, matrix, data frame or list) with actual values (to-be values).}
+\item{actuals}{Numeric data (vector, array, matrix, data frame or list) of actual values.}
 
-\item{yhat}{Numeric data (vector, array, matrix, data frame or list) with estimated values (as-is values).}
+\item{preds}{Numeric data (vector, array, matrix, data frame or list) of prediction values.}
+
+\item{na.rm}{A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.}
 }
 \value{
-The fraction of right predictions within total predictions.
+The fraction of right predictions within total number of predictions.
 }
 \description{
 Classification accuracy

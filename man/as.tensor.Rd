@@ -21,7 +21,7 @@ as.tensor(
 \code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
 \code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.}
 
-\item{numeric}{A boolean that indicates whether the elements should be coerced as numeric elements.}
+\item{numeric}{A logical value indicating whether the elements should be coerced as numeric elements.}
 
 \item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.
 The second parameter value indicates a row-wise reverse order (\code{1}) or a column-wise reverse order (\code{2}).}

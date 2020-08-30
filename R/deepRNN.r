@@ -410,8 +410,8 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.LSTM.Y.units},
 #'   and the second element the output activation function.
-#' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
-#' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).
+#' @param stateful A logical value indicating whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
+#' @param return_sequences A logical value indicating whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).
 #' @param loss Name of objective function or objective function. If the model has multiple outputs,
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
@@ -476,7 +476,7 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #'   the first value is used as before and the second value for the resampled sequence or multi-step outcome tensor produced by \code{as.LSTM.Y}.
 #' @param epochs The number of epochs.
 #' @param batch_size A vector with two elements. The first element holds the batch size, the number of samples used per gradient update.
-#'   The second element is boolean to indicate whether the batch size is used for input layer too (\code{TRUE}).
+#'   The second element is a logical value indicating whether the batch size is used for input layer too (\code{TRUE}).
 #' @param validation_split Fraction of the training data used as validation data.
 #' @param k.fold Number of folds within k-fold cross validation or \code{NULL} if no grid search is desired.
 #' @param k.optimizer Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.
@@ -484,8 +484,8 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
 #' @param output.activation A name of the output activation function.
-#' @param stateful A boolean that indicates whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
-#' @param return_sequences A boolean that indicates whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).
+#' @param stateful A logical value indicating whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
+#' @param return_sequences A logical value indicating whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).
 #' @param loss Name of objective function or objective function. If the model has multiple outputs,
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
@@ -526,7 +526,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
   l[[1L]] <- list(X.units, Y.units)
   names(l[[1L]]) <- l_hyperparameter_names
 
-  # Shell batch size also be used for specifying the input shape?
+  # Should batch size also be used for specifying the input shape?
   if (batch_size[2L] == F) { input_batch_size <- NULL } else {input_batch_size <- batch_size[1L] }
 
   # Build model procedure

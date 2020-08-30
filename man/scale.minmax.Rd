@@ -7,11 +7,11 @@
 \method{scale}{minmax}(x, use.attr = TRUE, invert = FALSE, minx = NULL, maxx = NULL)
 }
 \arguments{
-\item{x}{A numeric vector whose elements shell be scaled thru min-max scaling.}
+\item{x}{A numeric vector whose elements should be scaled thru min-max scaling.}
 
-\item{use.attr}{A boolean that controls whether scaling factors \code{min} and \code{max} are stored as named attributes of the scaled vector \code{x}.}
+\item{use.attr}{A logical value indicating whether scaling factors \code{min} and \code{max} are stored as named attributes of the scaled vector \code{x}.}
 
-\item{invert}{A boolean that indicates the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
+\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
 
 \item{minx}{A given minimum value for scaling. If this value is \code{NULL} the minimum of \code{x} is used.}
 

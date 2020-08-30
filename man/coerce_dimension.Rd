@@ -2,8 +2,7 @@
 % Please edit documentation in R/deepQuality.r
 \name{coerce_dimension}
 \alias{coerce_dimension}
-\title{Coerce data to an array or matrix with no trailing dimension of 1
-0}
+\title{Coerce data to an array or matrix with no trailing dimension of 1}
 \usage{
 coerce_dimension(x)
 }
@@ -15,5 +14,4 @@ The coerced data structure with no trailing dimension of 1.
 }
 \description{
 Coerce data to an array or matrix with no trailing dimension of 1
-0
 }

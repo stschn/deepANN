@@ -2,9 +2,9 @@
 #'
 #' @family Scaling
 #'
-#' @param x A numeric vector whose elements shell be scaled thru min-max scaling.
-#' @param use.attr A boolean that controls whether scaling factors \code{min} and \code{max} are stored as named attributes of the scaled vector \code{x}.
-#' @param invert A boolean that indicates the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
+#' @param x A numeric vector whose elements should be scaled thru min-max scaling.
+#' @param use.attr A logical value indicating whether scaling factors \code{min} and \code{max} are stored as named attributes of the scaled vector \code{x}.
+#' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
 #' @param minx A given minimum value for scaling. If this value is \code{NULL} the minimum of \code{x} is used.
 #' @param maxx A given maximum value for scaling. If this value is \code{NULL} the maximum of \code{x} is used.
 #'
@@ -47,9 +47,9 @@ scale.minmax <- function(x, use.attr = TRUE, invert = FALSE, minx = NULL, maxx =
 #'
 #' @family Scaling
 #'
-#' @param x A numeric vector whose elements shell be scaled thru z-score scaling.
-#' @param use.attr A boolean that controls whether scaling factors \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.
-#' @param invert A boolean that indicates the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
+#' @param x A numeric vector whose elements should be scaled thru z-score scaling.
+#' @param use.attr A logical value indicating whether scaling factors \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.
+#' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
 #' @param meanx A given mean value for scaling. If this value is \code{NULL} the mean of \code{x} is used.
 #' @param sdx A given standard deviation value for scaling. If this value is \code{NULL} the standard deviation of \code{x} is used.
 #'
@@ -92,8 +92,8 @@ scale.zscore <- function(x, use.attr = TRUE, invert = FALSE, meanx = NULL, sdx =
 #'
 #' @family Scaling
 #'
-#' @param x A numeric vector whose elements shell be log transformed.
-#' @param invert A boolean that indicates the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
+#' @param x A numeric vector whose elements should be log transformed.
+#' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
 #'
 #' @return A vector of same length as \code{x} with log transformed values.
 #' @export
@@ -114,10 +114,10 @@ scale.log <- function(x, invert = FALSE) {
 #'
 #' @family Scaling
 #'
-#' @param x A numeric vector whose elements shell be scaled.
+#' @param x A numeric vector whose elements should be scaled.
 #' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
-#' @param use.attr A boolean that controls whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.
-#' @param invert A boolean that indicates the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
+#' @param use.attr A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.
+#' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
 #' @param ... Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.
 #'
 #' @return The scaled or re-scaled (inverted) numeric vector \code{x}.

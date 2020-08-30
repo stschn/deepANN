@@ -2,8 +2,9 @@
 #'
 #' @family Quality
 #'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @details In Machine and Deep Learning, MAE is also known as L1 loss function.
 #'   In opposite to MSE, MAE is more robust to outliers.
@@ -12,33 +13,35 @@
 #' @export
 #'
 #' @examples
-mae <- function(y, yhat) {
-  error <- y - yhat
-  return(mean(abs(error)))
+mae <- function(actuals, preds, na.rm = FALSE) {
+  error <- actuals - preds
+  return(mean(abs(error), na.rm = na.rm))
 }
 
 #' Mean absolute percentage error (MAPE)
 #'
 #' @family Quality
 #'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Mean absolute percentage error.
 #' @export
 #'
 #' @examples
-mape <- function(y, yhat){
-  error <- y - yhat
-  return(mean(abs(error / y)) * 100)
+mape <- function(actuals, preds, na.rm = FALSE) {
+  error <- actuals - preds
+  return(mean(abs(error / actuals), na.rm = na.rm) * 100)
 }
 
 #' Mean squared error (MSE)
 #'
 #' @family Quality
 #'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @details In Machine and Deep Learning, MSE is also known as L2 loss function.
 #'
@@ -46,34 +49,36 @@ mape <- function(y, yhat){
 #' @export
 #'
 #' @examples
-mse <- function(y, yhat) {
-  error <- y - yhat
-  return(mean(error^2))
+mse <- function(actuals, preds, na.rm = FALSE) {
+  error <- actuals - preds
+  return(mean(error^2, na.rm = na.rm))
 }
 
 #' Root mean square error (RMSE)
 #'
 #' @family Quality
 #'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Root mean square error.
 #' @export
 #'
 #' @examples
-rmse <- function(y, yhat) {
-  error <- y - yhat
-  return(sqrt(mean(error^2)))
+rmse <- function(actuals, preds, na.rm = FALSE) {
+  error <- actuals - preds
+  return(sqrt(mean(error^2, na.rm = na.rm)))
 }
 
 #' Huber loss
 #'
 #' @family Quality
 #'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
 #' @param delta A parameter that shows the error difference and controls the calculation.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @details Huber loss is less sensitive to outliers than MSE.
 #'
@@ -85,10 +90,11 @@ rmse <- function(y, yhat) {
 #'   Hasti, Trevor; Tibshirani, Robert; Friedman, Jerome (2009): The Elements of Statistical Learning. 2nd ed., 2009. New York: Springer. (p. 349).
 #'
 #' @examples
-huber_loss <- function(y, yhat, delta = 1.0) {
-  error <- abs(y - yhat)
+huber_loss <- function(actuals, preds, delta = 1.0, na.rm = FALSE) {
+  error <- abs(actuals - preds)
+  if (na.rm) error <- error[!is.na(error)]
   e1 <- error[error <= delta]
-  e1 <- 0.5 * e1^2
+  e1 <- 0.5 * (e1^2)
   e2 <- error[error > delta]
   e2 <- (delta * e2) - (0.5 * (delta^2))
   loss <- mean(c(e1, e2))
@@ -99,15 +105,17 @@ huber_loss <- function(y, yhat, delta = 1.0) {
 #'
 #' @family Quality
 #'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Log-Cosh loss.
 #' @export
 #'
 #' @examples
-log_cosh_loss <- function(y, yhat) {
-  error <- yhat - y
+log_cosh_loss <- function(actuals, preds, na.rm = FALSE) {
+  error <- preds - actuals
+  if (na.rm) error <- error[!is.na(error)]
   return(sum(log(cosh(error))))
 }
 
@@ -115,9 +123,10 @@ log_cosh_loss <- function(y, yhat) {
 #'
 #' @family Quality
 #'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
 #' @param q A quantile fraction between 0 and 1.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @details This loss function tries to give different penalties to overestimation and underestimation.
 #'   For \code{q = 0.5}, overestimation and underestimation are penalized by the same factor and the median is obtained.
@@ -132,10 +141,11 @@ log_cosh_loss <- function(y, yhat) {
 #'   \url{https://www.evergreeninnovations.co/blog-quantile-loss-function-for-machine-learning/}
 #'
 #' @examples
-quantile_loss <- function(y, yhat, q = 0.5) {
+quantile_loss <- function(actuals, preds, q = 0.5, na.rm = FALSE) {
   q <- ifelse(q < 0, 0, q)
   q <- ifelse(q > 1, 1, q)
-  error <- y - yhat
+  error <- actuals - preds
+  if (na.rm) error <- error[!is.na(error)]
   e1 <- error[error >= 0]
   e1 <- q * abs(e1)
   e2 <- error[error < 0]
@@ -148,22 +158,22 @@ quantile_loss <- function(y, yhat, q = 0.5) {
 #'
 #' @family Quality
 #'
-#' @param y A numeric vector with actual values (to-be values).
-#' @param yhat A numeric vector with estimated values (as-is values).
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Variance coefficient.
 #' @export
 #'
 #' @examples
-vc <- function(y, yhat) {
-  if (length(y) != length(yhat)) {
-    stop("y and yhat vectors must be of same length.") }
-  error <- y - yhat
-  return(sqrt(mean(error^2)) / mean(y))
+vc <- function(actuals, preds, na.rm = FALSE) {
+  error <- actuals - preds
+  if (na.rm) error <- error[!is.na(error)]
+  return(sqrt(mean(error^2)) / mean(actuals))
 }
 
 #' Coerce data to an array or matrix with no trailing dimension of 1
-#'0
+#'
 #' @param x A data structure like vector, matrix, array, data frame or list.
 #'
 #' @return The coerced data structure with no trailing dimension of 1.
@@ -193,19 +203,20 @@ coerce_dimension <- function(x) {
 #'
 #' @family Quality
 #'
-#' @param y Numeric data (vector, array, matrix, data frame or list) with actual values (to-be values).
-#' @param yhat Numeric data (vector, array, matrix, data frame or list) with estimated values (as-is values).
+#' @param actuals Numeric data (vector, array, matrix, data frame or list) of actual values.
+#' @param preds Numeric data (vector, array, matrix, data frame or list) of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
-#' @return The fraction of right predictions within total predictions.
+#' @return The fraction of right predictions within total number of predictions.
 #' @export
 #'
 #' @details
 #'   \eqn{Accuracy = Number of correct predictions / Total number of predictions}
 #'
 #' @examples
-accuracy <- function(y, yhat) {
-  y <- coerce_dimension(y)
-  yhat <- coerce_dimension(yhat)
-  stopifnot(identical(dim(y), dim(yhat)), identical(length(y), length(yhat)))
-  return(sum(y == yhat, na.rm = T) / length(yhat))
+accuracy <- function(actuals, preds, na.rm = FALSE) {
+  actuals <- coerce_dimension(actuals)
+  preds <- coerce_dimension(preds)
+  stopifnot(identical(dim(actuals), dim(preds)), identical(length(actuals), length(preds)))
+  return(sum(actuals == preds, na.rm = na.rm) / length(preds))
 }

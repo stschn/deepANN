@@ -3,7 +3,7 @@
 #' @family Dummyfication
 #'
 #' @param dataset A data set with factor and/or character variables.
-#' @param columns The names or indices of the columns that shell be created dummy variables from; if \code{NULL} (default), all corresponding columns are encoded.
+#' @param columns The names or indices of the columns for which dummy variables are to be created; if \code{NULL} (default), all corresponding columns are encoded.
 #' @param remove_level Controls which level of a factor or character variable is removed.
 #'   \code{first} removes the first level.
 #'   \code{last} removes the last level.
@@ -11,7 +11,7 @@
 #'   \code{least} removes the level with the least occurrences within the samples.
 #'   \code{none} removes none of the levels.
 #' @param effectcoding Instead of using default 0/1 value pairs for dummy variables, effectcoding allows to set -1/1 pairs.
-#' @param remove_columns Controls whether the factor/character variables shell be removed from the data set after they are encoded in dummy variables.
+#' @param remove_columns A logical value indicating whether the factor/character variables should be removed from the data set after they have been encoded in dummy variables.
 #'
 #' @return The data set with encoded dummy variables.
 #' @export
