@@ -4,14 +4,14 @@
 \alias{as.CNN.temp.X}
 \title{Features (X) data format for a temporal CNN}
 \usage{
-as.CNN.temp.X(X, subsequences = NULL, timesteps = 1L, reverse = FALSE)
+as.CNN.temp.X(X, timesteps = 1L, subsequences = NULL, reverse = FALSE)
 }
 \arguments{
 \item{X}{A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.}
 
-\item{subsequences}{Number of subsequences within the outcome tensor. Using a CNN without RNN layers like LSTM layers, the number of subsequences is \code{NULL} (default). Otherwise, this number must be an integer multiple of \code{timesteps} to keep the origin timesteps value. To avoid problems in this regard, using a value of \code{1} is a proper solution.}
-
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}. If \code{subsequences} is given, \code{timesteps} is divided by \code{subsequences} to spawn the overall timesteps range (origin timesteps) within the result.}
+
+\item{subsequences}{Number of subsequences within the outcome tensor. Using a CNN without RNN layers like LSTM layers, the number of subsequences is \code{NULL} (default). Otherwise, this number must be an integer multiple of \code{timesteps} to keep the origin timesteps value. To avoid problems in this regard, using a value of \code{1} is a proper solution.}
 
 \item{reverse}{A logical value indicating the order of the values in the resampled feature matrix \code{X}. The values can be in given order (forward in time) or in reverse order (backward in time).}
 }

@@ -152,8 +152,8 @@ get.CNN.image.Y.units <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.te
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param X A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.
-#' @param subsequences Number of subsequences within the outcome tensor. Using a CNN without RNN layers like LSTM layers, the number of subsequences is \code{NULL} (default). Otherwise, this number must be an integer multiple of \code{timesteps} to keep the origin timesteps value. To avoid problems in this regard, using a value of \code{1} is a proper solution.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{X}. If \code{subsequences} is given, \code{timesteps} is divided by \code{subsequences} to spawn the overall timesteps range (origin timesteps) within the result.
+#' @param subsequences Number of subsequences within the outcome tensor. Using a CNN without RNN layers like LSTM layers, the number of subsequences is \code{NULL} (default). Otherwise, this number must be an integer multiple of \code{timesteps} to keep the origin timesteps value. To avoid problems in this regard, using a value of \code{1} is a proper solution.
 #' @param reverse A logical value indicating the order of the values in the resampled feature matrix \code{X}. The values can be in given order (forward in time) or in reverse order (backward in time).
 #'
 #' @return A 3D-array with dimensions samples, timesteps and features or a 4D-array with dimensions samples, subsequences, timesteps and features.
@@ -162,7 +162,7 @@ get.CNN.image.Y.units <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.te
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.CNN.temp.Y}}.
 #'
 #' @examples
-as.CNN.temp.X <- function(X, subsequences = NULL, timesteps = 1L, reverse = FALSE) {
+as.CNN.temp.X <- function(X, timesteps = 1L, subsequences = NULL, reverse = FALSE) {
   if (!is.null(subsequences)) {
     if ((timesteps %% subsequences) != 0) { stop("timesteps must be divided by subsequences without remainder.") }
     timesteps <- as.integer(timesteps / subsequences)

@@ -9,7 +9,7 @@ outlier.dataset(dataset, columns = NULL, type = c("tukey", "ml"), ...)
 \arguments{
 \item{dataset}{A data set, usually a data frame.}
 
-\item{columns}{The names of the columns whose outlier values are to be replaced. if \code{NULL} (default), all corresponding columns are examined.}
+\item{columns}{The names or indices of the columns whose outlier values are to be replaced. if \code{NULL} (default), all corresponding columns are examined.}
 
 \item{type}{The type of outlier definition and detection. 
 \code{tukey} refers to the method of Tukey (1977).

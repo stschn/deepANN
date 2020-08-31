@@ -64,7 +64,7 @@ outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
 #' @family Outlier
 #' 
 #' @param dataset A data set, usually a data frame.
-#' @param columns The names of the columns whose outlier values are to be replaced. if \code{NULL} (default), all corresponding columns are examined.
+#' @param columns The names or indices of the columns whose outlier values are to be replaced. if \code{NULL} (default), all corresponding columns are examined.
 #' @param type The type of outlier definition and detection. 
 #'   \code{tukey} refers to the method of Tukey (1977).
 #'   \code{ml} denotes maximum likelihood estimation.
@@ -81,15 +81,23 @@ outlier <- function(x, type = c("tukey", "ml"), na.replace = FALSE, ...) {
 #' @examples
 outlier.dataset <- function(dataset, columns = NULL, type = c("tukey", "ml"), ...) {
   if (!is.null(columns)) {
-    col_names <- columns
-    if (!all(col_names %in% names(dataset)))
-      stop("columns are not in dataset.")
+    cnames <- names(dataset)
+    if (!is.character(columns)) {
+      columns <- as.integer(columns)
+      if (!all(columns %in% c(1:NCOL(dataset))))
+        stop("column indices are not in dataset.")
+      col_names <- cnames[columns]
+    } else {
+      if (!all(columns %in% cnames))
+        stop("columns are not in dataset.")
+      col_names <- columns
+    }
   } else {
     all_classes <- sapply(dataset, class)
     col_classes <- all_classes[all_classes %in% c("integer", "numeric", "complex", "raw")]
     col_names <- names(col_classes)
   }
-  replaced <- as.data.frame(lapply(dataset[col_names], outlier, type = type, na.replace = T, ...))
+  replaced <- as.data.frame(lapply(dataset[col_names], outlier, type = type, na.replace = TRUE, ...))
   dataset[col_names] <- replaced
   return(dataset)
 }
