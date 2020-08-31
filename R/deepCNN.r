@@ -169,7 +169,7 @@ as.CNN.temp.X <- function(X, subsequences = NULL, timesteps = 1L, reverse = FALS
   }
   X.tensor <- deepANN::as.LSTM.X(X, timesteps = timesteps, reverse = reverse)
   if (!is.null(subsequences))
-    dim(X.tensor) <- dim = c(dim(X.tensor)[1L], subsequences, timesteps, get.CNN.temp.X.units(X.tensor))
+    dim(X.tensor) <- c(dim(X.tensor)[1L], subsequences, timesteps, get.CNN.temp.X.units(X.tensor))
   return(X.tensor)
 }
 
