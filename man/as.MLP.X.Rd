@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepMLP.r
 \name{as.MLP.X}
 \alias{as.MLP.X}
-\title{Features data format}
+\title{Features (X) data format for SLP/MLP}
 \usage{
 as.MLP.X(X)
 }
@@ -13,7 +13,7 @@ as.MLP.X(X)
 A two-dimensional array of the feature matrix \code{X}.
 }
 \description{
-Features data format
+Features (X) data format for SLP/MLP
 }
 \seealso{
 \code{\link{as.MLP.Y}}, \code{\link{as.ANN.matrix}}.

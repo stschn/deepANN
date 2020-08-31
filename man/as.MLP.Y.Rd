@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepMLP.r
 \name{as.MLP.Y}
 \alias{as.MLP.Y}
-\title{Outcomes data format}
+\title{Outcomes (Y) data format for SLP/MLP}
 \usage{
 as.MLP.Y(Y)
 }
@@ -13,7 +13,7 @@ as.MLP.Y(Y)
 A two-dimensional array of the outcome \code{Y}. For a factor outcome, the result is a one-hot vector.
 }
 \description{
-Outcomes data format
+Outcomes (Y) data format for SLP/MLP
 }
 \seealso{
 \code{\link{as.MLP.X}}, \code{\link{as.ANN.matrix}}, \code{\link{one_hot_encode}}.

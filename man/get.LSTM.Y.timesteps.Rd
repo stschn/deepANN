@@ -16,8 +16,7 @@ Number of output timesteps.
 Get number of timesteps from outcome tensor if outcome is a sequence
 }
 \seealso{
-\code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}},
-  \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
+\code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},

@@ -215,7 +215,7 @@ as.tensor.3D <- function(data, ncol = 1, reverse = FALSE, by = c("row", "col", "
   return(tensor)
 }
 
-#' Features data format
+#' Features (X) data format for SLP/MLP
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
@@ -231,7 +231,7 @@ as.MLP.X <- function(X) {
   return(as.tensor.2D(as.ANN.matrix(X)))
 }
 
-#' Outcomes data format
+#' Outcomes (Y) data format for SLP/MLP
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'

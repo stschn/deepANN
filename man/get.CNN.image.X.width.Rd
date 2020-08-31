@@ -21,10 +21,19 @@ Get width from image feature tensor
 Other Convolutional Neural Network (CNN): 
 \code{\link{as.CNN.image.X}()},
 \code{\link{as.CNN.image.Y}()},
+\code{\link{as.CNN.temp.X}()},
+\code{\link{as.CNN.temp.Y}()},
 \code{\link{get.CNN.image.X.channels}()},
 \code{\link{get.CNN.image.X.height}()},
 \code{\link{get.CNN.image.X.samples}()},
 \code{\link{get.CNN.image.Y.samples}()},
-\code{\link{get.CNN.image.Y.units}()}
+\code{\link{get.CNN.image.Y.units}()},
+\code{\link{get.CNN.temp.X.samples}()},
+\code{\link{get.CNN.temp.X.subsequences}()},
+\code{\link{get.CNN.temp.X.timesteps}()},
+\code{\link{get.CNN.temp.X.units}()},
+\code{\link{get.CNN.temp.Y.samples}()},
+\code{\link{get.CNN.temp.Y.timesteps}()},
+\code{\link{get.CNN.temp.Y.units}()}
 }
 \concept{Convolutional Neural Network (CNN)}

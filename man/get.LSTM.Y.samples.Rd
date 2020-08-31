@@ -16,8 +16,7 @@ Number of output samples.
 Get number of output samples from outcome tensor
 }
 \seealso{
-\code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.units}},
-  \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.samples}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
+\code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.timesteps}}, \code{\link{get.LSTM.Y.units}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},

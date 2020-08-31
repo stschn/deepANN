@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepRNN.r
 \name{as.LSTM.Y}
 \alias{as.LSTM.Y}
-\title{Outcomes (Y) data format}
+\title{Outcomes (Y) data format for LSTM}
 \usage{
 as.LSTM.Y(Y, timesteps = NULL, reverse = FALSE)
 }
@@ -19,7 +19,7 @@ Dependent on the type of \code{Y} and timesteps. If \code{Y} is a factor, the re
   if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 }
 \description{
-Outcomes (Y) data format
+Outcomes (Y) data format for LSTM
 }
 \seealso{
 \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.X}}, \code{\link{as.ANN.matrix}}, \code{\link{one_hot_encode}},

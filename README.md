@@ -94,10 +94,10 @@ This R library is currently structured in form of the following functional famil
   <li><code>as.lag()</code> transfers a lag from ARIMA(X) to a corresponding lag used for LSTM modeling.</li>
   <li><code>as.timesteps()</code> transfers a lag to a corresponding timesteps value.</li>
   <li><code>as.LSTM.X()</code> resamples a feature matrix into a 3D feature array with the dimensions samples, timesteps and units.</li>
-  <li><code>as.LSTM.Y()</code> creates either a 2D or 3D outcome array with the dimensions samples and units respectively samples, timesteps and units for a metric outcome or a one-hot vector for a non-metric outcome.</li>
   <li><code>get.LSTM.X.samples()</code> returns the number of feature samples.</li>
   <li><code>get.LSTM.X.timesteps()</code> returns the number of timesteps used within the resampled feature matrix.</li>
   <li><code>get.LSTM.X.units()</code> returns the number of feature units.</li>
+  <li><code>as.LSTM.Y()</code> creates either a 2D array with dimensions samples and units respectively a 3D array with dimensions samples, timesteps and units for a metric outcome or a one-hot vector for a non-metric outcome.</li>
   <li><code>get.LSTM.Y.samples()</code> returns the number of outcome samples.</li>
   <li><code>get.LSTM.Y.timesteps()</code> returns the number of outcome timesteps if outcome is a sequence.</li>
   <li><code>get.LSTM.Y.units()</code> returns the number of outcome units.</li>
@@ -118,6 +118,14 @@ This R library is currently structured in form of the following functional famil
   <li><code>get.CNN.image.X.channels()</code> returns the number of color channels of the images.</li>
   <li><code>get.CNN.image.Y.samples()</code> returns the number of image samples or labels.</li>
   <li><code>get.CNN.image.Y.units()</code> returns the number of output units.</li>
+  <li><code>as.CNN.temp.X()</code> resamples a feature matrix into a 3D feature array with the dimensions samples, timesteps and units or into a 4D array with the dimensions samples, subsequences, timesteps and features.</li>
+  <li><code>get.CNN.temp.X.samples()</code> returns the number of feature samples.</li>
+  <li><code>get.CNN.temp.X.timesteps()</code> returns the number of timesteps used within the resampled feature matrix.</li>
+  <li><code>get.CNN.temp.X.units()</code> returns the number of feature units.</li>
+  <li><code>as.CNN.temp.Y()</code> creates either a 2D outcome array with the dimensions samples and units respectively a 3D array with dimensions samples, timesteps and units for a metric outcome or a one-hot vector for a non-metric outcome.</li>
+ <li><code>get.CNN.temp.Y.samples()</code> returns the number of outcome samples.</li>
+  <li><code>get.CNN.temp.Y.timesteps()</code> returns the number of outcome timesteps if outcome is a sequence.</li>
+  <li><code>get.CNN.temp.Y.units()</code> returns the number of outcome units.</li>
 </ul>
 
 <b>Self-Organizing Map (SOM)</b>

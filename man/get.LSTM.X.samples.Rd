@@ -16,8 +16,7 @@ Number of input samples.
 Get number of input samples from feature tensor
 }
 \seealso{
-\code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}},
-  \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
+\code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.timesteps}}, \code{\link{get.LSTM.X.units}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},
