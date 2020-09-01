@@ -17,9 +17,9 @@ This R library is currently structured in form of the following functional famil
 
 <b>Outlier</b>
 <ul>
-  <li><code>outlier()</code> detects outlier thru methods like from Tukey (1977) or maximum likelihood estimation.</li>
+  <li><code>outlier()</code> detects and optionally replaces outliers thru the methods quartiles (from Tukey (1977)), mean (maximum likelihood estimation) or median (scaled median absolute deviation).</li>
   <li><code>outlier.dataset()</code> replaces outliers within a data set.</li>
-  <li><code>winsorize()</code> winsorizes a numerical vector.</li>
+  <li><code>winsorize()</code> winsorizes a numeric vector.</li>
 </ul>
 
 <b>Scaling</b>
@@ -65,8 +65,12 @@ This R library is currently structured in form of the following functional famil
 <ul>
   <li><code>cross_validation_split()</code> splits an entire data set into k folds.</li>
   <li><code>naive_forecast()</code> predicts values for a data series based upon random walk without and with drifts.</li>
-  <li><code>euclidean_distance()</code> calculates the euclidean distance between to numerical vectors.</li>
+  <li><code>euclidean_distance()</code> calculates the euclidean distance between to numeric vectors.</li>
   <li><code>k_nearest_neighbors()</code> identifies the majority class of k nearest neighbors of a query/test instance.</li>
+  <li><code>erf()</code> defines error function (from MATLAB).</li>
+  <li><code>erfc()</code> defines complementary error function (from MATLAB).</li>
+  <li><code>erfinv()</code> defines inverse error function (from MATLAB).</li>
+  <li><code>erfcinv()</code> defines inverse complementary error function (from MATLAB).</li>
 </ul>
 
 <b>Single & Multi Layer Perceptron (SLP, MLP)</b>

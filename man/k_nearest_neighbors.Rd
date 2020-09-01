@@ -4,7 +4,7 @@
 \alias{k_nearest_neighbors}
 \title{k-nearest neighbors}
 \usage{
-k_nearest_neighbors(y, X, test, k = 1)
+k_nearest_neighbors(y, X, test, k = 1L)
 }
 \arguments{
 \item{y}{A column vector of the categories within a feature matrix or data frame.}

@@ -95,7 +95,7 @@ euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 #' @seealso \code{\link{euclidean_distance}}.
 #'
 #' @examples
-k_nearest_neighbors <- function(y, X, test, k = 1) {
+k_nearest_neighbors <- function(y, X, test, k = 1L) {
   distances <- apply(X, 1, euclidean_distance, x2 = test) # calculate euclidean distances (ed)
   df <- data.frame(index = c(1:NROW(distances)), ed = distances) # build up data frame with index and ed
   df <- df[order(df$ed), ] # reorder data frame in ascending order for ed
@@ -105,3 +105,43 @@ k_nearest_neighbors <- function(y, X, test, k = 1) {
   majority_class <- names(which.max(n_neighbors)) # name of the majority class
   return(majority_class)
 }
+
+#' Error function (from MATLAB)
+#'
+#' @param x A numeric vector.
+#'
+#' @return Error function as the integral of the Gaussian distribution with 0 mean and variance 1/2.
+#' @export
+#'
+#' @examples
+erf <- function(x) {2L * pnorm(x * sqrt(2L)) - 1L }
+
+#' Complementary error function (from MATLAB)
+#'
+#' @param x A numeric vector.
+#'
+#' @return Complementary error function, defined as 1 - \code{erf}.
+#' @export
+#'
+#' @examples
+erfc <- function(x) {2L * pnorm(x * sqrt(2L), lower = F) }
+
+#' Inverse error function (from MATLAB)
+#'
+#' @param x A numeric vector.
+#'
+#' @return Inverse error function.
+#' @export
+#'
+#' @examples
+erfinv <- function(x) { qnorm((1L + x) / 2L) / sqrt(2L) }
+
+#' Inverse complementary error function (from MATLAB)
+#'
+#' @param x A numeric vector.
+#'
+#' @return Inverse complementary error function.
+#' @export
+#'
+#' @examples
+erfcinv <- function(x) { qnorm(x / 2L, lower = F) / sqrt(2L) }
