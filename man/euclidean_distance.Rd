@@ -20,6 +20,10 @@ The euclidean distance between these two vectors.
 \seealso{
 Other Machine Learning: 
 \code{\link{cross_validation_split}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{naive_forecast}()}
 }

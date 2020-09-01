@@ -26,6 +26,10 @@ The majority category for a query or test instance.
 
 Other Machine Learning: 
 \code{\link{cross_validation_split}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{euclidean_distance}()},
 \code{\link{naive_forecast}()}
 }

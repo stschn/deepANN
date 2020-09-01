@@ -31,7 +31,7 @@ Definition and detection of outliers
 }
 \examples{
   x <- c(57L, 59L, 60L, 100L, 59L, 58L, 57L, 58L, 300L, 61L, 62L, 60L, 62L, 58L, 57L, -12L)
-  outlier(x, type = "smad")
+  outlier(x, type = "median")
 }
 \references{
 Tukey, John W. (1977): Exploratory Data Analysis. 1977. Reading: Addison-Wesley.

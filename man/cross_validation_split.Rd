@@ -22,6 +22,10 @@ A named list with folds.
 }
 \seealso{
 Other Machine Learning: 
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{euclidean_distance}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{naive_forecast}()}

@@ -25,7 +25,7 @@
 #'
 #' @examples
 #'   x <- c(57L, 59L, 60L, 100L, 59L, 58L, 57L, 58L, 300L, 61L, 62L, 60L, 62L, 58L, 57L, -12L)
-#'   outlier(x, type = "smad")
+#'   outlier(x, type = "median")
 outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...) {
   type <- match.arg(type)
   params <- list(...)

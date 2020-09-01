@@ -15,3 +15,14 @@ Error function as the integral of the Gaussian distribution with 0 mean and vari
 \description{
 Error function (from MATLAB)
 }
+\seealso{
+Other Machine Learning: 
+\code{\link{cross_validation_split}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{euclidean_distance}()},
+\code{\link{k_nearest_neighbors}()},
+\code{\link{naive_forecast}()}
+}
+\concept{Machine Learning}

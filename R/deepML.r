@@ -108,6 +108,8 @@ k_nearest_neighbors <- function(y, X, test, k = 1L) {
 
 #' Error function (from MATLAB)
 #'
+#' @family Machine Learning
+#'
 #' @param x A numeric vector.
 #'
 #' @return Error function as the integral of the Gaussian distribution with 0 mean and variance 1/2.
@@ -117,6 +119,8 @@ k_nearest_neighbors <- function(y, X, test, k = 1L) {
 erf <- function(x) {2L * pnorm(x * sqrt(2L)) - 1L }
 
 #' Complementary error function (from MATLAB)
+#'
+#' @family Machine Learning
 #'
 #' @param x A numeric vector.
 #'
@@ -128,6 +132,8 @@ erfc <- function(x) {2L * pnorm(x * sqrt(2L), lower = F) }
 
 #' Inverse error function (from MATLAB)
 #'
+#' @family Machine Learning
+#'
 #' @param x A numeric vector.
 #'
 #' @return Inverse error function.
@@ -137,6 +143,8 @@ erfc <- function(x) {2L * pnorm(x * sqrt(2L), lower = F) }
 erfinv <- function(x) { qnorm((1L + x) / 2L) / sqrt(2L) }
 
 #' Inverse complementary error function (from MATLAB)
+#'
+#' @family Machine Learning
 #'
 #' @param x A numeric vector.
 #'

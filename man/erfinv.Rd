@@ -15,3 +15,14 @@ Inverse error function.
 \description{
 Inverse error function (from MATLAB)
 }
+\seealso{
+Other Machine Learning: 
+\code{\link{cross_validation_split}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erf}()},
+\code{\link{euclidean_distance}()},
+\code{\link{k_nearest_neighbors}()},
+\code{\link{naive_forecast}()}
+}
+\concept{Machine Learning}
