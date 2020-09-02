@@ -157,13 +157,11 @@ get.CNN.image.Y.units <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.te
 #'
 #' @examples
 as.CNN.temp.X <- function(X, timesteps = 1L, subsequences = NULL, reverse = FALSE) {
-  if (!is.null(subsequences)) {
-    if ((timesteps %% subsequences) != 0) { stop("timesteps must be divided by subsequences without remainder.") }
-    timesteps <- as.integer(timesteps / subsequences)
-  }
   X.tensor <- deepANN::as.LSTM.X(X, timesteps = timesteps, reverse = reverse)
-  if (!is.null(subsequences))
+  if (!is.null(subsequences)) {
+    if (timesteps %% subsequences != 0) { stop("subsequences must be an integer multiple of timesteps.")}
     dim(X.tensor) <- c(dim(X.tensor)[1L], subsequences, timesteps, get.CNN.temp.X.units(X.tensor))
+  }
   return(X.tensor)
 }
 
