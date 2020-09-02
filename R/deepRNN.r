@@ -84,7 +84,7 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
       cnames <- do.call(paste0, list(cnames, "_lag", c(k:(k + N - 1))))
       lagged_y_matrix <- sapply(Y, function(column) {
         lagged_y <- sapply(1:N, function(i) {
-          lagged <- lags(column, (k + i - 1))
+          lagged <- deepANN::lags(column, (k + i - 1))
           lagged <- lagged[(max_lag + 1):(NROW(lagged))]
         })
       })
