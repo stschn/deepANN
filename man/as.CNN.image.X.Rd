@@ -4,14 +4,14 @@
 \alias{as.CNN.image.X}
 \title{Create a 4-dimensional array for image features (input)}
 \usage{
-as.CNN.image.X(images, width, height, channels = 3L)
+as.CNN.image.X(images, height, width, channels = 3L)
 }
 \arguments{
 \item{images}{Image data either a 3D array or a list of file names, e.g. returned by \code{list.files}.}
 
-\item{width}{The width of an image, equal to the number of columns.}
-
 \item{height}{The height of an image, equal to the number of rows.}
+
+\item{width}{The width of an image, equal to the number of columns.}
 
 \item{channels}{The number of channels of an image. A color channel is a primary color (like red, green and blue), 
 equal to a color valence (denotes how light effects the color sensation of an eye or in common of the brain).
@@ -19,7 +19,7 @@ Primary colors can be mixed to produce any color.
 A channel equal \code{1} indicates a grayscale image, \code{3} a color image.}
 }
 \value{
-A 4D feature array with the dimensions samples (number of images), height, width and channel.
+A 4D feature array with the dimensions samples (number of images), height, width and channels.
 }
 \description{
 Create a 4-dimensional array for image features (input)
