@@ -10,7 +10,7 @@
 #' @param fill A value that is used to replace outliers; \code{NULL} (default) indicates no replacement.
 #' @param ... Dependent on \code{type}. 
 #'   For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
-#'   For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{3}.
+#'   For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{2}.
 #'   For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.
 #'
 #' @return Dependent on \code{fill}
@@ -38,7 +38,7 @@ outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...
     upper_boundary <- q3 + (k * IQR(x))
   } else {
   if (type == "mean") {
-    k <- ifelse(length(params) == 0, 3L, params[[1L]])
+    k <- ifelse(length(params) == 0, 2L, params[[1L]])
     m <- mean(x, na.rm = T)
     s <- sd(x, na.rm = T)
     lower_boundary <- m - (k * s)

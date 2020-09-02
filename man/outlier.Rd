@@ -18,7 +18,7 @@ outlier(x, type = c("quartiles", "mean", "median"), fill = NULL, ...)
 
 \item{...}{Dependent on \code{type}. 
 For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
-For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{3}.
+For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{2}.
 For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.}
 }
 \value{
