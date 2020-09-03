@@ -208,7 +208,7 @@ as.tensor.3D <- function(data, ncol = 1, reverse = FALSE, by = c("row", "col", "
   # M <- NCOL(m)
   # N <- NROW(m) - ncol + 1
   # tensor <- array(NA, dim = c(N, ncol, M))
-  # for (j in 1:M) { tensor[, , j] <- vector.as.matrix(m[, j], ncol, reverse, by) }
+  # for (j in 1:M) { tensor[, , j] <- vector.as.ANN.matrix(m[, j], ncol, reverse, by) }
   m <- as.matrix(data)
   m <- apply(m, 2, vector.as.ANN.matrix, ncol, reverse, by)
   tensor <- array(m, dim = c(NROW(m) / ncol, ncol, NCOL(m)))
@@ -247,7 +247,7 @@ as.MLP.Y <- function(Y) {
   # Factor outcome must be rebuild as a one-hot vector
   if (isTRUE((NCOL(f <- Filter(is.factor, Y)) > 0L) && (length(f) > 0))) {
     f <- as.data.frame(f)
-    m <- lapply(f, one_hot_encode)
+    m <- lapply(f, deepANN::one_hot_encode)
     m <- do.call(cbind, m)
     return(m)
   }
