@@ -238,7 +238,7 @@ as.LSTM.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
   # Factor outcome must be rebuild as a one-hot vector
   if (isTRUE((NCOL(f <- Filter(is.factor, Y)) > 0L) && (length(f) > 0))) {
     f <- as.data.frame(f)
-    m <- lapply(f, one_hot_encode)
+    m <- lapply(f, deepANN::one_hot_encode)
     m <- do.call(cbind, m)
     return(m)
   }
