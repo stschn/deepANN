@@ -64,20 +64,20 @@ lags <- function(x, k = 1, between = FALSE, na = NA) {
   }
 }
 
-#' Build a stationary data series thru differencing
+#' Build a stationary data series by differencing
 #'
 #' @family Time Series
 #'   
 #' @param dataset A data set, usually a data frame.
 #' @param type The type of differencing to be used. Available types are \code{simple}, \code{log} and \code{percentage}.
-#' @param y The indices of the columns which are used to build stationary series.
+#' @param columns The names or indices of the columns to be differentiated to build a stationary series; if \code{NULL}, all columns are used.
 #' @param differences The number of differences for building stationary series. That's only relevant for the \code{simple} type.
 #' @param suffix The suffix for every newly created column of the stationary series.
-#' @param adjust Controls whether NA values are included to fill up the entire data set in the newly
+#' @param adjust A logical value indicating whether NA values are included to fill up the entire data set in the newly
 #'   created columns for the stationary series (\code{FALSE}) or the entire data set is shorten to the length
 #'   of the stationary data series (\code{TRUE}).
 #'
-#' @details Differencing is a method of transforming a time series data set. The equations for the different types of differencing are
+#' @details Differencing is a method of transforming a time series. The equations for the different types of differencing are
 #'   \code{simple}: d(t) = x(t) - x(t-1). 
 #'   \code{log}: d(t) = ln(x(t) / x(t-1)) = ln(x(t)) - ln(x(t-1)). 
 #'   \code{percentage}: d(t) = (x(t) / x(t-1)) - 1.
@@ -88,23 +88,33 @@ lags <- function(x, k = 1, between = FALSE, na = NA) {
 #' @seealso \code{\link{invert_differencing}}.
 #'
 #' @examples
-build.stationary <- function(dataset, type = c("simple", "log", "percentage"), y = 2, differences = 1, suffix = "_delta", adjust = TRUE) {
+build.stationary <- function(dataset, type = c("simple", "log", "percentage"), columns = 2L, differences = 1L, suffix = "_delta", adjust = TRUE) {
   type <- match.arg(type)
   dataset <- as.data.frame(dataset)
-  cnames <- names(dataset)[y]
+  cnames <- names(dataset)
+  if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(dataset))))) || 
+      (((is.character(columns))) && (!all(columns %in% cnames))))
+    stop("columns are not in dataset.")
+  if (is.null(columns)) columns <- cnames
+  if (is.character(columns)) {
+    columns <- which(cnames %in% columns)
+  } else {
+    columns <- as.integer(columns)
+  }
+  cnames <- cnames[columns]
   cnames <- do.call(paste0, list(cnames, suffix))
   if (type == "simple") {
-    delta <- sapply(y, function(x) { diff(dataset[, x], differences = differences) })
+    delta <- sapply(columns, function(x) { diff(dataset[, x], differences = differences) })
   } else {
   if (type == "log") {
-    delta <- sapply(y, function(x) { diff.log(dataset[, x]) })
+    delta <- sapply(columns, function(x) { diff.log(dataset[, x]) })
   } else {
   if (type == "percentage") {
-    delta <- sapply(y, function(x) { diff.percentage(dataset[, x]) })
+    delta <- sapply(columns, function(x) { diff.percentage(dataset[, x]) })
   }}}
   colnames(delta) <- cnames
   if (adjust) {
-    dataset <- cbind(dataset[-c(1:differences), ], delta)
+    dataset <- cbind(dataset[-c(1L:differences), ], delta)
   } else {
     dataset <- cbind(dataset, rbind(rep(NA, differences), delta))
   }
