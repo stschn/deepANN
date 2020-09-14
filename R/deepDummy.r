@@ -93,7 +93,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 #' @examples
 append_rows <- function(dataset, columns = NULL, n = 1, type = c("copy", "minmax")) {
   dataset <- as.data.frame(dataset)
-  if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(dataset))))) || 
+  if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) || 
      (((is.character(columns))) && (!all(columns %in% names(dataset)))))
        stop("columns are not in dataset.")
   if (!is.null(columns))

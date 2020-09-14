@@ -175,10 +175,10 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
 scale.datasets <- function(trainset, testset, columns = NULL, type = c("minmax", "zscore", "log")) {
   trainset <- as.data.frame(trainset)
   testset <- as.data.frame(testset)
-  if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(trainset))))) || 
+  if (((is.numeric(columns)) && (!all(columns %in% seq_along(trainset)))) || 
       (((is.character(columns))) && (!all(columns %in% names(trainset)))))
     stop("columns are not in train data set.")
-  if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(testset))))) || 
+  if (((is.numeric(columns)) && (!all(columns %in% seq_along(testset)))) || 
       (((is.character(columns))) && (!all(columns %in% names(testset)))))
     stop("columns are not in test data set.")
   cnames <- names(trainset)

@@ -92,7 +92,7 @@ build.stationary <- function(dataset, type = c("simple", "log", "percentage"), c
   type <- match.arg(type)
   dataset <- as.data.frame(dataset)
   cnames <- names(dataset)
-  if (((is.numeric(columns)) && (!all(columns %in% c(seq_along(dataset))))) || 
+  if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) || 
       (((is.character(columns))) && (!all(columns %in% cnames))))
     stop("columns are not in dataset.")
   if (is.null(columns)) columns <- cnames
