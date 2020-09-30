@@ -23,6 +23,7 @@ Other Machine Learning:
 \code{\link{erfinv}()},
 \code{\link{euclidean_distance}()},
 \code{\link{k_nearest_neighbors}()},
+\code{\link{moving_average}()},
 \code{\link{naive_forecast}()}
 }
 \concept{Machine Learning}

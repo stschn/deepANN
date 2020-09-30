@@ -106,6 +106,42 @@ k_nearest_neighbors <- function(y, X, test, k = 1L) {
   return(majority_class)
 }
 
+#' Weighted moving average
+#' 
+#' @family Machine Learning
+#'
+#' @param x A numeric vector.
+#' @param n The order of the moving average.
+#' @param weights Optional weights.
+#'
+#' @return A vector with the (weighted) moving average.
+#' @export
+#'
+#' @examples
+#'   x <- c(855, 847, 1000, 635, 346, 2146, 1328, 1322, 3124, 1012, 1280, 2435, 1016, 3465, 1107, 1172, 3432, 836, 142, 345, 2603, 739, 716, 880, 1008, 112, 361)
+#'   moving_average(x)
+#'   moving_average(x, weights = c(1L, 2L, 3L))
+moving_average <- function(x, n = 3L, weights = NULL) {
+  x <- c(t(x))
+  if (is.null(weights)) {
+    ma <- lapply(seq_len(length(x) - n + 1L), function(i) {
+      start <- i
+      end <- i + n - 1L
+      mean(x[start:end])
+    })
+  } else {
+    if (length(weights) != n)
+      stop("number of weights must be equal to the order n")
+    s <- sum(weights)
+    ma <- lapply(seq_len(length(x) - n + 1L), function(i) {
+      start <- i
+      end <- i + n - 1L
+      sum(x[start:end] * weights) / s
+    })
+  }
+  return(unlist(ma))
+}
+
 #' Error function (from MATLAB)
 #'
 #' @family Machine Learning
