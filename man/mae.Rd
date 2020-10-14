@@ -26,6 +26,7 @@ In Machine and Deep Learning, MAE is also known as L1 loss function.
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{entropy}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},

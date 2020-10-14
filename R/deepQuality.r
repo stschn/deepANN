@@ -288,3 +288,24 @@ gini_impurity <- function(x) {
   probs <- occurences / total
   return(sum(probs * (1 - probs)))
 }
+
+#' Shannon-Entropy
+#'
+#' @family Quality
+#'
+#' @param x A vector of values, usually character labels as raw instances or as class frequencies.
+#'
+#' @details Shannon-Entropy is a concept from information theory and represents a quantification of the level 
+#'   of impurity or randomness that exists within a partition with class levels of a factor variable \code{x}.
+#'   
+#' @return Entropy.
+#' @export
+#'
+#' @examples
+#'   entropy(c("no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no"))
+#'   entropy(c("no" = 5, "yes" = 9))
+entropy <- function(x) {
+  if (is(x, "numeric")) occurences <- x else occurences <- table(x)
+  probabilities <- prop.table(occurences)
+  return(-sum(probabilities * log2(probabilities)))
+}

@@ -166,6 +166,10 @@ one_hot_encode <- function(x) {
   # for (i in 1:NROW(x)) {
   #   m[i, f[[i]]] <- 1
   # }
+  
+  # m <- lapply(levels(f), function(l) { (f == l) * 1 })
+  # m <- do.call(cbind, m)
+
   m <- model.matrix(~0 + f)
   colnames(m) <- levels(f)
   return(m)

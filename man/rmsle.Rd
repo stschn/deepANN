@@ -24,6 +24,7 @@ Root mean square logarithmic error (RMSLE)
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{entropy}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},
