@@ -289,14 +289,16 @@ gini_impurity <- function(x) {
   return(sum(probabilities * (1 - probabilities)))
 }
 
-#' Shannon-Entropy
+#' Shannon entropy
 #'
 #' @family Quality
 #'
 #' @param x A vector of values, usually character labels as raw instances or as class frequencies.
+#' @param base A positive or complex number: the base with respect to which logarithms are computed.
+#'   Defaults to \code{NULL} indicates that the base is automatically determined by the number of class levels of \code{x}.
 #'
-#' @details Shannon-Entropy is a concept from information theory and represents a quantification of the level 
-#'   of impurity or randomness that exists within a partition with class levels of a factor variable \code{x}.
+#' @details Shannon entropy is a concept from information theory and represents a quantification of the level 
+#'   of impurity or randomness that exists within a partition with class levels of \code{x}.
 #'   
 #' @return Entropy.
 #' @export
@@ -304,8 +306,9 @@ gini_impurity <- function(x) {
 #' @examples
 #'   entropy(c("no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no"))
 #'   entropy(c("no" = 5, "yes" = 9))
-entropy <- function(x) {
+entropy <- function(x, base = NULL) {
   if (is(x, "numeric")) occurences <- x else occurences <- table(x)
+  if (is.null(base)) base <- length(occurences)
   probabilities <- prop.table(occurences)
-  return(-sum(probabilities * log2(probabilities)))
+  return(-sum(probabilities * log(probabilities, base = base)))
 }

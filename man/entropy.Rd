@@ -2,22 +2,25 @@
 % Please edit documentation in R/deepQuality.r
 \name{entropy}
 \alias{entropy}
-\title{Shannon-Entropy}
+\title{Shannon entropy}
 \usage{
-entropy(x)
+entropy(x, base = NULL)
 }
 \arguments{
 \item{x}{A vector of values, usually character labels as raw instances or as class frequencies.}
+
+\item{base}{A positive or complex number: the base with respect to which logarithms are computed.
+Defaults to \code{NULL} indicates that the base is automatically determined by the number of class levels of \code{x}.}
 }
 \value{
 Entropy.
 }
 \description{
-Shannon-Entropy
+Shannon entropy
 }
 \details{
-Shannon-Entropy is a concept from information theory and represents a quantification of the level 
-  of impurity or randomness that exists within a partition with class levels of a factor variable \code{x}.
+Shannon entropy is a concept from information theory and represents a quantification of the level 
+  of impurity or randomness that exists within a partition with class levels of \code{x}.
 }
 \examples{
   entropy(c("no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no"))
