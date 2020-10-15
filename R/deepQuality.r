@@ -285,8 +285,8 @@ accuracy <- function(actuals, preds, na.rm = FALSE) {
 gini_impurity <- function(x) {
   if (is(x, "numeric")) occurences <- x else occurences <- table(x)
   total <- sum(occurences)
-  probs <- occurences / total
-  return(sum(probs * (1 - probs)))
+  probabilities <- occurences / total
+  return(sum(probabilities * (1 - probabilities)))
 }
 
 #' Shannon-Entropy
