@@ -26,6 +26,7 @@ Other Machine Learning:
 \code{\link{erf}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{moving_average}()},
-\code{\link{naive_forecast}()}
+\code{\link{naive_forecast}()},
+\code{\link{predict.kmeans}()}
 }
 \concept{Machine Learning}

@@ -142,6 +142,29 @@ moving_average <- function(x, n = 3L, weights = NULL) {
   return(unlist(ma))
 }
 
+#' Prediction for kmeans
+#'
+#' @family Machine Learning
+#' 
+#' @param object An object from type result of kmeans.
+#' @param newdata A vector or matrix with new data to predict labels for.
+#'
+#' @return A vector of predicted labels.
+#' @export
+#'
+#' @seealso \code{\link[stats]{kmeans}}.
+#' 
+#' @examples
+predict.kmeans <- function(object, newdata) {
+  centers <- object$centers
+  p <- apply(newdata, 1L, function(row_n) { 
+    apply(centers, 1L, function(row_c) {
+      stats::dist(rbind(row_n, row_c))
+    })})
+  p <- t(p)
+  return(as.vector(apply(p, 1L, which.min)))
+}
+
 #' Error function (from MATLAB)
 #'
 #' @family Machine Learning

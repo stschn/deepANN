@@ -69,6 +69,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>euclidean_distance()</code> calculates the euclidean distance between to numeric vectors.</li>
   <li><code>k_nearest_neighbors()</code> identifies the majority class of k nearest neighbors of a query/test instance.</li>
   <li><code>moving_average()</code> calculates the (weighted) moving average.</li>
+  <li><code>predict.kmeans()</code> predicts kmeans cluster for feature data.</li>
   <li><code>erf()</code> defines error function (from MATLAB).</li>
   <li><code>erfc()</code> defines complementary error function (from MATLAB).</li>
   <li><code>erfinv()</code> defines inverse error function (from MATLAB).</li>
