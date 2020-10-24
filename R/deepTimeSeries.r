@@ -293,7 +293,7 @@ diffinv.percentage <- function(delta, origin) {
 #' @family Time Series
 #'
 #' @param dataset A data set or time series, usually a data frame.
-#' @param p The index of the periodic column.
+#' @param column The name or index of the periodic column.
 #' @param type Different subsetting types
 #'   \code{seq} A sequence specified thru start index and increment passed in \code{...} as numbers.
 #'   \code{weekday} Certain days of week are extracted from the data set whereby the days are passed in \code{...} as strings.
@@ -309,7 +309,7 @@ diffinv.percentage <- function(delta, origin) {
 #' @export
 #'
 #' @examples
-period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week", "month", "quarter", "year", "season"), ...) {
+period <- function(dataset, column = 1L, type = c("seq", "weekday", "monthday", "week", "month", "quarter", "year", "season"), ...) {
   # internal constants for day of week and month of year
   ts.day.name <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
   ts.month.name <- month.name
@@ -320,7 +320,16 @@ period <- function(dataset, p = 1, type = c("seq", "weekday", "monthday", "week"
   type <- match.arg(type)
   # period column
   dataset <- as.data.frame(dataset)
-  periods <- dataset[[p]] # extract periods as row vector
+  cnames <- names(dataset)
+  if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) || 
+      (((is.character(column))) && (!all(column %in% cnames))))
+    stop("periodic column is not in dataset.")
+  if (is.character(column)) {
+    column <- which(cnames %in% column)
+  } else {
+    column <- as.integer(column)
+  }
+  periods <- dataset[[column]] # extract periods as row vector
   if (type == "seq") {
     if (length(params) < 2) { stop("specify start index and increment of the sequence.") }
     start <- params[[1L]]

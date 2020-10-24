@@ -6,7 +6,7 @@
 \usage{
 period(
   dataset,
-  p = 1,
+  column = 1L,
   type = c("seq", "weekday", "monthday", "week", "month", "quarter", "year", "season"),
   ...
 )
@@ -14,7 +14,7 @@ period(
 \arguments{
 \item{dataset}{A data set or time series, usually a data frame.}
 
-\item{p}{The index of the periodic column.}
+\item{column}{The name or index of the periodic column.}
 
 \item{type}{Different subsetting types
 \code{seq} A sequence specified thru start index and increment passed in \code{...} as numbers.
