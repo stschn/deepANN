@@ -28,6 +28,7 @@ Min-Max Scaling
 
 Other Scaling: 
 \code{\link{scale.datasets}()},
+\code{\link{scale.dataset}()},
 \code{\link{scale.log}()},
 \code{\link{scale.zscore}()},
 \code{\link{scaling}()}

@@ -34,6 +34,7 @@ Scaling of a numeric vector
 
 Other Scaling: 
 \code{\link{scale.datasets}()},
+\code{\link{scale.dataset}()},
 \code{\link{scale.log}()},
 \code{\link{scale.minmax}()},
 \code{\link{scale.zscore}()}

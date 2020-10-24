@@ -28,6 +28,7 @@ Scaling of a train and test data set
 \code{\link{scaling}}
 
 Other Scaling: 
+\code{\link{scale.dataset}()},
 \code{\link{scale.log}()},
 \code{\link{scale.minmax}()},
 \code{\link{scale.zscore}()},
