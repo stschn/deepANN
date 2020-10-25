@@ -21,6 +21,14 @@ The majority category for a query or test instance.
 \description{
 \code{k_nearest_neighbors} calculates the majority category (class label) of k nearest neighbors of a query or test instance.
 }
+\examples{
+  df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170),
+                   weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64),
+                   size = c(rep("M", 6), rep("L", 11)))
+  df$size <- as.factor(df$size)
+  x <- setNames(c(161, 61), c("height", "weight")) # query instance, e.g. a new customer
+  k_nearest_neighbors(df$size, df[, 1L:2L], x, k = 5L)
+}
 \seealso{
 \code{\link{euclidean_distance}}.
 

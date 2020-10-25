@@ -76,6 +76,9 @@ naive_forecast <- function(x, drift = 0, na = NA) {
 #' @export
 #'
 #' @examples
+#'   x1 <- c(20, 1, 41, 13, 5, 69)
+#'   x2 <- c(11, 2, 23, 4, 10, 67)
+#'   euclidean_distance(x1, x2)
 euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 
 #' k-nearest neighbors
@@ -95,6 +98,12 @@ euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 #' @seealso \code{\link{euclidean_distance}}.
 #'
 #' @examples
+#'   df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170),
+#'                    weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64),
+#'                    size = c(rep("M", 6), rep("L", 11)))
+#'   df$size <- as.factor(df$size)
+#'   x <- setNames(c(161, 61), c("height", "weight")) # query instance, e.g. a new customer
+#'   k_nearest_neighbors(df$size, df[, 1L:2L], x, k = 5L)
 k_nearest_neighbors <- function(y, X, test, k = 1L) {
   distances <- apply(X, 1, euclidean_distance, x2 = test) # calculate euclidean distances (ed)
   df <- data.frame(index = c(1:NROW(distances)), ed = distances) # build up data frame with index and ed

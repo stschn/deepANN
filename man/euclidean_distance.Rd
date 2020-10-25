@@ -17,6 +17,11 @@ The euclidean distance between these two vectors.
 \description{
 \code{euclidean_distance} calculates the euclidean distance between two vectors (or scalars).
 }
+\examples{
+  x1 <- c(20, 1, 41, 13, 5, 69)
+  x2 <- c(11, 2, 23, 4, 10, 67)
+  euclidean_distance(x1, x2)
+}
 \seealso{
 Other Machine Learning: 
 \code{\link{cross_validation_split}()},
