@@ -8,7 +8,8 @@
   dataset,
   columns = NULL,
   type = c("minmax", "zscore", "log"),
-  use.attr = TRUE
+  invert = FALSE,
+  ...
 )
 }
 \arguments{
@@ -18,13 +19,12 @@
 
 \item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).}
 
-\item{use.attr}{A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled columns of \code{dataset}.}
+\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{columns} are already scaled vectors and scaling will be inverted.}
+
+\item{...}{Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.}
 }
 \value{
-The scaled dataset if \code{use.attr = T} (default), or a named list dependent on the \code{type}.
-  \code{minmax}: The first element stores the min value, the second element the max value, and the third element the scaled dataset.
-  \code{zscore}: The first element stores the mean value, the second element the sd value, and the third element the scaled dataset.
-  \code{log}: The first element stores the scaled dataset.
+The scaled \code{dataset}.
 }
 \description{
 Scaling of a data set

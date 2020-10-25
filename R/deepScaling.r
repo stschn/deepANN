@@ -161,18 +161,17 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
 #' @param dataset A data set, usually a matrix or data frame.
 #' @param columns The names or indices of the columns to be scaled.
 #' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
-#' @param use.attr A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled columns of \code{dataset}.
+#' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{columns} are already scaled vectors and scaling will be inverted.
+#' @param ... Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.
 #'
-#' @return The scaled dataset if \code{use.attr = T} (default), or a named list dependent on the \code{type}.
-#'   \code{minmax}: The first element stores the min value, the second element the max value, and the third element the scaled dataset.
-#'   \code{zscore}: The first element stores the mean value, the second element the sd value, and the third element the scaled dataset.
-#'   \code{log}: The first element stores the scaled dataset.
+#' @return The scaled \code{dataset}.
 #' @export
 #'
 #' @seealso \code{\link{scaling}}
 #'
 #' @examples
-scale.dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", "log"), use.attr = TRUE) {
+scale.dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", "log"), invert = FALSE, ...) {
+  dataset <- as.data.frame(dataset)
   if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) || 
       (((is.character(columns))) && (!all(columns %in% names(dataset)))))
     stop("columns are not in dataset.")
@@ -185,33 +184,12 @@ scale.dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", 
   }
   remaining_dataset <- dataset[-columns_idx]
   type <- match.arg(type)
-  if (isTRUE(use.attr)) {
-    dataset <- as.data.frame(lapply(dataset[columns_idx], scaling, type = type, use.attr = T, invert = F))
-    dataset <- cbind.data.frame(remaining_dataset, dataset)[cnames]
-    return(dataset)
-  } else {  
-    l <- list()
-    if (type == "minmax") {
-      l[[1L]] <- sapply(dataset[columns_idx], min)
-      l[[2L]] <- sapply(dataset[columns_idx], max)
-      l[[3L]] <- as.data.frame(sapply(dataset[columns_idx], scaling, type = type, use.attr = F, invert = F))
-      l[[3L]] <- cbind.data.frame(remaining_dataset, l[[3L]])[cnames]
-      names(l) <- c("min", "max", "data")
-    } else {
-    if (type == "zscore") {
-      l[[1L]] <- sapply(dataset[columns_idx], mean)
-      l[[2L]] <- sapply(dataset[columns_idx], sd)
-      l[[3L]] <- as.data.frame(sapply(dataset[columns_idx], scaling, type = type, use.attr = F, invert = F))
-      l[[3L]] <- cbind.data.frame(remaining_dataset, l[[3L]])[cnames]
-      names(l) <- c("mean", "sd", "data")
-    } else {
-    if (type == "log") {
-      l[[1L]] <- as.data.frame(sapply(dataset[columns_idx], scaling, type = type, use.attr = F, invert = F))
-      l[[1L]] <- cbind.data.frame(remaining_dataset, l[[1L]])[cnames]
-      names(l) <- c("data")
-    }}}
-    return(l)
-  }
+  scaled <- as.data.frame(lapply(seq_along(dataset[columns_idx]), function(i) {
+    scaling(dataset[[i]], type = type, use.attr = T, invert = invert, ...) # it's important to pass a vector to access the attributes for invert scaling
+  }))
+  names(scaled) <- names(dataset[columns_idx])
+  dataset <- cbind.data.frame(remaining_dataset, scaled)[cnames]
+  return(dataset)
 }
 
 #' Scaling of a train and test data set
