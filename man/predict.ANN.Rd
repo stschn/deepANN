@@ -69,7 +69,9 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
+\code{\link{get.MLP.X.samples}()},
 \code{\link{get.MLP.X.units}()},
+\code{\link{get.MLP.Y.samples}()},
 \code{\link{get.MLP.Y.units}()},
 \code{\link{vector.as.ANN.matrix}()},
 \code{\link{vector.as.numeric}()}

@@ -88,7 +88,9 @@ This R library is currently structured in form of the following functional famil
   <li><code>as.tensor.3D()</code> transforms data into a three-dimensional tensor.</li>
   <li><code>as.MLP.X()</code> creates a 2D feature array with the dimensions samples and units.</li>
   <li><code>as.MLP.Y()</code> creates a 2D outcome array with the dimensions samples and units for a metric outcome or a one-hot vector for a non-metric outcome.</li>
+  <li><code>get.MLP.X.samples()</code> returns the number of feature samples.</li>
   <li><code>get.MLP.X.units()</code> returns the number of feature units.</li>
+  <li><code>get.MLP.Y.samples()</code> returns the number of outcome samples.</li>
   <li><code>get.MLP.Y.units()</code> returns the number of outcome units.</li>
   <li><code>build.MLP()</code> builds a sequential SLP/MLP model with stacked dense layers and optionally dropout layers.</li>
   <li><code>fit.MLP()</code> encapsulates building and fitting a SLP/MLP model.</li>

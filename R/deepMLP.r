@@ -255,7 +255,20 @@ as.MLP.Y <- function(Y) {
   else { return(as.tensor.2D(as.ANN.matrix(Y))) }
 }
 
-#' Get number of input units from 2-dimensional feature tensor
+#' Get number of input samples from feature tensor
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param X.tensor A two-dimensional array of the feature matrix produced by \code{as.MLP.X}.
+#' @return Number of input samples.
+#' @export
+#'
+#' @seealso \code{\link{as.MLP.X}}, \code{\link{get.MLP.X.units}}.
+#'
+#' @examples
+get.MLP.X.samples <- function(X.tensor) { return(dim(X.tensor)[1L]) }
+
+#' Get number of input units from feature tensor
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
@@ -268,6 +281,19 @@ as.MLP.Y <- function(Y) {
 #'
 #' @examples
 get.MLP.X.units <- function(X.tensor) { return(dim(X.tensor)[2L]) }
+
+#' Get number of output samples from outcome tensor
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param Y.tensor A tensor produced by \code{as.MLP.Y}.
+#' @return Number of output samples.
+#' @export
+#'
+#' @seealso \code{\link{as.MLP.Y}}, \code{\link{get.MLP.Y.units}}.
+#'
+#' @examples
+get.MLP.Y.samples <- function(Y.tensor) { return(dim(Y.tensor)[1L]) }
 
 #' Get number of output units from 2-dimensional outcome tensor
 #'

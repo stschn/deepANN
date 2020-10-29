@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepMLP.r
 \name{get.MLP.X.units}
 \alias{get.MLP.X.units}
-\title{Get number of input units from 2-dimensional feature tensor}
+\title{Get number of input units from feature tensor}
 \usage{
 get.MLP.X.units(X.tensor)
 }
@@ -13,7 +13,7 @@ get.MLP.X.units(X.tensor)
 Number of input units or features.
 }
 \description{
-Get number of input units from 2-dimensional feature tensor
+Get number of input units from feature tensor
 }
 \seealso{
 \code{\link{as.MLP.X}}, \code{\link{get.MLP.Y.units}}.
@@ -28,6 +28,8 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
+\code{\link{get.MLP.X.samples}()},
+\code{\link{get.MLP.Y.samples}()},
 \code{\link{get.MLP.Y.units}()},
 \code{\link{predict.ANN}()},
 \code{\link{vector.as.ANN.matrix}()},
