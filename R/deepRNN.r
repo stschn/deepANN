@@ -9,9 +9,9 @@
 #' @family Recurrent Neural Network (RNN)
 #'
 #' @param dataset A data set, usually a matrix or data frame.
-#' @param x The column indices which spawn the feature matrix.
-#' @param y The column indices of the outcomes.
-#' @param other_columns The column indices of other columns which play an important role, e.g. a datetime column.
+#' @param x The names or indices of the feature columns.
+#' @param y The names or indices of the outcome columns.
+#' @param other_columns The names or indices of further columns, e.g. a periodic column.
 #' @param timesteps A number or vector of timesteps for \code{x} and \code{y}. A timestep denotes the number of different periods of the values within one sample.
 #'   A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
 #'   If only one value is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. In this case, \code{y} will
@@ -38,6 +38,30 @@
 #' @examples
 get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0,
                         y_as_feature.type = c("none", "plain", "timesteps"), y_as_feature.lag = 0) {
+
+  check_column <- function(dataset, column = NULL, as.int = TRUE, err_column = "columns") {
+    dataset <- as.data.frame(dataset)
+    cnames <- names(dataset)
+    result <- NULL
+    if (!is.null(column)) {
+      if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) || 
+          (((is.character(column))) && (!all(column %in% cnames))))
+        stop(paste0(err_column, " are not in dataset"))
+      if (as.int) {
+        if (class(column) %in% c("character")) {
+          result <- as.integer(which(cnames %in% column))
+        } else {
+          result <- as.integer(column)
+        }} else {
+          result <- column
+        }
+    }
+    return(result)
+  }
+  x <- check_column(dataset, x, err_column = "features")
+  y <- check_column(dataset, y, err_column = "outcomes")
+  other_columns <- check_column(dataset, other_columns, err_column = "other columns")
+
   data_list <- list()
   y.sequence <- FALSE
   df <- as.data.frame(dataset)

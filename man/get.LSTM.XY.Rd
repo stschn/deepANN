@@ -18,11 +18,11 @@ get.LSTM.XY(
 \arguments{
 \item{dataset}{A data set, usually a matrix or data frame.}
 
-\item{x}{The column indices which spawn the feature matrix.}
+\item{x}{The names or indices of the feature columns.}
 
-\item{y}{The column indices of the outcomes.}
+\item{y}{The names or indices of the outcome columns.}
 
-\item{other_columns}{The column indices of other columns which play an important role, e.g. a datetime column.}
+\item{other_columns}{The names or indices of further columns, e.g. a periodic column.}
 
 \item{timesteps}{A number or vector of timesteps for \code{x} and \code{y}. A timestep denotes the number of different periods of the values within one sample.
 A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
