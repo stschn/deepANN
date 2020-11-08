@@ -24,6 +24,7 @@ Classification accuracy
 }
 \seealso{
 Other Quality: 
+\code{\link{cross_entropy}()},
 \code{\link{entropy}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},

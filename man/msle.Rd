@@ -24,6 +24,7 @@ Mean squared logarithmic error (MSLE)
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{cross_entropy}()},
 \code{\link{entropy}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},

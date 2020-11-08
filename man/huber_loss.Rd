@@ -31,6 +31,7 @@ Huber, Peter J. (1964): Robust Estimation of a Location Parameter. In: Annals of
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{cross_entropy}()},
 \code{\link{entropy}()},
 \code{\link{gini_impurity}()},
 \code{\link{log_cosh_loss}()},

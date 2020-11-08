@@ -29,6 +29,7 @@ Gini impurity is the probability of how often a randomly chosen element from a s
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
+\code{\link{cross_entropy}()},
 \code{\link{entropy}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},

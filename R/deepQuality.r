@@ -312,3 +312,25 @@ entropy <- function(x, base = NULL) {
   probabilities <- prop.table(occurences)
   return(-sum(probabilities * log(probabilities, base = base)))
 }
+
+#' Cross entropy
+#'
+#' @family Quality
+#'
+#' @param p A vector of ground truth probabilities (true probability distribution).
+#' @param q A vector of estimated probabilities (estimated probability distribution).
+#' @param base A positive or complex number: the base with respect to which logarithms are computed.
+#'   Defaults to \code{NULL} is equal to e = \code{exp(1)}.
+#'
+#' @details Cross entropy quantifies the difference between two probability distributions.
+#'   
+#' @return Cross entropy.
+#' @export
+#'
+#' @examples
+#'   p <- c(0.10, 0.40, 0.50) # ground truth values
+#'   q <- c(0.80, 0.15, 0.05) # estimated values, e.g. given by softmax function
+#'   cross_entropy(p, q)
+cross_entropy <- function(p, q, base = NULL) {
+  return(-sum(p * log(q, base = ifelse(is.null(base), exp(1L), base))))
+}

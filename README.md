@@ -61,6 +61,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>accuracy()</code> calculates the fraction of correct predictions.</li>
   <li><code>gini_impurity()</code> calculates the Gini impurity.</li>
   <li><code>entropy()</code> calculates the Shannon entropy.</li>
+  <li><code>cross_entropy()</code> calculates the cross-entropy.</li>
 </ul>
 
 <b>Machine Learning (ML)</b>
