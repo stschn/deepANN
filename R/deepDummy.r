@@ -159,19 +159,23 @@ effectcoding <- function(x) {
 #'
 #' @examples
 one_hot_encode <- function(x) {
-  f <- as.factor(x)
+  if (!is.factor(x)) x <- as.factor(x)
   # n <- nlevels(f)
   # m <- matrix(0, nrow = NROW(x), ncol = n)
-  # colnames(m) <- levels(f)
   # for (i in 1:NROW(x)) {
   #   m[i, f[[i]]] <- 1
   # }
   
-  # m <- lapply(levels(f), function(l) { (f == l) * 1 })
-  # m <- do.call(cbind, m)
+  # doesn't work with a single-level factor
+  # m <- model.matrix(~0 + f)
 
-  m <- model.matrix(~0 + f)
-  colnames(m) <- levels(f)
+  m <- lapply(levels(x), function(lvl) { 
+    l <- (x == lvl) * 1L
+    l[is.na(l)] <- 0L
+    l
+  })
+  m <- do.call(cbind, m)
+  colnames(m) <- levels(x)
   return(m)
 }
 
