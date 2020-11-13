@@ -9,6 +9,7 @@
 #'
 #' @examples
 vector.as.numeric <- function(x) {
+  if (is.logical(x)) { x <- as.integer(x) }
   if (is.character(x)) { x <- as.factor(x) }
   if (is.factor(x)) { x <- as.integer(x) }
   return(x)
