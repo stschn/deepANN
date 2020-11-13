@@ -185,7 +185,7 @@ as.tensor.1D <- function(data, reverse = FALSE) {
 as.tensor.2D <- function(data, reverse = FALSE) {
   m <- as.matrix(data)
   if (reverse) { m <- apply(m, 2, rev) }
-  tensor <- array(m, dim = c(NROW(m), NCOL(m)))
+  tensor <- array(m, dim = c(NROW(m), NCOL(m)), dimnames = list(NULL, colnames(m)))
   return(tensor)
 }
 
@@ -212,7 +212,7 @@ as.tensor.3D <- function(data, ncol = 1, reverse = FALSE, by = c("row", "col", "
   # for (j in 1:M) { tensor[, , j] <- vector.as.ANN.matrix(m[, j], ncol, reverse, by) }
   m <- as.matrix(data)
   m <- apply(m, 2, vector.as.ANN.matrix, ncol, reverse, by)
-  tensor <- array(m, dim = c(NROW(m) / ncol, ncol, NCOL(m)))
+  tensor <- array(m, dim = c(NROW(m) / ncol, ncol, NCOL(m)), dimnames = list(NULL, NULL, colnames(m)))
   return(tensor)
 }
 
