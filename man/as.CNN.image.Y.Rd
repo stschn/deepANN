@@ -7,10 +7,10 @@
 as.CNN.image.Y(labels)
 }
 \arguments{
-\item{labels}{The labels of the images}
+\item{labels}{The labels of the images either as factors for single-label classification or as a numeric or logical matrix for multi-label classification.}
 }
 \value{
-A one-hot encoded vector for the image labels
+A one-hot encoded vector or matrix for the image labels.
 }
 \description{
 Create a one-hot vector for image labels (output)

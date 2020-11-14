@@ -101,16 +101,24 @@ get.CNN.image.X.channels <- function(X.tensor) { return(ifelse(length(d <- dim(X
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
-#' @param labels The labels of the images
+#' @param labels The labels of the images either as factors for single-label classification or as a numeric or logical matrix for multi-label classification.
 #'
-#' @return A one-hot encoded vector for the image labels
+#' @return A one-hot encoded vector or matrix for the image labels.
 #' @export
 #' 
 #' @seealso \code{\link{one_hot_encode}}, \code{\link{as.CNN.image.X}}
 #'
 #' @examples
 as.CNN.image.Y <- function(labels) {
-  return(one_hot_encode(labels))
+  # Single-label classification
+  if (isTRUE((NCOL(f <- Filter(is.factor, labels)) > 0L) && (length(f) > 0))) {
+    f <- as.data.frame(f)
+    m <- lapply(f, deepANN::one_hot_encode)
+    m <- do.call(cbind, m)
+    return(m)
+  }
+  # Multi-label classification
+  else { return(as.tensor.2D(as.ANN.matrix(labels))) }
 }
 
 #' Get number of samples from image outcome tensor
