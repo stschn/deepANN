@@ -271,7 +271,7 @@ accuracy <- function(actuals, preds, na.rm = FALSE) {
 #' @param actuals Numeric data (vector, array, matrix, data frame or list) of actual values.
 #' @param preds Numeric data (vector, array, matrix, data frame or list) of prediction values.
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
-#' @param type Denotes the type(\code{precision}, \code{recall}, \code{F1-score}) for calculating the micro-averaging accuracy.
+#' @param type Denotes the type (\code{precision}, \code{recall}, \code{F1-score}) for calculating the micro-averaging accuracy.
 #'
 #' @details
 #'   \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.

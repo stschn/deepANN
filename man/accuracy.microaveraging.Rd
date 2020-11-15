@@ -18,7 +18,7 @@ accuracy.microaveraging(
 
 \item{na.rm}{A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.}
 
-\item{type}{Denotes the type(\code{precision}, \code{recall}, \code{F1-score}) for calculating the micro-averaging accuracy.}
+\item{type}{Denotes the type (\code{precision}, \code{recall}, \code{F1-score}) for calculating the micro-averaging accuracy.}
 }
 \value{
 The type-specific accuracy of a multi-label classification problem.
