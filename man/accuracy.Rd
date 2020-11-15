@@ -2,29 +2,40 @@
 % Please edit documentation in R/deepQuality.r
 \name{accuracy}
 \alias{accuracy}
-\title{Single-label classification accuracy}
+\title{Classification accuracy}
 \usage{
-accuracy(actuals, preds, na.rm = FALSE)
+accuracy(
+  actuals,
+  preds,
+  type = c("standard", "precision", "recall", "F1"),
+  na.rm = FALSE
+)
 }
 \arguments{
 \item{actuals}{Numeric data (vector, array, matrix, data frame or list) of actual values.}
 
 \item{preds}{Numeric data (vector, array, matrix, data frame or list) of prediction values.}
 
+\item{type}{Denotes the type (\code{standard}, \code{precision}, \code{recall}, \code{F1-score}) for calculating the accuracy.}
+
 \item{na.rm}{A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.}
 }
 \value{
-The fraction of right predictions within total number of predictions.
+The type-specific accuracy of a classification problem.
 }
 \description{
-Single-label classification accuracy
+Classification accuracy
 }
 \details{
-\eqn{Accuracy = Number of correct predictions / Total number of predictions}
+\eqn{Standard Accuracy = Number of correct predictions / Total number of predictions}.
+  \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.
+  \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.
+  \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.
+  
+  Standard accuracy is used for single-label classification problems, while the others are for multi-label classification problems.
 }
 \seealso{
 Other Quality: 
-\code{\link{accuracy.microaveraging}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
 \code{\link{gini_impurity}()},

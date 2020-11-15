@@ -28,7 +28,6 @@ Shannon entropy is a concept from information theory and represents a quantifica
 }
 \seealso{
 Other Quality: 
-\code{\link{accuracy.microaveraging}()},
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{gini_impurity}()},

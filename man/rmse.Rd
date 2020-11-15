@@ -21,7 +21,6 @@ Root mean square error (RMSE)
 }
 \seealso{
 Other Quality: 
-\code{\link{accuracy.microaveraging}()},
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},

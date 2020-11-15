@@ -30,7 +30,6 @@ Cross entropy quantifies the difference between two probability distributions.
 }
 \seealso{
 Other Quality: 
-\code{\link{accuracy.microaveraging}()},
 \code{\link{accuracy}()},
 \code{\link{entropy}()},
 \code{\link{gini_impurity}()},

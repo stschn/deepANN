@@ -33,7 +33,6 @@ This loss function tries to give different penalties to overestimation and under
 }
 \seealso{
 Other Quality: 
-\code{\link{accuracy.microaveraging}()},
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
