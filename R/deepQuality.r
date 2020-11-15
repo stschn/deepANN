@@ -242,7 +242,7 @@ coerce_dimension <- function(x) {
   return(x)
 }
 
-#' Classification accuracy
+#' Single-label classification accuracy
 #'
 #' @family Quality
 #'
@@ -250,11 +250,11 @@ coerce_dimension <- function(x) {
 #' @param preds Numeric data (vector, array, matrix, data frame or list) of prediction values.
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
-#' @return The fraction of right predictions within total number of predictions.
-#' @export
-#'
 #' @details
 #'   \eqn{Accuracy = Number of correct predictions / Total number of predictions}
+#'
+#' @return The fraction of right predictions within total number of predictions.
+#' @export
 #'
 #' @examples
 accuracy <- function(actuals, preds, na.rm = FALSE) {
@@ -262,6 +262,61 @@ accuracy <- function(actuals, preds, na.rm = FALSE) {
   preds <- coerce_dimension(preds)
   stopifnot(identical(dim(actuals), dim(preds)), identical(length(actuals), length(preds)))
   return(sum(actuals == preds, na.rm = na.rm) / length(preds))
+}
+
+#' Multi-label classification accuracy
+#'
+#' @family Quality
+#'
+#' @param actuals Numeric data (vector, array, matrix, data frame or list) of actual values.
+#' @param preds Numeric data (vector, array, matrix, data frame or list) of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
+#' @param type Denotes the type(\code{precision}, \code{recall}, \code{F1-score}) for calculating the micro-averaging accuracy.
+#'
+#' @details
+#'   \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.
+#'   \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.
+#'   \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.
+#'
+#' @return The type-specific accuracy of a multi-label classification problem.
+#' @export
+#'
+#' @examples
+accuracy.microaveraging <- function(actuals, preds, na.rm = FALSE, type = c("precision", "recall", "F1")) {
+  actuals <- coerce_dimension(actuals)
+  preds <- coerce_dimension(preds)
+  stopifnot(identical(dim(actuals), dim(preds)), identical(length(actuals), length(preds)))
+  
+  type <- match.arg(type)
+  
+  true_positives <- lapply(seq_len(NROW(actuals)), function(i) {
+    sum((actuals[i, ] == preds[i, ] & preds[i, ] == 1), na.rm = na.rm)
+  })
+  TP <- sum(unlist(true_positives))
+  true_negatives <- lapply(seq_len(NROW(actuals)), function(i) {
+    sum((actuals[i, ] == preds[i, ] & preds[i, ] == 0), na.rm = na.rm)
+  })
+  TN <- sum(unlist(true_negatives))
+  false_positives <- lapply(seq_len(NROW(actuals)), function(i) {
+    sum((actuals[i, ] != preds[i, ] & preds[i, ] == 1), na.rm = na.rm)
+  })
+  FP <- sum(unlist(false_positives))
+  false_negatives <- lapply(seq_len(NROW(actuals)), function(i) {
+    sum((actuals[i, ] != preds[i, ] & preds[i, ] == 0), na.rm = na.rm)
+  })
+  FN <- sum(unlist(false_negatives))
+  
+  if (type == "precision") {
+    return(TP / (TP + FP))
+  } else {
+  if (type == "recall") {
+    return(TP / (TP + FN))
+  } else {
+  if (type == "F1") {
+    precision <- TP / (TP + FP)
+    recall <- TP / (TP + FN)
+    return(2 * ((precision * recall) / (precision + recall)))
+  }}}
 }
 
 #' Gini impurity

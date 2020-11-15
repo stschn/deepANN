@@ -24,6 +24,7 @@ In Machine and Deep Learning, MSE is also known as L2 loss function.
 }
 \seealso{
 Other Quality: 
+\code{\link{accuracy.microaveraging}()},
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
