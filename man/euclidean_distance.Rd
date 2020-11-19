@@ -15,7 +15,7 @@ euclidean_distance(x1, x2)
 The euclidean distance between these two vectors.
 }
 \description{
-\code{euclidean_distance} calculates the euclidean distance between two vectors (or scalars).
+Euclidean distance
 }
 \examples{
   x1 <- c(20, 1, 41, 13, 5, 69)

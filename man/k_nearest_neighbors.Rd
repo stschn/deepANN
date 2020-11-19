@@ -4,30 +4,33 @@
 \alias{k_nearest_neighbors}
 \title{k-nearest neighbors}
 \usage{
-k_nearest_neighbors(y, X, test, k = 1L)
+k_nearest_neighbors(X, y, test, k = 1L)
 }
 \arguments{
-\item{y}{A column vector of the categories within a feature matrix or data frame.}
-
 \item{X}{Matrix or data frame with feature values.}
 
-\item{test}{The query or test instance.}
+\item{y}{A vector of the labels for \code{X}.}
 
-\item{k}{Number of samples resp. categories used to determine the majority category; default \code{1}.}
+\item{test}{Vector or matrix containing the test or query instances the majority classes are to be determined.}
+
+\item{k}{Number of label neighbors considered for majority class detection.}
 }
 \value{
-The majority category for a query or test instance.
+A named list with majority classes and a matrix with class-probability distributions for \code{test}.
 }
 \description{
-\code{k_nearest_neighbors} calculates the majority category (class label) of k nearest neighbors of a query or test instance.
+k-nearest neighbors
 }
 \examples{
   df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170),
                    weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64),
                    size = c(rep("M", 6), rep("L", 11)))
   df$size <- as.factor(df$size)
-  x <- setNames(c(161, 61), c("height", "weight")) # query instance, e.g. a new customer
-  k_nearest_neighbors(df$size, df[, 1L:2L], x, k = 5L)
+  test <- setNames(c(161, 61), c("height", "weight")) # query instance
+  test <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
+  knn <- k_nearest_neighbors(df[, 1L:2L], df$size, test, k = 3L)
+  knn$classes
+  knn$probability
 }
 \seealso{
 \code{\link{euclidean_distance}}.

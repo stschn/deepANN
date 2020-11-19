@@ -65,8 +65,6 @@ naive_forecast <- function(x, drift = 0, na = NA) {
 
 #' Euclidean distance
 #'
-#' \code{euclidean_distance} calculates the euclidean distance between two vectors (or scalars).
-#'
 #' @family Machine Learning
 #'
 #' @param x1 A numeric vector.
@@ -83,16 +81,14 @@ euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 
 #' k-nearest neighbors
 #'
-#' \code{k_nearest_neighbors} calculates the majority category (class label) of k nearest neighbors of a query or test instance.
-#'
 #' @family Machine Learning
 #'
-#' @param y A column vector of the categories within a feature matrix or data frame.
 #' @param X Matrix or data frame with feature values.
-#' @param test The query or test instance.
-#' @param k Number of samples resp. categories used to determine the majority category; default \code{1}.
+#' @param y A vector of the labels for \code{X}.
+#' @param test Vector or matrix containing the test or query instances the majority classes are to be determined.
+#' @param k Number of label neighbors considered for majority class detection.
 #'
-#' @return The majority category for a query or test instance.
+#' @return A named list with majority classes and a matrix with class-probability distributions for \code{test}.
 #' @export
 #' 
 #' @seealso \code{\link{euclidean_distance}}.
@@ -102,17 +98,38 @@ euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 #'                    weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64),
 #'                    size = c(rep("M", 6), rep("L", 11)))
 #'   df$size <- as.factor(df$size)
-#'   x <- setNames(c(161, 61), c("height", "weight")) # query instance, e.g. a new customer
-#'   k_nearest_neighbors(df$size, df[, 1L:2L], x, k = 5L)
-k_nearest_neighbors <- function(y, X, test, k = 1L) {
-  distances <- apply(X, 1, euclidean_distance, x2 = test) # calculate euclidean distances (ed)
-  df <- data.frame(index = c(1:NROW(distances)), ed = distances) # build up data frame with index and ed
-  df <- df[order(df$ed), ] # reorder data frame in ascending order for ed
-  idx <- df$index[(1:k)] # extract k minimum indices
-  neighbors <- y[idx] # get k target classes/categories
-  n_neighbors <- table(neighbors) # number of instances of each class
-  majority_class <- names(which.max(n_neighbors)) # name of the majority class
-  return(majority_class)
+#'   test <- setNames(c(161, 61), c("height", "weight")) # query instance
+#'   test <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
+#'   knn <- k_nearest_neighbors(df[, 1L:2L], df$size, test, k = 3L)
+#'   knn$classes
+#'   knn$probability
+k_nearest_neighbors <- function(X, y, test, k = 1L) {
+  X <- data.matrix(X)
+  if (is.null(dim(test))) test <- data.matrix(t(test)) else test <- data.matrix(test)
+  if (dim(X)[2L] != dim(test)[2L])
+    stop("feature matrix (X) and query instance (test) do not have the same number of features.")
+  if (!is.null(dim(y))) y <- c(t(y))
+  if (!is.factor(y)) y <- as.factor(y)
+  
+  distances <- apply(test, 1L, function(query) {
+    apply(X, 1L, euclidean_distance, x2 = query)
+  }) # calculate euclidean distances
+  majority_classes <- apply(distances, 2L, function(ed) {
+    df <- data.frame(index = seq_along(ed), eucldist = ed) # build a data frame with index and euclidean distance
+    df <- df[order(df$eucldist), ] # reorder data frame in ascending order for euclidean distance
+    idx <- df$index[(1:k)] # extract k minimum indices
+    neighbors <- y[idx] # get k target classes (categories, labels)
+    n_neighbors <- table(neighbors) # number of instances of each class
+    majority_class <- names(which.max(n_neighbors)) # name of the majority class
+    class_probs <- n_neighbors / k # probability of each class
+    list(majority_class, class_probs)
+  })
+
+  l <- list()
+  l[[1L]] <- unlist(lapply(seq_along(majority_classes), function(i) majority_classes[[i]][[1L]]))
+  l[[2L]] <- t(unlist(sapply(seq_along(majority_classes), function(i) majority_classes[[i]][[2L]])))
+  names(l) <- c("classes", "probability")
+  return(l)
 }
 
 #' Weighted moving average

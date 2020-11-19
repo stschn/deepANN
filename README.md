@@ -69,7 +69,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>cross_validation_split()</code> splits an entire data set into k folds.</li>
   <li><code>naive_forecast()</code> predicts values for a data series based upon random walk without and with drifts.</li>
   <li><code>euclidean_distance()</code> calculates the euclidean distance between to numeric vectors.</li>
-  <li><code>k_nearest_neighbors()</code> identifies the majority class of k nearest neighbors of a query/test instance.</li>
+  <li><code>k_nearest_neighbors()</code> identifies the majority classes and probability distributions of k nearest neighbors of a test instance.</li>
   <li><code>moving_average()</code> calculates the (weighted) moving average.</li>
   <li><code>predict.kmeans()</code> predicts kmeans cluster for feature data.</li>
   <li><code>erf()</code> defines error function (from MATLAB).</li>

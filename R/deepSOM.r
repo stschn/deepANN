@@ -71,10 +71,10 @@ fit.SOM <- function(X, xdim = NULL, ydim = NULL,
   agglomeration.method <- match.arg(agglomeration.method) # use first argument value for linkage algorithm
   som.cluster <- cutree(hclust(dist(getCodes(som.model), method = distance.method), method = agglomeration.method), k = cluster)
   # Show the map/grid with different colours for every cluster
-  plot(som.model, type="mapping", bgcol = colour.palette[som.cluster])
+  plot(som.model, type = "mapping", bgcol = colour.palette[som.cluster])
   add.cluster.boundaries(som.model, som.cluster)
   # Show the same plot with graphical illustrations for the codebook vectors
-  plot(som.model, type="codes", bgcol = colour.palette[som.cluster])
+  plot(som.model, type = "codes", bgcol = colour.palette[som.cluster])
   add.cluster.boundaries(som.model, som.cluster)
   
   return(som.model)
