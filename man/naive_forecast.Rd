@@ -23,13 +23,14 @@ A series of naive predicted values for a given vector.
 \seealso{
 Other Machine Learning: 
 \code{\link{cross_validation_split}()},
+\code{\link{distance}()},
 \code{\link{erfcinv}()},
 \code{\link{erfc}()},
 \code{\link{erfinv}()},
 \code{\link{erf}()},
-\code{\link{euclidean_distance}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{moving_average}()},
-\code{\link{predict.kmeans}()}
+\code{\link{predict.kmeans}()},
+\code{\link{similarity}()}
 }
 \concept{Machine Learning}

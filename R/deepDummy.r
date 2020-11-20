@@ -250,7 +250,7 @@ resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = c("oversampl
     x1 <- X_min_all[1, ] # reference sample with feature values
     X_min <- X_min_all[-1, ] # remaining minority samples with feature values
 
-    distances <- apply(X_min, 1, euclidean_distance, x2 = x1) # euclidean distances from reference sample to all other samples
+    distances <- apply(X_min, 1, deepANN::distance, x2 = x1) # euclidean distances from reference sample to all other samples
     dist_inst <- data.frame(index=c(1:NROW(distances)), ed = distances) # euclidean distances and row indices
     dist_inst <- dist_inst[order(dist_inst$ed), ] # ascending ordering
     idx <- dist_inst$index[(1:k)] # indices of k nearest neighbors

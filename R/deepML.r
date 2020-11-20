@@ -63,21 +63,68 @@ naive_forecast <- function(x, drift = 0, na = NA) {
   }}
 }
 
-#' Euclidean distance
+#' Distance
 #'
 #' @family Machine Learning
 #'
 #' @param x1 A numeric vector.
 #' @param x2 A numeric vector.
+#' @type The type of the distance measure: \code{euclidean} (default) or \code{squared_euclidean}.
 #'
-#' @return The euclidean distance between these two vectors.
+#' @return The distance between \code{x1} and \code{x2}.
 #' @export
 #'
 #' @examples
 #'   x1 <- c(20, 1, 41, 13, 5, 69)
 #'   x2 <- c(11, 2, 23, 4, 10, 67)
-#'   euclidean_distance(x1, x2)
-euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
+#'   distance(x1, x2)
+distance <- function(x1, x2, type = c("euclidean", "squared_euclidean")) {
+  type <- match.arg(type)
+  se <- sum((x1 - x2)^2)
+  if (type == "euclidean") {
+    return(sqrt(se))
+  } else {
+  if (type == "squared_euclidean") {
+    return(se)
+  }}
+}
+
+#' Similarity
+#'
+#' @family Machine Learning
+#'
+#' @param x1 A numeric or logical vector.
+#' @param x2 A numeric or logical vector.
+#' @type The type of the similarity measure: \code{simple} (default), \code{jaccard} or \code{tanimoto}.
+#'
+#' @return The similarity between \code{x1} and \code{x2}.
+#' @export
+#'
+#' @examples
+#'   similarity(c(1L, 1L, 0L), c(0L, 1L, 1L), type = "simple")
+#'   similarity(c(1L, 1L, 0L), c(0L, 1L, 1L), type = "jaccard")
+#'   similarity(c(1L, 1L, 0L), c(0L, 1L, 1L), type = "tanimoto")
+similarity <- function(x1, x2, type = c("simple", "jaccard", "tanimoto")) {
+  type <- match.arg(type)
+  x1 <- as.integer(c(t(x)))
+  x2 <- as.integer(c(t(x)))
+  if ((l <- length(x1)) != length(x2))
+    stop("vectors x1 and x2 must be of the same length.")
+  if (type == "simple") {
+    return(sum(x1 == x2) / l)
+  } else {
+    x_11 <- sum((x1 == x2) & (x2 == 1))
+    x_00 <- sum((x1 == x2) & (x2 == 0))
+    x_10 <- sum((x1 != x2) & (x2 == 0))
+    x_01 <- sum((x1 != x2) & (x2 == 1))
+    if (type == "jaccard") {
+      return(x_11 / (x_11 + x_10 + x_01))
+    } else {
+    if (type == "tanimoto") {
+      return((x_11 + x_00) / (x_11 + 2 * (x_10 + x_01) + x_00))
+    }}
+  }
+}
 
 #' k-nearest neighbors
 #'
@@ -91,7 +138,7 @@ euclidean_distance <- function(x1, x2) { return(sqrt(sum((x1 - x2)^2))) }
 #' @return A named list with majority classes and a matrix with class-probability distributions for \code{test}.
 #' @export
 #' 
-#' @seealso \code{\link{euclidean_distance}}.
+#' @seealso \code{\link{distance}}.
 #'
 #' @examples
 #'   df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170),
@@ -112,7 +159,7 @@ k_nearest_neighbors <- function(X, y, test, k = 1L) {
   if (!is.factor(y)) y <- as.factor(y)
   
   distances <- apply(test, 1L, function(query) {
-    apply(X, 1L, euclidean_distance, x2 = query)
+    apply(X, 1L, deepANN::distance, x2 = query)
   }) # calculate euclidean distances
   majority_classes <- apply(distances, 2L, function(ed) {
     df <- data.frame(index = seq_along(ed), eucldist = ed) # build a data frame with index and euclidean distance

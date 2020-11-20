@@ -271,22 +271,26 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
   if (type == "standard") {  
     return(sum(actuals == preds, na.rm = na.rm) / length(preds))
   } else {
-    true_positives <- lapply(seq_len(NROW(actuals)), function(i) {
-      sum((actuals[i, ] == preds[i, ] & preds[i, ] == 1), na.rm = na.rm)
-    })
-    TP <- sum(unlist(true_positives))
-    true_negatives <- lapply(seq_len(NROW(actuals)), function(i) {
-      sum((actuals[i, ] == preds[i, ] & preds[i, ] == 0), na.rm = na.rm)
-    })
-    TN <- sum(unlist(true_negatives))
-    false_positives <- lapply(seq_len(NROW(actuals)), function(i) {
-      sum((actuals[i, ] != preds[i, ] & preds[i, ] == 1), na.rm = na.rm)
-    })
-    FP <- sum(unlist(false_positives))
-    false_negatives <- lapply(seq_len(NROW(actuals)), function(i) {
-      sum((actuals[i, ] != preds[i, ] & preds[i, ] == 0), na.rm = na.rm)
-    })
-    FN <- sum(unlist(false_negatives))
+    # true_positives <- lapply(seq_len(NROW(actuals)), function(i) {
+    #   sum((actuals[i, ] == preds[i, ] & preds[i, ] == 1), na.rm = na.rm)
+    # })
+    # TP <- sum(unlist(true_positives))
+    # true_negatives <- lapply(seq_len(NROW(actuals)), function(i) {
+    #   sum((actuals[i, ] == preds[i, ] & preds[i, ] == 0), na.rm = na.rm)
+    # })
+    # TN <- sum(unlist(true_negatives))
+    # false_positives <- lapply(seq_len(NROW(actuals)), function(i) {
+    #   sum((actuals[i, ] != preds[i, ] & preds[i, ] == 1), na.rm = na.rm)
+    # })
+    # FP <- sum(unlist(false_positives))
+    # false_negatives <- lapply(seq_len(NROW(actuals)), function(i) {
+    #   sum((actuals[i, ] != preds[i, ] & preds[i, ] == 0), na.rm = na.rm)
+    # })
+    # FN <- sum(unlist(false_negatives))
+    TP <- sum((actuals == preds) & (preds == 1), na.rm = na.rm)
+    TN <- sum((actuals == preds) & (preds == 0), na.rm = na.rm)
+    FP <- sum((actuals != preds) & (preds == 1), na.rm = na.rm)
+    TN <- sum((actuals != preds) & (preds == 0), na.rm = na.rm)
     if (type == "precision") {
       return(TP / (TP + FP))
     } else {
