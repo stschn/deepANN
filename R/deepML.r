@@ -69,7 +69,7 @@ naive_forecast <- function(x, drift = 0, na = NA) {
 #'
 #' @param x1 A numeric vector.
 #' @param x2 A numeric vector.
-#' @type The type of the distance measure: \code{euclidean} (default) or \code{squared_euclidean}.
+#' @param type The type of the distance measure: \code{euclidean} (default) or \code{squared_euclidean}.
 #'
 #' @return The distance between \code{x1} and \code{x2}.
 #' @export
@@ -95,7 +95,7 @@ distance <- function(x1, x2, type = c("euclidean", "squared_euclidean")) {
 #'
 #' @param x1 A numeric or logical vector.
 #' @param x2 A numeric or logical vector.
-#' @type The type of the similarity measure: \code{simple} (default), \code{jaccard} or \code{tanimoto}.
+#' @param type The type of the similarity measure: \code{simple} (default), \code{jaccard} or \code{tanimoto}.
 #'
 #' @return The similarity between \code{x1} and \code{x2}.
 #' @export

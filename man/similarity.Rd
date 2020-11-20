@@ -10,6 +10,8 @@ similarity(x1, x2, type = c("simple", "jaccard", "tanimoto"))
 \item{x1}{A numeric or logical vector.}
 
 \item{x2}{A numeric or logical vector.}
+
+\item{type}{The type of the similarity measure: \code{simple} (default), \code{jaccard} or \code{tanimoto}.}
 }
 \value{
 The similarity between \code{x1} and \code{x2}.

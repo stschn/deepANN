@@ -10,6 +10,8 @@ distance(x1, x2, type = c("euclidean", "squared_euclidean"))
 \item{x1}{A numeric vector.}
 
 \item{x2}{A numeric vector.}
+
+\item{type}{The type of the distance measure: \code{euclidean} (default) or \code{squared_euclidean}.}
 }
 \value{
 The distance between \code{x1} and \code{x2}.
