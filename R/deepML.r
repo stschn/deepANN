@@ -106,8 +106,8 @@ distance <- function(x1, x2, type = c("euclidean", "squared_euclidean")) {
 #'   similarity(c(1L, 1L, 0L), c(0L, 1L, 1L), type = "tanimoto")
 similarity <- function(x1, x2, type = c("simple", "jaccard", "tanimoto")) {
   type <- match.arg(type)
-  x1 <- as.integer(c(t(x)))
-  x2 <- as.integer(c(t(x)))
+  x1 <- as.integer(c(t(x1)))
+  x2 <- as.integer(c(t(x2)))
   if ((l <- length(x1)) != length(x2))
     stop("vectors x1 and x2 must be of the same length.")
   if (type == "simple") {
