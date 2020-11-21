@@ -68,8 +68,8 @@ This R library is currently structured in form of the following functional famil
 <ul>
   <li><code>cross_validation_split()</code> splits an entire data set into k folds.</li>
   <li><code>naive_forecast()</code> predicts values for a data series based upon random walk without and with drifts.</li>
-  <li><code>distance()</code> calculates the distance between to numeric vectors.</li>
-  <li><code>similarity()</code> calculates the similarity between to numeric or logical vectors.</li>
+  <li><code>distance()</code> calculates the distance between two numeric vectors.</li>
+  <li><code>similarity()</code> calculates the similarity between two numeric or logical vectors.</li>
   <li><code>k_nearest_neighbors()</code> identifies the majority classes and probability distributions of k nearest neighbors of a test instance.</li>
   <li><code>moving_average()</code> calculates the (weighted) moving average.</li>
   <li><code>predict.kmeans()</code> predicts kmeans cluster for feature data.</li>
