@@ -159,7 +159,7 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
 #' @family Scaling
 #'
 #' @param dataset A data set, usually a matrix or data frame.
-#' @param columns The names or indices of the columns to be scaled.
+#' @param columns The names or indices of the columns to be scaled. If \code{NULL} (default), all columns are used.
 #' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
 #' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{columns} are already scaled vectors and scaling will be inverted.
 #' @param ... Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.
@@ -183,11 +183,12 @@ scale.dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", 
     columns_idx <- as.integer(columns)
   }
   remaining_dataset <- dataset[-columns_idx]
+  scaled_dataset <- dataset[columns_idx]
   type <- match.arg(type)
-  scaled <- as.data.frame(lapply(seq_along(dataset[columns_idx]), function(i) {
-    scaling(dataset[[i]], type = type, use.attr = T, invert = invert, ...) # it's important to pass a vector to access the attributes for invert scaling
+  scaled <- as.data.frame(lapply(seq_along(scaled_dataset), function(i) {
+    scaling(scaled_dataset[[i]], type = type, use.attr = T, invert = invert, ...) # it's important to pass a vector to access the attributes for invert scaling
   }))
-  names(scaled) <- names(dataset[columns_idx])
+  names(scaled) <- names(scaled_dataset)
   dataset <- cbind.data.frame(remaining_dataset, scaled)[cnames]
   return(dataset)
 }
@@ -198,7 +199,7 @@ scale.dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", 
 #'
 #' @param trainset A train dataset.
 #' @param testset A test dataset.
-#' @param columns The names or indices of the columns to be scaled.
+#' @param columns The names or indices of the columns to be scaled. If \code{NULL} (default), all columns are used.
 #' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
 #'
 #' @return A named list dependent on the \code{type}.

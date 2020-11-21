@@ -11,7 +11,7 @@
 
 \item{testset}{A test dataset.}
 
-\item{columns}{The names or indices of the columns to be scaled.}
+\item{columns}{The names or indices of the columns to be scaled. If \code{NULL} (default), all columns are used.}
 
 \item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).}
 }
