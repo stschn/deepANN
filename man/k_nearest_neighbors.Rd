@@ -9,27 +9,31 @@ k_nearest_neighbors(X, y, test, k = 1L)
 \arguments{
 \item{X}{Matrix or data frame with feature values.}
 
-\item{y}{A vector of the labels for \code{X}.}
+\item{y}{A vector of categorical (label) or continuous (numeric) outcomes for \code{X}.}
 
-\item{test}{Vector or matrix containing the test or query instances the majority classes are to be determined.}
-
-\item{k}{Number of label neighbors considered for majority class detection.}
+\item{test}{Vector or matrix containing the test or query instances the response is to be determined.}
 }
 \value{
-A named list with majority classes and a matrix with class-probability distributions for \code{test}.
+A named list with the response and a matrix with class-probability distributions where appropriate for \code{test}.
 }
 \description{
 k-nearest neighbors
 }
+\details{
+The response of k-nearest neighbors is either the majority class of k neighbors for a categorical outcome or the mean of k neighbors for a continuous outcome.
+}
 \examples{
   df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170),
                    weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64),
-                   size = c(rep("M", 6), rep("L", 11)))
+                   size = c(rep("M", 6), rep("L", 11)),
+                   cont = sample(20, 17))
   df$size <- as.factor(df$size)
   test <- setNames(c(161, 61), c("height", "weight")) # query instance
   test <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
-  knn <- k_nearest_neighbors(df[, 1L:2L], df$size, test, k = 3L)
-  knn$classes
+  y <- df$size # categorical outcome
+  y <- df$cont # continuous outcome
+  knn <- k_nearest_neighbors(df[, 1L:2L], y, test, k = 3L)
+  knn$response
   knn$probability
 }
 \seealso{

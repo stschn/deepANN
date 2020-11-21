@@ -32,7 +32,7 @@ Classification accuracy
   \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.
   \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.
   
-  Standard accuracy is used for single-label classification problems, while the others are for multi-label classification problems.
+  Standard accuracy is mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
 }
 \seealso{
 Other Quality: 
