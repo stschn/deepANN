@@ -91,7 +91,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 #' @seealso \code{\link{dummify}}.
 #' 
 #' @examples
-append_rows <- function(dataset, columns = NULL, n = 1, type = c("copy", "minmax")) {
+append_rows <- function(dataset, columns = NULL, n = 1L, type = c("copy", "minmax")) {
   dataset <- as.data.frame(dataset)
   if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) || 
      (((is.character(columns))) && (!all(columns %in% names(dataset)))))
@@ -205,10 +205,10 @@ one_hot_decode <- function(x_encoded) {
 #' @family Dummyfication
 #'
 #' @param dataset An imbalanced data set, usually a data frame.
-#' @param x The column indices which spawn the feature matrix.
-#' @param y The column index of the target vector with class labels (categories).
+#' @param x The names or indices of the feature columns within \code{dataset}.
+#' @param y The names or indices of the target columns with class labels (categories) within \code{dataset}.
 #' @param n The number of newly created samples or the percentage of deleted samples.
-#' @param k The number of nearest neighbors, only relevant for SMOTE technique.
+#' @param k The number of nearest neighbors, only relevant for type \code{smote}.
 #' @param type The technique to be used for creating a balanced data set.
 #'   \code{oversampling}: copy \code{n} rows of minority class (under-represented category)
 #'   \code{undersampling}: delete \code{n}% rows of majority class (over-represented category)
@@ -223,7 +223,31 @@ one_hot_decode <- function(x_encoded) {
 #'  \url{http://rikunert.com/SMOTE_explained}.
 #'
 #' @examples
-resample.imbalanced <- function(dataset, x, y, n = 1, k = 1, type = c("oversampling", "undersampling", "smote")) {
+resample.imbalanced <- function(dataset, x, y, n = 1L, k = 1L, type = c("oversampling", "undersampling", "smote")) {
+  
+  check_column <- function(dataset, column = NULL, as.int = TRUE, err_column = "columns") {
+    dataset <- as.data.frame(dataset)
+    cnames <- names(dataset)
+    result <- NULL
+    if (!is.null(column)) {
+      if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) || 
+          (((is.character(column))) && (!all(column %in% cnames))))
+        stop(paste0(err_column, " are not in dataset"))
+      if (as.int) {
+        if (class(column) %in% c("character")) {
+          result <- as.integer(which(cnames %in% column))
+        } else {
+          result <- as.integer(column)
+        }} else {
+          result <- column
+        }
+    }
+    return(result)
+  }
+
+  x <- check_column(dataset, x, err_column = "features")
+  y <- check_column(dataset, y, err_column = "targets")
+
   type <- match.arg(type)
   df <- as.data.frame(dataset)
   cnames <- colnames(df)

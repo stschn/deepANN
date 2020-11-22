@@ -4,7 +4,7 @@
 \alias{append_rows}
 \title{Append dummy rows}
 \usage{
-append_rows(dataset, columns = NULL, n = 1, type = c("copy", "minmax"))
+append_rows(dataset, columns = NULL, n = 1L, type = c("copy", "minmax"))
 }
 \arguments{
 \item{dataset}{A data set, usually a data frame.}

@@ -8,21 +8,21 @@ resample.imbalanced(
   dataset,
   x,
   y,
-  n = 1,
-  k = 1,
+  n = 1L,
+  k = 1L,
   type = c("oversampling", "undersampling", "smote")
 )
 }
 \arguments{
 \item{dataset}{An imbalanced data set, usually a data frame.}
 
-\item{x}{The column indices which spawn the feature matrix.}
+\item{x}{The names or indices of the feature columns within \code{dataset}.}
 
-\item{y}{The column index of the target vector with class labels (categories).}
+\item{y}{The names or indices of the target columns with class labels (categories) within \code{dataset}.}
 
 \item{n}{The number of newly created samples or the percentage of deleted samples.}
 
-\item{k}{The number of nearest neighbors, only relevant for SMOTE technique.}
+\item{k}{The number of nearest neighbors, only relevant for type \code{smote}.}
 
 \item{type}{The technique to be used for creating a balanced data set.
 \code{oversampling}: copy \code{n} rows of minority class (under-represented category)
