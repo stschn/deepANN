@@ -236,7 +236,7 @@ as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
   # })
   # tensor <- array(NA, dim = c(samples, timesteps, variables))
   # for (i in 1:variables) { tensor[, , i] <- matrix(variable_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
-  m <- as.ANN.matrix(X)
+  m <- data.matrix(X) # as.ANN.matrix(X)
   timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
   return(as.tensor.3D(data = m, ncol = timesteps, reverse = reverse, by = c("step")))
 }
@@ -268,11 +268,11 @@ as.LSTM.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
   }
   # Metric outcome
   else {
-    m <- as.ANN.matrix(Y)
+    m <- data.matrix(Y) # as.ANN.matrix(Y)
     if (is.null(timesteps)) {
       return(as.tensor.2D(data = m, reverse = reverse))
     } else {
-      timesteps <- ifelse(timesteps < 2, 2, timesteps)
+      timesteps <- ifelse(timesteps < 2, 2L, timesteps)
       return(as.tensor.3D(data = m, ncol = timesteps, reverse = reverse, by = c("step")))
     }
   }

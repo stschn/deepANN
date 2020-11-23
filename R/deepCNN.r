@@ -118,7 +118,7 @@ as.CNN.image.Y <- function(labels) {
     return(m)
   }
   # Multi-label classification
-  else { return(as.tensor.2D(as.ANN.matrix(labels))) }
+  else { return(as.tensor.2D(data.matrix(labels))) }
 }
 
 #' Get number of samples from image outcome tensor

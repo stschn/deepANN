@@ -28,6 +28,7 @@ vector.as.numeric <- function(x) {
 as.ANN.matrix <- function(data) {
   data <- as.data.frame(data)
   m <- sapply(data, vector.as.numeric)
+  if (NROW(data) == 1L) m <- t(m) # if data consists of only one row, sapply() outputs a column, and not a row vector
   m <- as.matrix(m)
   return(m)
 }
@@ -123,7 +124,7 @@ as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse =
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
   if (length(base::intersect(class(data), c("data.frame", "tbl_df", "tbl", "data.table"))) > 0) {
-    if (numeric) { data <- sapply(data, vector.as.numeric) }
+    if (numeric) { data <- data.matrix(data) } #data <- sapply(data, vector.as.numeric)
     data <- as.matrix(data)
     if (reverse[1L]) {
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
@@ -229,7 +230,7 @@ as.tensor.3D <- function(data, ncol = 1, reverse = FALSE, by = c("row", "col", "
 #'
 #' @examples
 as.MLP.X <- function(X) {
-  return(as.tensor.2D(as.ANN.matrix(X)))
+  return(as.tensor.2D(data.matrix(X)))
 }
 
 #' Outcomes (Y) data format for SLP/MLP
@@ -253,7 +254,7 @@ as.MLP.Y <- function(Y) {
     return(m)
   }
   # Metric outcome
-  else { return(as.tensor.2D(as.ANN.matrix(Y))) }
+  else { return(as.tensor.2D(data.matrix(Y))) }
 }
 
 #' Get number of input samples from feature tensor
