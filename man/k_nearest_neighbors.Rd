@@ -12,6 +12,8 @@ k_nearest_neighbors(X, y, test, k = 1L)
 \item{y}{A vector of categorical (label) or continuous (numeric) outcomes for \code{X}.}
 
 \item{test}{Vector or matrix containing the test or query instances the response is to be determined.}
+
+\item{k}{The number of nearest neighbors of feature samples chosen to extract the response.}
 }
 \value{
 A named list with the response and a matrix with class-probability distributions where appropriate for \code{test}.

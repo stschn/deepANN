@@ -133,6 +133,7 @@ similarity <- function(x1, x2, type = c("simple", "jaccard", "tanimoto")) {
 #' @param X Matrix or data frame with feature values.
 #' @param y A vector of categorical (label) or continuous (numeric) outcomes for \code{X}.
 #' @param test Vector or matrix containing the test or query instances the response is to be determined.
+#' @param k The number of nearest neighbors of feature samples chosen to extract the response.
 #' 
 #' @details The response of k-nearest neighbors is either the majority class of k neighbors for a categorical outcome or the mean of k neighbors for a continuous outcome.
 #'
