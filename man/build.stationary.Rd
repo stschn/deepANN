@@ -6,9 +6,9 @@
 \usage{
 build.stationary(
   dataset,
-  type = c("simple", "log", "percentage"),
   columns = 2L,
   differences = 1L,
+  type = c("simple", "log", "percentage"),
   suffix = "_delta",
   adjust = TRUE
 )
@@ -16,11 +16,11 @@ build.stationary(
 \arguments{
 \item{dataset}{A data set, usually a data frame.}
 
-\item{type}{The type of differencing to be used. Available types are \code{simple}, \code{log} and \code{percentage}.}
-
 \item{columns}{The names or indices of the columns to be differentiated to build a stationary series; if \code{NULL}, all columns are used.}
 
 \item{differences}{The number of differences for building stationary series. That's only relevant for the \code{simple} type.}
+
+\item{type}{The type of differencing to be used. Available types are \code{simple}, \code{log} and \code{percentage}.}
 
 \item{suffix}{The suffix for every newly created column of the stationary series.}
 

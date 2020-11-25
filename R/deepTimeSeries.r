@@ -69,9 +69,9 @@ lags <- function(x, k = 1, between = FALSE, na = NA) {
 #' @family Time Series
 #'   
 #' @param dataset A data set, usually a data frame.
-#' @param type The type of differencing to be used. Available types are \code{simple}, \code{log} and \code{percentage}.
 #' @param columns The names or indices of the columns to be differentiated to build a stationary series; if \code{NULL}, all columns are used.
 #' @param differences The number of differences for building stationary series. That's only relevant for the \code{simple} type.
+#' @param type The type of differencing to be used. Available types are \code{simple}, \code{log} and \code{percentage}.
 #' @param suffix The suffix for every newly created column of the stationary series.
 #' @param adjust A logical value indicating whether NA values are included to fill up the entire data set in the newly
 #'   created columns for the stationary series (\code{FALSE}) or the entire data set is shorten to the length
@@ -88,7 +88,7 @@ lags <- function(x, k = 1, between = FALSE, na = NA) {
 #' @seealso \code{\link{invert_differencing}}.
 #'
 #' @examples
-build.stationary <- function(dataset, type = c("simple", "log", "percentage"), columns = 2L, differences = 1L, suffix = "_delta", adjust = TRUE) {
+build.stationary <- function(dataset, columns = 2L, differences = 1L, type = c("simple", "log", "percentage"), suffix = "_delta", adjust = TRUE) {
   type <- match.arg(type)
   dataset <- as.data.frame(dataset)
   cnames <- names(dataset)
