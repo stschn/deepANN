@@ -17,7 +17,8 @@ fit.MLP(
   output.activation = "linear",
   loss = "mean_squared_error",
   optimizer = "adam",
-  metrics = c("mean_absolute_error")
+  metrics = c("mean_absolute_error"),
+  verbose = 1
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ The loss value that will be minimized by the model will then be the sum of all i
 \item{optimizer}{Name of optimizer or optimizer instance.}
 
 \item{metrics}{Vector or list of metrics to be evaluated by the model during training and testing.}
+
+\item{verbose}{Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) determines how the training progress is visualized.}
 }
 \value{
 A list with named elements

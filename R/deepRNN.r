@@ -622,7 +622,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
     names(l) <- l_names
 
     # Train/Fit the final or generalized model
-    # The function can deal with min or max optimizations
+    # The function can deal with min or max optimization
     if (!(is.null(k.optimizer))) {
       if (k.optimizer == "min") {
         opt_epochs <- average_qual_history$epoch[which.min(average_qual_history$validation_qual)]

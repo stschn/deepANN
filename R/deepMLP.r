@@ -389,6 +389,7 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
 #'   The loss value that will be minimized by the model will then be the sum of all individual losses.
 #' @param optimizer Name of optimizer or optimizer instance.
 #' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param verbose Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) determines how the training progress is visualized.
 #'
 #' @return A list with named elements
 #'   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
@@ -403,7 +404,8 @@ build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "li
 fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
                     k.fold = NULL, k.optimizer = NULL,
                     hidden = NULL, dropout = NULL, output.activation = "linear",
-                    loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
+                    loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error'),
+                    verbose = 1) {
   l <- list() # result
   l_names <- c("hyperparameter", "model", "avg_qual")
   l_hyperparameter_names <- c("features", "output.units")
@@ -433,7 +435,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
     # Build model
     l[[2L]] <- build_mlp_model()
     # Train/Fit the model
-    l[[2L]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size, validation_split = validation_split)
+    l[[2L]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size, validation_split = validation_split, verbose = verbose)
     # Named list
     names(l) <- l_names[1:2]
   }
@@ -461,7 +463,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
       # Train/fit model
       history <- l[[2L]] %>%
         keras::fit(x = x.train.fold, y = y.train.fold, epochs = epochs, batch_size = batch_size,
-            validation_data = list(x.val.fold, y.val.fold))
+            validation_data = list(x.val.fold, y.val.fold), verbose = verbose)
 
       # Store training results
       results <- l[[2L]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size, verbose = 0)
@@ -481,7 +483,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
     names(l) <- l_names
 
     # Train/Fit the final or generalized model
-    # The function can deal with min or max optimizations
+    # The function can deal with min or max optimization
     if (!(is.null(k.optimizer))) {
       if (k.optimizer == "min") {
         opt_epochs <- average_qual_history$epoch[which.min(average_qual_history$validation_qual)]
@@ -489,7 +491,7 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
         opt_epochs <- average_qual_history$epoch[which.max(average_qual_history$validation_qual)]
       }
       l[[2L]] <- build_mlp_model()
-      l[[2L]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size, validation_split = validation_split)
+      l[[2L]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size, validation_split = validation_split, verbose = verbose)
     }
   }
   return(l)
