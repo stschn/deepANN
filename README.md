@@ -95,7 +95,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>get.MLP.Y.samples()</code> returns the number of outcome samples.</li>
   <li><code>get.MLP.Y.units()</code> returns the number of outcome units.</li>
   <li><code>build.MLP()</code> builds a sequential SLP/MLP model with stacked dense layers and optionally dropout layers.</li>
-  <li><code>fit.MLP()</code> encapsulates building and fitting a SLP/MLP model.</li>
+  <li><code>fit.MLP()</code> encapsulates fitting a SLP/MLP model.</li>
 </ul>
 
 <b>Reccurent Neural Network (RNN)</b>
@@ -115,9 +115,11 @@ This R library is currently structured in form of the following functional famil
   <li><code>get.LSTM.Y.units()</code> returns the number of outcome units.</li>
   <li><code>as.LSTM.data.frame()</code> restructures a resampled feature matrix and an outcome matrix to a data.frame.</li>
   <li><code>build.LSTM()</code> builds a sequential LSTM model with stacked LSTM layers and optionally dropout layers.</li>
-  <li><code>fit.LSTM()</code> encapsulates building and fitting a LSTM model.</li>
+  <li><code>fit.LSTM()</code> encapsulates fitting a LSTM model.</li>
   <li><code>predict.ANN()</code> predicts with different ANN models like SLP/MLP or LSTM.</li>
   <li><code>as.LSTM.period_outcome()</code> returns a data.frame with period column and actual outcome column for quality assurance and graphical illustration purposes.</li>
+  <li><code>save_weights.ANN()</code> saves the weights of a ANN into a HDF5-file.</li>
+  <li><code>load_weights.ANN()</code> loads the weights of a ANN from a HDF5-file.</li>
 </ul>
 
 <b>Convolutional Neural Network (CNN)</b>
