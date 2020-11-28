@@ -317,11 +317,11 @@ get.MLP.Y.units <- function(Y.tensor) { return(dim(Y.tensor)[2L]) }
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param features Number of features, returned by \code{get.MLP.X.units}.
+#' @param features Number of features, e.g. returned by \code{get.MLP.X.units}.
 #' @param hidden A data frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
-#' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.MLP.Y.units},
+#' @param output A list with two elements whereby the first element determines the number of output units, e.g. returned by \code{get.MLP.Y.units},
 #'   and the second element the output activation function.
 #' @param loss Name of objective function or objective function. If the model has multiple outputs,
 #'   different loss on each output can be used by passing a dictionary or a list of objectives.
@@ -337,110 +337,74 @@ get.MLP.Y.units <- function(Y.tensor) { return(dim(Y.tensor)[2L]) }
 #'   \code{\link[keras]{compile.keras.engine.training.Model}}.
 #'
 #' @examples
-build.MLP <- function(features, hidden = NULL, dropout = NULL, output = c(1, "linear"),
+build.MLP <- function(features, hidden = NULL, dropout = NULL, output = list(1, "linear"),
                       loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
-  mlp_model <- keras::keras_model_sequential()
+  model <- keras::keras_model_sequential()
   # SLP
   if (is.null(hidden)) {
-    mlp_model %>% keras::layer_dense(units = output[1L], activation = output[2L], input_shape = features)
+    model %>% keras::layer_dense(units = output[[1L]], activation = output[[2L]], input_shape = features)
   }
   # MLP
   else {
     h <- as.data.frame(hidden)
     N <- NROW(h)
     # First hidden layer with input shape
-    mlp_model %>% keras::layer_dense(units = h[1L, 1L], activation = h[1L, 2L], input_shape = features)
-    d <- 1 # dropout layers to prevent overfitting
+    model %>% keras::layer_dense(units = h[1L, 1L], activation = h[1L, 2L], input_shape = features)
+    d <- 1L # dropout layers to prevent overfitting
     D <- ifelse(!(is.null(dropout)), NROW(dropout), 0L)
-    if (D > 0) { mlp_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
+    if (D > 0L) { model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1L }
     # Further hidden layers
-    i <- 2 # hidden layers
+    i <- 2L
     while (i <= N) {
-      mlp_model %>% keras::layer_dense(units = h[i, 1L], activation = h[i, 2L])
-      i <- i + 1
-      if (d <= D) { mlp_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
+      model %>% keras::layer_dense(units = h[i, 1L], activation = h[i, 2L])
+      i <- i + 1L
+      if (d <= D) { model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1L }
     }
     # Output layer
-    mlp_model %>% keras::layer_dense(units = output[1L], activation = output[2L])
+    model %>% keras::layer_dense(units = output[[1L]], activation = output[[2L]])
   }
-  mlp_model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
-  return(mlp_model)
+  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
+  return(model)
 }
 
 #' Fit SLP/MLP model
 #'
-#' \code{fit.MLP} is a wrapper function for building and fitting a feedforward SLP or MLP.
+#' \code{fit.MLP} is a wrapper function for fitting a feedforward SLP or MLP.
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
+#' @param model A model object to train, e.g. returned by \code{build.MLP}.
 #' @param X A feature data set, usually a matrix or data frame.
 #' @param Y An outcome data set, usually a vector, matrix or data frame.
+#' @param batch_size Batch size, the number of samples per gradient update.
 #' @param epochs Number of epochs to train the model.
-#' @param batch_size Batch size, the number of samples used per gradient update.
-#' @param validation_split Fraction of the training data used as validation data.
-#' @param k.fold Number of folds within k-fold cross validation or \code{NULL} if no grid search is desired.
-#' @param k.optimizer Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.
-#' @param hidden A data frame with two columns whereby the first column contains the number of hidden units
-#'   and the second column the activation function. The number of rows determines the number of hidden layers.
-#' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
-#' @param output.activation A name of the output activation function.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs,
-#'   different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
 #' @param verbose Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) determines how the training progress is visualized.
+#' @param validation_split Float between 0 and 1. Fraction of the training data used as validation data.
+#' @param cross_validation List or \code{NULL} (default). The list contains two elements whereby the first element stands for the number of folds (k)
+#'   and the second element indicates the type \code{min} or \code{max} for quality measuring.
 #'
-#' @return A list with named elements
-#'   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
-#'   \code{model}: A trained model object with stacked layers.
-#'   \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the
-#'                    first columns stores the epoch number and the second column the mean of the underpinned quality metric.
+#' @return A trained model object.
 #' @export
 #'
-#' @seealso \code{\link{build.MLP}}, \code{\link[keras]{compile.keras.engine.training.Model}}, \code{\link[keras]{fit.keras.engine.training.Model}}.
+#' @seealso \code{\link{build.MLP}},
+#'   \code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
 #'
 #' @examples
-fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
-                    k.fold = NULL, k.optimizer = NULL,
-                    hidden = NULL, dropout = NULL, output.activation = "linear",
-                    loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error'),
-                    verbose = 1) {
-  l <- list() # result
-  l_names <- c("hyperparameter", "model", "avg_qual")
-  l_hyperparameter_names <- c("features", "output.units")
-
+fit.MLP <- function(model, X, Y, batch_size = 1, epochs = 10, verbose = 1, validation_split = 0, cross_validation = NULL) {
+  base_model <- model
+  
   # SLP/MLP data format
   X.train <- as.MLP.X(X)
   Y.train <- as.MLP.Y(Y)
 
-  # Calculated Hyperparameters
-  X.units <- get.MLP.X.units(X.train) # Number of features
-  Y.units <- get.MLP.Y.units(Y.train) # Number of output units
-  l[[1L]] <- list(X.units, Y.units)
-  names(l[[1L]]) <- l_hyperparameter_names
-
-  # Build model procedure
-  build_mlp_model <- function() {
-    mlp_model <- build.MLP(features = X.units,
-                           hidden = hidden,
-                           dropout = dropout,
-                           output = c(Y.units, output.activation),
-                           loss = loss,
-                           optimizer = optimizer,
-                           metrics = metrics)
-  }
-
-  if (is.null(k.fold)) {
-    # Build model
-    l[[2L]] <- build_mlp_model()
-    # Train/Fit the model
-    l[[2L]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size, validation_split = validation_split, verbose = verbose)
-    # Named list
-    names(l) <- l_names[1:2]
+  if (is.null(cross_validation)) {
+    # Train the model
+    base_model %>% keras::fit(X.train, Y.train, batch_size = batch_size, epochs = epochs, verbose = verbose, validation_split = validation_split)
   }
   else {
-    k <- k.fold
+    if (length(cross_validation) < 2L)
+      stop("k-fold cross validation needs two parameters: k and optimizer.")
+    k <- cross_validation[[1L]]
     # List of data sets folds
     x.fold_datasets <- cross_validation_split(X, k)
     y.fold_datasets <- cross_validation_split(Y, k)
@@ -454,20 +418,20 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
       # Extract training and validation fold
       x.train.fold <- as.MLP.X(x.fold_datasets[[i]])
       y.train.fold <- as.MLP.Y(y.fold_datasets[[i]])
-      x.val.fold <- as.MLP.X(x.fold_datasets[[i + 1]])
-      y.val.fold <- as.MLP.Y(y.fold_datasets[[i + 1]])
+      x.val.fold <- as.MLP.X(x.fold_datasets[[i + 1L]])
+      y.val.fold <- as.MLP.Y(y.fold_datasets[[i + 1L]])
 
-      # Build model
-      l[[2L]] <- build_mlp_model()
+      # Temporary model
+      temp_model <- base_model
 
       # Train/fit model
-      history <- l[[2L]] %>%
-        keras::fit(x = x.train.fold, y = y.train.fold, epochs = epochs, batch_size = batch_size,
-            validation_data = list(x.val.fold, y.val.fold), verbose = verbose)
+      history <- temp_model %>%
+        keras::fit(x = x.train.fold, y = y.train.fold, epochs = epochs, batch_size = batch_size, verbose = verbose,
+            validation_data = list(x.val.fold, y.val.fold))
 
       # Store training results
-      results <- l[[2L]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size, verbose = 0)
-      m <- l[[2L]]$metrics_names[2L]
+      results <- temp_model %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size, verbose = 0)
+      m <- temp_model$metrics_names[2L]
       all_scores <- c(all_scores, results[m]) #$mean_absolute_error
       qual_history <- history$metrics[[4L]] #$val_mean_absolute_error
       all_qual_histories <- rbind(all_qual_histories, qual_history)
@@ -479,20 +443,17 @@ fit.MLP <- function(X, Y, epochs = 100, batch_size = 1, validation_split = 0.2,
       validation_qual = apply(all_qual_histories, 2L, mean)
     )
 
-    l[[3L]] <- average_qual_history
-    names(l) <- l_names
-
     # Train/Fit the final or generalized model
     # The function can deal with min or max optimization
-    if (!(is.null(k.optimizer))) {
-      if (k.optimizer == "min") {
+    k_optimizer <- cross_validation[[2L]]
+    if (!(is.null(k_optimizer))) {
+      if (k_optimizer == "min") {
         opt_epochs <- average_qual_history$epoch[which.min(average_qual_history$validation_qual)]
       } else {
         opt_epochs <- average_qual_history$epoch[which.max(average_qual_history$validation_qual)]
       }
-      l[[2L]] <- build_mlp_model()
-      l[[2L]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size, validation_split = validation_split, verbose = verbose)
+      base_model %>% keras::fit(X.train, Y.train, batch_size = batch_size, epochs = opt_epochs, validation_split = validation_split, verbose = verbose)
     }
   }
-  return(l)
+  return(base_model)
 }

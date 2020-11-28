@@ -34,7 +34,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

@@ -7,12 +7,12 @@
 get.LSTM.XY(
   dataset,
   x = NULL,
-  y = 2,
+  y = 2L,
   other_columns = NULL,
-  timesteps = 1,
-  x.lag = 0,
+  timesteps = 1L,
+  x.lag = 0L,
   y_as_feature.type = c("none", "plain", "timesteps"),
-  y_as_feature.lag = 0
+  y_as_feature.lag = 0L
 )
 }
 \arguments{
@@ -74,7 +74,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

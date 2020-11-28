@@ -5,66 +5,43 @@
 \title{Fit SLP/MLP model}
 \usage{
 fit.MLP(
+  model,
   X,
   Y,
-  epochs = 100,
   batch_size = 1,
-  validation_split = 0.2,
-  k.fold = NULL,
-  k.optimizer = NULL,
-  hidden = NULL,
-  dropout = NULL,
-  output.activation = "linear",
-  loss = "mean_squared_error",
-  optimizer = "adam",
-  metrics = c("mean_absolute_error"),
-  verbose = 1
+  epochs = 10,
+  verbose = 1,
+  validation_split = 0,
+  cross_validation = NULL
 )
 }
 \arguments{
+\item{model}{A model object to train, e.g. returned by \code{build.MLP}.}
+
 \item{X}{A feature data set, usually a matrix or data frame.}
 
 \item{Y}{An outcome data set, usually a vector, matrix or data frame.}
 
+\item{batch_size}{Batch size, the number of samples per gradient update.}
+
 \item{epochs}{Number of epochs to train the model.}
 
-\item{batch_size}{Batch size, the number of samples used per gradient update.}
-
-\item{validation_split}{Fraction of the training data used as validation data.}
-
-\item{k.fold}{Number of folds within k-fold cross validation or \code{NULL} if no grid search is desired.}
-
-\item{k.optimizer}{Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.}
-
-\item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units
-and the second column the activation function. The number of rows determines the number of hidden layers.}
-
-\item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
-
-\item{output.activation}{A name of the output activation function.}
-
-\item{loss}{Name of objective function or objective function. If the model has multiple outputs,
-different loss on each output can be used by passing a dictionary or a list of objectives.
-The loss value that will be minimized by the model will then be the sum of all individual losses.}
-
-\item{optimizer}{Name of optimizer or optimizer instance.}
-
-\item{metrics}{Vector or list of metrics to be evaluated by the model during training and testing.}
-
 \item{verbose}{Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) determines how the training progress is visualized.}
+
+\item{validation_split}{Float between 0 and 1. Fraction of the training data used as validation data.}
+
+\item{cross_validation}{List or \code{NULL} (default). The list contains two elements whereby the first element stands for the number of folds (k)
+and the second element indicates the type \code{min} or \code{max} for quality measuring.}
 }
 \value{
-A list with named elements
-  \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
-  \code{model}: A trained model object with stacked layers.
-  \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the
-                   first columns stores the epoch number and the second column the mean of the underpinned quality metric.
+A trained model object.
 }
 \description{
-\code{fit.MLP} is a wrapper function for building and fitting a feedforward SLP or MLP.
+\code{fit.MLP} is a wrapper function for fitting a feedforward SLP or MLP.
 }
 \seealso{
-\code{\link{build.MLP}}, \code{\link[keras]{compile.keras.engine.training.Model}}, \code{\link[keras]{fit.keras.engine.training.Model}}.
+\code{\link{build.MLP}},
+  \code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as.ANN.matrix}()},
@@ -79,7 +56,9 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.samples}()},
 \code{\link{get.MLP.Y.units}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{vector.as.ANN.matrix}()},
 \code{\link{vector.as.numeric}()}
 }

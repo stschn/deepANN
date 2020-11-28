@@ -31,7 +31,9 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{get.MLP.X.samples}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.units}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{vector.as.ANN.matrix}()},
 \code{\link{vector.as.numeric}()}
 }

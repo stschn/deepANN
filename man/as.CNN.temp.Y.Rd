@@ -4,7 +4,7 @@
 \alias{as.CNN.temp.Y}
 \title{Outcomes (Y) data format for a temporal CNN}
 \usage{
-as.CNN.temp.Y(Y, timesteps = NULL, reverse = FALSE)
+as.CNN.temp.Y(Y, timesteps = 1L, reverse = FALSE)
 }
 \arguments{
 \item{Y}{An outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.}
@@ -15,7 +15,7 @@ as.CNN.temp.Y(Y, timesteps = NULL, reverse = FALSE)
 }
 \value{
 Dependent on the type of \code{Y} and timesteps. If \code{Y} is a factor, the result is a one-hot vector.
-  If \code{timesteps = NULL} a 2D-array with the dimensions samples and number of output units, representing a scalar outcome;
+  If \code{timesteps = NULL|1} a 2D-array with the dimensions samples and number of output units, representing a scalar outcome;
   if \code{timesteps >= 2} a 3D-array with the dimensions samples, timesteps and number of output units, representing a sequence or multi-step outcome.
 }
 \description{

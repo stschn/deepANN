@@ -20,7 +20,7 @@
 )
 }
 \arguments{
-\item{model}{A model object, returned by \code{fit.MLP} or \code{fit.LSTM} in the list element \code{model}.}
+\item{model}{A model object, e.g. returned by \code{fit.MLP} or \code{fit.LSTM}.}
 
 \item{X.tensor}{A feature tensor returned by \code{as.MLP.X} or \code{as.LSTM.X}.}
 
@@ -73,6 +73,8 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.samples}()},
 \code{\link{get.MLP.Y.units}()},
+\code{\link{load_weights.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{vector.as.ANN.matrix}()},
 \code{\link{vector.as.numeric}()}
 
@@ -93,6 +95,8 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

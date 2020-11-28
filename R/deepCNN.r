@@ -234,14 +234,14 @@ get.CNN.temp.X.units <- function(X.tensor) { return(if (length(d <- dim(X.tensor
 #' @param reverse A logical value indicating the order of the values in the resampled outcome matrix \code{Y}. The values can be in given order (forward in time) or in reverse order (backward in time).
 #'
 #' @return Dependent on the type of \code{Y} and timesteps. If \code{Y} is a factor, the result is a one-hot vector.
-#'   If \code{timesteps = NULL} a 2D-array with the dimensions samples and number of output units, representing a scalar outcome;
+#'   If \code{timesteps = NULL|1} a 2D-array with the dimensions samples and number of output units, representing a scalar outcome;
 #'   if \code{timesteps >= 2} a 3D-array with the dimensions samples, timesteps and number of output units, representing a sequence or multi-step outcome.
 #' @export
 #'
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.CNN.temp.X}}.
 #'
 #' @examples
-as.CNN.temp.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
+as.CNN.temp.Y <- function(Y, timesteps = 1L, reverse = FALSE) {
   return(deepANN::as.LSTM.Y(Y, timesteps = timesteps, reverse = reverse))
 }
 

@@ -6,9 +6,9 @@
 \usage{
 \method{start}{invert_differencing}(
   invert_first_row,
-  differences = 1,
-  timesteps = 1,
-  lag = 0,
+  differences = 1L,
+  timesteps = 1L,
+  lag = 0L,
   type = "univariate"
 )
 }
@@ -49,6 +49,8 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
-\code{\link{predict.ANN}()}
+\code{\link{load_weights.ANN}()},
+\code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()}
 }
 \concept{Recurrent Neural Network (RNN)}

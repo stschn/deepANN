@@ -4,7 +4,7 @@
 \alias{as.LSTM.Y}
 \title{Outcomes (Y) data format for LSTM}
 \usage{
-as.LSTM.Y(Y, timesteps = NULL, reverse = FALSE)
+as.LSTM.Y(Y, timesteps = 1L, reverse = FALSE)
 }
 \arguments{
 \item{Y}{An outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.}
@@ -15,7 +15,7 @@ as.LSTM.Y(Y, timesteps = NULL, reverse = FALSE)
 }
 \value{
 Dependent on the type of \code{Y} and timesteps. If \code{Y} is a factor, the result is a one-hot vector.
-  If \code{timesteps = NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y},
+  If \code{timesteps = NULL|1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y},
   if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 }
 \description{
@@ -41,7 +41,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

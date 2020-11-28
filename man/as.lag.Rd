@@ -4,7 +4,7 @@
 \alias{as.lag}
 \title{Get ANN lag from ARIMA(X) lag}
 \usage{
-as.lag(arima_lag = 0, type = "univariate")
+as.lag(arima_lag = 0L, type = "univariate")
 }
 \arguments{
 \item{arima_lag}{The lag or p-Value from an ARIMA(X) (p-d-q) model.}
@@ -34,7 +34,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

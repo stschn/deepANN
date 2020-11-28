@@ -4,7 +4,7 @@
 \alias{as.timesteps}
 \title{Get ANN timesteps from ANN lag}
 \usage{
-as.timesteps(lag = 1, type = "univariate")
+as.timesteps(lag = 1L, type = "univariate")
 }
 \arguments{
 \item{lag}{The ANN lag, returned by \code{as.lag}.}
@@ -36,7 +36,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

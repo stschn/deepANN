@@ -4,7 +4,7 @@
 \alias{get.period_shift}
 \title{Period shift}
 \usage{
-get.period_shift(timesteps = 1, lag = 0, type = "univariate")
+get.period_shift(timesteps = 1L, lag = 0L, type = "univariate")
 }
 \arguments{
 \item{timesteps}{The number of timesteps.}
@@ -38,7 +38,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.samples}()},
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

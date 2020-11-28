@@ -5,80 +5,49 @@
 \title{Fit LSTM model}
 \usage{
 fit.LSTM(
+  model,
   X,
   Y,
-  timesteps = 1,
-  epochs = 100,
-  batch_size = c(1, FALSE),
-  validation_split = 0.2,
-  k.fold = NULL,
-  k.optimizer = NULL,
-  hidden = NULL,
-  dropout = NULL,
-  output.activation = "linear",
-  stateful = FALSE,
-  return_sequences = FALSE,
-  loss = "mean_squared_error",
-  optimizer = "adam",
-  metrics = c("mean_absolute_error"),
-  verbose = 1
+  timesteps = 1L,
+  batch_size = 1,
+  epochs = 10,
+  verbose = 1,
+  validation_split = 0,
+  cross_validation = NULL
 )
 }
 \arguments{
+\item{model}{A model object to train, e.g. returned by \code{build.LSTM}.}
+
 \item{X}{A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.}
 
-\item{Y}{n outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.}
+\item{Y}{An outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.}
 
-\item{timesteps}{A number or vector of timesteps for \code{X} and \code{Y}. A timestep denotes the number of different periods of the values within one sample.
+\item{timesteps}{A vector of timesteps for \code{X} and \code{Y}.
 A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
 If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. If two values are given,
 the first value is used as before and the second value for the resampled sequence or multi-step outcome tensor produced by \code{as.LSTM.Y}.}
 
-\item{epochs}{The number of epochs.}
+\item{batch_size}{Batch size, the number of samples per gradient update within training process.}
 
-\item{batch_size}{A vector with two elements. The first element holds the batch size, the number of samples used per gradient update.
-The second element is a logical value indicating whether the batch size is used for input layer too (\code{TRUE}).}
-
-\item{validation_split}{Fraction of the training data used as validation data.}
-
-\item{k.fold}{Number of folds within k-fold cross validation or \code{NULL} if no grid search is desired.}
-
-\item{k.optimizer}{Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.}
-
-\item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units
-and the second column the activation function. The number of rows determines the number of hidden layers.}
-
-\item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
-
-\item{output.activation}{A name of the output activation function.}
-
-\item{stateful}{A logical value indicating whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).}
-
-\item{return_sequences}{A logical value indicating whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).}
-
-\item{loss}{Name of objective function or objective function. If the model has multiple outputs,
-different loss on each output can be used by passing a dictionary or a list of objectives.
-The loss value that will be minimized by the model will then be the sum of all individual losses.}
-
-\item{optimizer}{Name of optimizer or optimizer instance.}
-
-\item{metrics}{Vector or list of metrics to be evaluated by the model during training and testing.}
+\item{epochs}{Number of epochs to train the model.}
 
 \item{verbose}{Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) determines how the training progress is visualized.}
+
+\item{validation_split}{Float between 0 and 1. Fraction of the training data used as validation data.}
+
+\item{cross_validation}{List or \code{NULL} (default). The list contains two elements whereby the first element stands for the number of folds (k)
+and the second element indicates the type \code{min} or \code{max} for quality measuring.}
 }
 \value{
-A list with named elements
-  \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
-  \code{model}: A trained model object with stacked layers.
-  \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the
-                   first columns stores the epoch number and the second column the mean of the underpinned quality metric.
+A trained model object.
 }
 \description{
-\code{fit.LSTM} is a wrapper function for building and fitting a LSTM model.
+\code{fit.LSTM} is a wrapper function for fitting a LSTM model.
 }
 \seealso{
 \code{\link{build.LSTM}}, \code{\link{get.LSTM.XY}},
-  \code{\link[keras]{compile.keras.engine.training.Model}}, \code{\link[keras]{fit.keras.engine.training.Model}}.
+  \code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},
@@ -96,7 +65,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

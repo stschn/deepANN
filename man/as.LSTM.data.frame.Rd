@@ -9,7 +9,7 @@ as.LSTM.data.frame(
   Y,
   names_X,
   names_Y,
-  timesteps = 1,
+  timesteps = 1L,
   reverse = FALSE,
   suffix = "_t"
 )
@@ -56,7 +56,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

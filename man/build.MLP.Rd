@@ -8,21 +8,21 @@ build.MLP(
   features,
   hidden = NULL,
   dropout = NULL,
-  output = c(1, "linear"),
+  output = list(1, "linear"),
   loss = "mean_squared_error",
   optimizer = "adam",
   metrics = c("mean_absolute_error")
 )
 }
 \arguments{
-\item{features}{Number of features, returned by \code{get.MLP.X.units}.}
+\item{features}{Number of features, e.g. returned by \code{get.MLP.X.units}.}
 
 \item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
 \item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
 
-\item{output}{A vector with two elements whereby the first element determines the number of output units, returned by \code{get.MLP.Y.units},
+\item{output}{A list with two elements whereby the first element determines the number of output units, e.g. returned by \code{get.MLP.Y.units},
 and the second element the output activation function.}
 
 \item{loss}{Name of objective function or objective function. If the model has multiple outputs,
@@ -57,7 +57,9 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.samples}()},
 \code{\link{get.MLP.Y.units}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{vector.as.ANN.matrix}()},
 \code{\link{vector.as.numeric}()}
 }

@@ -4,7 +4,7 @@
 \alias{as.LSTM.X}
 \title{Features (X) data format for LSTM}
 \usage{
-as.LSTM.X(X, timesteps = 1, reverse = FALSE)
+as.LSTM.X(X, timesteps = 1L, reverse = FALSE)
 }
 \arguments{
 \item{X}{A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.}
@@ -42,7 +42,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}

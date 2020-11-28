@@ -36,8 +36,8 @@
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{as.LSTM.Y}}.
 #'
 #' @examples
-get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timesteps = 1, x.lag = 0,
-                        y_as_feature.type = c("none", "plain", "timesteps"), y_as_feature.lag = 0) {
+get.LSTM.XY <- function(dataset, x = NULL, y = 2L, other_columns = NULL, timesteps = 1L, x.lag = 0L,
+                        y_as_feature.type = c("none", "plain", "timesteps"), y_as_feature.lag = 0L) {
 
   check_column <- function(dataset, column = NULL, as.int = TRUE, err_column = "columns") {
     dataset <- as.data.frame(dataset)
@@ -65,21 +65,21 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
   data_list <- list()
   y.sequence <- FALSE
   df <- as.data.frame(dataset)
-  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1L] < 1), 1, timesteps[1L]) # at least a timestep of 1 is needed for x
-  if (length(timesteps) >= 2) {
+  x.steps <- ifelse((length(timesteps) == 0L) || (timesteps[1L] < 1L), 1L, timesteps[1L]) # at least a timestep of 1 is needed for x
+  if ((length(timesteps) >= 2L) && (timesteps[2L] >= 2L)) {
     y.sequence <- TRUE
-    y.steps <- ifelse(timesteps[2L] < 2, 2, timesteps[2L]) # at least a timestep of 2 is needed for sequence outcome y
+    y.steps <- timesteps[2L] # at least a timestep of 2 is needed for sequence outcome y
   }
   max_lag <- max(x.lag)
-  max_lag <- ifelse(max_lag < 0, 0, max_lag)
+  max_lag <- ifelse(max_lag < 0L, 0L, max_lag)
   if (is.null(x) || setequal(x, y)) {
     # univariate time series
-    lag <- ifelse(max_lag <= 0, 1, max_lag) # at least a lag of 1 is needed
+    lag <- ifelse(max_lag <= 0L, 1L, max_lag) # at least a lag of 1 is needed
     data_list[[1L]] <- df[1:(NROW(df) - lag), y, drop = FALSE]
     data_list[[2L]] <- df[(x.steps + lag):NROW(df), y, drop = FALSE]
     data_list[[3L]] <- NA
     if (!is.null(other_columns)) data_list[[3L]] <- df[(x.steps + lag):NROW(df), other_columns, drop = FALSE]
-    if (y.sequence) { data_list[[1L]] <- head(data_list[[1L]], -(y.steps - 1)) }
+    if (y.sequence) { data_list[[1L]] <- head(data_list[[1L]], -(y.steps - 1L)) }
   } else {
     # multivariate time series
     x.len <- length(x)
@@ -142,10 +142,10 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2, other_columns = NULL, timestep
 #' @export
 #'
 #' @examples
-get.period_shift <- function(timesteps = 1, lag = 0, type = "univariate") {
+get.period_shift <- function(timesteps = 1L, lag = 0L, type = "univariate") {
   lag <- max(lag)
-  if (type == "univariate") { lag <- ifelse(lag <= 0, 1, lag) }
-  return(timesteps + lag - 1)
+  if (type == "univariate") { lag <- ifelse(lag <= 0L, 1L, lag) }
+  return(timesteps + lag - 1L)
 }
 
 #' Start row index/period for invert differencing
@@ -166,7 +166,7 @@ get.period_shift <- function(timesteps = 1, lag = 0, type = "univariate") {
 #' @seealso \code{\link{get.period_shift}}.
 #'
 #' @examples
-start.invert_differencing <- function(invert_first_row, differences = 1, timesteps = 1, lag = 0, type = "univariate") {
+start.invert_differencing <- function(invert_first_row, differences = 1L, timesteps = 1L, lag = 0L, type = "univariate") {
   return(invert_first_row + get.period_shift(timesteps, lag, type) - differences)
 }
 
@@ -181,11 +181,11 @@ start.invert_differencing <- function(invert_first_row, differences = 1, timeste
 #' @export
 #'
 #' @examples
-as.lag <- function(arima_lag = 0, type = "univariate") {
+as.lag <- function(arima_lag = 0L, type = "univariate") {
   if (type == "multivariate") {
     l <- arima_lag
   } else {
-    l <- ifelse(arima_lag < 1, 1, arima_lag)
+    l <- ifelse(arima_lag < 1L, 1L, arima_lag)
   }
   return(l)
 }
@@ -203,9 +203,9 @@ as.lag <- function(arima_lag = 0, type = "univariate") {
 #' @seealso \code{\link{as.lag}}
 #'
 #' @examples
-as.timesteps <- function(lag = 1, type = "univariate") {
+as.timesteps <- function(lag = 1L, type = "univariate") {
   tsteps <- lag
-  if (type == "multivariate") { tsteps <- lag + 1 }
+  if (type == "multivariate") { tsteps <- lag + 1L }
   return(tsteps)
 }
 
@@ -227,7 +227,7 @@ as.timesteps <- function(lag = 1, type = "univariate") {
 #' @seealso \code{\link{get.LSTM.XY}}, \code{\link{as.LSTM.Y}}, \code{\link{as.ANN.matrix}}, \code{\link{as.tensor.3D}}.
 #'
 #' @examples
-as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
+as.LSTM.X <- function(X, timesteps = 1L, reverse = FALSE) {
   # variables <- NCOL(m)
   # samples <- NROW(m) - timesteps + 1
   # variable_matrix <- sapply(1:variables, function(j) {
@@ -237,7 +237,7 @@ as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
   # tensor <- array(NA, dim = c(samples, timesteps, variables))
   # for (i in 1:variables) { tensor[, , i] <- matrix(variable_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
   m <- data.matrix(X) # as.ANN.matrix(X)
-  timesteps <- ifelse(timesteps < 1, 1, timesteps) # at least a timestep of 1 is needed
+  timesteps <- ifelse(is.null(timesteps) || (timesteps < 1L), 1L, timesteps) # at least a timestep of 1 is needed
   return(as.tensor.3D(data = m, ncol = timesteps, reverse = reverse, by = c("step")))
 }
 
@@ -250,7 +250,7 @@ as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
 #' @param reverse Controls the order of the values in the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #'
 #' @return Dependent on the type of \code{Y} and timesteps. If \code{Y} is a factor, the result is a one-hot vector.
-#'   If \code{timesteps = NULL} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y},
+#'   If \code{timesteps = NULL|1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{Y},
 #'   if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{Y}.
 #' @export
 #'
@@ -258,7 +258,7 @@ as.LSTM.X <- function(X, timesteps = 1, reverse = FALSE) {
 #'   \code{\link{as.tensor.2D}}, \code{\link{as.tensor.3D}}.
 #'
 #' @examples
-as.LSTM.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
+as.LSTM.Y <- function(Y, timesteps = 1L, reverse = FALSE) {
   # Factor outcome must be rebuild as a one-hot vector
   if (isTRUE((NCOL(f <- Filter(is.factor, Y)) > 0L) && (length(f) > 0))) {
     f <- as.data.frame(f)
@@ -269,10 +269,10 @@ as.LSTM.Y <- function(Y, timesteps = NULL, reverse = FALSE) {
   # Metric outcome
   else {
     m <- data.matrix(Y) # as.ANN.matrix(Y)
-    if (is.null(timesteps)) {
+    if ((is.null(timesteps)) || (timesteps <= 1L)) {
       return(as.tensor.2D(data = m, reverse = reverse))
     } else {
-      timesteps <- ifelse(timesteps < 2, 2L, timesteps)
+      timesteps <- ifelse(timesteps < 2L, 2L, timesteps) # at least a timestep of 2 is needed for a sequence outcome
       return(as.tensor.3D(data = m, ncol = timesteps, reverse = reverse, by = c("step")))
     }
   }
@@ -344,7 +344,7 @@ get.LSTM.Y.samples <- function(Y.tensor) { return(dim(Y.tensor)[1L]) }
 #' @seealso \code{\link{as.LSTM.Y}}, \code{\link{get.LSTM.Y.samples}}, \code{\link{get.LSTM.Y.units}}.
 #'
 #' @examples
-get.LSTM.Y.timesteps <- function(Y.tensor) { return(if (length(d <- dim(Y.tensor)) == 3) d[2L] else NULL) }
+get.LSTM.Y.timesteps <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.tensor)) == 3, d[2L], 1L)) }
 
 #' Get number of output units from outcome tensor
 #'
@@ -380,7 +380,7 @@ get.LSTM.Y.units <- function(Y.tensor) { return(ifelse(length(d <- dim(Y.tensor)
 #' @seealso \code{\link{get.LSTM.XY}}.
 #'
 #' @examples
-as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = FALSE, suffix = "_t") {
+as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1L, reverse = FALSE, suffix = "_t") {
 
   gen_colnames_timesteps <- function(caption, timesteps) {
     if (!reverse) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
@@ -393,14 +393,15 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
   }
 
   y.sequence <- FALSE
-  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1L] < 1), 1, timesteps[1L])
-  if (length(timesteps) >= 2) {
+  x.steps <- ifelse((length(timesteps) == 0) || (timesteps[1L] < 1L), 1L, timesteps[1L])
+  if ((length(timesteps) >= 2L) && (timesteps[2L] >= 2L)) {
     y.sequence <- TRUE
-    y.steps <- ifelse(timesteps[2L] < 2, 2, timesteps[2L])
+    y.steps <- timesteps[2L]
   }
 
   X.tensor <- as.LSTM.X(X, x.steps, reverse)
-  Y.tensor <- as.LSTM.Y(Y, switch(y.sequence + 1, NULL, y.steps), reverse)
+  #Y.tensor <- as.LSTM.Y(Y, switch(y.sequence + 1, NULL, y.steps), reverse)
+  Y.tensor <- as.LSTM.Y(Y, ifelse(!y.sequence, 1L, y.steps), reverse)
   dim(X.tensor) <- c(dim(X.tensor)[1L], dim(X.tensor)[2L] * dim(X.tensor)[3L])
   if (y.sequence) { dim(Y.tensor) <- c(dim(Y.tensor)[1L], dim(Y.tensor)[2L] * dim(Y.tensor)[3L]) }
   dataset <- cbind.data.frame(Y.tensor, X.tensor)
@@ -419,14 +420,14 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
-#' @param features Number of features, returned by \code{get.LSTM.X.units}.
-#' @param timesteps The number of timesteps.
-#' @param batch_size Batch size, the number of samples used per gradient update.
-#'   A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211), Culli/Kapoor/Pal (2019:290).
+#' @param features Number of features, e.g. returned by \code{get.LSTM.X.units}.
+#' @param timesteps The number of feature timesteps. A timestep denotes the number of different periods of the values within one sample.
+#' @param batch_size Batch size, the number of samples per gradient update, as information within input shape.
+#'   A batch size should reflect the periodicity of the data, see Gulli/Pal (2017:211), Gulli/Kapoor/Pal (2019:290).
 #' @param hidden A data frame with two columns whereby the first column contains the number of hidden units
 #'   and the second column the activation function. The number of rows determines the number of hidden layers.
 #' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
-#' @param output A vector with two elements whereby the first element determines the number of output units, returned by \code{get.LSTM.Y.units},
+#' @param output A list with two elements whereby the first element determines the number of output units, e.g. returned by \code{get.LSTM.Y.units},
 #'   and the second element the output activation function.
 #' @param stateful A logical value indicating whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
 #' @param return_sequences A logical value indicating whether an outcome unit produces one value (\code{FALSE}) or values per each timestep (\code{TRUE}).
@@ -439,17 +440,21 @@ as.LSTM.data.frame <- function(X, Y, names_X, names_Y, timesteps = 1, reverse = 
 #' @return A model object with stacked lstm layers, an output dense layer and optional dropout layers.
 #' @export
 #'
+#' @references
+#'   Gulli, A., Pal, S. (2017): Deep Learning with Keras: Implement neural networks with Keras on Theano and TensorFlow. 2017. Birmingham: Packt Publishing.
+#'   Gulli, A., Kapoor, A., Pal, S. (2017): Deep Learning with TensorFlow 2 and Keras: Regression, ConvNets, GANs, RNNs, NLP, and more with TensorFlow 2 and the Keras API. 2. Aufl., 2019. Birmingham: Packt Publishing.
+#'
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.units}}, \code{\link{get.LSTM.Y.units}},
 #'   \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}}, \code{\link[keras]{layer_lstm}}
 #'   \code{\link[keras]{compile.keras.engine.training.Model}}.
 #'
 #' @examples
-build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL, dropout = NULL, output = c(1, "linear"),
+build.LSTM <- function(features, timesteps = 1L, batch_size = NULL, hidden = NULL, dropout = NULL, output = list(1, "linear"),
                        stateful = FALSE, return_sequences = FALSE,
                        loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
-  lstm_model <- keras::keras_model_sequential()
+  model <- keras::keras_model_sequential()
   if (is.null(hidden)) {
-    lstm_model %>% keras::layer_lstm(units = output[1], activation = output[2], input_shape = c(timesteps, features), batch_size = batch_size, stateful = stateful, return_sequences = return_sequences)
+    model %>% keras::layer_lstm(units = output[[1L]], activation = output[[2L]], input_shape = c(timesteps[1L], features), batch_size = batch_size, stateful = stateful, return_sequences = return_sequences)
   } else {
     h <- as.data.frame(hidden)
     N <- NROW(h)
@@ -457,129 +462,86 @@ build.LSTM <- function(features, timesteps = 1, batch_size = NULL, hidden = NULL
     # Therefore, return_sequences must be set to TRUE with exception of the last layer if no sequence outcome is produced.
     rs <- ifelse(N <= 1, return_sequences, TRUE)
     # First hidden layer with input shape
-    lstm_model %>% keras::layer_lstm(units = h[1L, 1L], activation = h[1L, 2L], input_shape = c(timesteps, features), batch_size = batch_size, stateful = stateful, return_sequences = rs)
-    d <- 1
-    D <- ifelse(!(is.null(dropout)), NROW(dropout), 0)
-    if (D > 0) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
+    model %>% keras::layer_lstm(units = h[1L, 1L], activation = h[1L, 2L], input_shape = c(timesteps[1L], features), batch_size = batch_size, stateful = stateful, return_sequences = rs)
+    d <- 1L
+    D <- ifelse(!(is.null(dropout)), NROW(dropout), 0L)
+    if (D > 0L) { model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1L }
     # Further hidden layers
-    i <- 2
+    i <- 2L
     while (i <= N) {
       if ((i == (N)) && (!return_sequences)) { rs <- !rs }
-      lstm_model %>% keras::layer_lstm(units = h[i, 1L], activation = h[i, 2L], stateful = stateful, return_sequences = rs)
-      i <- i + 1
-      if (d <= D) { lstm_model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1 }
+      model %>% keras::layer_lstm(units = h[i, 1L], activation = h[i, 2L], stateful = stateful, return_sequences = rs)
+      i <- i + 1L
+      if (d <= D) { model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1L }
     }
     # Output layer
     if (!return_sequences) {
-      lstm_model %>% keras::layer_dense(units = output[1L], activation = output[2L])
+      model %>% keras::layer_dense(units = output[[1L]], activation = output[[2L]])
     } else {
-      lstm_model %>% keras::time_distributed(keras::layer_dense(units = output[1L], activation = output[2L]))
+      model %>% keras::time_distributed(keras::layer_dense(units = output[[1L]], activation = output[[2L]]))
     }
   }
-  lstm_model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
-  return(lstm_model)
+  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
+  return(model)
 }
 
 #' Fit LSTM model
 #'
-#' \code{fit.LSTM} is a wrapper function for building and fitting a LSTM model.
+#' \code{fit.LSTM} is a wrapper function for fitting a LSTM model.
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
+#' @param model A model object to train, e.g. returned by \code{build.LSTM}.
 #' @param X A feature data set, usually a matrix or data frame, returned by \code{get.LSTM.XY}.
-#' @param Y n outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.
-#' @param timesteps A number or vector of timesteps for \code{X} and \code{Y}. A timestep denotes the number of different periods of the values within one sample.
+#' @param Y An outcome data set, usually a vector, matrix or data frame, returned by \code{get.LSTM.XY}.
+#' @param timesteps A vector of timesteps for \code{X} and \code{Y}.
 #'   A feature does always have at least one timestep, but an outcome is either a scalar with one implicit timestep or a sequence with at least two timesteps.
 #'   If only one value for \code{timesteps} is given, this value is used for the resampled feature tensor produced by \code{as.LSTM.X}. If two values are given,
 #'   the first value is used as before and the second value for the resampled sequence or multi-step outcome tensor produced by \code{as.LSTM.Y}.
-#' @param epochs The number of epochs.
-#' @param batch_size A vector with two elements. The first element holds the batch size, the number of samples used per gradient update.
-#'   The second element is a logical value indicating whether the batch size is used for input layer too (\code{TRUE}).
-#' @param validation_split Fraction of the training data used as validation data.
-#' @param k.fold Number of folds within k-fold cross validation or \code{NULL} if no grid search is desired.
-#' @param k.optimizer Either \code{min} or \code{max} to indicate which type of quality measuring is used; if \code{NULL} no quality measure is extracted.
-#' @param hidden A data frame with two columns whereby the first column contains the number of hidden units
-#'   and the second column the activation function. The number of rows determines the number of hidden layers.
-#' @param dropout A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.
-#' @param output.activation A name of the output activation function.
-#' @param stateful A logical value indicating whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).
-#' @param return_sequences A logical value indicating whether an outcome unit produces one value (\code{FALSE}) (default) or values per each timestep (\code{TRUE}).
-#' @param loss Name of objective function or objective function. If the model has multiple outputs,
-#'   different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param batch_size Batch size, the number of samples per gradient update within training process.
+#' @param epochs Number of epochs to train the model.
 #' @param verbose Verbosity mode (0 = silent, 1 = progress bar, 2 = one line per epoch) determines how the training progress is visualized.
+#' @param validation_split Float between 0 and 1. Fraction of the training data used as validation data.
+#' @param cross_validation List or \code{NULL} (default). The list contains two elements whereby the first element stands for the number of folds (k)
+#'   and the second element indicates the type \code{min} or \code{max} for quality measuring.
 #'
-#' @return A list with named elements
-#'   \code{hyperparamter}: A list with named elements \code{features} and \code{output.units}.
-#'   \code{model}: A trained model object with stacked layers.
-#'   \code{avg_qual}: Only if k-fold cross validation is used. A data frame with two columns whereby the
-#'                    first columns stores the epoch number and the second column the mean of the underpinned quality metric.
+#' @return A trained model object.
 #' @export
 #'
 #' @seealso \code{\link{build.LSTM}}, \code{\link{get.LSTM.XY}},
-#'   \code{\link[keras]{compile.keras.engine.training.Model}}, \code{\link[keras]{fit.keras.engine.training.Model}}.
+#'   \code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
 #'
 #' @examples
-fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE), validation_split = 0.2,
-                     k.fold = NULL, k.optimizer = NULL,
-                     hidden = NULL, dropout = NULL, output.activation = "linear",
-                     stateful = FALSE, return_sequences = FALSE,
-                     loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error'),
-                     verbose = 1) {
-  l <- list() # result
-  l_names <- c("hyperparameter", "model", "avg_qual")
-  l_hyperparameter_names <- c("features", "output_units")
+fit.LSTM <- function(model, X, Y, timesteps = 1L, batch_size = 1, epochs = 10, verbose = 1, 
+                     validation_split = 0, cross_validation = NULL) {
+  base_model <- model
+
+  # Feature and outcome timesteps
+  X.steps <- ifelse(((l <- length(timesteps)) == 0) || (timesteps[1L] < 1L), 1L, timesteps[1L]) # at least a timestep of 1 is needed for x
+  Y.steps <- ifelse(l < 2L, 1L, timesteps[2L])
 
   # LSTM data format
-  X.steps <- ifelse((length(timesteps) == 0) || (timesteps[1L] < 1), 1, timesteps[1L]) # at least a timestep of 1 is needed for x
-  Y.steps <- switch(return_sequences + 1, NULL, ifelse(((length(timesteps) < 2) || (timesteps[2L] < 2)), 2, timesteps[2L]))
   X.train <- as.LSTM.X(X, X.steps)
   Y.train <- as.LSTM.Y(Y, Y.steps)
 
-  # Calculated Hyperparameters
-  X.units <- get.LSTM.X.units(X.train) # Number of features
-  Y.units <- get.LSTM.Y.units(Y.train) # Number of output units
-  l[[1L]] <- list(X.units, Y.units)
-  names(l[[1L]]) <- l_hyperparameter_names
-
-  # Should batch size also be used for specifying the input shape?
-  if (batch_size[2L] == F) { input_batch_size <- NULL } else {input_batch_size <- batch_size[1L] }
-
-  # Build model procedure
-  build_lstm_model <- function() {
-    lstm_model <- build.LSTM(features = X.units,
-                             timesteps = X.steps,
-                             batch_size = input_batch_size,
-                             hidden = hidden,
-                             dropout = dropout,
-                             output = c(Y.units, output.activation),
-                             stateful = stateful,
-                             return_sequences = return_sequences,
-                             loss = loss,
-                             optimizer = optimizer,
-                             metrics = metrics)
-  }
-
-  if (is.null(k.fold)) {
-    # Build and fit the model
-    l[[2L]] <- build_lstm_model()
-    names(l) <- l_names[1:2]
-    if (stateful == T) {
+  if (is.null(cross_validation)) {
+    # Train the model
+    if (isTRUE(base_model$stateful)) {
       for (i in 1:epochs) {
         # By default, Keras will shuffle the rows within each batch, which will destroy the alignment
-        # that is needed for a stateful RNN to learn effectively [Culli/Pal (2017:211)].
+        # that is needed for a stateful RNN to learn effectively [Gulli/Pal (2017:211)].
         # Therefore, shuffle must be set to false to keep alignment alive.
-        l[[2L]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
-        l[[2L]] %>% keras::reset_states()
+        base_model %>% keras::fit(X.train, Y.train, batch_size = batch_size, epochs = 1, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
+        base_model %>% keras::reset_states()
       }
     } else {
-      l[[2L]] %>% keras::fit(X.train, Y.train, epochs = epochs, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose)
+      base_model %>% keras::fit(X.train, Y.train, batch_size = batch_size, epochs = epochs, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
     }
   }
   else {
-    k <- k.fold
+    if (length(cross_validation) < 2L)
+      stop("k-fold cross validation needs two parameters: k and optimizer.")
+    k <- cross_validation[[1L]]
     # List of data sets folds
     x.fold_datasets <- cross_validation_split(X, k)
     y.fold_datasets <- cross_validation_split(Y, k)
@@ -593,20 +555,20 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       # Extract training and validation fold
       x.train.fold <- as.LSTM.X(x.fold_datasets[[i]], X.steps)
       y.train.fold <- as.LSTM.Y(y.fold_datasets[[i]], Y.steps)
-      x.val.fold <- as.LSTM.X(x.fold_datasets[[i + 1]], X.steps)
-      y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1]], Y.steps)
+      x.val.fold <- as.LSTM.X(x.fold_datasets[[i + 1L]], X.steps)
+      y.val.fold <- as.LSTM.Y(y.fold_datasets[[i + 1L]], Y.steps)
 
-      # Build model
-      l[[2L]] <- build_lstm_model()
+      # Temporary model
+      temp_model <- base_model
 
       # Train/fit model
-      history <- l[[2L]] %>%
-        keras::fit(x = x.train.fold, y = y.train.fold, epochs = epochs, batch_size = batch_size[1L],
-            validation_data = list(x.val.fold, y.val.fold), verbose = verbose)
+      history <- temp_model %>%
+        keras::fit(x = x.train.fold, y = y.train.fold, batch_size = batch_size, epochs = epochs, verbose = verbose,
+            validation_data = list(x.val.fold, y.val.fold), shuffle = FALSE)
 
       # Store training results
-      results <- l[[2L]] %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size[1L], verbose = 0)
-      m <- l[[2L]]$metrics_names[2]
+      results <- temp_model %>% keras::evaluate(x.val.fold, y.val.fold, batch_size = batch_size, verbose = 0)
+      m <- temp_model$metrics_names[2L]
       all_scores <- c(all_scores, results[m])
       qual_history <- history$metrics[[4L]]
       all_qual_histories <- rbind(all_qual_histories, qual_history)
@@ -618,29 +580,26 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
       validation_qual = apply(all_qual_histories, 2L, mean)
     )
 
-    l[[3L]] <- average_qual_history
-    names(l) <- l_names
-
     # Train/Fit the final or generalized model
     # The function can deal with min or max optimization
-    if (!(is.null(k.optimizer))) {
-      if (k.optimizer == "min") {
+    k_optimizer <- cross_validation[[2L]]
+    if (!(is.null(k_optimizer))) {
+      if (k_optimizer == "min") {
         opt_epochs <- average_qual_history$epoch[which.min(average_qual_history$validation_qual)]
       } else {
         opt_epochs <- average_qual_history$epoch[which.max(average_qual_history$validation_qual)]
       }
-      l[[2L]] <- build_lstm_model()
-      if (stateful == T) {
+      if (isTRUE(base_model$stateful)) {
         for (i in 1:opt_epochs) {
-          l[[2L]] %>% keras::fit(X.train, Y.train, epochs = 1, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose, shuffle = FALSE)
-          l[[2L]] %>% keras::reset_states()
+          base_model %>% keras::fit(X.train, Y.train, batch_size = batch_size, epochs = 1, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
+          base_model %>% keras::reset_states()
         }
       } else {
-        l[[2L]] %>% keras::fit(X.train, Y.train, epochs = opt_epochs, batch_size = batch_size[1L], validation_split = validation_split, verbose = verbose)
+        base_model %>% keras::fit(X.train, Y.train, batch_size = batch_size, epochs = opt_epochs, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
       }
     }
   }
-  return(l)
+  return(base_model)
 }
 
 #' Predict with ANN model
@@ -648,7 +607,7 @@ fit.LSTM <- function(X, Y, timesteps = 1, epochs = 100, batch_size = c(1, FALSE)
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #' @family Recurrent Neural Network (RNN)
 #'
-#' @param model A model object, returned by \code{fit.MLP} or \code{fit.LSTM} in the list element \code{model}.
+#' @param model A model object, e.g. returned by \code{fit.MLP} or \code{fit.LSTM}.
 #' @param X.tensor A feature tensor returned by \code{as.MLP.X} or \code{as.LSTM.X}.
 #' @param batch_size Batch size, the number of samples used per gradient update.
 #' @param scale_type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
@@ -797,7 +756,7 @@ predict.ANN <- function(model, X.tensor, batch_size = 1,
 #' @seealso \code{\link{as.LSTM.X}}, \code{\link{predict.ANN}}.
 #'
 #' @examples
-as.LSTM.period_outcome <- function(dataset, p, y, timesteps = 1, lag = 0, type = "univariate") {
+as.LSTM.period_outcome <- function(dataset, p, y, timesteps = 1L, lag = 0L, type = "univariate") {
   shift <- get.period_shift(timesteps, lag, type)
   if (shift > 0) {
     period <- dataset[, p][-c(1:shift)]
@@ -807,4 +766,46 @@ as.LSTM.period_outcome <- function(dataset, p, y, timesteps = 1, lag = 0, type =
     outcome <- dataset[, y]
   }
   return(cbind.data.frame(period, outcome))
+}
+
+#' Save model weights to file
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#' @family Recurrent Neural Network (RNN)
+#'
+#' @param model A model object.
+#' @param filename The file name.
+#'
+#' @return The model object.
+#' @export
+#'
+#' @seealso \code{\link{load_weights.ANN}}, \code{\link[base]{files}},
+#'   \code{\link[keras]{save_model_weights_hdf5}}.
+#'
+#' @examples
+save_weights.ANN <- function(model, filename) {
+  model %>% keras::save_model_weights_hdf5(filename)
+  return(model)
+}
+
+#' Load model weights from file
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#' @family Recurrent Neural Network (RNN)
+#'
+#' @param model A model object.
+#' @param filename The file name.
+#'
+#' @return The model object.
+#' @export
+#'
+#' @seealso \code{\link{save_weights.ANN}}, \code{\link[base]{files}},
+#'   \code{\link[keras]{save_model_weights_hdf5}}.
+#'
+#' @examples
+load_weights.ANN <- function(model, filename) {
+  if (!file.exists(filename))
+    stop("file does not exist.")
+  model %>% keras::load_model_weights_hdf5(filename)
+  return(model)
 }

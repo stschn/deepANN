@@ -6,11 +6,11 @@
 \usage{
 build.LSTM(
   features,
-  timesteps = 1,
+  timesteps = 1L,
   batch_size = NULL,
   hidden = NULL,
   dropout = NULL,
-  output = c(1, "linear"),
+  output = list(1, "linear"),
   stateful = FALSE,
   return_sequences = FALSE,
   loss = "mean_squared_error",
@@ -19,19 +19,19 @@ build.LSTM(
 )
 }
 \arguments{
-\item{features}{Number of features, returned by \code{get.LSTM.X.units}.}
+\item{features}{Number of features, e.g. returned by \code{get.LSTM.X.units}.}
 
-\item{timesteps}{The number of timesteps.}
+\item{timesteps}{The number of feature timesteps. A timestep denotes the number of different periods of the values within one sample.}
 
-\item{batch_size}{Batch size, the number of samples used per gradient update.
-A batch size should reflect the periodicity of the data, see Culli/Pal (2017:211), Culli/Kapoor/Pal (2019:290).}
+\item{batch_size}{Batch size, the number of samples per gradient update, as information within input shape.
+A batch size should reflect the periodicity of the data, see Gulli/Pal (2017:211), Gulli/Kapoor/Pal (2019:290).}
 
 \item{hidden}{A data frame with two columns whereby the first column contains the number of hidden units
 and the second column the activation function. The number of rows determines the number of hidden layers.}
 
 \item{dropout}{A numeric vector with dropout rates, the fractions of input units to drop or \code{NULL} if no dropout is desired.}
 
-\item{output}{A vector with two elements whereby the first element determines the number of output units, returned by \code{get.LSTM.Y.units},
+\item{output}{A list with two elements whereby the first element determines the number of output units, e.g. returned by \code{get.LSTM.Y.units},
 and the second element the output activation function.}
 
 \item{stateful}{A logical value indicating whether the last cell state of a LSTM unit at t-1 is used as initial cell state of the unit at period t (\code{TRUE}).}
@@ -54,6 +54,10 @@ A model object with stacked lstm layers, an output dense layer and optional drop
   For a univariate time series, usually \code{stateful=TRUE} and \code{batch_size=1} with \code{return_sequences = FALSE}.
   For a multivariate time series, usually \code{stateful=FALSE} and \code{batch_size=NULL} with \code{return_sequences = TRUE}.
 }
+\references{
+Gulli, A., Pal, S. (2017): Deep Learning with Keras: Implement neural networks with Keras on Theano and TensorFlow. 2017. Birmingham: Packt Publishing.
+  Gulli, A., Kapoor, A., Pal, S. (2017): Deep Learning with TensorFlow 2 and Keras: Regression, ConvNets, GANs, RNNs, NLP, and more with TensorFlow 2 and the Keras API. 2. Aufl., 2019. Birmingham: Packt Publishing.
+}
 \seealso{
 \code{\link{as.LSTM.X}}, \code{\link{get.LSTM.X.units}}, \code{\link{get.LSTM.Y.units}},
   \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}}, \code{\link[keras]{layer_lstm}}
@@ -75,7 +79,9 @@ Other Recurrent Neural Network (RNN):
 \code{\link{get.LSTM.Y.timesteps}()},
 \code{\link{get.LSTM.Y.units}()},
 \code{\link{get.period_shift}()},
+\code{\link{load_weights.ANN}()},
 \code{\link{predict.ANN}()},
+\code{\link{save_weights.ANN}()},
 \code{\link{start.invert_differencing}()}
 }
 \concept{Recurrent Neural Network (RNN)}
