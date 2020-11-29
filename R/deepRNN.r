@@ -128,15 +128,17 @@ get.LSTM.XY <- function(dataset, x = NULL, y = 2L, other_columns = NULL, timeste
 
 #' Period shift
 #'
-#' \code{get.period_shift} calculates the period shift for either a univariate or a multivariate time series.
-#'   A period shift denotes the number of periods to go backwards to get features (X) for outcomes (Y).
-#'   In other words: how many samples get lost respectively must be used as X for Y description/prediction?
-#'
 #' @family Recurrent Neural Network (RNN)
 #'
 #' @param timesteps The number of timesteps.
 #' @param lag The number of considered lags on feature side.
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
+#' 
+#' @details The period shift denotes the number of past periods starting from a certain period t, whose values of X are needed 
+#'   to describe Y in period t and which cannot be used to extract Y values. This number of past periods depends on the type of
+#'   timeseries (univariate or multivariate), the number of timesteps and the underpinned number of lags. In other words, the
+#'   period shift is the number of periods to go backwards to get features (X) for outcomes (Y) or as a question: how many samples
+#'   get lost respectively must be used as X for Y description/prediction?
 #'
 #' @return The period shift.
 #' @export
@@ -738,7 +740,7 @@ predict.ANN <- function(model, X.tensor, batch_size = 1,
   return(Y.hat)
 }
 
-#' Combination of periods and actual outcome values within a matrix for quality control or graphical representation
+#' Rebuild a data frame under consideration of time series type, timesteps and lags
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
@@ -748,12 +750,17 @@ predict.ANN <- function(model, X.tensor, batch_size = 1,
 #' @param timesteps The number of timesteps; stands for the number of different periods within one sample (record) of the resampled feature matrix, returned by \code{as.LSTM.X}.
 #' @param lag The number of considered lags on feature side.
 #' @param type The type of time series: \code{univariate} or \code{multivariate}.
+#' 
+#' @details Within time series analysis, \code{get.LSTM.XY} extracts X and Y of a matrix or data frame in a LSTM compatible preformat.
+#'   Then, these values are resampled thru \code{as.LSTM.X} and \code{as.LSTM.Y}. During extraction, the period shift is calculated
+#'   to determine the number of past periods which are used to extract X values for Y description/prediction. Because of this number
+#'   of periods cannot be used to extract Y values, this number must be deleted from \code{dataset}.
 #'
 #' @return A data frame with period and actual outcome values that can be used for quality assurance or
 #'   for graphical representation together with the predicted values produced by \code{predict.LSTM}.
 #' @export
 #'
-#' @seealso \code{\link{as.LSTM.X}}, \code{\link{predict.ANN}}.
+#' @seealso \code{\link{get.LSTM.XY}}, \code{\link{get.period_shift}}, \code{\link{predict.ANN}}.
 #'
 #' @examples
 as.LSTM.period_outcome <- function(dataset, p, y, timesteps = 1L, lag = 0L, type = "univariate") {

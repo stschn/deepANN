@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepRNN.r
 \name{as.LSTM.period_outcome}
 \alias{as.LSTM.period_outcome}
-\title{Combination of periods and actual outcome values within a matrix for quality control or graphical representation}
+\title{Rebuild a data frame under consideration of time series type, timesteps and lags}
 \usage{
 as.LSTM.period_outcome(
   dataset,
@@ -31,10 +31,16 @@ A data frame with period and actual outcome values that can be used for quality 
   for graphical representation together with the predicted values produced by \code{predict.LSTM}.
 }
 \description{
-Combination of periods and actual outcome values within a matrix for quality control or graphical representation
+Rebuild a data frame under consideration of time series type, timesteps and lags
+}
+\details{
+Within time series analysis, \code{get.LSTM.XY} extracts X and Y of a matrix or data frame in a LSTM compatible preformat.
+  Then, these values are resampled thru \code{as.LSTM.X} and \code{as.LSTM.Y}. During extraction, the period shift is calculated
+  to determine the number of past periods which are used to extract X values for Y description/prediction. Because of this number
+  of periods cannot be used to extract Y values, this number must be deleted from \code{dataset}.
 }
 \seealso{
-\code{\link{as.LSTM.X}}, \code{\link{predict.ANN}}.
+\code{\link{get.LSTM.XY}}, \code{\link{get.period_shift}}, \code{\link{predict.ANN}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as.LSTM.X}()},
