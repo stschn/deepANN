@@ -22,10 +22,20 @@ Cross entropy
 }
 \details{
 Cross entropy quantifies the difference between two probability distributions.
+  For a binary classification problem, the following equation can be used instead: 
+  \eqn{-sum((p * log(q)) + ((1 - p) * (1 - log(q))))}
 }
 \examples{
+  # multiclass classification
+  # each element represents the probability of the k-th class (k = 1,...,3)
   p <- c(0.10, 0.40, 0.50) # ground truth values
   q <- c(0.80, 0.15, 0.05) # estimated values, e.g. given by softmax function
+  cross_entropy(p, q)
+  
+  # binary classification
+  # the complementary probability is (1 - probability)
+  p <- c(1)   # ground truth value
+  q <- c(0.8) # estimated value
   cross_entropy(p, q)
 }
 \seealso{
