@@ -11,7 +11,7 @@
 #'   \code{least} removes the level with the least occurrences within the samples.
 #'   \code{none} removes none of the levels.
 #' @param effectcoding Instead of using default 0/1 value pairs for dummy variables, effectcoding allows to set -1/1 pairs.
-#' @param remove_columns A logical value indicating whether the factor/character variables should be removed from the data set after they have been encoded in dummy variables.
+#' @param remove_columns A logical value indicating whether the factor/character variables should be removed from \code{dataset} after they have been encoded in dummy variables.
 #'
 #' @return The data set with encoded dummy variables.
 #' @export
@@ -76,10 +76,62 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
   return(dataset)
 }
 
+#' Create dummy variables for multi-label columns
+#'
+#' @family Dummyfication
+#'
+#' @param dataset A data set with multi-label character variables.
+#' @param columns The names or indices of the columns for which dummy variables are to be created; if \code{NULL} (default), all character columns are encoded.
+#' @param split A character vector (or object which can be coerced to such) containing regular expression(s) to use for splitting.
+#' @param effectcoding Instead of using default 0/1 value pairs for dummy variables, effectcoding allows to set -1/1 pairs.
+#' @param remove_columns A logical value indicating whether the character variables should be removed from \code{dataset} after they have been encoded in dummy variables.
+#'
+#' @return The data set with encoded dummy variables.
+#' @export
+#'
+#' @seealso \code{\link{effectcoding}}, \code{\link[base]{strsplit}}.
+#'
+#' @examples
+dummify.multi_label <- function(dataset, columns = NULL, split = ",", effectcoding = FALSE, remove_columns = FALSE) {
+  dataset <- as.data.frame(dataset)
+  if (!is.null(columns)) {
+    cnames <- names(dataset)
+    if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) ||
+        (((is.character(columns))) && (!all(columns %in% cnames))))
+      stop("columns are not in dataset.")
+    if (!is.character(columns)) {
+      col_names <- cnames[columns]
+    } else {
+      col_names <- columns
+    }
+  } else {
+    all_classes <- sapply(dataset, class)
+    col_classes <- all_classes[all_classes %in% c("character")]
+    col_names <- names(col_classes)
+  }
+  if (length(col_names) == 0L) { stop("No character column found.") }
+  zero_value <- ifelse(!effectcoding, 0L, -1L)
+
+  # Get all unique labels from multi-label columns
+  tags <- unname(unlist(lapply(dataset[col_names], function(column) { unique(unlist(strsplit(column, split = split))) })))
+  # Preallocate empty matrix
+  dummies <- matrix(zero_value, nrow = NROW(dataset), ncol = length(tags), dimnames = list(NULL, tags))
+  # Set 1 for all corresponding labels
+  for (i in 1:NROW(dataset)) {
+    for (col_name in col_names){
+      s <- unique(unlist(strsplit(rawdata[i, col_name], split = split)))
+      dummies[i, s] <- 1L
+    }
+  }
+  dataset <- cbind(dataset, dummies)
+  if (remove_columns) dataset[col_names] <- NULL
+  return(dataset)
+}
+
 #' Append dummy rows
 #'
 #' @family Dummyfication
-#' 
+#'
 #' @param dataset A data set, usually a data frame.
 #' @param columns The names or indices of the columns to be included for creating dummy rows; if \code{NULL} (default), all columns are included.
 #' @param n The number of repeating sample blocks or new samples.
@@ -91,11 +143,11 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 #' @export
 #'
 #' @seealso \code{\link{dummify}}.
-#' 
+#'
 #' @examples
 append_rows <- function(dataset, columns = NULL, n = 1L, type = c("copy", "minmax")) {
   dataset <- as.data.frame(dataset)
-  if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) || 
+  if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) ||
      (((is.character(columns))) && (!all(columns %in% names(dataset)))))
        stop("columns are not in dataset.")
   if (!is.null(columns))
@@ -167,11 +219,11 @@ one_hot_encode <- function(x) {
   # for (i in 1:NROW(x)) {
   #   m[i, f[[i]]] <- 1
   # }
-  
+
   # doesn't work with a single-level factor
   # m <- model.matrix(~0 + f)
 
-  m <- lapply(levels(x), function(lvl) { 
+  m <- lapply(levels(x), function(lvl) {
     l <- (x == lvl) * 1L
     l[is.na(l)] <- 0L
     l
@@ -226,13 +278,13 @@ one_hot_decode <- function(x_encoded) {
 #'
 #' @examples
 resample.imbalanced <- function(dataset, x, y, n = 1L, k = 1L, type = c("oversampling", "undersampling", "smote")) {
-  
+
   check_column <- function(dataset, column = NULL, as.int = TRUE, err_column = "columns") {
     dataset <- as.data.frame(dataset)
     cnames <- names(dataset)
     result <- NULL
     if (!is.null(column)) {
-      if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) || 
+      if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) ||
           (((is.character(column))) && (!all(column %in% cnames))))
         stop(paste0(err_column, " are not in dataset"))
       if (as.int) {

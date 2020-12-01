@@ -7,6 +7,7 @@ This R library is currently structured in form of the following functional famil
 <b>Dummy</b>
 <ul>
   <li><code>dummify()</code> creates dummy variables for non-metric variables.</li>
+  <li><code>dummify.multi_label()</code> creates dummy variables for multi-lable character variables.</li>
   <li><code>effectcoding()</code> changes a binary 0/1 encoded variable into a -1/1 encoded variable.</li>
   <li><code>one_hot_encode()</code> builds a one-hot vector in form of a matrix.</li>
   <li><code>one_hot_decode()</code> restores a one-hote encoded matrix to a single vector.</li>

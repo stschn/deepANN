@@ -20,6 +20,7 @@ Remove columns with only one specific value
 \seealso{
 Other Dummyfication: 
 \code{\link{append_rows}()},
+\code{\link{dummify.multi_label}()},
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},

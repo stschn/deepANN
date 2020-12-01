@@ -26,7 +26,7 @@ dummify(
 
 \item{effectcoding}{Instead of using default 0/1 value pairs for dummy variables, effectcoding allows to set -1/1 pairs.}
 
-\item{remove_columns}{A logical value indicating whether the factor/character variables should be removed from the data set after they have been encoded in dummy variables.}
+\item{remove_columns}{A logical value indicating whether the factor/character variables should be removed from \code{dataset} after they have been encoded in dummy variables.}
 }
 \value{
 The data set with encoded dummy variables.
@@ -39,6 +39,7 @@ Create dummy variables for categorical (nominal or ordinal) columns
 
 Other Dummyfication: 
 \code{\link{append_rows}()},
+\code{\link{dummify.multi_label}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},

@@ -21,6 +21,7 @@ A matrix with all levels as columns with either 0 or 1 values.
 
 Other Dummyfication: 
 \code{\link{append_rows}()},
+\code{\link{dummify.multi_label}()},
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
