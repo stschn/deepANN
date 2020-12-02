@@ -113,13 +113,15 @@ dummify.multi_label <- function(dataset, columns = NULL, split = ",", effectcodi
   zero_value <- ifelse(!effectcoding, 0L, -1L)
 
   # Get all unique labels from multi-label columns
-  tags <- unname(unlist(lapply(dataset[col_names], function(column) { unique(unlist(strsplit(column, split = split))) })))
+  label <- lapply(dataset[col_names], strsplit, split = split)
+  tags <- unique(unlist(label))
+  #tags <- unname(unlist(lapply(dataset[col_names], function(column) { unique(unlist(strsplit(column, split = split))) })))
   # Preallocate empty matrix
   dummies <- matrix(zero_value, nrow = NROW(dataset), ncol = length(tags), dimnames = list(NULL, tags))
   # Set 1 for all corresponding labels
   for (i in 1:NROW(dataset)) {
     for (col_name in col_names){
-      s <- unique(unlist(strsplit(rawdata[i, col_name], split = split)))
+      s <- unique(unlist(strsplit(dataset[i, col_name], split = split)))
       dummies[i, s] <- 1L
     }
   }
