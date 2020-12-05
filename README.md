@@ -49,7 +49,7 @@ This R library is currently structured in form of the following functional famil
 
 <b>Quality</b>
 <ul>
-  <li><code>mae()</code> calculate the mean absolute error.</li>
+  <li><code>mae()</code> calculates the mean absolute error.</li>
   <li><code>mape()</code> calculates the mean absolute percentage error.</li>
   <li><code>mse()</code> calculates the mean squared error.</li>
   <li><code>msle()</code> calculates the mean squared logarithmic error.</li>
