@@ -1,3 +1,50 @@
+#' Population variance
+#'
+#' @family Machine Learning
+#'
+#' @param x A numeric vector, matrix or data frame.
+#' @param y \code{NULL} (default) or a vector, matrix or data frame with compatible dimensions to x. The default is equivalent to \code{y = x} (but more efficient).
+#' @param na.rm A logical value indicating whether missing values should be removed or not (default).
+#' @param use An optional character string giving a method for computing covariances in the presence of missing values.
+#'   This must be (an abbreviation of) one of the strings \code{everything}, \code{all.obs}, \code{complete.obs}, \code{na.or.complete}, or \code{pairwise.complete.obs}.
+#'
+#' @details The population variance and sample variance, implemented in \code{stats} package, differ in the denominator.
+#'   The value of denominator in the formula for variance in case of population data is \code{n}, while it is \code{n-1} for sample data.
+#' 
+#' @return The population variance.
+#' @export
+#'
+#' @seealso \code{\link[stats]{cor}}.
+#'
+#' @examples
+#'   x <- sample(1000)
+#'   var.pop(x)
+var.pop <- function(x, y = NULL, na.rm = FALSE, use) {
+  return(stats::var(x = x, y = y, na.rm = na.rm, use = use) * ((n <- NROW(x)) - 1L) / n)
+}
+
+#' Population standard deviation
+#'
+#' @family Machine Learning
+#'
+#' @param x A numeric vector, matrix or data frame.
+#' @param na.rm A logical value indicating whether missing values should be removed or not (default).
+#'
+#' @details The population standard deviation and sample standard deviation, implemented in \code{stats} package, differ in the denominator.
+#'   The value of denominator in the formula for standard deviation in case of population data is \code{n}, while it is \code{n-1} for sample data.
+#' 
+#' @return The population standard deviation.
+#' @export
+#'
+#' @seealso \code{\link[stats]{sd}}.
+#'
+#' @examples
+#'   x <- sample(1000)
+#'   sd.pop(x)
+sd.pop <- function(x, na.rm = FALSE) {
+  return(sqrt(var.pop(x, na.rm = na.rm)))
+}
+
 #' K-fold cross validation
 #'
 #' \code{cross_validation} splits a data set in partial sets, so-called folds, and creates a list of folds.

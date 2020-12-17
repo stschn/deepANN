@@ -35,6 +35,8 @@ Other Machine Learning:
 \code{\link{k_nearest_neighbors}()},
 \code{\link{naive_forecast}()},
 \code{\link{predict.kmeans}()},
-\code{\link{similarity}()}
+\code{\link{sd.pop}()},
+\code{\link{similarity}()},
+\code{\link{var.pop}()}
 }
 \concept{Machine Learning}

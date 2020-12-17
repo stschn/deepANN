@@ -67,6 +67,8 @@ This R library is currently structured in form of the following functional famil
 
 <b>Machine Learning (ML)</b>
 <ul>
+  <li><code>var.pop()</code> calculates the population variance.</li>
+  <li><code>sd.pop()</code> calculates the population standard deviation.</li>
   <li><code>cross_validation_split()</code> splits an entire data set into k folds.</li>
   <li><code>naive_forecast()</code> predicts values for a data series based upon random walk without and with drifts.</li>
   <li><code>distance()</code> calculates the distance between two numeric vectors.</li>
