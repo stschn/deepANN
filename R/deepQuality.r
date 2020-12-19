@@ -224,7 +224,7 @@ vc <- function(actuals, preds, na.rm = FALSE) {
 #' @examples
 coerce_dimension <- function(x) {
   if (is.null(dim(x))) {
-    x <- as.array(x)
+    x <- as.matrix(x)
   } else {
   if (c("data.frame") %in% class(x)) {
     x <- as.matrix(x)
@@ -269,7 +269,7 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
   stopifnot(identical(dim(actuals), dim(preds)), identical(length(actuals), length(preds)))
   type <- match.arg(type)
   if (type == "standard") {  
-    return(sum(actuals == preds, na.rm = na.rm) / length(preds))
+    return(sum(actuals == preds, na.rm = na.rm) / NROW(preds))
   } else {
     true_positives <- lapply(seq_len(NROW(actuals)), function(i) {
       sum((actuals[i, ] == preds[i, ] & preds[i, ] == 1), na.rm = na.rm)
