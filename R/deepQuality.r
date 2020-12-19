@@ -224,7 +224,7 @@ vc <- function(actuals, preds, na.rm = FALSE) {
 #' @examples
 coerce_dimension <- function(x) {
   if (is.null(dim(x))) {
-    x <- as.matrix(x)
+    x <- as.array(x)
   } else {
   if (c("data.frame") %in% class(x)) {
     x <- as.matrix(x)
@@ -239,6 +239,7 @@ coerce_dimension <- function(x) {
       dim(x) <- sapply(1:(length(dim(x)) - 1), function(i) { dim(x)[i] })
     }
   }
+  if (length(dim(x)) == 1L) x <- as.matrix(x)
   return(x)
 }
 
