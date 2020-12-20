@@ -110,22 +110,58 @@ naive_forecast <- function(x, drift = 0, na = NA) {
   }}
 }
 
+#' Degree to radian
+#'
+#' @family Machine Learning
+#'
+#' @param degree Degree.
+#'
+#' @return The radian of \code{degree}.
+#' @export
+#'
+#' @examples
+#'   as.radian(180) # pi
+as.radian <- function(degree) { return((degree * pi) / 180) }
+
+#' Radian to degree
+#'
+#' @family Machine Learning
+#'
+#' @param radian Radian.
+#'
+#' @return The degree of \code{radian}.
+#' @export
+#'
+#' @examples
+#'   as.degree(pi) # 180
+as.degree <- function(radian) { return((radian * 180) / pi) }
+
 #' Distance
 #'
 #' @family Machine Learning
 #'
 #' @param x1 A numeric vector.
 #' @param x2 A numeric vector.
-#' @param type The type of the distance measure: \code{euclidean} (default) or \code{squared_euclidean}.
+#' @param type The type of the distance measure: \code{euclidean} (default), \code{squared_euclidean} or \code{geographical}.
+#' 
+#' @details For calculating the geographical distance, longitude and latitude values are expected for \code{x1} and \code{x2} in that order.
+#'   Usually longitude and latitude values are given in degree, an automatically conversion to radian is made.
 #'
 #' @return The distance between \code{x1} and \code{x2}.
 #' @export
 #'
 #' @examples
+#'   # Euclidean distance
 #'   x1 <- c(20, 1, 41, 13, 5, 69)
 #'   x2 <- c(11, 2, 23, 4, 10, 67)
 #'   distance(x1, x2)
-distance <- function(x1, x2, type = c("euclidean", "squared_euclidean")) {
+#'   
+#'   # Geographical distance
+#'   geo_coord <- c("longitude", "latitude")
+#'   regensburg <- setNames(c(49.013432, 12.101624), geo_coord)
+#'   kiel <- setNames(c(54.323292, 10.122765), geo_coord)
+#'   distance(regensburg, kiel, type = "geographical")
+distance <- function(x1, x2, type = c("euclidean", "squared_euclidean", "geographical")) {
   type <- match.arg(type)
   se <- sum((x1 - x2)^2)
   if (type == "euclidean") {
@@ -133,7 +169,16 @@ distance <- function(x1, x2, type = c("euclidean", "squared_euclidean")) {
   } else {
   if (type == "squared_euclidean") {
     return(se)
-  }}
+  } else {
+  if (type == "geographical") {
+    if ((length(x1) != 2L) || (length(x2) != 2L))
+      stop("x1 or x2 don't have length 2.")
+    dist_latitudes <- 111.3 # constant distance between two latitudes
+    lat <- as.radian((x1[2L] + x2[2L]) / 2L)
+    delta_longitude <- dist_latitudes * cos(lat) * (x1[1L] - x2[1L])
+    delta_latitude <- dist_latitudes * (x1[2L] - x2[2L])
+    return(unname(sqrt((delta_longitude^2) + (delta_latitude^2))))
+  }}}
 }
 
 #' Similarity
@@ -197,9 +242,10 @@ similarity <- function(x1, x2, type = c("simple", "jaccard", "tanimoto")) {
 #'   df$size <- as.factor(df$size)
 #'   test <- setNames(c(161, 61), c("height", "weight")) # query instance
 #'   test <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
+#'   X <- df[, 1L:2L]
 #'   y <- df$size # categorical outcome
 #'   y <- df$cont # continuous outcome
-#'   knn <- k_nearest_neighbors(df[, 1L:2L], y, test, k = 3L)
+#'   knn <- k_nearest_neighbors(X, y, test, k = 3L)
 #'   knn$response
 #'   knn$probability
 k_nearest_neighbors <- function(X, y, test, k = 1L) {
@@ -216,7 +262,7 @@ k_nearest_neighbors <- function(X, y, test, k = 1L) {
   response <- apply(distances, 2L, function(ed) {
     df <- data.frame(index = seq_along(ed), eucldist = ed) # build a data frame with index and euclidean distance
     df <- df[order(df$eucldist), ] # reorder data frame in ascending order for euclidean distance
-    idx <- df$index[(1:k)] # extract k minimum indices
+    idx <- df$index[(1L:k)] # extract k minimum indices
     neighbors <- y[idx] # get k target values
     if (fy) { # categorical target
       n_neighbors <- table(neighbors) # number of instances of each class

@@ -22,6 +22,8 @@ A named list with folds.
 }
 \seealso{
 Other Machine Learning: 
+\code{\link{as.degree}()},
+\code{\link{as.radian}()},
 \code{\link{distance}()},
 \code{\link{erfcinv}()},
 \code{\link{erfc}()},

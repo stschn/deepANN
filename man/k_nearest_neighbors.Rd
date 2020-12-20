@@ -32,9 +32,10 @@ The response of k-nearest neighbors is either the majority class of k neighbors 
   df$size <- as.factor(df$size)
   test <- setNames(c(161, 61), c("height", "weight")) # query instance
   test <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
+  X <- df[, 1L:2L]
   y <- df$size # categorical outcome
   y <- df$cont # continuous outcome
-  knn <- k_nearest_neighbors(df[, 1L:2L], y, test, k = 3L)
+  knn <- k_nearest_neighbors(X, y, test, k = 3L)
   knn$response
   knn$probability
 }
@@ -42,6 +43,8 @@ The response of k-nearest neighbors is either the majority class of k neighbors 
 \code{\link{distance}}.
 
 Other Machine Learning: 
+\code{\link{as.degree}()},
+\code{\link{as.radian}()},
 \code{\link{cross_validation_split}()},
 \code{\link{distance}()},
 \code{\link{erfcinv}()},

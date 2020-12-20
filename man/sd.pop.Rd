@@ -29,6 +29,8 @@ The population standard deviation and sample standard deviation, implemented in 
 \code{\link[stats]{sd}}.
 
 Other Machine Learning: 
+\code{\link{as.degree}()},
+\code{\link{as.radian}()},
 \code{\link{cross_validation_split}()},
 \code{\link{distance}()},
 \code{\link{erfcinv}()},

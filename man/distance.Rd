@@ -4,14 +4,14 @@
 \alias{distance}
 \title{Distance}
 \usage{
-distance(x1, x2, type = c("euclidean", "squared_euclidean"))
+distance(x1, x2, type = c("euclidean", "squared_euclidean", "geographical"))
 }
 \arguments{
 \item{x1}{A numeric vector.}
 
 \item{x2}{A numeric vector.}
 
-\item{type}{The type of the distance measure: \code{euclidean} (default) or \code{squared_euclidean}.}
+\item{type}{The type of the distance measure: \code{euclidean} (default), \code{squared_euclidean} or \code{geographical}.}
 }
 \value{
 The distance between \code{x1} and \code{x2}.
@@ -19,13 +19,26 @@ The distance between \code{x1} and \code{x2}.
 \description{
 Distance
 }
+\details{
+For calculating the geographical distance, longitude and latitude values are expected for \code{x1} and \code{x2} in that order.
+  Usually longitude and latitude values are given in degree, an automatically conversion to radian is made.
+}
 \examples{
+  # Euclidean distance
   x1 <- c(20, 1, 41, 13, 5, 69)
   x2 <- c(11, 2, 23, 4, 10, 67)
   distance(x1, x2)
+  
+  # Geographical distance
+  geo_coord <- c("longitude", "latitude")
+  regensburg <- setNames(c(49.013432, 12.101624), geo_coord)
+  kiel <- setNames(c(54.323292, 10.122765), geo_coord)
+  distance(regensburg, kiel, type = "geographical")
 }
 \seealso{
 Other Machine Learning: 
+\code{\link{as.degree}()},
+\code{\link{as.radian}()},
 \code{\link{cross_validation_split}()},
 \code{\link{erfcinv}()},
 \code{\link{erfc}()},

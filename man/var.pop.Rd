@@ -34,6 +34,8 @@ The population variance and sample variance, implemented in \code{stats} package
 \code{\link[stats]{cor}}.
 
 Other Machine Learning: 
+\code{\link{as.degree}()},
+\code{\link{as.radian}()},
 \code{\link{cross_validation_split}()},
 \code{\link{distance}()},
 \code{\link{erfcinv}()},

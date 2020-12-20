@@ -22,6 +22,8 @@ A series of naive predicted values for a given vector.
 }
 \seealso{
 Other Machine Learning: 
+\code{\link{as.degree}()},
+\code{\link{as.radian}()},
 \code{\link{cross_validation_split}()},
 \code{\link{distance}()},
 \code{\link{erfcinv}()},
