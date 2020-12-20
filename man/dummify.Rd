@@ -39,7 +39,7 @@ Create dummy variables for categorical (nominal or ordinal) columns
 
 Other Dummyfication: 
 \code{\link{append_rows}()},
-\code{\link{dummify.multi_label}()},
+\code{\link{dummify.multilabel}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},

@@ -20,7 +20,7 @@ A vector with the original levels (categories) of a non-metric variable.
 
 Other Dummyfication: 
 \code{\link{append_rows}()},
-\code{\link{dummify.multi_label}()},
+\code{\link{dummify.multilabel}()},
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_encode}()},

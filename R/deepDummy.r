@@ -92,7 +92,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 #' @seealso \code{\link{effectcoding}}, \code{\link[base]{strsplit}}.
 #'
 #' @examples
-dummify.multi_label <- function(dataset, columns = NULL, split = ",", effectcoding = FALSE, remove_columns = FALSE) {
+dummify.multilabel <- function(dataset, columns = NULL, split = ",", effectcoding = FALSE, remove_columns = FALSE) {
   dataset <- as.data.frame(dataset)
   if (!is.null(columns)) {
     cnames <- names(dataset)
@@ -111,19 +111,20 @@ dummify.multi_label <- function(dataset, columns = NULL, split = ",", effectcodi
   }
   if (length(col_names) == 0L) { stop("No character column found.") }
   zero_value <- ifelse(!effectcoding, 0L, -1L)
-
+  
   # Get all unique labels from multi-label columns
-  label <- lapply(dataset[col_names], strsplit, split = split)
-  tags <- unique(unlist(label))
+  l <- list()
+  for (col_name in col_names){
+    l[[col_name]] <- lapply(strsplit(dataset[[col_name]], split = split), unique) # sapply() will cause problems if dataset consists of only one row
+  }
+  tags <- unique(unlist(l))
   #tags <- unname(unlist(lapply(dataset[col_names], function(column) { unique(unlist(strsplit(column, split = split))) })))
+  
   # Preallocate empty matrix
   dummies <- matrix(zero_value, nrow = NROW(dataset), ncol = length(tags), dimnames = list(NULL, tags))
-  # Set 1 for all corresponding labels
-  for (i in 1:NROW(dataset)) {
-    for (col_name in col_names){
-      s <- unique(unlist(strsplit(dataset[i, col_name], split = split)))
-      dummies[i, s] <- 1L
-    }
+  # Iterate thru nested list, extract values from corresponding index and set them in matrix equal 1
+  for (i in seq_len(NROW(dataset))) {
+    dummies[i, unname(unlist(lapply(l, '[[', i)))] <- 1L
   }
   dataset <- cbind(dataset, dummies)
   if (remove_columns) dataset[col_names] <- NULL
