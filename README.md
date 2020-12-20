@@ -72,7 +72,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>cross_validation_split()</code> splits an entire data set into k folds.</li>
   <li><code>naive_forecast()</code> predicts values for a data series based upon random walk without and with drifts.</li>
   <li><code>as.radian()</code> converts degrees to radians.</li>
-  <li><code>as.degree()</code> radians to degrees.</li>
+  <li><code>as.degree()</code> converts radians to degrees.</li>
   <li><code>distance()</code> calculates the distance between two numeric vectors.</li>
   <li><code>similarity()</code> calculates the similarity between two numeric or logical vectors.</li>
   <li><code>k_nearest_neighbors()</code> identifies the categorical or continuous response and probability distributions of k nearest neighbors where appropriate of a test instance.</li>
