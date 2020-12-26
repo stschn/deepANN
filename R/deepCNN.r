@@ -9,6 +9,7 @@
 #'   equal to a color valence (denotes how light effects the color sensation of an eye or in common of the brain).
 #'   Primary colors can be mixed to produce any color. 
 #'   A channel equal \code{1} indicates a grayscale image, \code{3} a color image.
+#' @param order The order in which elements of image data should be read during the rearrangement. \code{C} (default) means elements should be read in row-major order (C-style), \code{F} means elements should be read in column-major order (Fortran-style).
 #'
 #' @return A 4D feature array with the dimensions samples (number of images), height, width and channels.
 #' @export
@@ -17,7 +18,7 @@
 #'   \code{\link{as.CNN.image.Y}}.
 #'
 #' @examples
-as.CNN.image.X <- function(images, height, width, channels = 3L) {
+as.CNN.image.X <- function(images, height, width, channels = 3L, order = c("C", "F")) {
   if (is.null(dim(images))) {
     if (!all(file.exists(images))) { stop("images contains invalid file names.") }
     img_list <- lapply(images, function(imgname) {
@@ -37,7 +38,8 @@ as.CNN.image.X <- function(images, height, width, channels = 3L) {
   # feature_array <- do.call(rbind, img_array)
   # dim(feature_array) <- c(NROW(img_array), height, width, channels)
   
-  feature_array <- keras::array_reshape(img_array, c(NROW(img_array), height, width, channels))
+  order <- match.arg(order)
+  feature_array <- keras::array_reshape(img_array, c(NROW(img_array), height, width, channels), order = order)
   return(feature_array)
 }
 

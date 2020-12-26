@@ -4,7 +4,7 @@
 \alias{as.CNN.image.X}
 \title{Create a 4-dimensional array for image features (input)}
 \usage{
-as.CNN.image.X(images, height, width, channels = 3L)
+as.CNN.image.X(images, height, width, channels = 3L, order = c("C", "F"))
 }
 \arguments{
 \item{images}{Image data either a 3D array or a list of file names, e.g. returned by \code{list.files}.}
@@ -17,6 +17,8 @@ as.CNN.image.X(images, height, width, channels = 3L)
 equal to a color valence (denotes how light effects the color sensation of an eye or in common of the brain).
 Primary colors can be mixed to produce any color. 
 A channel equal \code{1} indicates a grayscale image, \code{3} a color image.}
+
+\item{order}{The order in which elements of image data should be read during the rearrangement. \code{C} (default) means elements should be read in row-major order (C-style), \code{F} means elements should be read in column-major order (Fortran-style).}
 }
 \value{
 A 4D feature array with the dimensions samples (number of images), height, width and channels.
