@@ -249,7 +249,7 @@ coerce_dimension <- function(x) {
 #'
 #' @param actuals Numeric data (vector, array, matrix, data frame or list) of actual values.
 #' @param preds Numeric data (vector, array, matrix, data frame or list) of prediction values.
-#' @param type Denotes the calculated type (\code{standard} (default), \code{precision}, \code{recall}, \code{F1}-score, \code{tpr}, \code{fpr} or \code{misclassification}-error of accuracy derivative from confusion matrix.
+#' @param type Denotes the calculated type (\code{standard} (default), \code{precision}, \code{recall}, \code{F1}-score, \code{tpr}, \code{fpr}, \code{kappa} or \code{misclassification}-error of accuracy derivative from confusion matrix.
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @details
@@ -259,6 +259,7 @@ coerce_dimension <- function(x) {
 #'   \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.
 #'   \eqn{TPR (True Positive Rate) or sensitivity = True Positives / (True Positives + False Negatives)}.
 #'   \eqn{FPR (False Positive Rate) or specificity = True Negatives / (True Negatives + False Positives)}.
+#'   \eqn{Kappa statistics = (p0 - pe) / (1 - pe)}.
 #'   \eqn{Misclassification error = Number of incorrect predictions / Total number of predictions}.
 #'   
 #'   Standard accuracy and misclassification error are mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
@@ -267,7 +268,7 @@ coerce_dimension <- function(x) {
 #' @export
 #'
 #' @examples
-accuracy <- function(actuals, preds, type = c("standard", "precision", "recall", "F1", "tpr", "fpr", "misclassification"), na.rm = FALSE) {
+accuracy <- function(actuals, preds, type = c("standard", "precision", "recall", "F1", "tpr", "fpr", "kappa", "misclassification"), na.rm = FALSE) {
   actuals <- coerce_dimension(actuals)
   preds <- coerce_dimension(preds)
   stopifnot(identical(dim(actuals), dim(preds)), identical(length(actuals), length(preds)))
@@ -310,7 +311,14 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
     } else {
     if (type == "misclassification") {
       return((FP + FN) / (TP + TN + FP + FN))
-    }}}}}}
+    } else {
+    if (type == "kappa") {
+      p0 <- (TP + TN) / (TP + TN + FP + FN) # standard accuracy
+      pyes <- ((TP + FP) / (TP + TN + FP + FN)) * ((TP + FN) / (TP + TN + FP + FN))
+      pno <- ((FN + TN) / (TP + TN + FP + FN)) * ((FP + TN) / (TP + TN + FP + FN))
+      pe <- pyes + pno
+      return(1 - ((1 - p0) / (1 - pe)))
+    }}}}}}}
   }
 }
 
