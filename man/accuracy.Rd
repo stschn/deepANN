@@ -7,7 +7,7 @@
 accuracy(
   actuals,
   preds,
-  type = c("standard", "precision", "recall", "F1"),
+  type = c("standard", "precision", "recall", "F1", "tpr", "fpr", "misclassification"),
   na.rm = FALSE
 )
 }
@@ -16,7 +16,7 @@ accuracy(
 
 \item{preds}{Numeric data (vector, array, matrix, data frame or list) of prediction values.}
 
-\item{type}{Denotes the type (\code{standard}, \code{precision}, \code{recall}, \code{F1-score}) for calculating the accuracy.}
+\item{type}{Denotes the calculated type (\code{standard} (default), \code{precision}, \code{recall}, \code{F1}-score, \code{tpr}, \code{fpr} or \code{misclassification}-error of accuracy derivative from confusion matrix.}
 
 \item{na.rm}{A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.}
 }
@@ -31,8 +31,11 @@ Classification accuracy
   \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.
   \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.
   \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.
+  \eqn{TPR (True Positive Rate) or sensitivity = True Positives / (True Positives + False Negatives)}.
+  \eqn{FPR (False Positive Rate) or specificity = True Negatives / (True Negatives + False Positives)}.
+  \eqn{Misclassification error = Number of incorrect predictions / Total number of predictions}.
   
-  Standard accuracy is mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
+  Standard accuracy and misclassification error are mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
 }
 \seealso{
 Other Quality: 
