@@ -163,12 +163,11 @@ as.degree <- function(radian) { return((radian * 180) / pi) }
 #'   distance(regensburg, kiel, type = "geographical")
 distance <- function(x1, x2, type = c("euclidean", "squared_euclidean", "geographical")) {
   type <- match.arg(type)
-  se <- sum((x1 - x2)^2)
   if (type == "euclidean") {
-    return(sqrt(se))
+    return(sqrt(sum((x1 - x2)^2)))
   } else {
   if (type == "squared_euclidean") {
-    return(se)
+    return(sum((x1 - x2)^2))
   } else {
   if (type == "geographical") {
     if ((length(x1) != 2L) || (length(x2) != 2L))
