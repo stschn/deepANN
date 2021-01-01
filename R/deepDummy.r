@@ -202,37 +202,50 @@ effectcoding <- function(x) {
 
 #' One-hot encoding
 #'
-#' \code{one_hot_encode} rebuilds a categorical variable to a so-called 'one-hot vector';
-#'   within a sample (row) of a one-hot-vector each level of the variable is rebuild in the form \code{(0|1,0|1,0|1,...)}.
+#' \code{one_hot_encode} rebuilds a categorical variable to a so-called 'one-hot vector'.
+#'   Within a sample (row) of a one-hot vector (matrix) each level of the variable is rebuild in the binary form \code{(0|1,0|1,0|1,...)}.
 #'
 #' @family Dummyfication
 #'
-#' @param x A vector with categorical values, so-called levels, of a non-metric variable.
+#' @param x A vector with values (levels) of a categorical variable.
+#' @param ordered A logical value indicating whether the factor levels of \code{x} should be encoded in an ordered way or not (default).
+#' 
+#' @details An unordered encoding creates an indicator matrix with the value \code{1} only for the given level of \code{x} and \code{0} for all other levels.
+#'   In opposite, an ordered encoding assumes an intrinsic order of all levels whereby a given level automatically means reaching and exceeding all previous levels.
+#'   In that case, all previous levels are also encoded with value \code{1}.
 #'
-#' @return A matrix with all levels as columns with either 0 or 1 values.
+#' @return A matrix with all levels as columns with either \code{0} or \code{1} values.
 #' @export
 #'
 #' @seealso \code{\link{one_hot_decode}}.
 #'
 #' @examples
-one_hot_encode <- function(x) {
+one_hot_encode <- function(x, ordered = FALSE) {
   if (!is.factor(x)) x <- as.factor(x)
-  # n <- nlevels(f)
-  # m <- matrix(0, nrow = NROW(x), ncol = n)
-  # for (i in 1:NROW(x)) {
-  #   m[i, f[[i]]] <- 1
+  # m <- matrix(0, nrow = N <- NROW(x), ncol = nlevels(x))
+  # for (i in 1L:N) {
+  #   m[i, x[[i]]] <- 1
   # }
 
   # doesn't work with a single-level factor
-  # m <- model.matrix(~0 + f)
+  # m <- model.matrix(~0 + x)
 
-  m <- lapply(levels(x), function(lvl) {
-    l <- (x == lvl) * 1L
-    l[is.na(l)] <- 0L
-    l
-  })
-  m <- do.call(cbind, m)
-  colnames(m) <- levels(x)
+  if (!ordered) {
+    m <- lapply(levels(x), function(lvl) {
+      l <- (x == lvl) * 1
+      l[is.na(l)] <- 0
+      l
+    })
+    m <- do.call(cbind, m)
+    colnames(m) <- levels(x)
+  } else {
+    lvl <- levels(x)
+    m <- matrix(0, nrow = N <- NROW(x), ncol = nlevels(x))
+    colnames(m) <- lvl
+    for (i in 1L:N) {
+      m[i, lvl[1L:as.integer(x[[i]])]] <- 1
+    }
+  }
   return(m)
 }
 
@@ -242,17 +255,17 @@ one_hot_encode <- function(x) {
 #'
 #' @family Dummyfication
 #'
-#' @param x_encoded An already one-hot encoded variable; the outcome from \code{one_hot_encode}.
+#' @param m An already one-hot encoded variable in form of a matrix as the outcome from \code{one_hot_encode}.
 #'
-#' @return A vector with the original levels (categories) of a non-metric variable.
+#' @return A vector with the original levels of a categorical variable.
 #' @export
 #'
 #' @seealso \code{\link{one_hot_encode}}.
 #'
 #' @examples
-one_hot_decode <- function(x_encoded) {
-  m <- as.matrix(x_encoded)
-  return(colnames(m)[max.col(m)])
+one_hot_decode <- function(m) {
+  m <- as.matrix(m)
+  return(colnames(m)[max.col(m, ties.method = "last")])
 }
 
 #' Resampling imbalanced data for classification problems

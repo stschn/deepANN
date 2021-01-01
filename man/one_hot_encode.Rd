@@ -4,17 +4,24 @@
 \alias{one_hot_encode}
 \title{One-hot encoding}
 \usage{
-one_hot_encode(x)
+one_hot_encode(x, ordered = FALSE)
 }
 \arguments{
-\item{x}{A vector with categorical values, so-called levels, of a non-metric variable.}
+\item{x}{A vector with values (levels) of a categorical variable.}
+
+\item{ordered}{A logical value indicating whether the factor levels of \code{x} should be encoded in an ordered way or not (default).}
 }
 \value{
-A matrix with all levels as columns with either 0 or 1 values.
+A matrix with all levels as columns with either \code{0} or \code{1} values.
 }
 \description{
-\code{one_hot_encode} rebuilds a categorical variable to a so-called 'one-hot vector';
-  within a sample (row) of a one-hot-vector each level of the variable is rebuild in the form \code{(0|1,0|1,0|1,...)}.
+\code{one_hot_encode} rebuilds a categorical variable to a so-called 'one-hot vector'.
+  Within a sample (row) of a one-hot vector (matrix) each level of the variable is rebuild in the binary form \code{(0|1,0|1,0|1,...)}.
+}
+\details{
+An unordered encoding creates an indicator matrix with the value \code{1} only for the given level of \code{x} and \code{0} for all other levels.
+  In opposite, an ordered encoding assumes an intrinsic order of all levels whereby a given level automatically means reaching and exceeding all previous levels.
+  In that case, all previous levels are also encoded with value \code{1}.
 }
 \seealso{
 \code{\link{one_hot_decode}}.

@@ -4,13 +4,13 @@
 \alias{one_hot_decode}
 \title{One-hot decoding}
 \usage{
-one_hot_decode(x_encoded)
+one_hot_decode(m)
 }
 \arguments{
-\item{x_encoded}{An already one-hot encoded variable; the outcome from \code{one_hot_encode}.}
+\item{m}{An already one-hot encoded variable in form of a matrix as the outcome from \code{one_hot_encode}.}
 }
 \value{
-A vector with the original levels (categories) of a non-metric variable.
+A vector with the original levels of a categorical variable.
 }
 \description{
 \code{one_hot_decode} builds back an already one-hot encoded variable into its original value form.
