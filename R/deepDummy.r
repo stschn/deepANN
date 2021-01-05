@@ -117,15 +117,26 @@ dummify.multilabel <- function(dataset, columns = NULL, split = ",", effectcodin
   for (col_name in col_names){
     l[[col_name]] <- lapply(strsplit(dataset[[col_name]], split = split), unique) # sapply() will cause problems if dataset consists of only one row
   }
-  tags <- unique(unlist(l))
+  tags.column <- lapply(l, function(categories) { (z <- unique(unlist(categories)))[!is.na(z)] })
+  tags.all <- unique(unlist(tags.column))
   #tags <- unname(unlist(lapply(dataset[col_names], function(column) { unique(unlist(strsplit(column, split = split))) })))
   
   # Preallocate empty matrix
-  dummies <- matrix(zero_value, nrow = NROW(dataset), ncol = length(tags), dimnames = list(NULL, tags))
+  dummies <- matrix(zero_value, nrow = NROW(dataset), ncol = length(tags.all), dimnames = list(NULL, tags.all))
   # Iterate thru nested list, extract values from corresponding index and set them in matrix equal 1
   for (i in seq_len(NROW(dataset))) {
-    dummies[i, unname(unlist(lapply(l, '[[', i)))] <- 1L
+    for (j in seq_along(l)) {
+      categories <- l[[j]][[i]]
+      if (!is.element(NA, categories)) {
+        dummies[i, categories] <- 1L
+      } else {
+        dummies[i, tags.column[[j]]] <- NA
+      }
+    }
   }
+  # for (i in seq_len(NROW(dataset))) {
+  #   dummies[i, unname(unlist(lapply(l, '[[', i)))] <- 1L
+  # }
   dataset <- cbind(dataset, dummies)
   if (remove_columns) dataset[col_names] <- NULL
   return(dataset)
