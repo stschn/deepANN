@@ -84,6 +84,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 #' @param columns The names or indices of the columns for which dummy variables are to be created; if \code{NULL} (default), all character columns are encoded.
 #' @param split A character vector (or object which can be coerced to such) containing regular expression(s) to use for splitting.
 #' @param effectcoding Instead of using default 0/1 value pairs for dummy variables, effectcoding allows to set -1/1 pairs.
+#' @param prefix A logical value indicating whether the names of the dummy variables have the corresponding column names as a prefix.
 #' @param remove_columns A logical value indicating whether the character variables should be removed from \code{dataset} after they have been encoded in dummy variables.
 #'
 #' @return The data set with encoded dummy variables.
@@ -92,7 +93,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 #' @seealso \code{\link{effectcoding}}, \code{\link[base]{strsplit}}.
 #'
 #' @examples
-dummify.multilabel <- function(dataset, columns = NULL, split = ",", effectcoding = FALSE, remove_columns = FALSE) {
+dummify.multilabel <- function(dataset, columns = NULL, split = ",", effectcoding = FALSE, prefix = FALSE, remove_columns = FALSE) {
   dataset <- as.data.frame(dataset)
   if (!is.null(columns)) {
     cnames <- names(dataset)
@@ -118,7 +119,7 @@ dummify.multilabel <- function(dataset, columns = NULL, split = ",", effectcodin
     l[[col_name]] <- lapply(strsplit(dataset[[col_name]], split = split), unique) # sapply() will cause problems if dataset consists of only one row
   }
   tags.column <- lapply(l, function(categories) { (z <- unique(unlist(categories)))[!is.na(z)] })
-  tags.all <- unique(unlist(tags.column))
+  tags.all <- unlist(tags.column)
   #tags <- unname(unlist(lapply(dataset[col_names], function(column) { unique(unlist(strsplit(column, split = split))) })))
   
   # Preallocate empty matrix
@@ -137,6 +138,14 @@ dummify.multilabel <- function(dataset, columns = NULL, split = ",", effectcodin
   # for (i in seq_len(NROW(dataset))) {
   #   dummies[i, unname(unlist(lapply(l, '[[', i)))] <- 1L
   # }
+
+  # Column names of the dummy variables
+  if (prefix) {
+    colnames(dummies) <- unlist(lapply(seq_along(tags.column), function(i) {
+      do.call(paste0, list(rep(names(tags.column)[i], length(tags.column[[i]])), '_', tags.column[[i]]))
+    }))
+  }
+  
   dataset <- cbind(dataset, dummies)
   if (remove_columns) dataset[col_names] <- NULL
   return(dataset)

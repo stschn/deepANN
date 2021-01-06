@@ -9,6 +9,7 @@ dummify.multilabel(
   columns = NULL,
   split = ",",
   effectcoding = FALSE,
+  prefix = FALSE,
   remove_columns = FALSE
 )
 }
@@ -20,6 +21,8 @@ dummify.multilabel(
 \item{split}{A character vector (or object which can be coerced to such) containing regular expression(s) to use for splitting.}
 
 \item{effectcoding}{Instead of using default 0/1 value pairs for dummy variables, effectcoding allows to set -1/1 pairs.}
+
+\item{prefix}{A logical value indicating whether the names of the dummy variables have the corresponding column names as a prefix.}
 
 \item{remove_columns}{A logical value indicating whether the character variables should be removed from \code{dataset} after they have been encoded in dummy variables.}
 }
