@@ -4,18 +4,33 @@
 \alias{winsorize}
 \title{Winsorize outliers}
 \usage{
-winsorize(x, quantile.low = 0.05)
+winsorize(
+  x,
+  minx = NULL,
+  maxx = NULL,
+  probs = c(0.05, 0.95),
+  na.rm = FALSE,
+  type = 7
+)
 }
 \arguments{
-\item{x}{A numeric vector.}
+\item{x}{A numeric vector to be winsorized.}
 
-\item{quantile.low}{A lower quantile limit (default \code{0.05}). The upper quantile limit is calculated by \code{1-quantile.low}.}
+\item{minx}{The low border value, all values within \code{x} being lower than this value will be replaced by this value. By default, this value is set to the 5\% quantile of \code{x}.}
+
+\item{maxx}{The high border value, all values within \code{x} being higher than this value will be replaced by this value. By default, this value is set to the 95\% quantile of \code{x}.}
+
+\item{probs}{A numeric vector of probabilities with values in [0,1] as used in \code{\link[stats]{quantile}}.}
+
+\item{na.rm}{A logical value indicating whether missing values should be omitted or not (default) to calculate the quantiles.}
+
+\item{type}{An integer between 1 and 9 selecting one of the nine quantile algorithms detailed in \code{\link[stats]{quantile}} to be used.}
 }
 \value{
-A winsorized version of the given \code{x} vector.
+A vector of the same length as \code{x} containing the winsorized values.
 }
 \description{
-\code{winsorize} sets extremely low or high values, so-called outliers, to quantile limits.
+\code{winsorize} sets outliers to low and high border values.
 }
 \seealso{
 \code{\link[stats]{quantile}}, \code{\link{outlier}}.

@@ -9,15 +9,15 @@ outlier(x, type = c("quartiles", "mean", "median"), fill = NULL, ...)
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{type}{The type of outlier definition and detection. 
+\item{type}{The type of outlier definition and detection.
 \code{quartiles} refers to the method of Tukey (1977); Outliers are defined as elements more than 1.5 interquartile ranges above the upper quartile (75 percent) or below the lower quartile (25 percent). This method is useful when \code{x} is not normally distributed.
 \code{mean} denotes maximum likelihood estimation; Outliers are defined as elements more than three standard deviations from the mean. This method is faster but less robust than \code{median}.
 \code{median} denotes scaled median absolute deviation. Outliers are defined as elements more than three scaled MAD from the median; the scaled MAD is defined as c median(abs(x - median(x))), where c = -1/(sqrt(2) * erfcinv(3/2)).}
 
 \item{fill}{A value that is used to replace outliers; \code{NULL} (default) indicates no replacement.}
 
-\item{...}{Dependent on \code{type}. 
-For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
+\item{...}{Dependent on \code{type}.
+For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
 For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{2}.
 For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.}
 }

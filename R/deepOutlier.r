@@ -3,13 +3,13 @@
 #' @family Outlier
 #'
 #' @param x A numeric vector.
-#' @param type The type of outlier definition and detection. 
+#' @param type The type of outlier definition and detection.
 #'   \code{quartiles} refers to the method of Tukey (1977); Outliers are defined as elements more than 1.5 interquartile ranges above the upper quartile (75 percent) or below the lower quartile (25 percent). This method is useful when \code{x} is not normally distributed.
 #'   \code{mean} denotes maximum likelihood estimation; Outliers are defined as elements more than three standard deviations from the mean. This method is faster but less robust than \code{median}.
 #'   \code{median} denotes scaled median absolute deviation. Outliers are defined as elements more than three scaled MAD from the median; the scaled MAD is defined as c median(abs(x - median(x))), where c = -1/(sqrt(2) * erfcinv(3/2)).
 #' @param fill A value that is used to replace outliers; \code{NULL} (default) indicates no replacement.
-#' @param ... Dependent on \code{type}. 
-#'   For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
+#' @param ... Dependent on \code{type}.
+#'   For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
 #'   For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{2}.
 #'   For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.
 #'
@@ -17,10 +17,10 @@
 #'   By default (\code{NULL}), a named list of lower and upper boundaries and values.
 #'   Otherwise, the vector \code{x} with replaced outliers.
 #' @export
-#' 
+#'
 #' @references
 #'   Tukey, John W. (1977): Exploratory Data Analysis. 1977. Reading: Addison-Wesley.
-#' 
+#'
 #' @seealso \code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{outlier.dataset}}, \code{\link{winsorize}}.
 #'
 #' @examples
@@ -58,7 +58,7 @@ outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...
   upper_values <- x[x > upper_boundary]
   if (length(upper_values) == 0) { upper_values <- NA }
   if (is.null(fill)) {
-    outs <- list(list(lower_boundary, lower_values), 
+    outs <- list(list(lower_boundary, lower_values),
                  list(upper_boundary, upper_values))
     names(outs) <- c("lower", "upper")
     names(outs[[1L]]) <- c("boundary", "values")
@@ -75,15 +75,15 @@ outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...
 #' Replace outliers in columns of a data set with \code{NA}
 #'
 #' @family Outlier
-#' 
+#'
 #' @param dataset A data set, usually a data frame.
 #' @param columns The names or indices of the columns whose outlier values are to be replaced; if \code{NULL} (default), all corresponding columns are examined.
-#' @param type The type of outlier definition and detection. 
+#' @param type The type of outlier definition and detection.
 #'   \code{quartiles} refers to the method of Tukey (1977).
 #'   \code{mean} denotes maximum likelihood estimation.
 #'   \code{median} denotes scaled median absolute deviation.
-#' @param ... Dependent on \code{type}. 
-#'   For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}. 
+#' @param ... Dependent on \code{type}.
+#'   For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
 #'   For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{3}.
 #'   For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.
 #'
@@ -118,26 +118,31 @@ outlier.dataset <- function(dataset, columns = NULL, type = c("quartiles", "mean
 }
 
 #' Winsorize outliers
-#' 
-#' \code{winsorize} sets extremely low or high values, so-called outliers, to quantile limits.
-#' 
+#'
+#' \code{winsorize} sets outliers to low and high border values.
+#'
 #' @family Outlier
 #'
-#' @param x A numeric vector.
-#' @param quantile.low A lower quantile limit (default \code{0.05}). The upper quantile limit is calculated by \code{1-quantile.low}.
+#' @param x A numeric vector to be winsorized.
+#' @param minx The low border value, all values within \code{x} being lower than this value will be replaced by this value. By default, this value is set to the 5\% quantile of \code{x}.
+#' @param maxx The high border value, all values within \code{x} being higher than this value will be replaced by this value. By default, this value is set to the 95\% quantile of \code{x}.
+#' @param probs A numeric vector of probabilities with values in [0,1] as used in \code{\link[stats]{quantile}}.
+#' @param na.rm A logical value indicating whether missing values should be omitted or not (default) to calculate the quantiles.
+#' @param type An integer between 1 and 9 selecting one of the nine quantile algorithms detailed in \code{\link[stats]{quantile}} to be used.
 #'
-#' @return A winsorized version of the given \code{x} vector.
+#' @return A vector of the same length as \code{x} containing the winsorized values.
 #' @export
 #'
 #' @seealso \code{\link[stats]{quantile}}, \code{\link{outlier}}.
-#' 
+#'
 #' @examples
-winsorize <- function(x, quantile.low = .05) {
-  if (length(quantile.low) != 1 || quantile.low < 0 || quantile.low > 0.5) {
-    stop("bad value for lower quantile limit.")
+winsorize <- function(x, minx = NULL, maxx = NULL, probs = c(0.05, 0.95), na.rm = FALSE, type = 7) {
+  if (is.null(minx) || is.null(maxx)) {
+    xq <- quantile(x = x, probs = probs, na.rm = na.rm, type = type)
+    if (is.null(minx)) minx <- xq[1L]
+    if (is.null(maxx)) maxx <- xq[2L]
   }
-  lim <- quantile(x, probs = c(quantile.low, 1 - quantile.low))
-  x[x < lim[1L]] <- lim[1L]
-  x[x > lim[2L]] <- lim[2L]
+  x[x < minx] <- minx
+  x[x > maxx] <- maxx
   return(x)
 }
