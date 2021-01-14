@@ -21,6 +21,7 @@ Log Transformation
 \code{\link{scaling}}.
 
 Other Scaling: 
+\code{\link{scale.center}()},
 \code{\link{scale.datasets}()},
 \code{\link{scale.dataset}()},
 \code{\link{scale.minmax}()},

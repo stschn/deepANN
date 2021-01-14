@@ -6,7 +6,7 @@
 \usage{
 scaling(
   x,
-  type = c("minmax", "zscore", "log"),
+  type = c("minmax", "zscore", "log", "center"),
   use.attr = TRUE,
   invert = FALSE,
   ...
@@ -15,13 +15,13 @@ scaling(
 \arguments{
 \item{x}{A numeric vector whose elements should be scaled.}
 
-\item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).}
+\item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}), log transformation (\code{log}) and centering (\code{center}).}
 
 \item{use.attr}{A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.}
 
 \item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
 
-\item{...}{Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.}
+\item{...}{Further arguments depend on the type of scaling. Min-max scaling, z-score scaling and centering need two or one further arguments if necessary.}
 }
 \value{
 The scaled or re-scaled (inverted) numeric vector \code{x}.
@@ -30,9 +30,10 @@ The scaled or re-scaled (inverted) numeric vector \code{x}.
 Scaling of a numeric vector
 }
 \seealso{
-\code{\link{scale.minmax}}, \code{\link{scale.zscore}}, \code{\link{scale.log}}.
+\code{\link{scale.minmax}}, \code{\link{scale.zscore}}, \code{\link{scale.log}}, \code{\link{scale.center}}.
 
 Other Scaling: 
+\code{\link{scale.center}()},
 \code{\link{scale.datasets}()},
 \code{\link{scale.dataset}()},
 \code{\link{scale.log}()},

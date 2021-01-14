@@ -7,7 +7,7 @@
 \method{scale}{dataset}(
   dataset,
   columns = NULL,
-  type = c("minmax", "zscore", "log"),
+  type = c("minmax", "zscore", "log", "center"),
   invert = FALSE,
   ...
 )
@@ -17,11 +17,11 @@
 
 \item{columns}{The names or indices of the columns to be scaled. If \code{NULL} (default), all columns are used.}
 
-\item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).}
+\item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}), log transformation (\code{log}) and centering \code{center}.}
 
 \item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{columns} are already scaled vectors and scaling will be inverted.}
 
-\item{...}{Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.}
+\item{...}{Further arguments depend on the type of scaling. Min-max scaling, z-score scaling and centering need two or one further arguments if necessary.}
 }
 \value{
 The scaled \code{dataset}.
@@ -33,6 +33,7 @@ Scaling of a data set
 \code{\link{scaling}}
 
 Other Scaling: 
+\code{\link{scale.center}()},
 \code{\link{scale.datasets}()},
 \code{\link{scale.log}()},
 \code{\link{scale.minmax}()},

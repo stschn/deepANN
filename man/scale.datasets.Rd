@@ -4,22 +4,28 @@
 \alias{scale.datasets}
 \title{Scaling of a train and test data set}
 \usage{
-\method{scale}{datasets}(trainset, testset, columns = NULL, type = c("minmax", "zscore", "log"))
+\method{scale}{datasets}(
+  trainset,
+  testset,
+  columns = NULL,
+  type = c("minmax", "zscore", "log", "center")
+)
 }
 \arguments{
-\item{trainset}{A train dataset.}
+\item{trainset}{A train data set.}
 
-\item{testset}{A test dataset.}
+\item{testset}{A test data set.}
 
 \item{columns}{The names or indices of the columns to be scaled. If \code{NULL} (default), all columns are used.}
 
-\item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).}
+\item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}), log transformation (\code{log}) and centering \code{center}.}
 }
 \value{
 A named list dependent on the \code{type}.
-  \code{minmax}: The first element stores the min value, the second element the max value, the third element the scaled train dataset and the fourth element the scaled test data set.
-  \code{zscore}: The first element stores the mean value, the second element the sd value, the third element the scaled train dataset and the fourth element the scaled test data set.
-  \code{log}: The first element stores the scaled train dataset and the second element the scaled test data set.
+  \code{minmax}: The first element stores the min value, the second element the max value, the third element the scaled train data set and the fourth element the scaled test data set.
+  \code{zscore}: The first element stores the mean value, the second element the sd value, the third element the scaled train data set and the fourth element the scaled test data set.
+  \code{log}: The first element stores the scaled train data set and the second element the scaled test data set.
+  \code{center}: The first element stores the constant value, the second element the scaled train data set and the third element the scaled test data set.
 }
 \description{
 Scaling of a train and test data set
@@ -28,6 +34,7 @@ Scaling of a train and test data set
 \code{\link{scaling}}
 
 Other Scaling: 
+\code{\link{scale.center}()},
 \code{\link{scale.dataset}()},
 \code{\link{scale.log}()},
 \code{\link{scale.minmax}()},

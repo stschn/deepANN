@@ -88,6 +88,40 @@ scale.zscore <- function(x, use.attr = TRUE, invert = FALSE, meanx = NULL, sdx =
   return(scaled)
 }
 
+#' (Mean) Centering
+#'
+#' @family Scaling
+#'
+#' @param x A numeric vector whose elements should be scaled thru centering.
+#' @param use.attr A logical value indicating whether the scaling factor \code{const} is stored as named attribute of the scaled vector \code{x}.
+#' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
+#' @param const A constant value that is subtracted from all values in \code{x}. By default (\code{NULL}), the mean of \code{x} is used as the constant value.
+#'
+#' @return A vector of same length as \code{x} with (mean) centered values.
+#' @export
+#'
+#' @seealso \code{\link{scaling}}.
+#'
+#' @examples
+scale.center <- function(x, use.attr = TRUE, invert = FALSE, const = NULL) {
+  attr.name <- c("const")
+  if (!invert) {
+    if (is.null(const)) const <- mean(x)
+    scaled <- (x - const)
+    if (use.attr) {
+      attr(scaled, attr.name[1L]) <- const
+    }
+  } else {
+    if (use.attr) {
+      const <- attr(x, attr.name[1L])
+    } else {
+      if (is.null(const)) { stop("centering needs a constant value argument.") }
+    }
+    scaled <- as.vector(x + const)
+  }
+  return(scaled)
+}
+
 #' Log Transformation
 #'
 #' @family Scaling
@@ -115,25 +149,25 @@ scale.log <- function(x, invert = FALSE) {
 #' @family Scaling
 #'
 #' @param x A numeric vector whose elements should be scaled.
-#' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
+#' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}), log transformation (\code{log}) and centering (\code{center}).
 #' @param use.attr A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.
 #' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.
-#' @param ... Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.
+#' @param ... Further arguments depend on the type of scaling. Min-max scaling, z-score scaling and centering need two or one further arguments if necessary.
 #'
 #' @return The scaled or re-scaled (inverted) numeric vector \code{x}.
 #' @export
 #'
-#' @seealso \code{\link{scale.minmax}}, \code{\link{scale.zscore}}, \code{\link{scale.log}}.
+#' @seealso \code{\link{scale.minmax}}, \code{\link{scale.zscore}}, \code{\link{scale.log}}, \code{\link{scale.center}}.
 #'
 #' @examples
-scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, invert = FALSE, ...) {
+scaling <- function(x, type = c("minmax", "zscore", "log", "center"), use.attr = TRUE, invert = FALSE, ...) {
   params <- list(...)
   type <- match.arg(type)
   scaled <- NULL
   if (type == "minmax") {
     minx <- NULL
     maxx <- NULL
-    if (length(params) == 2) {
+    if (length(params) >= 2) {
       minx <- params[[1L]]
       maxx <- params[[2L]]
     }
@@ -142,15 +176,20 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
   if (type == "zscore") {
     meanx <- NULL
     sdx <- NULL
-    if (length(params) == 2) {
+    if (length(params) >= 2) {
       meanx <- params[[1L]]
       sdx <- params[[2L]]
     }
     scaled <- scale.zscore(x, use.attr, invert, meanx, sdx)
   } else {
+  if (type == "center") {
+    const <- NULL
+    if (length(params) >= 1) const <- params[[1L]]
+    scaled <- scale.center(x, use.attr, invert, const)
+  } else {
   if (type == "log") {
     scaled <- scale.log(x, invert)
-  }}}
+  }}}}
   return(scaled)
 }
 
@@ -160,9 +199,9 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
 #'
 #' @param dataset A data set, usually a matrix or data frame.
 #' @param columns The names or indices of the columns to be scaled. If \code{NULL} (default), all columns are used.
-#' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
+#' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}), log transformation (\code{log}) and centering \code{center}.
 #' @param invert A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{columns} are already scaled vectors and scaling will be inverted.
-#' @param ... Further arguments depend on the type of scaling. Min-max scaling and z-score scaling need two further arguments if necessary.
+#' @param ... Further arguments depend on the type of scaling. Min-max scaling, z-score scaling and centering need two or one further arguments if necessary.
 #'
 #' @return The scaled \code{dataset}.
 #' @export
@@ -170,7 +209,7 @@ scaling <- function(x, type = c("minmax", "zscore", "log"), use.attr = TRUE, inv
 #' @seealso \code{\link{scaling}}
 #'
 #' @examples
-scale.dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", "log"), invert = FALSE, ...) {
+scale.dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", "log", "center"), invert = FALSE, ...) {
   dataset <- as.data.frame(dataset)
   if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) || 
       (((is.character(columns))) && (!all(columns %in% names(dataset)))))
@@ -197,21 +236,22 @@ scale.dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", 
 #'
 #' @family Scaling
 #'
-#' @param trainset A train dataset.
-#' @param testset A test dataset.
+#' @param trainset A train data set.
+#' @param testset A test data set.
 #' @param columns The names or indices of the columns to be scaled. If \code{NULL} (default), all columns are used.
-#' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}) and log transformation (\code{log}).
+#' @param type Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}), log transformation (\code{log}) and centering \code{center}.
 #'
 #' @return A named list dependent on the \code{type}.
-#'   \code{minmax}: The first element stores the min value, the second element the max value, the third element the scaled train dataset and the fourth element the scaled test data set.
-#'   \code{zscore}: The first element stores the mean value, the second element the sd value, the third element the scaled train dataset and the fourth element the scaled test data set.
-#'   \code{log}: The first element stores the scaled train dataset and the second element the scaled test data set.
+#'   \code{minmax}: The first element stores the min value, the second element the max value, the third element the scaled train data set and the fourth element the scaled test data set.
+#'   \code{zscore}: The first element stores the mean value, the second element the sd value, the third element the scaled train data set and the fourth element the scaled test data set.
+#'   \code{log}: The first element stores the scaled train data set and the second element the scaled test data set.
+#'   \code{center}: The first element stores the constant value, the second element the scaled train data set and the third element the scaled test data set.
 #' @export
 #'
 #' @seealso \code{\link{scaling}}
 #'
 #' @examples
-scale.datasets <- function(trainset, testset, columns = NULL, type = c("minmax", "zscore", "log")) {
+scale.datasets <- function(trainset, testset, columns = NULL, type = c("minmax", "zscore", "log", "center")) {
   trainset <- as.data.frame(trainset)
   testset <- as.data.frame(testset)
   if (((is.numeric(columns)) && (!all(columns %in% seq_along(trainset)))) || 
@@ -251,6 +291,15 @@ scale.datasets <- function(trainset, testset, columns = NULL, type = c("minmax",
     l[[4L]] <- cbind.data.frame(remaining_testset, l[[4L]])[cnames]
     names(l) <- c("mean", "sd", "train", "test")
   } else {
+  if (type == "center") {
+    l[[1L]] <- sapply(trainset[columns_idx], mean)
+    l[[2L]] <- as.data.frame(sapply(trainset[columns_idx], scaling, type = type, use.attr = F, invert = F))
+    l[[3L]] <- as.data.frame(mapply(scaling, testset[columns_idx], type = type, use.attr = F, invert = F, l[[1L]]))
+  
+    l[[2L]] <- cbind.data.frame(remaining_trainset, l[[2L]])[cnames]
+    l[[3L]] <- cbind.data.frame(remaining_testset, l[[3L]])[cnames]
+    names(l) <- c("const", "train", "test")
+  } else {
   if (type == "log") {
     l[[1L]] <- as.data.frame(sapply(trainset[columns_idx], scaling, type = type, use.attr = F, invert = F))
     l[[2L]] <- as.data.frame(sapply(testset[columns_idx], scaling, type = type, use.attr = F, invert = F))
@@ -258,6 +307,6 @@ scale.datasets <- function(trainset, testset, columns = NULL, type = c("minmax",
     l[[1L]] <- cbind.data.frame(remaining_trainset, l[[1L]])[cnames]
     l[[2L]] <- cbind.data.frame(remaining_testset, l[[2L]])[cnames]
     names(l) <- c("train", "test")
-  }}}
+  }}}}
   return(l)
 }
