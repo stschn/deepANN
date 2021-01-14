@@ -84,6 +84,58 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
   return(m)
 }
 
+#' Create a reshaped numpy array known from Python
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param x A vector to be reshaped to a numpy array.
+#' @param dim The new dimensions to be set to \code{x}.
+#' @param numeric A logical value indicating whether the elements should be coerced as numeric elements.
+#' @param reverse Controls the order of the elements in the numpy array. By default they are used in the given order, but they can also be used in reverse order.
+#' @param order The order in which elements of data should be read during rearrangement.
+#'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#'
+#' @details The function \code{array_reshape} from reticulate package differs from the base function \code{dim}.
+#'   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
+#'
+#' @return The numpy array.
+#' @export
+#'
+#' @seealso \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
+#'
+#' @examples
+#'  as.numpy(1:24, dim = c(8, 3)) # 2D array with row-major ordering
+#'  as.numpy(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
+#'  as.numpy(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
+#'  as.numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
+as.numpy <- function(x, dim = NULL, numeric = TRUE, reverse = FALSE, order = c("C", "F")) {
+  x <- c(t(x))
+  if (numeric) x <- vector.as.numeric(x)
+  if (reverse) x <- rev(x)
+  x <- array(x)
+  order <- match.arg(order)
+  byrow = ifelse(order == "C", TRUE, FALSE)
+  if (!is.null(dim) && ((ldim <- length(dim)) >= 2L)) {
+    if (ldim == 2L) {
+      x <- matrix(x, nrow = dim[1L], ncol = dim[2L], byrow = byrow)
+    } else {
+    if (ldim == 3L){
+      x <- array(x, dim = dim)
+      if (byrow) {
+        x <- array(x, dim = c(dim[2L], dim[1L], dim[3L]))
+        x <- aperm(x, perm = c(2L, 1L, 3L))
+      }
+    } else {
+    if (!byrow) {
+      dim(x) <- dim
+    } else {
+      x <- keras::array_reshape(x, dim = dim, order = order)
+    }}}
+  }
+  return(x)
+}
+
 #' Create a (reshaped) tensor (n-dimensional array)
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)

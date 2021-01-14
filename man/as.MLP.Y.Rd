@@ -21,6 +21,7 @@ Outcomes (Y) data format for SLP/MLP
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as.ANN.matrix}()},
 \code{\link{as.MLP.X}()},
+\code{\link{as.numpy}()},
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},

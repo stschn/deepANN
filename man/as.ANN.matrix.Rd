@@ -19,6 +19,7 @@ Convert data into an ANN compatible matrix with only numbers
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as.MLP.X}()},
 \code{\link{as.MLP.Y}()},
+\code{\link{as.numpy}()},
 \code{\link{as.tensor.1D}()},
 \code{\link{as.tensor.2D}()},
 \code{\link{as.tensor.3D}()},
