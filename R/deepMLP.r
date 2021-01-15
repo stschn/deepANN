@@ -84,12 +84,48 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
   return(m)
 }
 
+#' Flatten data into a one-dimensional array
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param data Data to be flatten.
+#' @param order The order in which elements of \code{data} should be read during flattening.
+#'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#'
+#' @return The flatten data in form of a one-dimensional array.
+#' @export
+#'
+#' @examples
+#' v <- (1:24); dim(v); length(dim(v))
+#' m <- matrix(1:24, nrow = 6); dim(m); length(m);
+#' a3 <- array(v, dim = c(4, 3, 2)); dim(a3); length(a3)
+#' a4 <- array(1:48, dim = c(4, 3, 2, 2))
+#' data <- a4; data
+#' flatten(data, order = "F"); flatten(data, order = "C")
+flatten <- function(data, order = c("C", "F")) {
+  order <- match.arg(order)
+  byrow <- ifelse(order %in% c("C"), TRUE, FALSE)
+  if (is.null((d <- dim(data)))) { data <- array(data) }
+  if ((l <- length(d)) > 1L) {
+    if (l == 2L) { # matrix
+      if (!byrow) { data <- array(data) } else { data <- array(t(data))}
+    } else { # n-dimensional arrays with n > 2
+      # coerce n-dimensional array to stacked matrices
+      fixed_dimension <- seq_len(l)[-c(1L:2L)]
+      data <- array(unlist(list(apply(data, c(ifelse(byrow, 1L, 2L), fixed_dimension), function(element) { element }))))
+      #data <- aperm(data, perm = rev(seq_along(dim(data)))) # byrow
+    }
+  }
+  return(data)
+}
+
 #' Create a reshaped numpy array known from Python
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
-#' @param x A vector to be reshaped to a numpy array.
-#' @param dim The new dimensions to be set to \code{x}.
+#' @param data Data to be reshaped to a numpy array.
+#' @param dim The new dimensions to be set to \code{data}.
 #' @param numeric A logical value indicating whether the elements should be coerced as numeric elements.
 #' @param reverse Controls the order of the elements in the numpy array. By default they are used in the given order, but they can also be used in reverse order.
 #' @param order The order in which elements of data should be read during rearrangement.
@@ -109,11 +145,10 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #'  as.numpy(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
 #'  as.numpy(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
 #'  as.numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
-as.numpy <- function(x, dim = NULL, numeric = TRUE, reverse = FALSE, order = c("C", "F")) {
-  x <- c(t(x))
+as.numpy <- function(data, dim = NULL, numeric = TRUE, reverse = FALSE, order = c("C", "F")) {
+  x <- array(data)
   if (numeric) x <- vector.as.numeric(x)
   if (reverse) x <- rev(x)
-  x <- array(x)
   order <- match.arg(order)
   byrow = ifelse(order == "C", TRUE, FALSE)
   if (!is.null(dim) && ((ldim <- length(dim)) >= 2L)) {

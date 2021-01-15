@@ -4,12 +4,18 @@
 \alias{as.numpy}
 \title{Create a reshaped numpy array known from Python}
 \usage{
-as.numpy(x, dim = NULL, numeric = TRUE, reverse = FALSE, order = c("C", "F"))
+as.numpy(
+  data,
+  dim = NULL,
+  numeric = TRUE,
+  reverse = FALSE,
+  order = c("C", "F")
+)
 }
 \arguments{
-\item{x}{A vector to be reshaped to a numpy array.}
+\item{data}{Data to be reshaped to a numpy array.}
 
-\item{dim}{The new dimensions to be set to \code{x}.}
+\item{dim}{The new dimensions to be set to \code{data}.}
 
 \item{numeric}{A logical value indicating whether the elements should be coerced as numeric elements.}
 
@@ -48,6 +54,7 @@ Other Single & Multi Layer Perceptron (SLP, MLP):
 \code{\link{as.tensor}()},
 \code{\link{build.MLP}()},
 \code{\link{fit.MLP}()},
+\code{\link{flatten}()},
 \code{\link{get.MLP.X.samples}()},
 \code{\link{get.MLP.X.units}()},
 \code{\link{get.MLP.Y.samples}()},
