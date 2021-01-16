@@ -4,10 +4,14 @@
 \alias{flatten}
 \title{Flatten data into a one-dimensional array}
 \usage{
-flatten(data, order = c("C", "F"))
+flatten(data, axis = NULL, order = c("C", "F"))
 }
 \arguments{
 \item{data}{Data to be flatten.}
+
+\item{axis}{The axes to be fixed while iterating over the remaining axes of \code{data}.
+By default (\code{NULL}), the structure of \code{data} is interpret as a stack (of stack...) of matrices, 
+with either the first axis (\code{C}-order) or the second axis (\code{F}-order) and all remaining axes are fixed.}
 
 \item{order}{The order in which elements of \code{data} should be read during flattening.
 By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.

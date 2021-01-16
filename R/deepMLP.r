@@ -79,7 +79,7 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
     })
     # m <- matrix(unlist(l), ncol = N)
     # m <- t(m)
-    m <- matrix(unlist(l), nrow = N, byrow = T)
+    m <- matrix(unlist(l), nrow = N, byrow = TRUE)
   }}
   return(m)
 }
@@ -89,6 +89,9 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param data Data to be flatten.
+#' @param axis The axes to be fixed while iterating over the remaining axes of \code{data}.
+#'   By default (\code{NULL}), the structure of \code{data} is interpret as a stack (of stack...) of matrices, 
+#'   with either the first axis (\code{C}-order) or the second axis (\code{F}-order) and all remaining axes are fixed.
 #' @param order The order in which elements of \code{data} should be read during flattening.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
@@ -103,18 +106,22 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #' a4 <- array(1:48, dim = c(4, 3, 2, 2))
 #' data <- a4; data
 #' flatten(data, order = "F"); flatten(data, order = "C")
-flatten <- function(data, order = c("C", "F")) {
+flatten <- function(data, axis = NULL, order = c("C", "F")) {
   order <- match.arg(order)
   byrow <- ifelse(order %in% c("C"), TRUE, FALSE)
   if (is.null((d <- dim(data)))) { data <- array(data) }
   if ((l <- length(d)) > 1L) {
-    if (l == 2L) { # matrix
-      if (!byrow) { data <- array(data) } else { data <- array(t(data))}
-    } else { # n-dimensional arrays with n > 2
-      # coerce n-dimensional array to stacked matrices
-      fixed_dimension <- seq_len(l)[-c(1L:2L)]
-      data <- array(unlist(list(apply(data, c(ifelse(byrow, 1L, 2L), fixed_dimension), function(element) { element }))))
-      #data <- aperm(data, perm = rev(seq_along(dim(data)))) # byrow
+    if (is.null(axis)) {
+      if (l == 2L) { # matrix
+        if (!byrow) { data <- array(data) } else { data <- array(t(data))}
+      } else { # n-dimensional arrays with n > 2
+        # coerce n-dimensional array to stacked matrices
+        fixed_dimension <- seq_len(l)[-c(1L:2L)]
+        data <- array(unlist(list(apply(data, c(ifelse(byrow, 1L, 2L), fixed_dimension), function(element) { element }))))
+        #data <- aperm(data, perm = rev(seq_along(dim(data)))) # byrow
+      }
+    } else {
+      data <- array(unlist(list(apply(data, MARGIN = axis, function(element) { element }))))
     }
   }
   return(data)
