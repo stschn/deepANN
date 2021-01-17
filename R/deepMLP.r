@@ -215,7 +215,7 @@ as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse =
   dataclass <- class(data)
   if ((is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
     if (numeric) data <- as.array(vector.as.numeric(data)) else data <- as.array(data)
-    if (reverse) data <- rev(data)
+    if (reverse[1L]) data <- rev(data)
   } else {
   if (any(dataclass %in% c("matrix"))) {
     data <- as.matrix(data)
