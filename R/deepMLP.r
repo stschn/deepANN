@@ -153,15 +153,16 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'  as.numpy(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
 #'  as.numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
 as.numpy <- function(data, dim = NULL, numeric = TRUE, reverse = FALSE, order = c("C", "F")) {
-  if (is.null(dim(data))) {
+  dataclass <- class(data)
+  if ((is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
     if (numeric) data <- vector.as.numeric(data)
     if (reverse) data <- rev(data)
   } else {
-  if ((!is.null(dim(data))) && (any(class(data) %in% c("list", "data.frame", "tbl_df", "tbl", "data.table")))) {
+  if (any(dataclass %in% c("list", "data.frame", "tbl_df", "tbl", "data.table"))) {
     if (!numeric) {
-      data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), colnames(data)))
+      data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), names(data)))
     } else {
-      data <- matrix(unlist(lapply(data, vector.as.numeric)), ncol = length(data), dimnames = list(rownames(data), colnames(data)))
+      data <- matrix(unlist(lapply(data, vector.as.numeric)), ncol = length(data), dimnames = list(rownames(data), names(data)))
     }
     if (reverse) data <- apply(data, 2L, rev)
   }}
@@ -211,30 +212,26 @@ as.numpy <- function(data, dim = NULL, numeric = TRUE, reverse = FALSE, order = 
 #'
 #' @examples
 as.tensor <- function(data, dim = NULL, byrow = FALSE, numeric = TRUE, reverse = c(FALSE, 2)) {
-  datadim <- dim(data)
-  if (is.null(datadim)) {
-    if (reverse[1L]) { data <- rev(data) }
-    if (numeric) {
-      data <- as.array(vector.as.numeric(data))
-    } else {
-      data <- as.array(data)
-    }
+  dataclass <- class(data)
+  if ((is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+    if (numeric) data <- as.array(vector.as.numeric(data)) else data <- as.array(data)
+    if (reverse) data <- rev(data)
   } else {
-  if (c("matrix") %in% class(data)) {
+  if (any(dataclass %in% c("matrix"))) {
     data <- as.matrix(data)
     if (numeric) { data <- apply(data, 2, vector.as.numeric) }
     if (reverse[1L]) {
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
-  if (length(base::intersect(class(data), c("data.frame", "tbl_df", "tbl", "data.table"))) > 0) {
+  if (any(dataclass %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
     if (numeric) { data <- data.matrix(data) } #data <- sapply(data, vector.as.numeric)
     data <- as.matrix(data)
     if (reverse[1L]) {
       if (reverse[2L] == 2) { data <- apply(data, 2, rev) } else { data <- t(apply(data, 1, rev)) }}
     data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
-  if (c("list") %in% class(data)) {
+  if (any(dataclass %in% c("list"))) {
     if (numeric) { data <- lapply(data, vector.as.numeric) }
     data <- matrix(unlist(data), ncol = length(data))
     if (reverse[1L]) {
