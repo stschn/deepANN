@@ -153,6 +153,9 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'  as.numpy(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
 #'  as.numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
 as.numpy <- function(data, dim = NULL, numeric = TRUE, reverse = FALSE, order = c("C", "F")) {
+  if ((!is.null(dim(data))) && (any(class(data) %in% c("list", "data.frame", "tbl_df", "tbl", "data.table")))) {
+    data <- unlist(data)
+  }
   x <- array(data)
   if (numeric) x <- vector.as.numeric(x)
   if (reverse) x <- rev(x)
