@@ -153,12 +153,19 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'  as.numpy(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
 #'  as.numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
 as.numpy <- function(data, dim = NULL, numeric = TRUE, reverse = FALSE, order = c("C", "F")) {
+  if (is.null(dim(data))) {
+    if (numeric) data <- vector.as.numeric(data)
+    if (reverse) data <- rev(data)
+  } else {
   if ((!is.null(dim(data))) && (any(class(data) %in% c("list", "data.frame", "tbl_df", "tbl", "data.table")))) {
-    data <- unlist(data)
-  }
+    if (!numeric) {
+      data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), colnames(data)))
+    } else {
+      data <- matrix(unlist(lapply(data, vector.as.numeric)), ncol = length(data), dimnames = list(rownames(data), colnames(data)))
+    }
+    if (reverse) data <- apply(data, 2L, rev)
+  }}
   x <- array(data)
-  if (numeric) x <- vector.as.numeric(x)
-  if (reverse) x <- rev(x)
   order <- match.arg(order)
   byrow = ifelse(order == "C", TRUE, FALSE)
   if (!is.null(dim) && ((ldim <- length(dim)) >= 2L)) {
