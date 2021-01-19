@@ -101,6 +101,7 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 #'
 #' @examples
 #' v <- (1:24); dim(v); length(dim(v))
+#' l <- list(x1 = 1:10, x2 =seq(10, 100, 10), x3 = list(a = 11, b = c(2, 23)))
 #' m <- matrix(1:24, nrow = 6); dim(m); length(m);
 #' a3 <- array(v, dim = c(4, 3, 2)); dim(a3); length(a3)
 #' a4 <- array(1:48, dim = c(4, 3, 2, 2))
@@ -109,8 +110,14 @@ vector.as.ANN.matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "co
 flatten <- function(data, axis = NULL, order = c("C", "F")) {
   order <- match.arg(order)
   byrow <- ifelse(order %in% c("C"), TRUE, FALSE)
-  if (is.null((d <- dim(data)))) { data <- array(data) }
-  if ((l <- length(d)) > 1L) {
+  dataclass <- class(data)
+  if ((is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+    data <- array(data)
+  } else {
+  if (any(dataclass %in% c("list"))) {
+    data <- array(unname(unlist(lapply(data, function(element) { element }))))
+  } else {
+  if ((l <- length(dim(data))) > 1L) {
     if (is.null(axis)) {
       if (l == 2L) { # matrix
         if (!byrow) { data <- array(data) } else { data <- array(t(data))}
@@ -123,7 +130,9 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
     } else {
       data <- array(unlist(list(apply(data, MARGIN = axis, function(element) { element }))))
     }
-  }
+  } else {
+    data <- array(data) 
+  }}}
   return(data)
 }
 

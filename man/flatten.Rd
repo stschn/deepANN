@@ -25,6 +25,7 @@ Flatten data into a one-dimensional array
 }
 \examples{
 v <- (1:24); dim(v); length(dim(v))
+l <- list(x1 = 1:10, x2 =seq(10, 100, 10), x3 = list(a = 11, b = c(2, 23)))
 m <- matrix(1:24, nrow = 6); dim(m); length(m);
 a3 <- array(v, dim = c(4, 3, 2)); dim(a3); length(a3)
 a4 <- array(1:48, dim = c(4, 3, 2, 2))
