@@ -1,3 +1,143 @@
+#' Load images from different sources like from files or web
+#' 
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param images A vector or list of files, urls etc. containing images.
+#' @param FUN The function to be applied for loading \code{images}. If no function is specified \code{image_load()} from keras is called.
+#' @param ... Optional arguments to \code{FUN}.
+#'
+#' @return A list of images.
+#' @export
+#' 
+#' @seealso \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}.
+#'
+#' @examples
+#'   For an example see \code{\link{as_images_tensor4D}}.
+images_load <- function(images, FUN, ...) {
+  if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
+  params <- list(...)
+  # params <- match.call(expand.dots = FALSE)$...
+  # param_values <- sapply(params, deparse)
+  if (!is.null(FUN)) {
+    img_list <- lapply(images, function(img_name) { FUN(img_name, ...) })
+  } else {
+    # Per default, call image_load() from keras
+    if (length(params) >= 3L) {
+      target_size <- c(params[[1L]], params[[2L]]) # height, width
+      grayscale <- ifelse((params[[3L]] %in% c("gray")) || (params[[3L]] == 1L), TRUE, FALSE)
+    } else {
+      target_size <- NULL
+      grayscale <- FALSE
+    }
+    img_list <- lapply(images, function(img_name) { keras::image_load(img_name, grayscale = grayscale, target_size = target_size) })
+  }
+  return(img_list)
+}
+
+#' Resize loaded images
+#' 
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param imagelist A list of loaded images returned by \code{images_load()}.
+#' @param FUN The function to be applied for resizing images within \code{imagelist}. If no function is specified the images within \code{imagelist} aren't resized.
+#' @param ... Optional arguments to \code{FUN}.
+#'
+#' @return A list of (resized) images.
+#' @export
+#' 
+#' @examples
+#'   For an example see \code{\link{as_images_tensor4D}}.
+images_resize <- function(imagelist, FUN, ...) {
+  if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
+  params <- list(...)
+  if (!is.null(FUN)) {
+    img_list <- lapply(imagelist, function(img) { FUN(img, ...) })
+  } else {
+    # Per default, image_load() from keras does automatically resize images
+    img_list <- imagelist
+  }
+  return(img_list)
+}
+
+#' Convert (resized) images to 3D arrays
+#' 
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param imagelist A list of (resized) images returned by either \code{images_load()} or \code{images_resize()}.
+#' @param FUN The function to be applied for changing the representation of the images within \code{imagelist}. If no function is specified \code{image_to_array()} from keras is called.
+#' @param ... Optional arguments to \code{FUN}.
+#'
+#' @return A list of images represented in 3D arrays with dimensions height, width and channels.
+#' @export
+#' 
+#' @seealso \code{\link[keras]{image_to_array}}.
+#'
+#' @examples
+#'   For an example see \code{\link{as_images_tensor4D}}.
+as_images_array <- function(imagelist, FUN, ...) {
+  if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
+  params <- list(...)
+  if (!is.null(FUN)) {
+    img_list <- lapply(imagelist, function(img) { FUN(img, ...) })
+  } else {
+    # Per default, call image_to_array() from keras
+    img_list <- lapply(imagelist, function(img) { keras::image_to_array(img) })
+  }
+  return(img_list)
+}
+
+#' Convert image arrays to 4D tensor
+#' 
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param imagelist A list of images returned by \code{as_images_array()}.
+#' @param height The height of an image, equal to the number of rows.
+#' @param width The width of an image, equal to the number of columns.
+#' @param channels The number of channels of an image. A color channel is a primary color (like red, green and blue), 
+#'   equal to a color valence (denotes how light effects the color sensation of an eye or in common of the brain).
+#'   Primary colors can be mixed to produce any color. 
+#'   A channel equal \code{1} indicates a grayscale image, \code{3} a color image.
+#'
+#' @return A 4D array (tensor) with dimensions samples (number of images), height, width and channels.
+#' @export
+#' 
+#' @examples
+#'   # Make pipe operator available
+#'   '%>%' <- keras::'%>%'
+#'   # Get file image names
+#'   base_dir <- "c:/users/.../images" # any folder where image files are stored
+#'   filelist <- list.files(path = base_dir, pattern = "\\.jpg$", full.names = T) # JPEG images
+#'   # Image dimensions
+#'   height   <- 200L
+#'   width    <- 200L
+#'   channels <- 3L
+#'   
+#'   # with keras (no functions are specified)
+#'   CNN_X <- images_load(filelist, h = height, w = width, ch = channels) %>% 
+#'     images_resize() %>% 
+#'     as_images_array() %>% 
+#'     as_images_tensor4D(height = height, width = width, channels = channels)
+#'  
+#'   # with magick
+#'   magick_resize <- function(img, height, width) {
+#'     magick::image_scale(img, magick::geometry_size_pixels(width = width, height = height, preserve_aspect = FALSE))
+#'   }
+#'
+#'   magick_array <- function(img, channels) {
+#'     as.integer(magick::image_data(img, channels))
+#'   }
+#'
+#'   CNN_X <- images_load(filelist, FUN = magick::image_read) %>% 
+#'     images_resize(FUN = magick_resize, h = height, w = width) %>% 
+#'     as_images_array(FUN = magick_array, ch = "rgb") %>% 
+#'     as_images_tensor4D(height = height, width = width, channels = channels)
+as_images_tensor4D <- function(imagelist, height, width, channels = "rgb") {
+  #feature <- keras::array_reshape(imagelist, dim = c(NROW(imagelist), height, width, channels))
+  tensor <- array(NA, dim = c((N <- NROW(imagelist)), height, width, ifelse((channels %in% c("gray")) || (channels == 1L), 1L, 3L)))
+  for (i in 1L:N) { tensor[i, , , ] <- imagelist[[i]] }
+  return(tensor)
+}
+
 #' Create a 4-dimensional array for image features (input)
 #'
 #' @family Convolutional Neural Network (CNN)

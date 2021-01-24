@@ -132,6 +132,10 @@ This R library is currently structured in form of the following functional famil
 
 <b>Convolutional Neural Network (CNN)</b>
 <ul>
+  <li><code>images_load()</code> load images from different sources.</li>
+  <li><code>images_resize()</code> resizes loaded images.</li>
+  <li><code>as_images_array()</code> converts image representation into 3D array.</li>
+  <li><code>as_images_tensor4D()</code> builds a 4D image tensor with dimensions samples, height, width and channels.</li>
   <li><code>as.CNN.image.X()</code> creates a 4D image feature array with the dimensions samples, height, width and channels either from already given image data or from images on a storage medium.</li>
   <li><code>as.CNN.image.Y()</code> creates a one-hot vector for the image labels.</li>
   <li><code>get.CNN.image.X.samples()</code> returns the number of images (feature samples).</li>
