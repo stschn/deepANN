@@ -22,4 +22,4 @@ PackageRoxygenize: rd,collate,namespace,vignette
 
 PythonType: conda
 PythonVersion: 3.8.5
-PythonPath: C:\ProgramData\Miniconda3\envs\PAI\python.exe
+PythonPath: C:\ProgramData\Miniconda3\envs\AI\python.exe

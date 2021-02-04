@@ -210,9 +210,7 @@ quantile_loss <- function(actuals, preds, q = 0.5, na.rm = FALSE) {
 #'
 #' @examples
 vc <- function(actuals, preds, na.rm = FALSE) {
-  error <- actuals - preds
-  if (na.rm) error <- error[!is.na(error)]
-  return(sqrt(mean(error^2)) / mean(actuals))
+  return(deepANN::rmse(actuals = actuals, preds = preds, na.rm = na.rm) / mean(actuals, na.rm = na.rm))
 }
 
 #' Coerce data to an array or matrix with no trailing dimension of 1
