@@ -221,20 +221,21 @@ vc <- function(actuals, preds, na.rm = FALSE) {
 #'
 #' @examples
 coerce_dimension <- function(x) {
-  if (is.null(dim(x))) {
+  xclass <- class(x)
+  if ((is.atomic(x)) && (!any(xclass %in% c("matrix", "array")))) {
     x <- as.array(x)
   } else {
-  if (c("data.frame") %in% class(x)) {
+  if (any(xclass %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
     x <- as.matrix(x)
   } else {
-  if (c("list") %in% class(x)) {
+  if (any(xclass %in% c("list"))) {
     x <- matrix(unlist(x), ncol = length(x))
   }}}
   x <- as.array(x)
   # cut off last dimension, if last dimension is 1
   if (length(dim(x)) >= 2L) {
     while (dim(x)[length(dim(x))] == 1L) {
-      dim(x) <- sapply(1:(length(dim(x)) - 1), function(i) { dim(x)[i] })
+      dim(x) <- dim(x)[seq_len(length(dim(x)) - 1L)]
     }
   }
   if (length(dim(x)) == 1L) x <- as.matrix(x)
