@@ -25,24 +25,28 @@ accuracy(
 The type-specific accuracy of a classification problem.
 }
 \description{
-Classification accuracy
+
 }
 \details{
-\eqn{Standard Accuracy = Number of correct predictions / Total number of predictions}.
-  \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.
-  \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.
-  \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.
-  \eqn{TPR (True Positive Rate) or sensitivity = True Positives / (True Positives + False Negatives)}.
-  \eqn{FPR (False Positive Rate) or specificity = True Negatives / (True Negatives + False Positives)}.
-  \eqn{Kappa statistics = (p0 - pe) / (1 - pe)}.
-  \eqn{Misclassification error = Number of incorrect predictions / Total number of predictions}.
-  
+\eqn{Standard Accuracy = Number of correct predictions / Total number of predictions}.\cr
+  \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.\cr
+  \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.\cr
+  \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.\cr
+  \eqn{TPR (True Positive Rate) or sensitivity = True Positives / (True Positives + False Negatives)}.\cr
+  \eqn{FPR (False Positive Rate) or specificity = True Negatives / (True Negatives + False Positives)}.\cr
+  \eqn{Kappa statistics = (p0 - pe) / (1 - pe)}.\cr
+  \eqn{Misclassification error = Number of incorrect predictions / Total number of predictions}.\cr
+
   Standard accuracy and misclassification error are mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
 }
 \seealso{
 Other Quality: 
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},

@@ -17,34 +17,21 @@ images_load(images, FUN, ...)
 A list of images.
 }
 \description{
-Load images from different sources like from files or web
+
 }
 \examples{
-  For an example see \code{\link{as_images_tensor4D}}.
+  For an example see \code{\link{as_images_tensor_4D}}.
 }
 \seealso{
 \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}.
 
 Other Convolutional Neural Network (CNN): 
-\code{\link{as.CNN.image.X}()},
-\code{\link{as.CNN.image.Y}()},
-\code{\link{as.CNN.temp.X}()},
-\code{\link{as.CNN.temp.Y}()},
+\code{\link{as_CNN_image_X}()},
+\code{\link{as_CNN_image_Y}()},
+\code{\link{as_CNN_temp_X}()},
+\code{\link{as_CNN_temp_Y}()},
 \code{\link{as_images_array}()},
-\code{\link{as_images_tensor4D}()},
-\code{\link{get.CNN.image.X.channels}()},
-\code{\link{get.CNN.image.X.height}()},
-\code{\link{get.CNN.image.X.samples}()},
-\code{\link{get.CNN.image.X.width}()},
-\code{\link{get.CNN.image.Y.samples}()},
-\code{\link{get.CNN.image.Y.units}()},
-\code{\link{get.CNN.temp.X.samples}()},
-\code{\link{get.CNN.temp.X.subsequences}()},
-\code{\link{get.CNN.temp.X.timesteps}()},
-\code{\link{get.CNN.temp.X.units}()},
-\code{\link{get.CNN.temp.Y.samples}()},
-\code{\link{get.CNN.temp.Y.timesteps}()},
-\code{\link{get.CNN.temp.Y.units}()},
+\code{\link{as_images_tensor_4D}()},
 \code{\link{images_resize}()}
 }
 \concept{Convolutional Neural Network (CNN)}

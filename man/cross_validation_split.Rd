@@ -22,19 +22,11 @@ A named list with folds.
 }
 \seealso{
 Other Machine Learning: 
-\code{\link{as.degree}()},
-\code{\link{as.radian}()},
-\code{\link{distance}()},
-\code{\link{erfcinv}()},
-\code{\link{erfc}()},
-\code{\link{erfinv}()},
-\code{\link{erf}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{moving_average}()},
+\code{\link{naive_bayes}()},
 \code{\link{naive_forecast}()},
 \code{\link{predict.kmeans}()},
-\code{\link{sd.pop}()},
-\code{\link{similarity}()},
-\code{\link{var.pop}()}
+\code{\link{predict.naivebayes}()}
 }
 \concept{Machine Learning}

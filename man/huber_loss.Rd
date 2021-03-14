@@ -19,7 +19,7 @@ huber_loss(actuals, preds, delta = 1, na.rm = FALSE)
 Huber loss.
 }
 \description{
-Huber loss
+
 }
 \details{
 Huber loss is less sensitive to outliers than MSE.
@@ -33,6 +33,10 @@ Other Quality:
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{gini_impurity}()},
 \code{\link{log_cosh_loss}()},
 \code{\link{mae}()},

@@ -1,4 +1,5 @@
-#' Mean absolute error (MAE)
+#' @title Mean absolute error (MAE)
+#' @description
 #'
 #' @family Quality
 #'
@@ -10,15 +11,15 @@
 #'   In opposite to MSE, MAE is more robust to outliers.
 #'
 #' @return Mean absolute error.
-#' @export
 #'
-#' @examples
+#' @export
 mae <- function(actuals, preds, na.rm = FALSE) {
   error <- actuals - preds
   return(mean(abs(error), na.rm = na.rm))
 }
 
-#' Mean absolute percentage error (MAPE)
+#' @title Mean absolute percentage error (MAPE)
+#' @description
 #'
 #' @family Quality
 #'
@@ -27,15 +28,15 @@ mae <- function(actuals, preds, na.rm = FALSE) {
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Mean absolute percentage error.
-#' @export
 #'
-#' @examples
+#' @export
 mape <- function(actuals, preds, na.rm = FALSE) {
   error <- actuals - preds
   return(mean(abs(error / actuals), na.rm = na.rm) * 100)
 }
 
-#' Mean squared error (MSE)
+#' @title Mean squared error (MSE)
+#' @description
 #'
 #' @family Quality
 #'
@@ -46,15 +47,15 @@ mape <- function(actuals, preds, na.rm = FALSE) {
 #' @details In Machine and Deep Learning, MSE is also known as L2 loss function.
 #'
 #' @return Mean squared error.
-#' @export
 #'
-#' @examples
+#' @export
 mse <- function(actuals, preds, na.rm = FALSE) {
   error <- actuals - preds
   return(mean(error^2, na.rm = na.rm))
 }
 
-#' Mean squared logarithmic error (MSLE)
+#' @title Mean squared logarithmic error (MSLE)
+#' @description
 #'
 #' @family Quality
 #'
@@ -64,9 +65,8 @@ mse <- function(actuals, preds, na.rm = FALSE) {
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Mean squared logarithmic error.
-#' @export
 #'
-#' @examples
+#' @export
 msle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
   if (na.rm) {
     idx <- sort(unique(c(which(is.na(actuals)), which(is.na(preds)))))
@@ -81,7 +81,8 @@ msle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
   return(mean(error^2, na.rm = na.rm))
 }
 
-#' Root mean square error (RMSE)
+#' @title Root mean square error (RMSE)
+#' @description
 #'
 #' @family Quality
 #'
@@ -90,14 +91,14 @@ msle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Root mean square error.
-#' @export
 #'
-#' @examples
+#' @export
 rmse <- function(actuals, preds, na.rm = FALSE) {
   return(sqrt(deepANN::mse(actuals = actuals, preds = preds, na.rm = na.rm)))
 }
 
-#' Root mean square logarithmic error (RMSLE)
+#' @title Root mean square logarithmic error (RMSLE)
+#' @description
 #'
 #' @family Quality
 #'
@@ -107,14 +108,14 @@ rmse <- function(actuals, preds, na.rm = FALSE) {
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Root mean square logarithmic error.
-#' @export
 #'
-#' @examples
+#' @export
 rmsle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
   return(sqrt(deepANN::msle(actuals = actuals, preds = preds, alpha = alpha, na.rm = na.rm)))
 }
 
-#' Huber loss
+#' @title Huber loss
+#' @description
 #'
 #' @family Quality
 #'
@@ -126,13 +127,12 @@ rmsle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
 #' @details Huber loss is less sensitive to outliers than MSE.
 #'
 #' @return Huber loss.
-#' @export
 #'
 #' @references
 #'   Huber, Peter J. (1964): Robust Estimation of a Location Parameter. In: Annals of Mathematical Statistics, 35 (1964) 1, 73-101.
 #'   Hasti, Trevor; Tibshirani, Robert; Friedman, Jerome (2009): The Elements of Statistical Learning. 2nd ed., 2009. New York: Springer. (p. 349).
 #'
-#' @examples
+#' @export
 huber_loss <- function(actuals, preds, delta = 1.0, na.rm = FALSE) {
   error <- abs(actuals - preds)
   if (na.rm) error <- error[!is.na(error)]
@@ -144,7 +144,8 @@ huber_loss <- function(actuals, preds, delta = 1.0, na.rm = FALSE) {
   return(loss)
 }
 
-#' Log-Cosh loss
+#' @title Log-Cosh loss
+#' @description
 #'
 #' @family Quality
 #'
@@ -153,16 +154,16 @@ huber_loss <- function(actuals, preds, delta = 1.0, na.rm = FALSE) {
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Log-Cosh loss.
-#' @export
 #'
-#' @examples
+#' @export
 log_cosh_loss <- function(actuals, preds, na.rm = FALSE) {
   error <- preds - actuals
   if (na.rm) error <- error[!is.na(error)]
   return(sum(log(cosh(error))))
 }
 
-#' Quantile loss
+#' @title Quantile loss
+#' @description
 #'
 #' @family Quality
 #'
@@ -177,13 +178,12 @@ log_cosh_loss <- function(actuals, preds, na.rm = FALSE) {
 #'   it will then try to avoid overestimation approximately \code{(1 - p) / p} times as hard as underestimation.
 #'
 #' @return Quantile loss.
-#' @export
 #'
 #' @references
 #'   \url{https://heartbeat.fritz.ai/5-regression-loss-functions-all-machine-learners-should-know-4fb140e9d4b0}
 #'   \url{https://www.evergreeninnovations.co/blog-quantile-loss-function-for-machine-learning/}
 #'
-#' @examples
+#' @export
 quantile_loss <- function(actuals, preds, q = 0.5, na.rm = FALSE) {
   q <- ifelse(q < 0, 0, q)
   q <- ifelse(q > 1, 1, q)
@@ -197,7 +197,8 @@ quantile_loss <- function(actuals, preds, q = 0.5, na.rm = FALSE) {
   return(loss)
 }
 
-#' Variance coefficient (VC)
+#' @title Variance coefficient (VC)
+#' @description
 #'
 #' @family Quality
 #'
@@ -206,20 +207,20 @@ quantile_loss <- function(actuals, preds, q = 0.5, na.rm = FALSE) {
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @return Variance coefficient.
-#' @export
 #'
-#' @examples
+#' @export
 vc <- function(actuals, preds, na.rm = FALSE) {
   return(deepANN::rmse(actuals = actuals, preds = preds, na.rm = na.rm) / mean(actuals, na.rm = na.rm))
 }
 
-#' Coerce data to an array or matrix with no trailing dimension of 1
+#' @title Coerce data to an array with no trailing dimension of 1 or to a matrix
+#' @description
 #'
 #' @param x A data structure like vector, matrix, array, data frame or list.
 #'
-#' @return The coerced data structure with no trailing dimension of 1.
+#' @return The coerced data structure, either an array with no trailing dimension of 1 or a matrix.
 #'
-#' @examples
+#' @export
 coerce_dimension <- function(x) {
   xclass <- class(x)
   if ((is.atomic(x)) && (!any(xclass %in% c("matrix", "array")))) {
@@ -242,7 +243,8 @@ coerce_dimension <- function(x) {
   return(x)
 }
 
-#' Classification accuracy
+#' @title Classification accuracy
+#' @description
 #'
 #' @family Quality
 #'
@@ -252,27 +254,26 @@ coerce_dimension <- function(x) {
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
 #' @details
-#'   \eqn{Standard Accuracy = Number of correct predictions / Total number of predictions}.
-#'   \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.
-#'   \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.
-#'   \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.
-#'   \eqn{TPR (True Positive Rate) or sensitivity = True Positives / (True Positives + False Negatives)}.
-#'   \eqn{FPR (False Positive Rate) or specificity = True Negatives / (True Negatives + False Positives)}.
-#'   \eqn{Kappa statistics = (p0 - pe) / (1 - pe)}.
-#'   \eqn{Misclassification error = Number of incorrect predictions / Total number of predictions}.
-#'   
+#'   \eqn{Standard Accuracy = Number of correct predictions / Total number of predictions}.\cr
+#'   \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.\cr
+#'   \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.\cr
+#'   \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.\cr
+#'   \eqn{TPR (True Positive Rate) or sensitivity = True Positives / (True Positives + False Negatives)}.\cr
+#'   \eqn{FPR (False Positive Rate) or specificity = True Negatives / (True Negatives + False Positives)}.\cr
+#'   \eqn{Kappa statistics = (p0 - pe) / (1 - pe)}.\cr
+#'   \eqn{Misclassification error = Number of incorrect predictions / Total number of predictions}.\cr
+#'
 #'   Standard accuracy and misclassification error are mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
 #'
 #' @return The type-specific accuracy of a classification problem.
-#' @export
 #'
-#' @examples
+#' @export
 accuracy <- function(actuals, preds, type = c("standard", "precision", "recall", "F1", "tpr", "fpr", "kappa", "misclassification"), na.rm = FALSE) {
   actuals <- coerce_dimension(actuals)
   preds <- coerce_dimension(preds)
   stopifnot(identical(dim(actuals), dim(preds)), identical(length(actuals), length(preds)))
   type <- match.arg(type)
-  if (type == "standard") {  
+  if (type == "standard") {
     return(sum(actuals == preds, na.rm = na.rm) / NROW(preds))
   } else {
     true_positives <- lapply(seq_len(NROW(actuals)), function(i) {
@@ -321,32 +322,34 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
   }
 }
 
-#' Gini impurity
+#' @title Gini impurity
+#' @description
 #'
 #' @family Quality
-#' 
+#'
 #' @param x A vector of values, usually character labels as raw instances or as class frequencies.
 #'
 #' @details Gini impurity is the probability of how often a randomly chosen element from a set \code{x} would be
 #'   incorrectly labeled if it was randomly labeled according to the distribution of labels in the set.
-#' 
+#'
 #' @return The Gini impurity.
-#' @export
-#' 
+#'
 #' @references
 #'   \url{https://victorzhou.com/blog/gini-impurity/}
 #'
 #' @examples
 #'   gini_impurity(c("dog", "dog", "cat", "mouse"))
 #'   gini_impurity(c(dog = 2, cat = 1, mouse = 1))
+#' @export
 gini_impurity <- function(x) {
   if (is(x, "numeric")) occurences <- x else occurences <- table(x)
   total <- sum(occurences)
   probabilities <- occurences / total
-  return(sum(probabilities * (1 - probabilities)))
+  return(sum(probabilities * (1 - probabilities))) # equal to 1 - sum(probabilities^2)
 }
 
-#' Shannon entropy
+#' @title Shannon entropy
+#' @description
 #'
 #' @family Quality
 #'
@@ -354,15 +357,15 @@ gini_impurity <- function(x) {
 #' @param base A positive or complex number: the base with respect to which logarithms are computed.
 #'   Defaults to \code{NULL} indicates that the base is automatically determined by the number of class levels of \code{x}.
 #'
-#' @details Shannon entropy is a concept from information theory and represents a quantification of the level 
+#' @details Shannon entropy is a concept from information theory and represents a quantification of the level
 #'   of impurity or randomness that exists within a partition with class levels of \code{x}.
-#'   
+#'
 #' @return Entropy.
-#' @export
 #'
 #' @examples
 #'   entropy(c("no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no"))
 #'   entropy(c("no" = 5, "yes" = 9))
+#' @export
 entropy <- function(x, base = NULL) {
   if (is(x, "numeric")) occurences <- x else occurences <- table(x)
   if (is.null(base)) base <- length(occurences)
@@ -370,7 +373,8 @@ entropy <- function(x, base = NULL) {
   return(-sum(probabilities * log(probabilities, base = base)))
 }
 
-#' Cross entropy
+#' @title Cross entropy
+#' @description
 #'
 #' @family Quality
 #'
@@ -380,11 +384,10 @@ entropy <- function(x, base = NULL) {
 #'   Defaults to \code{NULL} is equal to e = \code{exp(1)}.
 #'
 #' @details Cross entropy quantifies the difference between two probability distributions.
-#'   For a binary classification problem, the following equation can be used instead: 
+#'   For a binary classification problem, the following equation can be used instead:
 #'   \eqn{-sum((p * log(q)) + ((1 - p) * (1 - log(q))))}
-#'   
+#'
 #' @return Cross entropy.
-#' @export
 #'
 #' @examples
 #'   # multiclass classification
@@ -392,12 +395,57 @@ entropy <- function(x, base = NULL) {
 #'   p <- c(0.10, 0.40, 0.50) # ground truth values
 #'   q <- c(0.80, 0.15, 0.05) # estimated values, e.g. given by softmax function
 #'   cross_entropy(p, q)
-#'   
+#'
 #'   # binary classification
 #'   # the complementary probability is (1 - probability)
 #'   p <- c(1)   # ground truth value
 #'   q <- c(0.8) # estimated value
 #'   cross_entropy(p, q)
+#' @export
 cross_entropy <- function(p, q, base = NULL) {
   return(-sum(p * log(q, base = ifelse(is.null(base), exp(1L), base))))
 }
+
+#' @title Error function (from MATLAB)
+#' @description
+#'
+#' @family Quality
+#'
+#' @param x A numeric vector.
+#'
+#' @return Error function as the integral of the Gaussian distribution with 0 mean and variance 1/2.
+#' @export
+erf <- function(x) {2L * pnorm(x * sqrt(2L)) - 1L }
+
+#' @title Complementary error function (from MATLAB)
+#' @description
+#'
+#' @family Quality
+#'
+#' @param x A numeric vector.
+#'
+#' @return Complementary error function, defined as 1 - \code{erf}.
+#' @export
+erfc <- function(x) {2L * pnorm(x * sqrt(2L), lower = F) }
+
+#' @title Inverse error function (from MATLAB)
+#' @description
+#'
+#' @family Quality
+#'
+#' @param x A numeric vector.
+#'
+#' @return Inverse error function.
+#' @export
+erfinv <- function(x) { qnorm((1L + x) / 2L) / sqrt(2L) }
+
+#' @title Inverse complementary error function (from MATLAB)
+#' @description
+#'
+#' @family Quality
+#'
+#' @param x A numeric vector.
+#'
+#' @return Inverse complementary error function.
+#' @export
+erfcinv <- function(x) { qnorm(x / 2L, lower = F) / sqrt(2L) }

@@ -13,26 +13,26 @@ append_rows(dataset, columns = NULL, n = 1L, type = c("copy", "minmax"))
 
 \item{n}{The number of repeating sample blocks or new samples.}
 
-\item{type}{The type of creating dummy rows.
-\code{copy} The mode copy repeats the entire dataset n times.
+\item{type}{The type of creating dummy rows.\cr
+\code{copy} The mode copy repeats the entire dataset n times.\cr
 \code{minmax} The mode minmax creates n synthetic rows based upon the minimum and maximum values of each column.}
 }
 \value{
 The dataset consisting of selected columns with dummy rows.
 }
 \description{
-Append dummy rows
+
 }
 \seealso{
 \code{\link{dummify}}.
 
-Other Dummyfication: 
-\code{\link{dummify.multilabel}()},
+Other Dummifying: 
+\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},
 \code{\link{remove_columns}()},
-\code{\link{resample.imbalanced}()}
+\code{\link{resample_imbalanced}()}
 }
-\concept{Dummyfication}
+\concept{Dummifying}

@@ -17,7 +17,7 @@ moving_average(x, n = 3L, weights = NULL)
 A vector with the (weighted) moving average.
 }
 \description{
-Weighted moving average
+
 }
 \examples{
   x <- c(855, 847, 1000, 635, 346, 2146, 1328, 1322, 3124, 1012, 1280, 2435, 1016, 3465, 1107, 1172, 3432, 836, 142, 345, 2603, 739, 716, 880, 1008, 112, 361)
@@ -26,19 +26,11 @@ Weighted moving average
 }
 \seealso{
 Other Machine Learning: 
-\code{\link{as.degree}()},
-\code{\link{as.radian}()},
 \code{\link{cross_validation_split}()},
-\code{\link{distance}()},
-\code{\link{erfcinv}()},
-\code{\link{erfc}()},
-\code{\link{erfinv}()},
-\code{\link{erf}()},
 \code{\link{k_nearest_neighbors}()},
+\code{\link{naive_bayes}()},
 \code{\link{naive_forecast}()},
 \code{\link{predict.kmeans}()},
-\code{\link{sd.pop}()},
-\code{\link{similarity}()},
-\code{\link{var.pop}()}
+\code{\link{predict.naivebayes}()}
 }
 \concept{Machine Learning}

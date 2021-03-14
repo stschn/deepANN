@@ -2,60 +2,63 @@
 % Please edit documentation in R/deepML.r
 \name{k_nearest_neighbors}
 \alias{k_nearest_neighbors}
-\title{k-nearest neighbors}
+\alias{k_nearest_neighbors.formula}
+\alias{k_nearest_neighbors.default}
+\title{K-nearest neighbors}
 \usage{
-k_nearest_neighbors(X, y, test, k = 1L)
+k_nearest_neighbors(object, ...)
+
+\method{k_nearest_neighbors}{formula}(formula, data, query, k = 1L, ...)
+
+\method{k_nearest_neighbors}{default}(x, y, query, k = 1L, ...)
 }
 \arguments{
-\item{X}{Matrix or data frame with feature values.}
+\item{object}{R object.}
 
-\item{y}{A vector of categorical (label) or continuous (numeric) outcomes for \code{X}.}
+\item{...}{Optional arguments.}
 
-\item{test}{Vector or matrix containing the test or query instances the response is to be determined.}
+\item{formula}{A model \code{\link[stats]{formula}}.}
+
+\item{data}{A data frame, containing the variables in \code{formula}. Neither a matrix nor an array will be accepted.}
+
+\item{query}{A vector or matrix containing the test or query instances the response is to be determined.}
 
 \item{k}{The number of nearest neighbors of feature samples chosen to extract the response.}
+
+\item{x}{A matrix or data frame with feature values.}
+
+\item{y}{A vector of categorical or continuous outcomes for \code{x}.}
 }
 \value{
-A named list with the response and a matrix with class-probability distributions where appropriate for \code{test}.
+A named list with the response and a matrix with class-probability distributions where appropriate for \code{query}.
 }
 \description{
-k-nearest neighbors
+
 }
 \details{
-The response of k-nearest neighbors is either the majority class of k neighbors for a categorical outcome or the mean of k neighbors for a continuous outcome.
+The response of k-nearest neighbors is either the majority class of k neighbors for a categorical response or the mean of k neighbors for a continuous outcome.
 }
 \examples{
-  df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170),
-                   weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64),
-                   size = c(rep("M", 6), rep("L", 11)),
-                   cont = sample(20, 17))
-  df$size <- as.factor(df$size)
-  test <- setNames(c(161, 61), c("height", "weight")) # query instance
-  test <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
-  X <- df[, 1L:2L]
-  y <- df$size # categorical outcome
-  y <- df$cont # continuous outcome
-  knn <- k_nearest_neighbors(X, y, test, k = 3L)
+  df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170, 170),
+                   weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64, 68),
+                   size = as.factor(c(rep("M", 7), rep("L", 11))),
+                   cont = sample(20, 18))
+  query <- setNames(c(161, 61), c("height", "weight")) # query instance
+  query <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
+  knn <- k_nearest_neighbors(size ~ height + weight, df, query, k = 3L)
   knn$response
   knn$probability
+
 }
 \seealso{
 \code{\link{distance}}.
 
 Other Machine Learning: 
-\code{\link{as.degree}()},
-\code{\link{as.radian}()},
 \code{\link{cross_validation_split}()},
-\code{\link{distance}()},
-\code{\link{erfcinv}()},
-\code{\link{erfc}()},
-\code{\link{erfinv}()},
-\code{\link{erf}()},
 \code{\link{moving_average}()},
+\code{\link{naive_bayes}()},
 \code{\link{naive_forecast}()},
 \code{\link{predict.kmeans}()},
-\code{\link{sd.pop}()},
-\code{\link{similarity}()},
-\code{\link{var.pop}()}
+\code{\link{predict.naivebayes}()}
 }
 \concept{Machine Learning}

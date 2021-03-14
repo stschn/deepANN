@@ -10,10 +10,10 @@ effectcoding(x)
 \item{x}{An already binary encoded variable with 0/1 value pairs.}
 }
 \value{
-A binary encoded variable with -1/1 value pairs.
+\code{x} encoded with -1/1 value pairs.
 }
 \description{
-\code{effectcoding} encodes an already binary encoded variable with 0/1 value pairs into -1/1 pairs.
+
 }
 \references{
 \url{http://www.faqs.org/faqs/ai-faq/neural-nets/part2/}.
@@ -21,13 +21,13 @@ A binary encoded variable with -1/1 value pairs.
 \seealso{
 \code{\link{dummify}}.
 
-Other Dummyfication: 
+Other Dummifying: 
 \code{\link{append_rows}()},
-\code{\link{dummify.multilabel}()},
+\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},
 \code{\link{remove_columns}()},
-\code{\link{resample.imbalanced}()}
+\code{\link{resample_imbalanced}()}
 }
-\concept{Dummyfication}
+\concept{Dummifying}

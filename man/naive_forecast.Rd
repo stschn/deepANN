@@ -2,39 +2,39 @@
 % Please edit documentation in R/deepML.r
 \name{naive_forecast}
 \alias{naive_forecast}
-\title{Naive forecasting methods}
+\title{Naive forecasting}
 \usage{
 naive_forecast(x, drift = 0, na = NA)
 }
 \arguments{
-\item{x}{A vector with numbers.}
+\item{x}{A vector, usually a numeric vector.}
 
 \item{drift}{The number of periods used to calculate the change over time (it's called a drift).
 If drift is more than 1 the mean value of the changes over time is used; default \code{0}.}
 
-\item{na}{A value that indicates that no value is given; default \code{NA}.}
+\item{na}{The value, default \code{NA}, used for gaps caused by the drift in the resulting vector.}
 }
 \value{
-A series of naive predicted values for a given vector.
+A series of naive predicted values based upon \code{x}.
 }
 \description{
 \code{naive_forecast} offers three naive forecast approaches: plain random walk and random walk with drifts.
 }
+\details{
+The following naive forecast approaches are implemented:
+\itemize{
+\item Random Walk: \eqn{y(t+1) = y(t)}
+\item One drift: \eqn{y(t+1) = y(t) + [y(t)-y(t-1)]}
+\item Many drifts: \eqn{y(t+1) = y(t) + [(1/drifts) * \sum ([y(t)-y(t-1)])]}
+}
+}
 \seealso{
 Other Machine Learning: 
-\code{\link{as.degree}()},
-\code{\link{as.radian}()},
 \code{\link{cross_validation_split}()},
-\code{\link{distance}()},
-\code{\link{erfcinv}()},
-\code{\link{erfc}()},
-\code{\link{erfinv}()},
-\code{\link{erf}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{moving_average}()},
+\code{\link{naive_bayes}()},
 \code{\link{predict.kmeans}()},
-\code{\link{sd.pop}()},
-\code{\link{similarity}()},
-\code{\link{var.pop}()}
+\code{\link{predict.naivebayes}()}
 }
 \concept{Machine Learning}

@@ -26,13 +26,13 @@ An unordered encoding creates an indicator matrix with the value \code{1} only f
 \seealso{
 \code{\link{one_hot_decode}}.
 
-Other Dummyfication: 
+Other Dummifying: 
 \code{\link{append_rows}()},
-\code{\link{dummify.multilabel}()},
+\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{remove_columns}()},
-\code{\link{resample.imbalanced}()}
+\code{\link{resample_imbalanced}()}
 }
-\concept{Dummyfication}
+\concept{Dummifying}

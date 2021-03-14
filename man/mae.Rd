@@ -17,7 +17,7 @@ mae(actuals, preds, na.rm = FALSE)
 Mean absolute error.
 }
 \description{
-Mean absolute error (MAE)
+
 }
 \details{
 In Machine and Deep Learning, MAE is also known as L1 loss function.
@@ -28,6 +28,10 @@ Other Quality:
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},

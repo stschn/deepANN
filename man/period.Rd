@@ -14,36 +14,37 @@ period(
 \arguments{
 \item{dataset}{A data set or time series, usually a data frame.}
 
-\item{column}{The name or index of the periodic column.}
+\item{column}{The name or index of a periodic column.}
 
-\item{type}{Different subsetting types
-\code{seq} A sequence specified thru start index and increment passed in \code{...} as numbers.
-\code{weekday} Certain days of week are extracted from the data set whereby the days are passed in \code{...} as strings.
-\code{monthday} Certain days of month are extracted from the data set whereby the days are passed in \code{...} as numbers.
-\code{week} Certain weeks are extracted from the data set whereby the weeks are passed in \code{...} as numbers.
-\code{month} Certain months are extracted from the data set whereby the months are passed in \code{...} as strings.
-\code{quarter} Certain quarters are extracted from the data set whereby the quarters are passed in \code{...} as numbers.
-\code{year} Certain years are extracted from the data set whereby the years are passed in \code{...} as numbers.
+\item{type}{Different subsetting types\cr
+\code{seq} A sequence specified thru start index and increment passed in \code{...} as numbers.\cr
+\code{weekday} Certain days of week are extracted from the data set whereby the days are passed in \code{...} as strings.\cr
+\code{monthday} Certain days of month are extracted from the data set whereby the days are passed in \code{...} as numbers.\cr
+\code{week} Certain weeks are extracted from the data set whereby the weeks are passed in \code{...} as numbers.\cr
+\code{month} Certain months are extracted from the data set whereby the months are passed in \code{...} as strings.\cr
+\code{quarter} Certain quarters are extracted from the data set whereby the quarters are passed in \code{...} as numbers.\cr
+\code{year} Certain years are extracted from the data set whereby the years are passed in \code{...} as numbers.\cr
 \code{season} Certain seasons are extracted from the data set whereby the seasons are passed in \code{...} as strings.}
 
 \item{...}{Arguments dependent from the \code{type}.}
 }
 \value{
-A subset of dataset with periodically specified data.
+A subset of \code{dataset} with periodically specified data.
 }
 \description{
-Subset data set/time series to specific periodically data
+
 }
 \seealso{
 Other Time Series: 
-\code{\link{build.stationary}()},
-\code{\link{diff.log}()},
-\code{\link{diff.percentage}()},
-\code{\link{diffinv.log}()},
-\code{\link{diffinv.percentage}()},
-\code{\link{diffinv.simple}()},
-\code{\link{get.season}()},
+\code{\link{diff_log}()},
+\code{\link{diff_percentage}()},
+\code{\link{diffinv_log}()},
+\code{\link{diffinv_percentage}()},
+\code{\link{diffinv_simple}()},
+\code{\link{get_season}()},
 \code{\link{invert_differencing}()},
-\code{\link{lags}()}
+\code{\link{lags}()},
+\code{\link{partition}()},
+\code{\link{stationary}()}
 }
 \concept{Time Series}

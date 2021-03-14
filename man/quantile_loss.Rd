@@ -19,7 +19,7 @@ quantile_loss(actuals, preds, q = 0.5, na.rm = FALSE)
 Quantile loss.
 }
 \description{
-Quantile loss
+
 }
 \details{
 This loss function tries to give different penalties to overestimation and underestimation.
@@ -36,6 +36,10 @@ Other Quality:
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},

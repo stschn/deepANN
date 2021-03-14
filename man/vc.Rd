@@ -17,13 +17,17 @@ vc(actuals, preds, na.rm = FALSE)
 Variance coefficient.
 }
 \description{
-Variance coefficient (VC)
+
 }
 \seealso{
 Other Quality: 
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},

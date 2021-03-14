@@ -7,7 +7,7 @@
 scaling(
   x,
   type = c("minmax", "zscore", "log", "center"),
-  use.attr = TRUE,
+  use_attr = TRUE,
   invert = FALSE,
   ...
 )
@@ -17,7 +17,7 @@ scaling(
 
 \item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}), log transformation (\code{log}) and centering (\code{center}).}
 
-\item{use.attr}{A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.}
+\item{use_attr}{A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.}
 
 \item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
 
@@ -27,17 +27,17 @@ scaling(
 The scaled or re-scaled (inverted) numeric vector \code{x}.
 }
 \description{
-Scaling of a numeric vector
+
 }
 \seealso{
-\code{\link{scale.minmax}}, \code{\link{scale.zscore}}, \code{\link{scale.log}}, \code{\link{scale.center}}.
+\code{\link{scale_minmax}}, \code{\link{scale_zscore}}, \code{\link{scale_log}}, \code{\link{scale_center}}.
 
 Other Scaling: 
-\code{\link{scale.center}()},
-\code{\link{scale.datasets}()},
-\code{\link{scale.dataset}()},
-\code{\link{scale.log}()},
-\code{\link{scale.minmax}()},
-\code{\link{scale.zscore}()}
+\code{\link{scale_center}()},
+\code{\link{scale_dataset}()},
+\code{\link{scale_log}()},
+\code{\link{scale_minmax}()},
+\code{\link{scale_train_test}()},
+\code{\link{scale_zscore}()}
 }
 \concept{Scaling}

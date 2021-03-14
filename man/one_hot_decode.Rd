@@ -18,13 +18,13 @@ A vector with the original levels of a categorical variable.
 \seealso{
 \code{\link{one_hot_encode}}.
 
-Other Dummyfication: 
+Other Dummifying: 
 \code{\link{append_rows}()},
-\code{\link{dummify.multilabel}()},
+\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_encode}()},
 \code{\link{remove_columns}()},
-\code{\link{resample.imbalanced}()}
+\code{\link{resample_imbalanced}()}
 }
-\concept{Dummyfication}
+\concept{Dummifying}

@@ -1,65 +1,16 @@
-#' Population variance
+#' @title K-fold cross validation
+#' @description \code{cross_validation} splits a data set in partial sets, so-called folds, and creates a list of folds.
 #'
 #' @family Machine Learning
 #'
-#' @param x A numeric vector, matrix or data frame.
-#' @param y \code{NULL} (default) or a vector, matrix or data frame with compatible dimensions to x. The default is equivalent to \code{y = x} (but more efficient).
-#' @param na.rm A logical value indicating whether missing values should be removed or not (default).
-#' @param use An optional character string giving a method for computing covariances in the presence of missing values.
-#'   This must be (an abbreviation of) one of the strings \code{everything}, \code{all.obs}, \code{complete.obs}, \code{na.or.complete}, or \code{pairwise.complete.obs}.
-#'
-#' @details The population variance and sample variance, implemented in \code{stats} package, differ in the denominator.
-#'   The value of denominator in the formula for variance in case of population data is \code{n}, while it is \code{n-1} for sample data.
-#' 
-#' @return The population variance.
-#' @export
-#'
-#' @seealso \code{\link[stats]{cor}}.
-#'
-#' @examples
-#'   x <- sample(1000)
-#'   var.pop(x)
-var.pop <- function(x, y = NULL, na.rm = FALSE, use) {
-  return(stats::var(x = x, y = y, na.rm = na.rm, use = use) * ((n <- NROW(x)) - 1L) / n)
-}
-
-#' Population standard deviation
-#'
-#' @family Machine Learning
-#'
-#' @param x A numeric vector, matrix or data frame.
-#' @param na.rm A logical value indicating whether missing values should be removed or not (default).
-#'
-#' @details The population standard deviation and sample standard deviation, implemented in \code{stats} package, differ in the denominator.
-#'   The value of denominator in the formula for standard deviation in case of population data is \code{n}, while it is \code{n-1} for sample data.
-#' 
-#' @return The population standard deviation.
-#' @export
-#'
-#' @seealso \code{\link[stats]{sd}}.
-#'
-#' @examples
-#'   x <- sample(1000)
-#'   sd.pop(x)
-sd.pop <- function(x, na.rm = FALSE) {
-  return(sqrt(var.pop(x, na.rm = na.rm)))
-}
-
-#' K-fold cross validation
-#'
-#' \code{cross_validation} splits a data set in partial sets, so-called folds, and creates a list of folds.
-#'
-#' @family Machine Learning
-#'   
 #' @param dataset A data set, usually a data frame.
 #' @param folds Number of created folds.
 #' @param shuffle Controls whether the samples of the data set should be randomly shuffled before fold creation.
 #'   For time series data, this argument must be set equal to \code{FALSE} because the order of the samples can't be changed.
 #'
 #' @return A named list with folds.
-#' @export
 #'
-#' @examples
+#' @export
 cross_validation_split <- function(dataset, folds = 3L, shuffle = FALSE) {
   dataset <- as.data.frame(dataset)
   if (shuffle) dataset <- dataset[sample(NROW(dataset)), ]
@@ -67,27 +18,32 @@ cross_validation_split <- function(dataset, folds = 3L, shuffle = FALSE) {
   fold_list <- lapply(seq_len(folds), function(fold) {
     start <- as.integer(((fold - 1) * fold_size) + 1L)
     end <- as.integer(fold * fold_size)
-    dataset[start:end, , drop = F]
+    dataset[start:end, , drop = FALSE]
   })
   names(fold_list) <- do.call(sprintf, list("fold%d", seq_len(folds)))
   return(fold_list)
 }
 
-#' Naive forecasting methods
-#'
-#' \code{naive_forecast} offers three naive forecast approaches: plain random walk and random walk with drifts.
+#' @title Naive forecasting
+#' @description \code{naive_forecast} offers three naive forecast approaches: plain random walk and random walk with drifts.
 #'
 #' @family Machine Learning
-#'   
-#' @param x A vector with numbers.
+#'
+#' @param x A vector, usually a numeric vector.
 #' @param drift The number of periods used to calculate the change over time (it's called a drift).
 #'   If drift is more than 1 the mean value of the changes over time is used; default \code{0}.
-#' @param na A value that indicates that no value is given; default \code{NA}.
+#' @param na The value, default \code{NA}, used for gaps caused by the drift in the resulting vector.
 #'
-#' @return A series of naive predicted values for a given vector.
+#' @details The following naive forecast approaches are implemented:
+#' \itemize{
+#' \item Random Walk: \eqn{y(t+1) = y(t)}
+#' \item One drift: \eqn{y(t+1) = y(t) + [y(t)-y(t-1)]}
+#' \item Many drifts: \eqn{y(t+1) = y(t) + [(1/drifts) * \sum ([y(t)-y(t-1)])]}
+#' }
+#'
+#' @return A series of naive predicted values based upon \code{x}.
+#'
 #' @export
-#'
-#' @examples
 naive_forecast <- function(x, drift = 0, na = NA) {
   # basic naive forecast (random walk forecast): y(t+1) = y(t)
   if (drift == 0) {
@@ -110,182 +66,9 @@ naive_forecast <- function(x, drift = 0, na = NA) {
   }}
 }
 
-#' Degree to radian
+#' @title Weighted moving average
+#' @description
 #'
-#' @family Machine Learning
-#'
-#' @param degree Degree.
-#'
-#' @return The radian of \code{degree}.
-#' @export
-#'
-#' @examples
-#'   as.radian(180) # pi
-as.radian <- function(degree) { return((degree * pi) / 180) }
-
-#' Radian to degree
-#'
-#' @family Machine Learning
-#'
-#' @param radian Radian.
-#'
-#' @return The degree of \code{radian}.
-#' @export
-#'
-#' @examples
-#'   as.degree(pi) # 180
-as.degree <- function(radian) { return((radian * 180) / pi) }
-
-#' Distance
-#'
-#' @family Machine Learning
-#'
-#' @param x1 A numeric vector.
-#' @param x2 A numeric vector.
-#' @param type The type of the distance measure: \code{euclidean} (default), \code{squared_euclidean} or \code{geographical}.
-#' 
-#' @details For calculating the geographical distance, longitude and latitude values are expected for \code{x1} and \code{x2} in that order.
-#'   Usually longitude and latitude values are given in degree, an automatically conversion to radian is made.
-#'
-#' @return The distance between \code{x1} and \code{x2}.
-#' @export
-#'
-#' @examples
-#'   # Euclidean distance
-#'   x1 <- c(20, 1, 41, 13, 5, 69)
-#'   x2 <- c(11, 2, 23, 4, 10, 67)
-#'   distance(x1, x2)
-#'   
-#'   # Geographical distance
-#'   geo_coord <- c("longitude", "latitude")
-#'   regensburg <- setNames(c(49.013432, 12.101624), geo_coord)
-#'   kiel <- setNames(c(54.323292, 10.122765), geo_coord)
-#'   distance(regensburg, kiel, type = "geographical")
-distance <- function(x1, x2, type = c("euclidean", "squared_euclidean", "geographical")) {
-  type <- match.arg(type)
-  if (type == "euclidean") {
-    return(sqrt(sum((x1 - x2)^2)))
-  } else {
-  if (type == "squared_euclidean") {
-    return(sum((x1 - x2)^2))
-  } else {
-  if (type == "geographical") {
-    if ((length(x1) != 2L) || (length(x2) != 2L))
-      stop("x1 or x2 don't have length 2.")
-    dist_latitudes <- 111.3 # constant distance between two latitudes
-    lat <- as.radian((x1[2L] + x2[2L]) / 2L)
-    delta_longitude <- dist_latitudes * cos(lat) * (x1[1L] - x2[1L])
-    delta_latitude <- dist_latitudes * (x1[2L] - x2[2L])
-    return(unname(sqrt((delta_longitude^2) + (delta_latitude^2))))
-  }}}
-}
-
-#' Similarity
-#'
-#' @family Machine Learning
-#'
-#' @param x1 A numeric or logical vector.
-#' @param x2 A numeric or logical vector.
-#' @param type The type of the similarity measure: \code{simple} (default), \code{jaccard} or \code{tanimoto}.
-#'
-#' @return The similarity between \code{x1} and \code{x2}.
-#' @export
-#'
-#' @examples
-#'   similarity(c(1L, 1L, 0L), c(0L, 1L, 1L), type = "simple")
-#'   similarity(c(1L, 1L, 0L), c(0L, 1L, 1L), type = "jaccard")
-#'   similarity(c(1L, 1L, 0L), c(0L, 1L, 1L), type = "tanimoto")
-similarity <- function(x1, x2, type = c("simple", "jaccard", "tanimoto")) {
-  type <- match.arg(type)
-  x1 <- as.integer(c(t(x1)))
-  x2 <- as.integer(c(t(x2)))
-  if ((l <- length(x1)) != length(x2))
-    stop("vectors x1 and x2 must be of the same length.")
-  if (type == "simple") {
-    return(sum(x1 == x2) / l)
-  } else {
-    x_11 <- sum((x1 == x2) & (x2 == 1))
-    x_00 <- sum((x1 == x2) & (x2 == 0))
-    x_10 <- sum((x1 != x2) & (x2 == 0))
-    x_01 <- sum((x1 != x2) & (x2 == 1))
-    if (type == "jaccard") {
-      return(x_11 / (x_11 + x_10 + x_01))
-    } else {
-    if (type == "tanimoto") {
-      return((x_11 + x_00) / (x_11 + 2 * (x_10 + x_01) + x_00))
-    }}
-  }
-}
-
-#' k-nearest neighbors
-#'
-#' @family Machine Learning
-#'
-#' @param X Matrix or data frame with feature values.
-#' @param y A vector of categorical (label) or continuous (numeric) outcomes for \code{X}.
-#' @param test Vector or matrix containing the test or query instances the response is to be determined.
-#' @param k The number of nearest neighbors of feature samples chosen to extract the response.
-#' 
-#' @details The response of k-nearest neighbors is either the majority class of k neighbors for a categorical outcome or the mean of k neighbors for a continuous outcome.
-#'
-#' @return A named list with the response and a matrix with class-probability distributions where appropriate for \code{test}.
-#' @export
-#' 
-#' @seealso \code{\link{distance}}.
-#'
-#' @examples
-#'   df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170),
-#'                    weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64),
-#'                    size = c(rep("M", 6), rep("L", 11)),
-#'                    cont = sample(20, 17))
-#'   df$size <- as.factor(df$size)
-#'   test <- setNames(c(161, 61), c("height", "weight")) # query instance
-#'   test <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
-#'   X <- df[, 1L:2L]
-#'   y <- df$size # categorical outcome
-#'   y <- df$cont # continuous outcome
-#'   knn <- k_nearest_neighbors(X, y, test, k = 3L)
-#'   knn$response
-#'   knn$probability
-k_nearest_neighbors <- function(X, y, test, k = 1L) {
-  X <- data.matrix(X)
-  if (is.null(dim(test))) test <- data.matrix(t(test)) else test <- data.matrix(test)
-  if (dim(X)[2L] != dim(test)[2L])
-    stop("feature matrix (X) and query instance (test) do not have the same number of features.")
-  if (!is.null(dim(y))) y <- c(t(y))
-  fy <- is.factor(y)
-  
-  distances <- apply(test, 1L, function(query) {
-    apply(X, 1L, deepANN::distance, x2 = query)
-  }) # calculate euclidean distances
-  response <- apply(distances, 2L, function(ed) {
-    df <- data.frame(index = seq_along(ed), eucldist = ed) # build a data frame with index and euclidean distance
-    df <- df[order(df$eucldist), ] # reorder data frame in ascending order for euclidean distance
-    idx <- df$index[(1L:k)] # extract k minimum indices
-    neighbors <- y[idx] # get k target values
-    if (fy) { # categorical target
-      n_neighbors <- table(neighbors) # number of instances of each class
-      majority_class <- names(which.max(n_neighbors)) # name of the majority class
-      class_probs <- n_neighbors / k # probability of each class
-      list(majority_class, class_probs)
-    } else { # continuous target
-      list(mean(neighbors))
-    }
-  })
-
-  l <- list()
-  l[[1L]] <- unlist(lapply(seq_along(response), function(i) response[[i]][[1L]]))
-  if (fy) {
-    l[[2L]] <- t(unlist(sapply(seq_along(response), function(i) response[[i]][[2L]])))
-  } else {
-    l[[2L]] <- NA
-  }
-  names(l) <- c("response", "probability")
-  return(l)
-}
-
-#' Weighted moving average
-#' 
 #' @family Machine Learning
 #'
 #' @param x A numeric vector.
@@ -293,12 +76,12 @@ k_nearest_neighbors <- function(X, y, test, k = 1L) {
 #' @param weights Optional weights.
 #'
 #' @return A vector with the (weighted) moving average.
-#' @export
 #'
 #' @examples
 #'   x <- c(855, 847, 1000, 635, 346, 2146, 1328, 1322, 3124, 1012, 1280, 2435, 1016, 3465, 1107, 1172, 3432, 836, 142, 345, 2603, 739, 716, 880, 1008, 112, 361)
 #'   moving_average(x)
 #'   moving_average(x, weights = c(1L, 2L, 3L))
+#' @export
 moving_average <- function(x, n = 3L, weights = NULL) {
   x <- c(t(x))
   if (is.null(weights)) {
@@ -320,73 +103,298 @@ moving_average <- function(x, n = 3L, weights = NULL) {
   return(unlist(ma))
 }
 
-#' Prediction for kmeans
+#' @title K-nearest neighbors
+#' @description
 #'
 #' @family Machine Learning
-#' 
+#'
+#' @param object R object.
+#' @param formula A model \code{\link[stats]{formula}}.
+#' @param data A data frame, containing the variables in \code{formula}. Neither a matrix nor an array will be accepted.
+#' @param x A matrix or data frame with feature values.
+#' @param y A vector of categorical or continuous outcomes for \code{x}.
+#' @param query A vector or matrix containing the test or query instances the response is to be determined.
+#' @param k The number of nearest neighbors of feature samples chosen to extract the response.
+#' @param ... Optional arguments.
+#'
+#' @details The response of k-nearest neighbors is either the majority class of k neighbors for a categorical response or the mean of k neighbors for a continuous outcome.
+#'
+#' @return A named list with the response and a matrix with class-probability distributions where appropriate for \code{query}.
+#'
+#' @seealso \code{\link{distance}}.
+#'
+#' @examples
+#'   df <- data.frame(height = c(158, 158, 158, 160, 160, 163, 163, 160, 163, 165, 165, 165, 168, 168, 168, 170, 170, 170),
+#'                    weight = c(58, 59, 63, 59, 60, 60, 61, 64, 64, 61, 62, 65, 62, 63, 66, 63, 64, 68),
+#'                    size = as.factor(c(rep("M", 7), rep("L", 11))),
+#'                    cont = sample(20, 18))
+#'   query <- setNames(c(161, 61), c("height", "weight")) # query instance
+#'   query <- data.frame(height = c(161, 183, 161), weight = c(61, 77, 55)) # query data frame
+#'   knn <- k_nearest_neighbors(size ~ height + weight, df, query, k = 3L)
+#'   knn$response
+#'   knn$probability
+#'
+#' @export
+k_nearest_neighbors <- function(object, ...) {
+  UseMethod("k_nearest_neighbors")
+}
+
+#' @rdname k_nearest_neighbors
+#' @export
+k_nearest_neighbors.formula <- function(formula, data, query, k = 1L, ...) {
+  mf <- stats::model.frame(formula = formula, data = data)
+  y <- stats::model.response(mf)
+  x <- mf[-1L]
+  res <- k_nearest_neighbors.default(x, y, query, k, ...)
+  return(res)
+}
+
+#' @rdname k_nearest_neighbors
+#' @export
+k_nearest_neighbors.default <- function(x, y, query, k = 1L, ...) {
+  x <- data.matrix(x)
+  if (is.null(dim(query))) query <- data.matrix(t(query)) else query <- data.matrix(query)
+  if (dim(x)[2L] != dim(query)[2L])
+    stop("feature matrix (x) and query instance do not have the same number of features.")
+  if (!is.null(dim(y))) y <- c(t(y))
+
+  if (is.factor(y)) { # categorical response
+    response <- apply(query, 1L, function(qi) {
+      eucl_dist <- setNames(sqrt(colSums((t(x) - qi)^2L)), 1L:NROW(x)) # compute euclidean distances
+      eucl_dist <- sort(eucl_dist) # sort distances
+      neighbors <- y[as.integer(names(eucl_dist)[1L:k])] # extract k values from y
+      n_neighbors <- table(neighbors) # number of instances of each class
+      majority_class <- names(which.max(n_neighbors))# name of the majority class
+      class_proba <- n_neighbors / k # probability of each class
+      list(majority_class, class_proba)
+    })
+  } else { # continuous response
+    response <- apply(query, 1L, function(qi) {
+      eucl_dist <- setNames(sqrt(colSums((t(x) - qi)^2L)), 1L:NROW(x))
+      eucl_dist <- sort(eucl_dist)
+      neighbors <- y[as.integer(names(eucl_dist)[1L:k])]
+      list(mean(neighbors))
+    })
+  }
+
+  l <- list()
+  l[[1L]] <- unlist(lapply(seq_along(response), function(i) response[[i]][[1L]]))
+  if (is.factor(y)) {
+    l[[2L]] <- t(unlist(sapply(seq_along(response), function(i) response[[i]][[2L]])))
+  } else {
+    l[[2L]] <- NA
+  }
+  names(l) <- c("response", "probability")
+  return(l)
+}
+
+#' @title Naive Bayes
+#' @description
+#'
+#' @family Machine Learning
+#'
+#' @param object R object.
+#' @param formula A model \code{\link[stats]{formula}}.
+#' @param data A data frame, containing the variables in \code{formula}. Neither a matrix nor an array will be accepted.
+#' @param x A matrix or data frame with feature values.
+#' @param y A factor variable with categorical values for \code{x}.
+#' @param laplace A value for Laplace smoothing to avoid zero probability problem, default \code{0} is equal to no smoothing.
+#' @param ... Optional arguments.
+#'
+#' @details The naive Bayes model is based on Bayes' theorem: \eqn{P(A|B) = P(B|A) * P(A) / P(B)}\cr
+#'   Adopted to a classification problem, the equation is: \eqn{P(y=k|X) = P(X|y=k) * P(y=k) / P(X)}, whereby
+#'   \itemize{
+#'   \item \eqn{P(y=k|X)} is the conditional probability of \code{y=k} given a feature set \code{X}. This probability is also called posterior probability.
+#'   \item \eqn{P(X|y=k)} is the conditional probability of \code{X} given a specific category \code{k} of \code{y}. This probability is also called the probability of likelihood of evidence.
+#'   \item \eqn{P(y=k)} is the probability that \code{y} takes the value \code{k}. This probability is also called the prior probability.
+#'   \item \eqn{P(X)} is the probability that features \code{X} have the given values. This probability is also called the probability of evidence.
+#'     This probability is constant for every value of \code{y}, and therefore it will not affect the posterior probabilities. For reasons of simplification, the probability of evidence will be ignored in computation.
+#'     The result without probability of evidence is no longer strictly a probability. The calculated largest value is used for class prediction.
+#'   }
+#'
+#' @return A list from class naivebayes with levels and prior probabilities of \code{y} and names and likelihood distribution parameters of \code{x} categorized by the levels of factor \code{y}.
+#'
+#' @examples
+#'   # Continuous features
+#'   df <- data.frame(y = c(0L, 0L, 0L, 0L, 0L, 1L, 1L, 1L, 1L, 1L),
+#'                    x1 = c(3.393533211, 3.110073483, 1.343808831, 3.582294042, 2.280362439, 7.423436942, 5.745051997, 9.172168622, 7.792783481, 7.939820817),
+#'                    x2 = c(2.331273381, 1.781539638, 3.368360954, 4.67917911, 2.866990263, 4.696522875, 3.533989803, 2.511101045, 3.424088941, 0.791637231))
+#'
+#'   # Categorical features
+#'   fruit_type <- c("Banana", "Orange", "Other")
+#'   # Banana
+#'   Long <- (v <- c(rep(1, 400), rep(0, 100)))[sample(length(v))]
+#'   Sweet <- (v <- c(rep(1, 350), rep(0, 150)))[sample(length(v))]
+#'   Yellow <-  (v <- c(rep(1, 450), rep(0, 50)))[sample(length(v))]
+#'   fruit <- data.frame(Type = fruit_type[1L], Long, Sweet, Yellow)
+#'   # Orange
+#'   Type <- rep(fruit_type[2L], 300)
+#'   Long <- (v <- c(rep(1, 0), rep(0, 300)))[sample(length(v))]
+#'   Sweet <- (v <- c(rep(1, 150), rep(0, 150)))[sample(length(v))]
+#'   Yellow <-  (v <- c(rep(1, 300), rep(0, 0)))[sample(length(v))]
+#'   fruit <- rbind.data.frame(fruit, cbind.data.frame(Type, Long, Sweet, Yellow))
+#'   # Other
+#'   Type <- rep(fruit_type[3L], 200)
+#'   Long <- (v <- c(rep(1, 100), rep(0, 100)))[sample(length(v))]
+#'   Sweet <- (v <- c(rep(1, 150), rep(0, 50)))[sample(length(v))]
+#'   Yellow <-  (v <- c(rep(1, 50), rep(0, 150)))[sample(length(v))]
+#'   fruit <- rbind.data.frame(fruit, cbind.data.frame(Type, Long, Sweet, Yellow))
+#'   fruit <- fruit[sample(NROW(fruit)), ]
+#'   rownames(fruit) <- seq_len(NROW(fruit))
+#'   to_factor <- c("Type", "Long", "Sweet", "Yellow")
+#'   fruit[to_factor] <- lapply(fruit[to_factor], as.factor)
+#'   df <- fruit
+#'   rm(Long, Sweet, Yellow, Type, v, to_factor, fruit_type, fruit)
+#'
+#'   x <- df[, -1L]
+#'   y <- as.factor(df[[1L]])
+#'   nb <- naive_bayes(as.formula(y ~ .), data = df) # change y to Type for second example
+#'   yposterior <- predict(nb, x)
+#'   yhat <- levels(y)[apply(yposterior, 1L, which.max)]
+#'   deepANN::accuracy(y, yhat)
+#'
+#' @export
+naive_bayes <- function(object, ...) {
+  UseMethod("naive_bayes")
+}
+
+#' @rdname naive_bayes
+#' @export
+naive_bayes.formula <- function(formula, data, ...) {
+  mf <- stats::model.frame(formula = formula, data = data)
+  y <- stats::model.response(mf)
+  x <- mf[-1L]
+  out <- naive_bayes.default(x, y, ...)
+  return(out)
+}
+
+#' @rdname naive_bayes
+#' @export
+naive_bayes.default <- function(x, y, laplace = 0, FUN, ...) {
+  if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
+  x <- as.data.frame(x)
+  if (!is.factor(y) && !is.character(y) && !is.logical(y))
+    warning("y should be either a factor or character or logical vector.", call. = FALSE)
+  if (anyNA(y))
+    warning("y contains NAs. They are excluded from the estimation process", call. = FALSE)
+  # Create list as result structure
+  nb <- list()
+  nbnames <- c("ylevels", "yprior", "xnames", "xlikelihood_params")
+  # Compute prior probability
+  y <- as.factor(y)
+  nb[[nbnames[1L]]] <- (lvls <- levels(y))
+  nb[[nbnames[2L]]] <- setNames(deepANN::probability(lvls, y), lvls)
+  # Create a list of subsets of x separated by y categories and compute probability distribution parameters
+  # for categorical and continuous attributes within x
+  nb[[nbnames[3L]]] <- names(x)
+  level_features <- lapply(lvls, function(lvl) { x[y == lvl, , drop = FALSE] })
+  nb[[nbnames[4L]]] <- lapply(level_features, function(dataset) {
+    lapply(dataset, function(column) {
+      col_class <- class(column)
+      if (any(col_class %in% .CategoricalClasses)) {
+        f <- as.factor(column)
+        lvl <- levels(f)
+        out <- stats::setNames(deepANN::probability(lvl, f, laplace = laplace), lvl)
+        out <- structure(out, proba = .ProbabilityDistribution[["Categorical"]])
+        out
+      } else {
+        if (any(col_class %in% .ContinuousClasses)) {
+          if (is.null(FUN)) {
+            out <- stats::setNames(c(mean(column), sd(column)), c("mean", "sd"))
+            out <- structure(out, proba = .ProbabilityDistribution[["Gaussian"]])
+            out
+          } else {
+            out <- FUN(column, ...)
+            out
+          }
+        }}
+    })
+  })
+  names(nb[[nbnames[4L]]]) <- lvls
+  nb <- structure(nb, class = c(class(nb), .deepANNClasses[["Naive Bayes"]]))
+  return(nb)
+}
+
+#' @rdname naive_bayes
+#' @export
+is.naivebayes <- function(object) { return(inherits(object, .deepANNClasses[["Naive Bayes"]])) }
+
+#' @title Prediction for naive Bayes
+#' @description
+#'
+#' @family Machine Learning
+#'
+#' @param object R object.
+#' @param x A matrix or data frame with feature values.
+#' @param ... Optional arguments.
+#'
+#' @return Numeric values for classifying the features within \code{x} to the levels of \code{y} stored in \code{object}.
+#'
+#' @export
+predict.naivebayes <- function(object, x, ...) {
+  if (!any(class(x) %in% c("matrix", "data.frame", "tbl_df", "tbl", "data.table")))
+    stop("x must be a two-dimensional data structure like matrix or data.frame", call. = FALSE)
+  x <- as.data.frame(x)
+  features <- names(x)[names(x) %in% object$xnames]
+  x <- x[features]
+
+  lvl_list <- lapply(seq_along(object$xlikelihood_params), function(l) {
+    lvl <- names(object$xlikelihood_params)[[l]]
+    columns_level <- object$xlikelihood_params[[l]]
+    col_list <- lapply(seq_along(columns_level), function(i) {
+      col_name <- names(columns_level)[[i]]
+      if (attr(columns_level[[i]], "proba") == .ProbabilityDistribution[["Categorical"]]) {
+        out <- columns_level[[i]][x[[col_name]]]
+        out[is.na(out)] <- 0
+        out
+      } else {
+      if (attr(columns_level[[i]], "proba") == .ProbabilityDistribution[["Gaussian"]]) {
+        mean <- columns_level[[i]][["mean"]]
+        sd <- columns_level[[i]][["sd"]]
+        out <- deepANN::probability(x[[col_name]], mean = mean, sd = sd)
+        out[is.infinite(out)] <- 0
+        out
+      } else {
+        out <- deepANN::probability(x[[col_name]], unlist(list(...)))
+        out[is.infinite(out)] <- 0
+        out
+      }}
+    })
+    names(col_list) <- object$xnames
+    col_list
+  })
+  names(lvl_list) <- object$ylevels
+
+  posterior <- lapply(seq_along(lvl_list), function(l) {
+    lvl <- names(lvl_list)[[l]]
+    mlist <- lvl_list[[l]]
+    m <- matrix(unlist(mlist), ncol = length(mlist), dimnames = list(NULL, object$xnames))
+    apply(m, 1L, prod, object$yprior[[lvl]])
+  })
+  names(posterior) <- object$ylevels
+  yposterior <- matrix(unlist(posterior), ncol = length(posterior), dimnames = list(NULL, object$ylevels))
+  yposterior
+}
+
+#' @title Prediction for kmeans
+#' @description
+#'
+#' @family Machine Learning
+#'
 #' @param object An object from type result of kmeans.
 #' @param newdata A vector or matrix with new data to predict labels for.
 #'
 #' @return A vector of predicted labels.
-#' @export
 #'
 #' @seealso \code{\link[stats]{kmeans}}.
-#' 
-#' @examples
+#'
+#' @export
 predict.kmeans <- function(object, newdata) {
   centers <- object$centers
-  p <- apply(newdata, 1L, function(row_n) { 
+  p <- apply(newdata, 1L, function(row_n) {
     apply(centers, 1L, function(row_c) {
       stats::dist(rbind(row_n, row_c))
     })})
   p <- t(p)
   return(as.vector(apply(p, 1L, which.min)))
 }
-
-#' Error function (from MATLAB)
-#'
-#' @family Machine Learning
-#'
-#' @param x A numeric vector.
-#'
-#' @return Error function as the integral of the Gaussian distribution with 0 mean and variance 1/2.
-#' @export
-#'
-#' @examples
-erf <- function(x) {2L * pnorm(x * sqrt(2L)) - 1L }
-
-#' Complementary error function (from MATLAB)
-#'
-#' @family Machine Learning
-#'
-#' @param x A numeric vector.
-#'
-#' @return Complementary error function, defined as 1 - \code{erf}.
-#' @export
-#'
-#' @examples
-erfc <- function(x) {2L * pnorm(x * sqrt(2L), lower = F) }
-
-#' Inverse error function (from MATLAB)
-#'
-#' @family Machine Learning
-#'
-#' @param x A numeric vector.
-#'
-#' @return Inverse error function.
-#' @export
-#'
-#' @examples
-erfinv <- function(x) { qnorm((1L + x) / 2L) / sqrt(2L) }
-
-#' Inverse complementary error function (from MATLAB)
-#'
-#' @family Machine Learning
-#'
-#' @param x A numeric vector.
-#'
-#' @return Inverse complementary error function.
-#' @export
-#'
-#' @examples
-erfcinv <- function(x) { qnorm(x / 2L, lower = F) / sqrt(2L) }

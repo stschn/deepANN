@@ -13,7 +13,7 @@ gini_impurity(x)
 The Gini impurity.
 }
 \description{
-Gini impurity
+
 }
 \details{
 Gini impurity is the probability of how often a randomly chosen element from a set \code{x} would be
@@ -31,6 +31,10 @@ Other Quality:
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},
 \code{\link{mae}()},

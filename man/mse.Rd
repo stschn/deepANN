@@ -17,7 +17,7 @@ mse(actuals, preds, na.rm = FALSE)
 Mean squared error.
 }
 \description{
-Mean squared error (MSE)
+
 }
 \details{
 In Machine and Deep Learning, MSE is also known as L2 loss function.
@@ -27,6 +27,10 @@ Other Quality:
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
 \code{\link{entropy}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},

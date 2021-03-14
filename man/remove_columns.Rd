@@ -12,19 +12,19 @@ remove_columns(dataset, value = 0)
 \item{value}{The specified values searched for.}
 }
 \value{
-The dataset without those columns that contain only one specific value.
+The \code{dataset} without those columns that contain only one specific value.
 }
 \description{
-Remove columns with only one specific value
+
 }
 \seealso{
-Other Dummyfication: 
+Other Dummifying: 
 \code{\link{append_rows}()},
-\code{\link{dummify.multilabel}()},
+\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},
-\code{\link{resample.imbalanced}()}
+\code{\link{resample_imbalanced}()}
 }
-\concept{Dummyfication}
+\concept{Dummifying}

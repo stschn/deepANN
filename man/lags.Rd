@@ -11,7 +11,7 @@ lags(x, k = 1, between = FALSE, na = NA)
 
 \item{k}{The amount of period shifts (lags).}
 
-\item{between}{Controls whether only the lag for \code{k} is calculated (\code{FALSE}) or 
+\item{between}{Controls whether only the lag for \code{k} is calculated (\code{FALSE}) or
 all lags between the periods \code{1:k} are also considered (\code{TRUE}).}
 
 \item{na}{A sign which is used to indicate a missing value in a prior period.}
@@ -24,14 +24,15 @@ A lagged data series or a lagged data set.
 }
 \seealso{
 Other Time Series: 
-\code{\link{build.stationary}()},
-\code{\link{diff.log}()},
-\code{\link{diff.percentage}()},
-\code{\link{diffinv.log}()},
-\code{\link{diffinv.percentage}()},
-\code{\link{diffinv.simple}()},
-\code{\link{get.season}()},
+\code{\link{diff_log}()},
+\code{\link{diff_percentage}()},
+\code{\link{diffinv_log}()},
+\code{\link{diffinv_percentage}()},
+\code{\link{diffinv_simple}()},
+\code{\link{get_season}()},
 \code{\link{invert_differencing}()},
-\code{\link{period}()}
+\code{\link{partition}()},
+\code{\link{period}()},
+\code{\link{stationary}()}
 }
 \concept{Time Series}

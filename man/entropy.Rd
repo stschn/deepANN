@@ -16,10 +16,10 @@ Defaults to \code{NULL} indicates that the base is automatically determined by t
 Entropy.
 }
 \description{
-Shannon entropy
+
 }
 \details{
-Shannon entropy is a concept from information theory and represents a quantification of the level 
+Shannon entropy is a concept from information theory and represents a quantification of the level
   of impurity or randomness that exists within a partition with class levels of \code{x}.
 }
 \examples{
@@ -30,6 +30,10 @@ Shannon entropy is a concept from information theory and represents a quantifica
 Other Quality: 
 \code{\link{accuracy}()},
 \code{\link{cross_entropy}()},
+\code{\link{erfcinv}()},
+\code{\link{erfc}()},
+\code{\link{erfinv}()},
+\code{\link{erf}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{log_cosh_loss}()},

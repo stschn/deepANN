@@ -1,4 +1,5 @@
-#' Definition and detection of outliers
+#' @title Definition and detection of outliers
+#' @description
 #'
 #' @family Outlier
 #'
@@ -16,16 +17,16 @@
 #' @return Dependent on \code{fill}
 #'   By default (\code{NULL}), a named list of lower and upper boundaries and values.
 #'   Otherwise, the vector \code{x} with replaced outliers.
-#' @export
 #'
 #' @references
 #'   Tukey, John W. (1977): Exploratory Data Analysis. 1977. Reading: Addison-Wesley.
 #'
-#' @seealso \code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{outlier.dataset}}, \code{\link{winsorize}}.
+#' @seealso \code{\link[stats]{quantile}}, \code{\link[stats]{IQR}}, \code{\link{outlier_dataset}}, \code{\link{winsorize}}.
 #'
 #' @examples
 #'   x <- c(57L, 59L, 60L, 100L, 59L, 58L, 57L, 58L, 300L, 61L, 62L, 60L, 62L, 58L, 57L, -12L)
 #'   outlier(x, type = "median")
+#' @export
 outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...) {
   type <- match.arg(type)
   params <- list(...)
@@ -72,7 +73,8 @@ outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...
   }
 }
 
-#' Replace outliers in columns of a data set with \code{NA}
+#' @title Replace outliers in columns of a data set with \code{NA}
+#' @description
 #'
 #' @family Outlier
 #'
@@ -89,12 +91,11 @@ outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...
 #'
 #' @return
 #'   The \code{dataset} with replaced outliers.
-#' @export
 #'
 #' @seealso \code{\link{outlier}}.
 #'
-#' @examples
-outlier.dataset <- function(dataset, columns = NULL, type = c("quartiles", "mean", "median"), ...) {
+#' @export
+outlier_dataset <- function(dataset, columns = NULL, type = c("quartiles", "mean", "median"), ...) {
   if (!is.null(columns)) {
     cnames <- names(dataset)
     if (!is.character(columns)) {
@@ -109,17 +110,17 @@ outlier.dataset <- function(dataset, columns = NULL, type = c("quartiles", "mean
     }
   } else {
     all_classes <- sapply(dataset, class)
-    col_classes <- all_classes[all_classes %in% c("integer", "numeric", "complex", "raw")]
-    col_names <- names(col_classes)
+    col_names <- unlist(lapply(seq_along(all_classes), function(i) {
+      if (any(.ContinuousClasses %in% all_classes[[i]])) names(all_classes)[i]
+    }))
   }
   replaced <- as.data.frame(lapply(dataset[col_names], outlier, type = type, fill = NA, ...))
   dataset[col_names] <- replaced
   return(dataset)
 }
 
-#' Winsorize outliers
-#'
-#' \code{winsorize} sets outliers to low and high border values.
+#' @title Winsorize outliers
+#' @description \code{winsorize} sets outliers to low and high border values.
 #'
 #' @family Outlier
 #'
@@ -131,11 +132,10 @@ outlier.dataset <- function(dataset, columns = NULL, type = c("quartiles", "mean
 #' @param type An integer between 1 and 9 selecting one of the nine quantile algorithms detailed in \code{\link[stats]{quantile}} to be used.
 #'
 #' @return A vector of the same length as \code{x} containing the winsorized values.
-#' @export
 #'
 #' @seealso \code{\link[stats]{quantile}}, \code{\link{outlier}}.
 #'
-#' @examples
+#' @export
 winsorize <- function(x, minx = NULL, maxx = NULL, probs = c(0.05, 0.95), na.rm = FALSE, type = 7) {
   if (is.null(minx) || is.null(maxx)) {
     xq <- quantile(x = x, probs = probs, na.rm = na.rm, type = type)

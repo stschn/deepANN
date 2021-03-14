@@ -17,20 +17,21 @@ invert_differencing(delta, origin, type = c("simple", "log", "percentage"))
 The inverted \code{delta}.
 }
 \description{
-Invert a differenced data series
+
 }
 \seealso{
-\code{\link{build.stationary}}.
+\code{\link{stationary}}.
 
 Other Time Series: 
-\code{\link{build.stationary}()},
-\code{\link{diff.log}()},
-\code{\link{diff.percentage}()},
-\code{\link{diffinv.log}()},
-\code{\link{diffinv.percentage}()},
-\code{\link{diffinv.simple}()},
-\code{\link{get.season}()},
+\code{\link{diff_log}()},
+\code{\link{diff_percentage}()},
+\code{\link{diffinv_log}()},
+\code{\link{diffinv_percentage}()},
+\code{\link{diffinv_simple}()},
+\code{\link{get_season}()},
 \code{\link{lags}()},
-\code{\link{period}()}
+\code{\link{partition}()},
+\code{\link{period}()},
+\code{\link{stationary}()}
 }
 \concept{Time Series}
