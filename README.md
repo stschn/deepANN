@@ -101,7 +101,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>naive_forecast()</code> predicts values for a data series based upon random walk without and with drifts.</li>
   <li><code>k_nearest_neighbors()</code> identifies the categorical or continuous response and probability distributions of k nearest neighbors where appropriate of a query instance.</li>
   <li><code>moving_average()</code> calculates the (weighted) moving average.</li>
-  <li><code>naivebayes()</code> and <code>predict.naivebayes()</code> computes and predicts numeric values for classification solutions based on Bayes' theorem.</li>
+  <li><code>naive_bayes()</code> and <code>predict.naivebayes()</code> computes and predicts numeric values for classification solutions based on Bayes' theorem.</li>
   <li><code>predict.kmeans()</code> predicts kmeans cluster for feature data.</li>
 </ul>
 
