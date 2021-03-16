@@ -330,7 +330,8 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
 #' @param x A vector of values, usually character labels as raw instances or as class frequencies.
 #'
 #' @details Gini impurity is the probability of how often a randomly chosen element from a set \code{x} would be
-#'   incorrectly labeled if it was randomly labeled according to the distribution of labels in the set.
+#'   incorrectly labeled if it was randomly labeled according to the distribution of labels in the set. So, impurity is
+#'   the probability of being incorrect if a label is randomly assigned to a sample of \code{x}.
 #'
 #' @return The Gini impurity.
 #'
