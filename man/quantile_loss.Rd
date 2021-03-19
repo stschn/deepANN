@@ -49,6 +49,7 @@ Other Quality:
 \code{\link{msle}()},
 \code{\link{rmse}()},
 \code{\link{rmsle}()},
+\code{\link{rmspe}()},
 \code{\link{vc}()}
 }
 \concept{Quality}

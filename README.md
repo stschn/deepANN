@@ -57,6 +57,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>msle()</code> calculates the mean squared logarithmic error.</li>
   <li><code>rmse()</code> calculates the root mean square error.</li>
   <li><code>rmsle()</code> calculates the root mean square logarithmic error.</li>
+  <li><code>rmspe()</code> calculates the root mean square percentage error.</li>
   <li><code>huber_loss()</code> calculates the Huber loss.</li>
   <li><code>log_cosh_loss()</code> calculates the log-cosh loss.</li>
   <li><code>quantile_loss()</code> calculates the quantile loss.</li>

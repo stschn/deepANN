@@ -57,6 +57,7 @@ Other Quality:
 \code{\link{quantile_loss}()},
 \code{\link{rmse}()},
 \code{\link{rmsle}()},
+\code{\link{rmspe}()},
 \code{\link{vc}()}
 }
 \concept{Quality}

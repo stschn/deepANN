@@ -114,6 +114,22 @@ rmsle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
   return(sqrt(deepANN::msle(actuals = actuals, preds = preds, alpha = alpha, na.rm = na.rm)))
 }
 
+#' @title Root mean square percentage error (RMSPE)
+#' @description
+#'
+#' @family Quality
+#'
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
+#'
+#' @return Root mean square percentage error.
+#'
+#' @export
+rmspe <- function(actuals, preds, na.rm = FALSE) {
+  return(sqrt(mean(((actuals - preds) / actuals)^2, na.rm = na.rm)) * 100)
+}
+
 #' @title Huber loss
 #' @description
 #'
