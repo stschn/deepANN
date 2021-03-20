@@ -11,7 +11,14 @@ numpy(data, ...)
 
 as.numpy(data, ...)
 
-\method{as.numpy}{default}(data, dim = length(data), dimnames = NULL, order = c("C", "F"))
+\method{as.numpy}{default}(
+  data,
+  dim = NULL,
+  dimnames = NULL,
+  order = c("C", "F"),
+  numeric = TRUE,
+  reverse = FALSE
+)
 
 is.numpy(x)
 }
@@ -20,13 +27,17 @@ is.numpy(x)
 
 \item{...}{Additional arguments to be passed to or from methods.}
 
-\item{dim}{The dimensions for the numpy array to be set to \code{data}.}
+\item{dim}{The dimensions for the created numpy array. If \code{dim} is not defined (default) and \code{data} already has dimensions, these will be applied.}
 
 \item{dimnames}{Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.}
 
 \item{order}{The order in which elements of data should be read during rearrangement.
 By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.}
+
+\item{numeric}{A logical value indicating whether the elements should be coerced as numeric elements.}
+
+\item{reverse}{Controls the order of the elements in the numpy array. By default, they are used in the given order, but they can also be used in reverse order.}
 
 \item{x}{An R object.}
 }
@@ -46,10 +57,22 @@ The function \code{array_reshape} from reticulate package differs from the base 
   \code{is.numpy} returns \code{TRUE} or \code{FALSE} depending on whether its argument is a numpy array.
 }
 \examples{
+  # Vector input with explicit dimensions
   numpy(1:24, dim = c(8, 3)) # 2D array with row-major ordering
   numpy(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
   numpy(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
   numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
+
+  # Different input types and applying the dimensions
+  v <- (1:24)
+  l <- list(x1 = 1:10, x2 = seq(10, 100, 10))
+  df <- data.frame(x1 = 1:6, x2 = seq(10, 60, 10), x3 = sample(letters, 6))
+  m <- matrix(1:24, nrow = 6)
+  a1 <- array(letters[1L:24L])
+  a3 <- array(v, dim = c(4, 3, 2))
+  a4 <- array(1:48, dim = c(4, 3, 2, 2))
+  data <- a3; data
+  a <- numpy(data, order = "F", reverse = F); a
 }
 \seealso{
 \code{\link{array}}, \code{\link{dim}}.

@@ -9,7 +9,7 @@ as_tensor_2D(data, reverse = FALSE)
 \arguments{
 \item{data}{A data set, usually a matrix or data frame.}
 
-\item{reverse}{Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.}
+\item{reverse}{Controls the order of the values in the transformed \code{data}. By default, they are used in the given order, but they can also be used in reverse order.}
 }
 \value{
 A 2D-tensor (two-dimensional array equal to a matrix).

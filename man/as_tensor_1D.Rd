@@ -9,7 +9,7 @@ as_tensor_1D(data, reverse = FALSE)
 \arguments{
 \item{data}{Any data structure, e.g. a vector, matrix, array, data frame.}
 
-\item{reverse}{Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.}
+\item{reverse}{Controls the order of the values in the transformed \code{data}. By default, they are used in the given order, but they can also be used in reverse order.}
 }
 \value{
 A one-dimensional array.

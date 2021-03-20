@@ -307,8 +307,8 @@ vector_as_numeric <- function(x) {
 #' @export
 as_ANN_matrix <- function(data) {
   data <- as.data.frame(data)
-  m <- sapply(data, vector.as.numeric)
-  if (NROW(data) == 1L) m <- t(m) # if data consists of only one row, sapply() outputs a column, and not a row vector
+  m <- sapply(data, vector_as_numeric)
+  if (NROW(data) == 1L) m <- t(m) # if data consists of only one row, sapply() outputs a column vector, and not a row vector
   m <- as.matrix(m)
   return(m)
 }
@@ -320,7 +320,7 @@ as_ANN_matrix <- function(data) {
 #'
 #' @param x A numeric vector.
 #' @param ncol The number of columns in the resulting matrix. If \code{by = step}, the number of columns is equal to the number of timesteps used for a LSTM.
-#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.
+#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default, they are used in the given order, but they can also be used in reverse order.
 #' @param by Controls the transformation process. The options \code{row} and \code{col} lead to a matrix whereby the values are structured row-wise or column-wise.
 #'   The option \code{step} stands for a stepwise order of the values row by row (e.g. 1 2 3, 2 3 4, 4 5 6 etc.).
 #'
@@ -392,7 +392,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
   order <- match.arg(order)
   byrow <- ifelse(order %in% c("C"), TRUE, FALSE)
   dataclass <- class(data)
-  if ((is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+  if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
     data <- array(data)
   } else {
   if (any(dataclass %in% c("list"))) {
@@ -426,11 +426,13 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #' @family Utils
 #'
 #' @param data Data to be reshaped to a numpy array.
-#' @param dim The dimensions for the numpy array to be set to \code{data}.
+#' @param dim The dimensions for the created numpy array. If \code{dim} is not defined (default) and \code{data} already has dimensions, these will be applied.
 #' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
 #' @param order The order in which elements of data should be read during rearrangement.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#' @param numeric A logical value indicating whether the elements should be coerced as numeric elements.
+#' @param reverse Controls the order of the elements in the numpy array. By default, they are used in the given order, but they can also be used in reverse order.
 #' @param x An R object.
 #' @param ... Additional arguments to be passed to or from methods.
 #'
@@ -446,10 +448,22 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #' @seealso \code{\link{array}}, \code{\link{dim}}.
 #'
 #' @examples
+#'   # Vector input with explicit dimensions
 #'   numpy(1:24, dim = c(8, 3)) # 2D array with row-major ordering
 #'   numpy(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
 #'   numpy(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
 #'   numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
+#'
+#'   # Different input types and applying the dimensions
+#'   v <- (1:24)
+#'   l <- list(x1 = 1:10, x2 = seq(10, 100, 10))
+#'   df <- data.frame(x1 = 1:6, x2 = seq(10, 60, 10), x3 = sample(letters, 6))
+#'   m <- matrix(1:24, nrow = 6)
+#'   a1 <- array(letters[1L:24L])
+#'   a3 <- array(v, dim = c(4, 3, 2))
+#'   a4 <- array(1:48, dim = c(4, 3, 2, 2))
+#'   data <- a3; data
+#'   a <- numpy(data, order = "F", reverse = F); a
 #' @export
 numpy <- function(data, ...) {
   as.numpy.default(data, ...)
@@ -463,20 +477,26 @@ as.numpy <- function(data, ...) {
 
 #' @rdname numpy
 #' @export
-as.numpy.default <- function(data, dim = length(data), dimnames = NULL, order = c("C", "F")) {
-  # dataclass <- class(data)
-  # if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
-  #   if (numeric) data <- vector_as_numeric(data)
-  #   if (reverse) data <- rev(data)
-  # } else {
-  # if (any(dataclass %in% c("list", "data.frame", "tbl_df", "tbl", "data.table"))) {
-  #   if (!numeric) {
-  #     data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), names(data)))
-  #   } else {
-  #     data <- matrix(unlist(lapply(data, vector.as.numeric)), ncol = length(data), dimnames = list(rownames(data), names(data)))
-  #   }
-  #   if (reverse) data <- apply(data, 2L, rev)
-  # }}
+as.numpy.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = TRUE, reverse = FALSE) {
+  dataclass <- class(data)
+  if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+    if (numeric) data <- vector_as_numeric(data)
+    if (reverse) data <- rev(data)
+  } else {
+  if ((any(dataclass %in% c("array"))) && (length(dim(data)) == 1L)) {
+    if (numeric) data <- as.array(vector_as_numeric(data))
+    if (reverse) data <- as.array(rev(data))
+  } else {
+  if (any(dataclass %in% c("matrix"))) {
+    if ((!is.numeric(data)) && (numeric)) { data <- apply(data, 2L, vector_as_numeric) }
+  } else {
+  if (any(dataclass %in% c("list", "data.frame", "tbl_df", "tbl", "data.table"))) {
+    if (!numeric) {
+      data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), names(data)))
+    } else {
+      data <- matrix(unlist(lapply(data, vector_as_numeric)), ncol = length(data), dimnames = list(rownames(data), names(data)))
+    }
+  }}}}
   # x <- array(data)
   # order <- match.arg(order)
   # byrow = ifelse(order == "C", TRUE, FALSE)
@@ -497,12 +517,23 @@ as.numpy.default <- function(data, dim = length(data), dimnames = NULL, order = 
   #     x <- keras::array_reshape(x, dim = dim, order = order)
   #   }}}
   # }
+  if (missing(dim)) {
+    if (!is.null(dim(data))) dim <- dim(data) else dim <- length(data)
+  }
   x <- array(data, dim = dim)
   order <- match.arg(order)
   if (((ldim <- length(dim)) >= 2L) && (order == "C")) {
     newdim <- c(dim[2L], dim[1L], dim[-c(1L:2L)])
     x <- array(x, dim = newdim)
     x <- aperm(x, perm = c(2L, 1L, if (ldim > 2L) c(3L:ldim)))
+  }
+  if ((ldim >= 2L) && reverse) {
+    fixed_dimension <- seq_len(ldim)[-c(1L:2L)]
+    if (order == "F") {
+      x <- apply(x, c(2L, fixed_dimension), rev)
+    } else {
+      x <- aperm(apply(x, c(1L, fixed_dimension), rev), perm = c(2L, 1L, fixed_dimension))
+    }
   }
   if (!is.null(dimnames)) { dimnames(x) <- dimnames }
   x <- structure(x, class = c(class(x), .deepANNClasses[["numpy"]]))
@@ -531,7 +562,7 @@ is.numpy <- function(x) {
 #'   \code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
 #'   \code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #' @param numeric A logical value indicating whether the elements should be coerced as numeric elements.
-#' @param reverse Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.
+#' @param reverse Controls the order of the elements in the (reshaped) tensor. By default, they are used in the given order, but they can also be used in reverse order.
 #'   The second parameter value indicates a row-wise reverse order (\code{1L}) or a column-wise reverse order (\code{2L}).
 #' @param x An R object.
 #' @param ... Additional arguments to be passed to or from methods.
@@ -737,7 +768,7 @@ nsubsequences.numpy <- function(x, default = 0L) { nsubsequences.array(x, defaul
 #' @family Utils
 #'
 #' @param data Any data structure, e.g. a vector, matrix, array, data frame.
-#' @param reverse Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.
+#' @param reverse Controls the order of the values in the transformed \code{data}. By default, they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A one-dimensional array.
 #'
@@ -754,7 +785,7 @@ as_tensor_1D <- function(data, reverse = FALSE) {
 #' @family Utils
 #'
 #' @param data A data set, usually a matrix or data frame.
-#' @param reverse Controls the order of the values in the transformed \code{data}. By default they are used in the given order, but they can also be used in reverse order.
+#' @param reverse Controls the order of the values in the transformed \code{data}. By default, they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A 2D-tensor (two-dimensional array equal to a matrix).
 #'
@@ -772,7 +803,7 @@ as_tensor_2D <- function(data, reverse = FALSE) {
 #'
 #' @param data A data set, usually a matrix or data frame.
 #' @param ncol The number of columns in the resulting tensor. If \code{by = step}, the number of columns is equal to the number of timesteps used for a RNN respectively LSTM.
-#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.
+#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default, they are used in the given order, but they can also be used in reverse order.
 #' @param by Controls the transformation process. The options \code{row} and \code{col} lead to a matrix whereby the values are structured row-wise or column-wise.
 #'   The option \code{step} stands for a stepwise order of the values row by row (e.g. 1 2 3, 2 3 4, 4 5 6 etc.).
 #'
@@ -785,7 +816,7 @@ as_tensor_3D <- function(data, ncol = 1L, reverse = FALSE, by = c("row", "col", 
   # M <- NCOL(m)
   # N <- NROW(m) - ncol + 1
   # tensor <- array(NA, dim = c(N, ncol, M))
-  # for (j in 1:M) { tensor[, , j] <- vector.as.ANN.matrix(m[, j], ncol, reverse, by) }
+  # for (j in 1:M) { tensor[, , j] <- vector_as_ANN_matrix(m[, j], ncol, reverse, by) }
 
   # m <- as.matrix(data)
   # m <- apply(m, 2, vector_as_ANN_matrix, ncol, reverse, by)

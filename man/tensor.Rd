@@ -37,7 +37,7 @@ is.tensor(x)
 
 \item{numeric}{A logical value indicating whether the elements should be coerced as numeric elements.}
 
-\item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default they are used in the given order, but they can also be used in reverse order.
+\item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default, they are used in the given order, but they can also be used in reverse order.
 The second parameter value indicates a row-wise reverse order (\code{1L}) or a column-wise reverse order (\code{2L}).}
 
 \item{x}{An R object.}

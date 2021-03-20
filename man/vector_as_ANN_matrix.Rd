@@ -16,7 +16,7 @@ vector_as_ANN_matrix(
 
 \item{ncol}{The number of columns in the resulting matrix. If \code{by = step}, the number of columns is equal to the number of timesteps used for a LSTM.}
 
-\item{reverse}{Controls the order of the values in the transformed vector \code{X}. By default they are used in the given order, but they can also be used in reverse order.}
+\item{reverse}{Controls the order of the values in the transformed vector \code{X}. By default, they are used in the given order, but they can also be used in reverse order.}
 
 \item{by}{Controls the transformation process. The options \code{row} and \code{col} lead to a matrix whereby the values are structured row-wise or column-wise.
 The option \code{step} stands for a stepwise order of the values row by row (e.g. 1 2 3, 2 3 4, 4 5 6 etc.).}
