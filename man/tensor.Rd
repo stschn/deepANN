@@ -42,6 +42,9 @@ The second parameter value indicates a row-wise reverse order (\code{1L}) or a c
 
 \item{x}{An R object.}
 }
+\value{
+A tensor (n-dimensional array).
+}
 \description{
 \code{tensor(data, ...)} creates a (reshaped) tensor (a n-dimensional array).\cr
   \code{as.tensor(data, ...)} attempts to turn its argument into a tensor.\cr

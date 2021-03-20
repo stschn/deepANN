@@ -445,7 +445,10 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'
 #'   \code{is.numpy} returns \code{TRUE} or \code{FALSE} depending on whether its argument is a numpy array.
 #'
+#' @return A numpy array (n-dimensional array).
+#'
 #' @seealso \code{\link{array}}, \code{\link{dim}}.
+#' @references \url{https://rstudio.github.io/reticulate/articles/arrays.html}.
 #'
 #' @examples
 #'   # Vector input with explicit dimensions
@@ -575,6 +578,8 @@ is.numpy <- function(x) {
 #'   \code{as.tensor} is a generic function. The default method will return a recreated tensor.
 #'
 #'   \code{is.tensor} returns \code{TRUE} or \code{FALSE} depending on whether its argument is a tensor.
+#'
+#' @return A tensor (n-dimensional array).
 #'
 #' @seealso \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
 #'

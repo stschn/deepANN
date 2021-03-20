@@ -41,6 +41,9 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 
 \item{x}{An R object.}
 }
+\value{
+A numpy array (n-dimensional array).
+}
 \description{
 \code{numpy(data, ...)} creates a reshaped numpy array known from Python.\cr
   \code{as.numpy(data, ...)} attempts to turn its argument into a numpy.\cr
@@ -73,6 +76,9 @@ The function \code{array_reshape} from reticulate package differs from the base 
   a4 <- array(1:48, dim = c(4, 3, 2, 2))
   data <- a3; data
   a <- numpy(data, order = "F", reverse = F); a
+}
+\references{
+\url{https://rstudio.github.io/reticulate/articles/arrays.html}.
 }
 \seealso{
 \code{\link{array}}, \code{\link{dim}}.
