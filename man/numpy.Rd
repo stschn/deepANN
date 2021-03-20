@@ -11,13 +11,7 @@ numpy(data, ...)
 
 as.numpy(data, ...)
 
-\method{as.numpy}{default}(
-  data,
-  dim = NULL,
-  numeric = TRUE,
-  reverse = FALSE,
-  order = c("C", "F")
-)
+\method{as.numpy}{default}(data, dim = length(data), dimnames = NULL, order = c("C", "F"))
 
 is.numpy(x)
 }
@@ -26,11 +20,9 @@ is.numpy(x)
 
 \item{...}{Additional arguments to be passed to or from methods.}
 
-\item{dim}{The new dimensions to be set to \code{data}.}
+\item{dim}{The dimensions for the numpy array to be set to \code{data}.}
 
-\item{numeric}{A logical value indicating whether the elements should be coerced as numeric elements.}
-
-\item{reverse}{Controls the order of the elements in the numpy array. By default they are used in the given order, but they can also be used in reverse order.}
+\item{dimnames}{Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.}
 
 \item{order}{The order in which elements of data should be read during rearrangement.
 By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
@@ -60,7 +52,7 @@ The function \code{array_reshape} from reticulate package differs from the base 
   numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
 }
 \seealso{
-\code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
+\code{\link{array}}, \code{\link{dim}}.
 
 Other Utils: 
 \code{\link{as_ANN_matrix}()},

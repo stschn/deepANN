@@ -426,9 +426,8 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #' @family Utils
 #'
 #' @param data Data to be reshaped to a numpy array.
-#' @param dim The new dimensions to be set to \code{data}.
-#' @param numeric A logical value indicating whether the elements should be coerced as numeric elements.
-#' @param reverse Controls the order of the elements in the numpy array. By default they are used in the given order, but they can also be used in reverse order.
+#' @param dim The dimensions for the numpy array to be set to \code{data}.
+#' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
 #' @param order The order in which elements of data should be read during rearrangement.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
@@ -444,7 +443,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'
 #'   \code{is.numpy} returns \code{TRUE} or \code{FALSE} depending on whether its argument is a numpy array.
 #'
-#' @seealso \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
+#' @seealso \code{\link{array}}, \code{\link{dim}}.
 #'
 #' @examples
 #'   numpy(1:24, dim = c(8, 3)) # 2D array with row-major ordering
@@ -464,40 +463,48 @@ as.numpy <- function(data, ...) {
 
 #' @rdname numpy
 #' @export
-as.numpy.default <- function(data, dim = NULL, numeric = TRUE, reverse = FALSE, order = c("C", "F")) {
-  dataclass <- class(data)
-  if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
-    if (numeric) data <- vector_as_numeric(data)
-    if (reverse) data <- rev(data)
-  } else {
-  if (any(dataclass %in% c("list", "data.frame", "tbl_df", "tbl", "data.table"))) {
-    if (!numeric) {
-      data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), names(data)))
-    } else {
-      data <- matrix(unlist(lapply(data, vector.as.numeric)), ncol = length(data), dimnames = list(rownames(data), names(data)))
-    }
-    if (reverse) data <- apply(data, 2L, rev)
-  }}
-  x <- array(data)
+as.numpy.default <- function(data, dim = length(data), dimnames = NULL, order = c("C", "F")) {
+  # dataclass <- class(data)
+  # if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+  #   if (numeric) data <- vector_as_numeric(data)
+  #   if (reverse) data <- rev(data)
+  # } else {
+  # if (any(dataclass %in% c("list", "data.frame", "tbl_df", "tbl", "data.table"))) {
+  #   if (!numeric) {
+  #     data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), names(data)))
+  #   } else {
+  #     data <- matrix(unlist(lapply(data, vector.as.numeric)), ncol = length(data), dimnames = list(rownames(data), names(data)))
+  #   }
+  #   if (reverse) data <- apply(data, 2L, rev)
+  # }}
+  # x <- array(data)
+  # order <- match.arg(order)
+  # byrow = ifelse(order == "C", TRUE, FALSE)
+  # if (!is.null(dim) && ((ldim <- length(dim)) >= 2L)) {
+  #   if (ldim == 2L) {
+  #     x <- as.array(matrix(x, nrow = dim[1L], ncol = dim[2L], byrow = byrow))
+  #   } else {
+  #   if (ldim == 3L){
+  #     x <- array(x, dim = dim)
+  #     if (byrow) {
+  #       x <- array(x, dim = c(dim[2L], dim[1L], dim[3L]))
+  #       x <- aperm(x, perm = c(2L, 1L, 3L))
+  #     }
+  #   } else {
+  #   if (!byrow) {
+  #     dim(x) <- dim
+  #   } else {
+  #     x <- keras::array_reshape(x, dim = dim, order = order)
+  #   }}}
+  # }
+  x <- array(data, dim = dim)
   order <- match.arg(order)
-  byrow = ifelse(order == "C", TRUE, FALSE)
-  if (!is.null(dim) && ((ldim <- length(dim)) >= 2L)) {
-    if (ldim == 2L) {
-      x <- as.array(matrix(x, nrow = dim[1L], ncol = dim[2L], byrow = byrow))
-    } else {
-    if (ldim == 3L){
-      x <- array(x, dim = dim)
-      if (byrow) {
-        x <- array(x, dim = c(dim[2L], dim[1L], dim[3L]))
-        x <- aperm(x, perm = c(2L, 1L, 3L))
-      }
-    } else {
-    if (!byrow) {
-      dim(x) <- dim
-    } else {
-      x <- keras::array_reshape(x, dim = dim, order = order)
-    }}}
+  if (((ldim <- length(dim)) >= 2L) && (order == "C")) {
+    newdim <- c(dim[2L], dim[1L], dim[-c(1L:2L)])
+    x <- array(x, dim = newdim)
+    x <- aperm(x, perm = c(2L, 1L, if (ldim > 2L) c(3L:ldim)))
   }
+  if (!is.null(dimnames)) { dimnames(x) <- dimnames }
   x <- structure(x, class = c(class(x), .deepANNClasses[["numpy"]]))
   return(x)
 }
