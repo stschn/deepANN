@@ -7,7 +7,7 @@
 #'
 #' @return A two-dimensional array of the feature matrix \code{x}.
 #'
-#' @seealso \code{\link{as_MLP_Y}}, \code{\link{as_ANN_matrix}}.
+#' @seealso \code{\link{as_MLP_Y}}.
 #'
 #' @export
 as_MLP_X <- function(x) {
@@ -23,7 +23,7 @@ as_MLP_X <- function(x) {
 #'
 #' @return A two-dimensional array of the outcome \code{Y}. For a factor outcome, the result is a one-hot vector.
 #'
-#' @seealso \code{\link{as_MLP_X}}, \code{\link{as_ANN_matrix}}, \code{\link{one_hot_encode}}.
+#' @seealso \code{\link{as_MLP_X}}, \code{\link{one_hot_encode}}.
 #'
 #' @export
 as_MLP_Y <- function(y) {

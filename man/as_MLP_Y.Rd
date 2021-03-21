@@ -16,7 +16,7 @@ A two-dimensional array of the outcome \code{Y}. For a factor outcome, the resul
 
 }
 \seealso{
-\code{\link{as_MLP_X}}, \code{\link{as_ANN_matrix}}, \code{\link{one_hot_encode}}.
+\code{\link{as_MLP_X}}, \code{\link{one_hot_encode}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as_MLP_X}()},

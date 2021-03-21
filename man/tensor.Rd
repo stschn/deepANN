@@ -15,9 +15,9 @@ as.tensor(data, ...)
   data,
   dim = NULL,
   dimnames = NULL,
-  byrow = FALSE,
+  order = c("C", "F"),
   numeric = TRUE,
-  reverse = list(FALSE, 2L)
+  reverse = FALSE
 )
 
 is.tensor(x)
@@ -31,14 +31,13 @@ is.tensor(x)
 
 \item{dimnames}{Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.}
 
-\item{byrow}{The order in which elements of data should be read during rearrangement.
-\code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
-\code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.}
+\item{order}{The order in which elements of data should be read during rearrangement.
+By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.}
 
 \item{numeric}{A logical value indicating whether the elements should be coerced as numeric elements.}
 
-\item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default, they are used in the given order, but they can also be used in reverse order.
-The second parameter value indicates a row-wise reverse order (\code{1L}) or a column-wise reverse order (\code{2L}).}
+\item{reverse}{Controls the order of the elements in the (reshaped) tensor. By default, they are used in the given order, but they can also be used in reverse order.}
 
 \item{x}{An R object.}
 }

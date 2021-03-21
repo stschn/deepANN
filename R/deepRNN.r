@@ -234,7 +234,7 @@ as_LSTM_X <- function(x, timesteps = 1L, reverse = FALSE) {
   # for (i in 1:variables) { tensor[, , i] <- matrix(variable_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
   m <- data.matrix(x) # as_ANN_matrix(x)
   timesteps <- ifelse(is.null(timesteps) || (timesteps < 1L), 1L, timesteps) # at least a timestep of 1 is needed
-  return(as_tensor_3D(data = m, ncol = timesteps, reverse = reverse, by = c("step")))
+  return(as_tensor_3D(data = m, ncol = timesteps, by = c("step"), reverse = reverse))
 }
 
 #' @title Outcomes (Y) data format for LSTM
@@ -269,7 +269,7 @@ as_LSTM_Y <- function(y, timesteps = 1L, reverse = FALSE) {
       return(as_tensor_2D(data = m, reverse = reverse))
     } else {
       timesteps <- ifelse(timesteps < 2L, 2L, timesteps) # at least a timestep of 2 is needed for a sequence outcome
-      return(as_tensor_3D(data = m, ncol = timesteps, reverse = reverse, by = c("step")))
+      return(as_tensor_3D(data = m, ncol = timesteps, by = c("step"), reverse = reverse))
     }
   }
 }

@@ -320,16 +320,16 @@ as_ANN_matrix <- function(data) {
 #'
 #' @param x A numeric vector.
 #' @param ncol The number of columns in the resulting matrix. If \code{by = step}, the number of columns is equal to the number of timesteps used for a LSTM.
-#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default, they are used in the given order, but they can also be used in reverse order.
 #' @param by Controls the transformation process. The options \code{row} and \code{col} lead to a matrix whereby the values are structured row-wise or column-wise.
 #'   The option \code{step} stands for a stepwise order of the values row by row (e.g. 1 2 3, 2 3 4, 4 5 6 etc.).
+#' @param reverse Controls the order of the values in the transformed vector \code{x}. By default, they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return The transformed or resampled vector \code{x} into a matrix.
 #'
 #' @seealso \code{\link{as_tensor_3D}}.
 #'
 #' @export
-vector_as_ANN_matrix <- function(x, ncol = 1, reverse = FALSE, by = c("row", "col", "step")) {
+vector_as_ANN_matrix <- function(x, ncol = 1, by = c("row", "col", "step"), reverse = FALSE) {
   # For fast transferring a list into a matrix
   # https://stackoverflow.com/questions/13224553/how-to-convert-a-huge-list-of-vector-to-a-matrix-more-efficiently
   # https://stackoverflow.com/questions/17752830/r-reshape-a-vector-into-multiple-columns
@@ -484,11 +484,9 @@ as.numpy.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "
   dataclass <- class(data)
   if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
     if (numeric) data <- vector_as_numeric(data)
-    if (reverse) data <- rev(data)
   } else {
   if ((any(dataclass %in% c("array"))) && (length(dim(data)) == 1L)) {
     if (numeric) data <- as.array(vector_as_numeric(data))
-    if (reverse) data <- as.array(rev(data))
   } else {
   if (any(dataclass %in% c("matrix"))) {
     if ((!is.numeric(data)) && (numeric)) { data <- apply(data, 2L, vector_as_numeric) }
@@ -520,7 +518,7 @@ as.numpy.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "
   #     x <- keras::array_reshape(x, dim = dim, order = order)
   #   }}}
   # }
-  if (missing(dim)) {
+  if (is.null(dim)) {
     if (!is.null(dim(data))) dim <- dim(data) else dim <- length(data)
   }
   x <- array(data, dim = dim)
@@ -530,12 +528,15 @@ as.numpy.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "
     x <- array(x, dim = newdim)
     x <- aperm(x, perm = c(2L, 1L, if (ldim > 2L) c(3L:ldim)))
   }
-  if ((ldim >= 2L) && reverse) {
-    fixed_dimension <- seq_len(ldim)[-c(1L:2L)]
-    if (order == "F") {
-      x <- apply(x, c(2L, fixed_dimension), rev)
-    } else {
-      x <- aperm(apply(x, c(1L, fixed_dimension), rev), perm = c(2L, 1L, fixed_dimension))
+  if (reverse) {
+    if (ldim == 1L) x <- rev(x)
+    if (ldim >= 2L) {
+      fixed_dimension <- seq_len(ldim)[-c(1L:2L)]
+      if (order == "F") {
+        x <- apply(x, c(2L, fixed_dimension), rev)
+      } else {
+        x <- aperm(apply(x, c(1L, fixed_dimension), rev), perm = c(2L, 1L, fixed_dimension))
+      }
     }
   }
   if (!is.null(dimnames)) { dimnames(x) <- dimnames }
@@ -561,12 +562,11 @@ is.numpy <- function(x) {
 #' @param data A data set, e.g. vector, array, matrix, data frame, tibble, data.table.
 #' @param dim The new dimensions to be set on the tensor.
 #' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
-#' @param byrow The order in which elements of data should be read during rearrangement.
-#'   \code{FALSE} (default) is equivalent to the \code{Fortran}-style ordering and means elements should be read in column-major order.
-#'   \code{TRUE} is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#' @param order The order in which elements of data should be read during rearrangement.
+#'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #' @param numeric A logical value indicating whether the elements should be coerced as numeric elements.
 #' @param reverse Controls the order of the elements in the (reshaped) tensor. By default, they are used in the given order, but they can also be used in reverse order.
-#'   The second parameter value indicates a row-wise reverse order (\code{1L}) or a column-wise reverse order (\code{2L}).
 #' @param x An R object.
 #' @param ... Additional arguments to be passed to or from methods.
 #'
@@ -596,47 +596,68 @@ as.tensor <- function(data, ...) {
 
 #' @rdname tensor
 #' @export
-as.tensor.default <- function(data, dim = NULL, dimnames = NULL, byrow = FALSE, numeric = TRUE, reverse = list(FALSE, 2L)) {
+as.tensor.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = TRUE, reverse = FALSE) {
   dataclass <- class(data)
   if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
-    if (numeric) data <- array(vector_as_numeric(data)) else data <- array(data)
-    if (reverse[[1L]]) data <- rev(data)
+    if (numeric) data <- vector_as_numeric(data)
+  } else {
+  if ((any(dataclass %in% c("array"))) && (length(dim(data)) == 1L)) {
+    if (numeric) data <- as.array(vector_as_numeric(data))
   } else {
   if (any(dataclass %in% c("matrix"))) {
     if ((!is.numeric(data)) && (numeric)) { data <- apply(data, 2L, vector_as_numeric) }
-    if (reverse[[1L]]) {
-      if (reverse[[2L]] == 2L) { data <- apply(data, 2L, rev) } else { data <- t(apply(data, 1L, rev)) }}
-    data <- array(data, dim = c(NROW(data), NCOL(data)))
+    # Reverse order of a matrix
+    # by column: { data <- apply(data, 2L, rev) }; by row: { data <- t(apply(data, 1L, rev)) }}
   } else {
   if (any(dataclass %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
     if (numeric) { data <- data.matrix(data) } else { data <- as.matrix(data) }
-    if (reverse[[1L]]) {
-      if (reverse[[2L]] == 2L) { data <- apply(data, 2L, rev) } else { data <- t(apply(data, 1L, rev)) }}
-    data <- array(data, dim = c(NROW(data), NCOL(data)))
   } else {
   if (any(dataclass %in% c("list"))) {
     if (numeric) { data <- lapply(data, vector_as_numeric) }
-    data <- matrix(unlist(data), ncol = length(data))
-    if (reverse[[1L]]) {
-      if (reverse[[2L]] == 2L) { data <- apply(data, 2L, rev) } else { data <- t(apply(data, 1L, rev)) }}
-    data <- array(data, dim = c(NROW(data), NCOL(data)))
-  } else {
-  if (!any(dataclass %in% c("array"))) {
-    data <- array(data)
+    data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), names(data)))
   }}}}}
-  if ((!is.null(dim)) && (!isTRUE(all.equal(dim(data), dim)))) {
-    if (!byrow) {
-      dim(data) <- dim
-    } else {
+  # Preserve already given dimensions
+  if (!is.null(dim(data))) olddim <- dim(data) else olddim <- length(data)
+  x <- array(data, dim = olddim)
+  # Reshape to dimensions
+  order <- match.arg(order)
+  newdim <- if (!is.null(dim)) dim else olddim
+  distinctdim <- !isTRUE(all.equal(newdim, olddim))
+  if (order == "F") {
+    if (distinctdim) dim(x) <- newdim
+  } else {
+  if (order == "C") {
+    if (distinctdim) { # only if dimensions differ, array_reshape() from numpy will work
       # array_reshape() shows a strange behavior in reshaping an array consisting only of NA or combined with logical values
       # Each NA is transferred to TRUE, and not to NA in the reshaped array
       # see: https://stackoverflow.com/questions/63548335/array-reshape-with-strange-behaviour
-      data <- keras::array_reshape(data, dim = dim, order = ifelse(!byrow, "F", "C"))
+      x <- keras::array_reshape(x, dim = newdim, order = order)
+    } else { # use own row-major ordering
+      if ((ldim <- length(newdim)) >= 2L) {
+        newdim <- c(newdim[2L], newdim[1L], newdim[-c(1L:2L)])
+        x <- array(x, dim = newdim)
+        x <- aperm(x, perm = c(2L, 1L, if (ldim > 2L) c(3L:ldim)))
+      }
+    }
+  }}
+  # Reverse order if necessary
+  if (reverse) {
+    ldim <- length((dim(x)))
+    if (ldim == 1L) x <- rev(x)
+    if (ldim >= 2L) {
+      fixed_dimension <- seq_len(ldim)[-c(1L:2L)]
+      if (order == "F") {
+        x <- apply(x, c(2L, fixed_dimension), rev)
+      } else {
+        x <- aperm(apply(x, c(1L, fixed_dimension), rev), perm = c(2L, 1L, fixed_dimension))
+      }
     }
   }
-  if (!is.null(dimnames)) { dimnames(data) <- dimnames }
-  data <- structure(data, class = c(class(data), .deepANNClasses[["Tensor"]]))
-  return(data)
+  # Set dimension names if necessary
+  if (!is.null(dimnames)) { dimnames(x) <- dimnames }
+  # Set class information
+  x <- structure(x, class = c(class(x), .deepANNClasses[["Tensor"]]))
+  return(x)
 }
 
 #' @rdname tensor
@@ -781,7 +802,7 @@ nsubsequences.numpy <- function(x, default = 0L) { nsubsequences.array(x, defaul
 #'
 #' @export
 as_tensor_1D <- function(data, reverse = FALSE) {
-  as.tensor.default(flatten(data, order = "F"), reverse = list(reverse, 2L))
+  as.tensor.default(flatten(data, order = "F"), order = "F", reverse = reverse)
 }
 
 #' @title Transform data into a tensor with two ranks or dimensions.
@@ -798,7 +819,7 @@ as_tensor_1D <- function(data, reverse = FALSE) {
 #'
 #' @export
 as_tensor_2D <- function(data, reverse = FALSE) {
-  as.tensor.default(m <- as.matrix(data), dimnames = list(NULL, colnames(m)), reverse = list(reverse, 2L))
+  as.tensor.default(m <- as.matrix(data), dimnames = list(NULL, colnames(m)), order = "F", reverse = reverse)
 }
 
 #' @title Transform data into a tensor with three ranks or dimensions.
@@ -808,23 +829,23 @@ as_tensor_2D <- function(data, reverse = FALSE) {
 #'
 #' @param data A data set, usually a matrix or data frame.
 #' @param ncol The number of columns in the resulting tensor. If \code{by = step}, the number of columns is equal to the number of timesteps used for a RNN respectively LSTM.
-#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default, they are used in the given order, but they can also be used in reverse order.
 #' @param by Controls the transformation process. The options \code{row} and \code{col} lead to a matrix whereby the values are structured row-wise or column-wise.
 #'   The option \code{step} stands for a stepwise order of the values row by row (e.g. 1 2 3, 2 3 4, 4 5 6 etc.).
+#' @param reverse Controls the order of the values in the transformed vector \code{X}. By default, they are used in the given order, but they can also be used in reverse order.
 #'
 #' @return A 3D-tensor (three-dimensional array).
 #'
 #' @seealso \code{\link{as_tensor_1D}}, \code{\link{as_tensor_2D}}, \code{\link{vector_as_ANN_matrix}}.
 #'
 #' @export
-as_tensor_3D <- function(data, ncol = 1L, reverse = FALSE, by = c("row", "col", "step")) {
+as_tensor_3D <- function(data, ncol = 1L, by = c("row", "col", "step"), reverse = FALSE) {
   # M <- NCOL(m)
   # N <- NROW(m) - ncol + 1
   # tensor <- array(NA, dim = c(N, ncol, M))
-  # for (j in 1:M) { tensor[, , j] <- vector_as_ANN_matrix(m[, j], ncol, reverse, by) }
+  # for (j in 1:M) { tensor[, , j] <- vector_as_ANN_matrix(m[, j], ncol, by, reverse) }
 
   # m <- as.matrix(data)
-  # m <- apply(m, 2, vector_as_ANN_matrix, ncol, reverse, by)
+  # m <- apply(m, 2, vector_as_ANN_matrix, ncol, by, reverse)
   # tensor <- array(m, dim = c(NROW(m) / ncol, ncol, NCOL(m)), dimnames = list(NULL, NULL, colnames(m)))
-  as.tensor.default(array(m <- apply(as.matrix(data), 2L, vector_as_ANN_matrix, ncol, reverse, by), dim = c(NROW(m) / ncol, ncol, NCOL(m)), dimnames = list(NULL, NULL, colnames(m))))
+  as.tensor.default(array(m <- apply(as.matrix(data), 2L, vector_as_ANN_matrix, ncol, by, reverse), dim = c(NROW(m) / ncol, ncol, NCOL(m)), dimnames = list(NULL, NULL, colnames(m))), order = "F")
 }

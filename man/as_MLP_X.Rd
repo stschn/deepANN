@@ -16,7 +16,7 @@ A two-dimensional array of the feature matrix \code{x}.
 
 }
 \seealso{
-\code{\link{as_MLP_Y}}, \code{\link{as_ANN_matrix}}.
+\code{\link{as_MLP_Y}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as_MLP_Y}()},
