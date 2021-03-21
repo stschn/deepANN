@@ -417,45 +417,47 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
   return(data)
 }
 
-#' @title Numpy
+#' @title Multidimensional Array (marray)
 #' @description
-#'   \code{numpy(data, ...)} creates a reshaped numpy array known from Python.\cr
-#'   \code{as.numpy(data, ...)} attempts to turn its argument into a numpy.\cr
-#'   \code{is.numpy(x)} tests if its argument is a numpy.\cr
+#'   \code{marray(data, ...)} creates a reshaped multidimensional array.\cr
+#'   \code{as.marray(data, ...)} attempts to turn its argument into a \code{marray}.\cr
+#'   \code{is.marray(x)} tests if its argument is a \code{marray}.\cr
 #'
 #' @family Utils
 #'
-#' @param data Data to be reshaped to a numpy array.
-#' @param dim The dimensions for the created numpy array. If \code{dim} is not defined (default) and \code{data} already has dimensions, these will be applied.
+#' @param data Data to be reshaped to a multidimensional array.
+#' @param dim The dimensions for the created array. If \code{dim} is not defined (default) and \code{data} already has dimensions, these will be applied.
 #' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
 #' @param order The order in which elements of data should be read during rearrangement.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #' @param numeric A logical value indicating whether the elements should be coerced as numeric elements.
-#' @param reverse Controls the order of the elements in the numpy array. By default, they are used in the given order, but they can also be used in reverse order.
+#' @param reverse Controls the order of the elements in the \code{marray}. By default, they are used in the given order, but they can also be used in reverse order.
 #' @param x An R object.
 #' @param ... Additional arguments to be passed to or from methods.
 #'
-#' @details The function \code{array_reshape} from reticulate package differs from the base function \code{dim}.
+#' @details This introduced multidimensional array, read m-array, defines an array as several bunches of matrices.
+#'   Usually, an R array with more than two dimensions can be interpret as a bunch of bunch of bunch... of matrices.
+#'   The first two dimensions define the matrix while the remaining dimensions define the corresponding bunches.
+#'   For e.g., an 4x3x2 array has 2 bunches of each 4x3 matrix. An 6x4x3x2 array has 2 bunches, each of these two bunches has 3 bunches and each of these three bunches again contains a 6x4 matrix.
+#'
+#'   The behavior of \code{marray} is quite similar to that of numpy from Python. While column-major ordering is identically,
+#'   row-major ordering differs. An array from type \code{marray} always order data within the matrices, and not along the remaining axis.
+#'
+#'   In this context, the function \code{array_reshape} from reticulate package, which is consistent with libraries like NumPy, differs from the base function \code{dim}.
 #'   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
 #'
-#'   \code{numpy} creates a numpy array.
-#'
-#'   \code{as.numpy} is a generic function. The default method will return a recreated numpy array.
-#'
-#'   \code{is.numpy} returns \code{TRUE} or \code{FALSE} depending on whether its argument is a numpy array.
-#'
-#' @return A numpy array (n-dimensional array).
+#' @return An array from type \code{marray}.
 #'
 #' @seealso \code{\link{array}}, \code{\link{dim}}.
 #' @references \url{https://rstudio.github.io/reticulate/articles/arrays.html}.
 #'
 #' @examples
 #'   # Vector input with explicit dimensions
-#'   numpy(1:24, dim = c(8, 3)) # 2D array with row-major ordering
-#'   numpy(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
-#'   numpy(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
-#'   numpy(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
+#'   marray(1:24, dim = c(8, 3)) # 2D array with row-major ordering
+#'   marray(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
+#'   marray(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
+#'   marray(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
 #'
 #'   # Different input types and applying the dimensions
 #'   v <- (1:24)
@@ -466,21 +468,21 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'   a3 <- array(v, dim = c(4, 3, 2))
 #'   a4 <- array(1:48, dim = c(4, 3, 2, 2))
 #'   data <- a3; data
-#'   a <- numpy(data, order = "F", reverse = F); a
+#'   a <- marray(data, order = "F", reverse = F); a
 #' @export
-numpy <- function(data, ...) {
-  as.numpy.default(data, ...)
+marray <- function(data, ...) {
+  as.marray.default(data, ...)
 }
 
-#' @rdname numpy
+#' @rdname marray
 #' @export
-as.numpy <- function(data, ...) {
-  UseMethod("as.numpy")
+as.marray <- function(data, ...) {
+  UseMethod("as.marray")
 }
 
-#' @rdname numpy
+#' @rdname marray
 #' @export
-as.numpy.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = TRUE, reverse = FALSE) {
+as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = TRUE, reverse = FALSE) {
   dataclass <- class(data)
   if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
     if (numeric) data <- vector_as_numeric(data)
@@ -540,15 +542,15 @@ as.numpy.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "
     }
   }
   if (!is.null(dimnames)) { dimnames(x) <- dimnames }
-  x <- structure(x, class = c(class(x), .deepANNClasses[["numpy"]]))
+  x <- structure(x, class = c(class(x), .deepANNClasses[["marray"]]))
   return(x)
 }
 
-#' @rdname numpy
+#' @rdname marray
 #' @export
-is.numpy <- function(x) {
-  # return(.deepANNClasses[["numpy"]] %in% class(x))
-  return(inherits(x, .deepANNClasses[["numpy"]]))
+is.marray <- function(x) {
+  # return(.deepANNClasses[["marray"]] %in% class(x))
+  return(inherits(x, .deepANNClasses[["marray"]]))
 }
 
 #' @title Tensor
@@ -572,12 +574,6 @@ is.numpy <- function(x) {
 #'
 #' @details The function \code{array_reshape} from reticulate package differs from the base function \code{dim}.
 #'   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
-#'
-#'   \code{tensor} creates a tensor.
-#'
-#'   \code{as.tensor} is a generic function. The default method will return a recreated tensor.
-#'
-#'   \code{is.tensor} returns \code{TRUE} or \code{FALSE} depending on whether its argument is a tensor.
 #'
 #' @return A tensor (n-dimensional array).
 #'
@@ -619,7 +615,7 @@ as.tensor.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
   # Preserve already given dimensions
   if (!is.null(dim(data))) olddim <- dim(data) else olddim <- length(data)
   x <- array(data, dim = olddim)
-  # Reshape to dimensions
+  # Reshape to new dimensions if necessary
   order <- match.arg(order)
   newdim <- if (!is.null(dim)) dim else olddim
   distinctdim <- !isTRUE(all.equal(newdim, olddim))
@@ -670,7 +666,7 @@ is.tensor <- function(x) { return(inherits(x, .deepANNClasses[["Tensor"]])) }
 #' @family Utils
 #'
 #' @param data A data structure, the number of samples is extracted.
-#' @param x A multidimensional data structure like array, tensor, numpy or matrix.
+#' @param x A multidimensional data structure like array, tensor, marray or matrix.
 #' @details The number of samples is stored in the first dimension of \code{x}.
 #' @return Number of samples.
 #' @export
@@ -688,7 +684,7 @@ nsamples.tensor <- function(x) { nsamples.array(x) }
 
 #' @rdname nsamples
 #' @export
-nsamples.numpy <- function(x) { nsamples.array(x) }
+nsamples.marray <- function(x) { nsamples.array(x) }
 
 #' @rdname nsamples
 #' @export
@@ -700,7 +696,7 @@ nsamples.matrix <- function(x) { return(dim(x)[1L]) }
 #' @family Utils
 #'
 #' @param data A data structure, the number of units is extracted.
-#' @param x A multidimensional data structure like array, tensor, numpy or matrix.
+#' @param x A multidimensional data structure like array, tensor, marray or matrix.
 #' @details The number of units is stored in the last dimension of \code{x}.
 #'   What a unit is or what it stands for is determined by the context. Usually, a unit is an attribute (feature or outcome).
 #'   In the context of image processing, a unit on feature side represents a color channel.
@@ -720,7 +716,7 @@ nunits.tensor <- function(x) { nunits.array(x) }
 
 #' @rdname nunits
 #' @export
-nunits.numpy <- function(x) { nunits.array(x) }
+nunits.marray <- function(x) { nunits.array(x) }
 
 #' @rdname nunits
 #' @export
@@ -732,7 +728,7 @@ nunits.matrix <- function(x) { return(dim(x)[2L]) }
 #' @family Utils
 #'
 #' @param data A data structure, the number of timesteps is extracted.
-#' @param x A multidimensional data structure like array, tensor or numpy.
+#' @param x A multidimensional data structure like array, tensor or marray.
 #' @details The number of timesteps is stored in the second dimension of a three-dimensional \code{x}, usually used for a LSTM,
 #'   or in the third dimension of a four-dimensional \code{x}, usually used for a temporal CNN.
 #' @return Number of timesteps.
@@ -756,7 +752,7 @@ ntimesteps.tensor <- function(x, default = 1L) { ntimesteps.array(x, default) }
 
 #' @rdname ntimesteps
 #' @export
-ntimesteps.numpy <- function(x, default = 1L) { ntimesteps.array(x, default) }
+ntimesteps.marray <- function(x, default = 1L) { ntimesteps.array(x, default) }
 
 #' @title Number of subsequences within a data structure
 #' @description
@@ -764,7 +760,7 @@ ntimesteps.numpy <- function(x, default = 1L) { ntimesteps.array(x, default) }
 #' @family Utils
 #'
 #' @param data A data structure, the number of subsequences is extracted.
-#' @param x A multidimensional data structure like array, tensor or numpy.
+#' @param x A multidimensional data structure like array, tensor or marray.
 #' @details The number of subsequences is stored in the second dimension of a four-dimensional \code{x}, usually used for a temporal CNN.
 #' @return Number of subsequences.
 #' @export
@@ -786,7 +782,7 @@ nsubsequences.tensor <- function(x, default = 0L) { nsubsequences.array(x, defau
 
 #' @rdname nsubsequences
 #' @export
-nsubsequences.numpy <- function(x, default = 0L) { nsubsequences.array(x, default) }
+nsubsequences.marray <- function(x, default = 0L) { nsubsequences.array(x, default) }
 
 #' @title Transform data into a 1D tensor
 #' @description

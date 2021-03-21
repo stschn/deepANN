@@ -4,7 +4,7 @@
 \alias{nsubsequences}
 \alias{nsubsequences.array}
 \alias{nsubsequences.tensor}
-\alias{nsubsequences.numpy}
+\alias{nsubsequences.marray}
 \title{Number of subsequences within a data structure}
 \usage{
 nsubsequences(data, ...)
@@ -13,12 +13,12 @@ nsubsequences(data, ...)
 
 \method{nsubsequences}{tensor}(x, default = 0L)
 
-\method{nsubsequences}{numpy}(x, default = 0L)
+\method{nsubsequences}{marray}(x, default = 0L)
 }
 \arguments{
 \item{data}{A data structure, the number of subsequences is extracted.}
 
-\item{x}{A multidimensional data structure like array, tensor or numpy.}
+\item{x}{A multidimensional data structure like array, tensor or marray.}
 }
 \value{
 Number of subsequences.
@@ -38,9 +38,9 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{marray}()},
 \code{\link{nsamples}()},
 \code{\link{ntimesteps}()},
-\code{\link{numpy}()},
 \code{\link{nunits}()},
 \code{\link{probability}()},
 \code{\link{radian}()},

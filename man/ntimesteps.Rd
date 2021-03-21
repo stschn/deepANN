@@ -4,7 +4,7 @@
 \alias{ntimesteps}
 \alias{ntimesteps.array}
 \alias{ntimesteps.tensor}
-\alias{ntimesteps.numpy}
+\alias{ntimesteps.marray}
 \title{Number of timesteps within a data structure}
 \usage{
 ntimesteps(data, ...)
@@ -13,12 +13,12 @@ ntimesteps(data, ...)
 
 \method{ntimesteps}{tensor}(x, default = 1L)
 
-\method{ntimesteps}{numpy}(x, default = 1L)
+\method{ntimesteps}{marray}(x, default = 1L)
 }
 \arguments{
 \item{data}{A data structure, the number of timesteps is extracted.}
 
-\item{x}{A multidimensional data structure like array, tensor or numpy.}
+\item{x}{A multidimensional data structure like array, tensor or marray.}
 }
 \value{
 Number of timesteps.
@@ -39,9 +39,9 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{marray}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
-\code{\link{numpy}()},
 \code{\link{nunits}()},
 \code{\link{probability}()},
 \code{\link{radian}()},

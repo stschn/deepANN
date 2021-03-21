@@ -26,7 +26,7 @@
 .ContinuousClasses <- .getBasicClasses("Integer", "Numeric", "Complex", "Raw")
 
 .deepANNClasses <-
-  c("numpy"                        = "numpy",
+  c("marray"                       = "marray",
     "Tensor"                       = "tensor",
     "Feedforward Network"          = "mlp",
     "Long Short-Term Memory"       = "lstm",

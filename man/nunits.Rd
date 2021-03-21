@@ -4,7 +4,7 @@
 \alias{nunits}
 \alias{nunits.array}
 \alias{nunits.tensor}
-\alias{nunits.numpy}
+\alias{nunits.marray}
 \alias{nunits.matrix}
 \title{Number of units within a data structure}
 \usage{
@@ -14,14 +14,14 @@ nunits(data, ...)
 
 \method{nunits}{tensor}(x)
 
-\method{nunits}{numpy}(x)
+\method{nunits}{marray}(x)
 
 \method{nunits}{matrix}(x)
 }
 \arguments{
 \item{data}{A data structure, the number of units is extracted.}
 
-\item{x}{A multidimensional data structure like array, tensor, numpy or matrix.}
+\item{x}{A multidimensional data structure like array, tensor, marray or matrix.}
 }
 \value{
 Number of units.
@@ -43,10 +43,10 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{marray}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
 \code{\link{ntimesteps}()},
-\code{\link{numpy}()},
 \code{\link{probability}()},
 \code{\link{radian}()},
 \code{\link{sd_pop}()},

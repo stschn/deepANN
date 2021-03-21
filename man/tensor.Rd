@@ -52,12 +52,6 @@ A tensor (n-dimensional array).
 \details{
 The function \code{array_reshape} from reticulate package differs from the base function \code{dim}.
   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
-
-  \code{tensor} creates a tensor.
-
-  \code{as.tensor} is a generic function. The default method will return a recreated tensor.
-
-  \code{is.tensor} returns \code{TRUE} or \code{FALSE} depending on whether its argument is a tensor.
 }
 \seealso{
 \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
@@ -70,10 +64,10 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{marray}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
 \code{\link{ntimesteps}()},
-\code{\link{numpy}()},
 \code{\link{nunits}()},
 \code{\link{probability}()},
 \code{\link{radian}()},

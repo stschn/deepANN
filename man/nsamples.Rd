@@ -4,7 +4,7 @@
 \alias{nsamples}
 \alias{nsamples.array}
 \alias{nsamples.tensor}
-\alias{nsamples.numpy}
+\alias{nsamples.marray}
 \alias{nsamples.matrix}
 \title{Number of samples within a data structure}
 \usage{
@@ -14,14 +14,14 @@ nsamples(data, ...)
 
 \method{nsamples}{tensor}(x)
 
-\method{nsamples}{numpy}(x)
+\method{nsamples}{marray}(x)
 
 \method{nsamples}{matrix}(x)
 }
 \arguments{
 \item{data}{A data structure, the number of samples is extracted.}
 
-\item{x}{A multidimensional data structure like array, tensor, numpy or matrix.}
+\item{x}{A multidimensional data structure like array, tensor, marray or matrix.}
 }
 \value{
 Number of samples.
@@ -41,9 +41,9 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{marray}()},
 \code{\link{nsubsequences}()},
 \code{\link{ntimesteps}()},
-\code{\link{numpy}()},
 \code{\link{nunits}()},
 \code{\link{probability}()},
 \code{\link{radian}()},
