@@ -49,6 +49,7 @@ Other Utils:
 \code{\link{ntimesteps}()},
 \code{\link{probability}()},
 \code{\link{radian}()},
+\code{\link{re.factor}()},
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},
 \code{\link{tensor}()},

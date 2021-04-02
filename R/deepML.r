@@ -25,7 +25,7 @@ cross_validation_split <- function(dataset, folds = 3L, shuffle = FALSE) {
 }
 
 #' @title Naive forecasting
-#' @description \code{naive_forecast} offers three naive forecast approaches: plain random walk and random walk with drifts.
+#' @description
 #'
 #' @family Machine Learning
 #'
@@ -201,7 +201,7 @@ k_nearest_neighbors.default <- function(x, y, query, k = 1L, ...) {
 #' @param laplace A value for Laplace smoothing to avoid zero probability problem, default \code{0} is equal to no smoothing.
 #' @param ... Optional arguments.
 #'
-#' @details The naive Bayes model is based on Bayes' theorem: \eqn{P(A|B) = P(B|A) * P(A) / P(B)}\cr
+#' @details The Naive Bayes model is based on Bayes' theorem: \eqn{P(A|B) = P(B|A) * P(A) / P(B)}\cr
 #'   Adopted to a classification problem, the equation is: \eqn{P(y=k|X) = P(X|y=k) * P(y=k) / P(X)}, whereby
 #'   \itemize{
 #'   \item \eqn{P(y=k|X)} is the conditional probability of \code{y=k} given a feature set \code{X}. This probability is also called posterior probability.
@@ -212,7 +212,7 @@ k_nearest_neighbors.default <- function(x, y, query, k = 1L, ...) {
 #'     The result without probability of evidence is no longer strictly a probability. The calculated largest value is used for class prediction.
 #'   }
 #'
-#' @return A list from class naivebayes with levels and prior probabilities of \code{y} and names and likelihood distribution parameters of \code{x} categorized by the levels of factor \code{y}.
+#' @return A list from class \code{naivebayes} with levels and prior probabilities of \code{y} and names and likelihood distribution parameters of \code{x} categorized by the levels of factor \code{y}.
 #'
 #' @examples
 #'   # Continuous features
@@ -319,7 +319,7 @@ naive_bayes.default <- function(x, y, laplace = 0, FUN, ...) {
 #' @export
 is.naivebayes <- function(object) { return(inherits(object, .deepANNClasses[["Naive Bayes"]])) }
 
-#' @title Prediction for naive Bayes
+#' @title Prediction for Naive Bayes
 #' @description
 #'
 #' @family Machine Learning
@@ -374,6 +374,229 @@ predict.naivebayes <- function(object, x, ...) {
   names(posterior) <- object$ylevels
   yposterior <- matrix(unlist(posterior), ncol = length(posterior), dimnames = list(NULL, object$ylevels))
   yposterior
+}
+
+#' @title Decision Tree
+#' @description
+#'
+#' @family Machine Learning
+#'
+#' @param object R object.
+#' @param formula A model \code{\link[stats]{formula}}.
+#' @param data A data frame, containing the variables in \code{formula}. Neither a matrix nor an array will be accepted.
+#' @param x A matrix or data frame with feature values.
+#' @param y A factor variable with categorical values for \code{x}.
+#' @param depth The maximum depth of the resulting tree. If this value, default \code{100}, is reached, the algorithm will stop.
+#' @param ... Optional arguments.
+#'
+#' @details A decision tree is a type of model that puts a certain feature from \code{x} onto a node, called split node, of the tree structure on the basis of
+#'   operations (e.g. gini impurity, information gain) and also uses a calculated value of the feature for each node for further separations into
+#'   left and right subnodes. At the end of the tree are the leaf nodes, each of which has a resulting level of \code{y}. \cr
+#'   \code{depth()} computes the depth of a tree.
+#'
+#' @return A list from class \code{decisiontree} with split nodes and leaf nodes.
+#'
+#' @examples
+#'   df <- data.frame(Outlook = factor(c("Sunny", "Sunny", "Overcast", "Rain", "Rain", "Rain", "Overcast", "Sunny", "Sunny", "Rain", "Sunny", "Overcast", "Overcast", "Rain")),
+#'                    Temperature = factor(c("Hot", "Hot", "Hot", "Mild", "Cool", "Cool", "Cool", "Mild", "Cool", "Mild", "Mild", "Mild", "Hot", "Mild")),
+#'                    Humidity = factor(c("High", "High", "High", "High", "Normal", "Normal", "Normal", "High", "Normal", "Normal", "Normal", "High", "Normal", "High")),
+#'                    Wind = factor(c("Weak", "Strong", "Weak", "Weak", "Weak", "Strong", "Strong", "Weak", "Weak", "Weak", "Strong", "Strong", "Weak", "Strong")),
+#'                    PlayTennis = factor(c("No", "No", "Yes", "Yes", "Yes", "No", "Yes", "No", "Yes", "Yes", "Yes", "Yes", "Yes", "No")))
+#'
+#'   x <- df[, -5L]
+#'   y <- df[[5L]]
+#'   tree <- decision_tree(as.formula(PlayTennis ~ .), data = df)
+#'   yhat <- predict(tree, x)
+#'   deepANN::accuracy(y, yhat)
+#'
+#' @export
+decision_tree <- function(object, ...) {
+  UseMethod("decision_tree")
+}
+
+#' @rdname decision_tree
+#' @export
+decision_tree.formula <- function(formula, data, depth = 100L, ...) {
+  mf <- stats::model.frame(formula = formula, data = data)
+  y <- unname(stats::model.response(mf))
+  x <- mf[-1L]
+  out <- decision_tree.default(x, y, depth, ...)
+  return(out)
+}
+
+#' @rdname decision_tree
+#' @export
+depth <- function(list) {
+  if (is.list(list) && length(list) == 0L) return(0L)
+  ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
+}
+
+.nodematrix <- function(x, y) {
+  col_class <- class(x)
+  if (any(col_class %in% .CategoricalClasses)) {
+    x <- deepANN::re.factor(x)
+    lvls <- levels(x)
+    occurences <- table(x)
+    total <- sum(occurences)
+    g <- lapply(lvls, function(lvl) {
+      gi1 <- deepANN::gini_impurity(y[x == lvl])
+      gi2 <- deepANN::gini_impurity(y[x != lvl])
+      impurity <- unname((occurences[lvl] / total * gi1) + (sum(occurences[-which(names(occurences) == lvl)]) / total * gi2))
+      gain <- unname(deepANN::gini_impurity(y) - impurity)
+      l <- list()
+      l[[1L]] <- which(lvls == lvl)
+      l[[2L]] <- impurity
+      l[[3L]] <- gain
+      l
+    })
+    m <- matrix(unlist(g), nrow = length(g), byrow = TRUE, dimnames = list(NULL, c("value", "impurity", "gain")))
+  } else {
+  if (any(col_class %in% .ContinuousClasses)) {
+    # The "levels" are the midpoints of the sorted continuous vector
+    total <- sum(x)
+    occurences <- unique(sort(x))
+    lvls <- ifelse(length(occurences) > 1L, head(filter(occurences, c(0.5, 0.5)), -1L), occurences[1L]) # midpoints of the values
+    g <- lapply(lvls, function(lvl) {
+      gi1 <- deepANN::gini_impurity(y[x >= lvl])
+      gi2 <- deepANN::gini_impurity(y[x < lvl])
+      impurity <- unname(sum(x[x >= lvl] / total * gi1, x[x < lvl] / total * gi2))
+      gain <- unname(deepANN::gini_impurity(y) - impurity)
+      l <- list()
+      l[[1L]] <- lvl
+      l[[2L]] <- impurity
+      l[[3L]] <- gain
+      l
+    })
+    m <- matrix(unlist(g), nrow = length(g), byrow = TRUE, dimnames = list(NULL, c("value", "impurity", "gain")))
+    #m[, 1L] <- unlist(lapply(lvls, function(lvl) { min(occurences[occurences >= lvl]) })) # use true values as split values
+  }}
+  m
+}
+
+.decision_tree <- function(x, y, tree, depth, ...) {
+  if ((NCOL(x) > 1L) && (length(unique(y)) > 1L) && (depth(tree) < depth)) { # identify split node
+    nodes <- lapply(x, function(column) {
+      .nodematrix(column, y)
+    })
+    columns <- cumsum(unlist(lapply(nodes, NROW))) # get cumulative sum of number of rows of each matrix per column
+    m <- do.call(rbind, nodes) # combine all matrices of the columns
+    idx <- which(m[, "gain"] == max(m[, "gain"]))[1L] # get index of the maximum gain
+    split_column <- names(which(columns == min(columns[columns >= idx]))) # get split column name
+    column <- x[[split_column]]
+    if (any(class(column) %in% .CategoricalClasses)) {
+      column <- deepANN::re.factor(column)
+      split_value <- levels(column)[m[idx, "value"]]
+    } else {
+      split_value <- m[idx, "value"]
+    }
+    tree[["x"]] <- split_column
+    tree[["value"]] <- unname(split_value)
+    tree[["impurity"]] <- unname(m[idx, "impurity"])
+    tree[["gain"]] <- unname(m[idx, "gain"])
+    if (any(class(column) %in% .CategoricalClasses)) {
+      xleft <- x[column == split_value, , drop = FALSE]
+      yleft <- y[column == split_value]
+      xright <- x[column != split_value, , drop = FALSE]
+      yright <- y[column != split_value]
+    } else {
+    if (any(class(column) %in% .ContinuousClasses)) {
+      xleft <- x[column >= split_value, , drop = FALSE]
+      yleft <- y[column >= split_value]
+      xright <- x[column < split_value, , drop = FALSE]
+      yright <- y[column < split_value]
+    }}
+    xleft[[split_column]] <- NULL
+    xright[[split_column]] <- NULL
+    tree[["left"]] <- .decision_tree(xleft, yleft, tree[["left"]], depth, ...)
+    tree[["right"]] <- .decision_tree(xright, yright, tree[["right"]], depth, ...)
+  } else { # implement leaf node
+    if (length(unique(y)) == 1L) { # there's only one level of y remaining
+      tree <- c(tree, list(y = levels(y)[which.max(table(y))]))
+    } else { # there's only one x remaining or the depth of the tree is reached
+      nodes <- lapply(x, function(column) {
+        .nodematrix(column, y)
+      })
+      columns <- cumsum(unlist(lapply(nodes, NROW))) # get cumulative sum of number of rows of each matrix per column
+      m <- do.call(rbind, nodes) # combine all matrices of the columns
+      idx <- which(m[, "gain"] == max(m[, "gain"]))[1L] # get index of the maximum gain
+      split_column <- names(which(columns == min(columns[columns >= idx]))) # get split column name
+      column <- x[[split_column]]
+      if (any(class(column) %in% .CategoricalClasses)) {
+        column <- deepANN::re.factor(column)
+        split_value <- levels(column)[m[idx, "value"]]
+      } else {
+        split_value <- m[idx, "value"]
+      }
+      tree[["x"]] <- split_column
+      tree[["value"]] <- unname(split_value)
+      tree[["impurity"]] <- unname(m[idx, "impurity"])
+      tree[["gain"]] <- unname(m[idx, "gain"])
+      if (any(class(column) %in% .CategoricalClasses)) {
+        yleft <- y[column == split_value]
+        yright <- y[column != split_value]
+      } else {
+      if (any(class(column) %in% .ContinuousClasses)) {
+        yleft <- y[column >= split_value]
+        yright <- y[column < split_value]
+      }}
+      tree[["left"]] <- list(y = levels(yleft)[which.max(table(yleft))])
+      tree[["right"]] <- list(y = levels(yright)[which.max(table(yright))])
+    }
+  }
+  tree
+}
+
+#' @rdname decision_tree
+#' @export
+decision_tree.default <- function(x, y, depth = 100L, ...) {
+  x <- as.data.frame(x)
+  y <- as.factor(y)
+  tree <- list()
+  tree[["xnames"]] <- names(x)
+  depth <- ifelse(depth < 1L, 1L, depth)
+  tree <- .decision_tree(x, y, tree, depth, ...)
+  tree <- structure(tree, class = c(class(tree), .deepANNClasses[["Decision Tree"]]))
+  return(tree)
+}
+
+#' @rdname decision_tree
+#' @export
+is.decisiontree <- function(object) { return(inherits(object, .deepANNClasses[["Decision Tree"]])) }
+
+#' @title Prediction for Decision Tree
+#' @description
+#'
+#' @family Machine Learning
+#'
+#' @param object R object.
+#' @param x A matrix or data frame with feature values.
+#' @param ... Optional arguments.
+#'
+#' @return A vector with levels of \code{y} as the results of classifying the samples of \code{x}.
+#'
+#' @export
+predict.decisiontree <- function(object, x, ...) {
+  if (!any(class(x) %in% c("matrix", "data.frame", "tbl_df", "tbl", "data.table")))
+    stop("x must be a two-dimensional data structure like matrix or data.frame", call. = FALSE)
+  x <- as.data.frame(x)
+  features <- names(x)[names(x) %in% object$xnames]
+  x <- x[features][object$xnames]
+  ypred <- unlist(lapply(seq_len(NROW(x)), function(i) {
+    features <- x[i, ]
+    tree <- object
+    while (length(tree) > 1L) {
+      feature <- features[, tree$x]
+      if (any(class(feature) %in% .CategoricalClasses)) {
+        value <- feature
+        if (tolower(value) == tolower(tree$value)) tree <- tree$left else tree <- tree$right
+      } else {
+      if (any(class(feature) %in% .ContinuousClasses)) {
+        value <- feature
+        if (value >= tree$value) tree <- tree$left else tree <- tree$right
+      }}
+    }
+    tree$y
+  }))
 }
 
 #' @title Prediction for kmeans

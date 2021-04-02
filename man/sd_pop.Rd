@@ -43,6 +43,7 @@ Other Utils:
 \code{\link{nunits}()},
 \code{\link{probability}()},
 \code{\link{radian}()},
+\code{\link{re.factor}()},
 \code{\link{similarity}()},
 \code{\link{tensor}()},
 \code{\link{var_pop}()},

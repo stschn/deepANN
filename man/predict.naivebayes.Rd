@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepML.r
 \name{predict.naivebayes}
 \alias{predict.naivebayes}
-\title{Prediction for naive Bayes}
+\title{Prediction for Naive Bayes}
 \usage{
 \method{predict}{naivebayes}(object, x, ...)
 }
@@ -22,10 +22,12 @@ Numeric values for classifying the features within \code{x} to the levels of \co
 \seealso{
 Other Machine Learning: 
 \code{\link{cross_validation_split}()},
+\code{\link{decision_tree}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{moving_average}()},
 \code{\link{naive_bayes}()},
 \code{\link{naive_forecast}()},
+\code{\link{predict.decisiontree}()},
 \code{\link{predict.kmeans}()}
 }
 \concept{Machine Learning}

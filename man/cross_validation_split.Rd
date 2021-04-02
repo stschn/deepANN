@@ -22,10 +22,12 @@ A named list with folds.
 }
 \seealso{
 Other Machine Learning: 
+\code{\link{decision_tree}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{moving_average}()},
 \code{\link{naive_bayes}()},
 \code{\link{naive_forecast}()},
+\code{\link{predict.decisiontree}()},
 \code{\link{predict.kmeans}()},
 \code{\link{predict.naivebayes}()}
 }

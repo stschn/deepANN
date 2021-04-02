@@ -18,7 +18,7 @@ If drift is more than 1 the mean value of the changes over time is used; default
 A series of naive predicted values based upon \code{x}.
 }
 \description{
-\code{naive_forecast} offers three naive forecast approaches: plain random walk and random walk with drifts.
+
 }
 \details{
 The following naive forecast approaches are implemented:
@@ -31,9 +31,11 @@ The following naive forecast approaches are implemented:
 \seealso{
 Other Machine Learning: 
 \code{\link{cross_validation_split}()},
+\code{\link{decision_tree}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{moving_average}()},
 \code{\link{naive_bayes}()},
+\code{\link{predict.decisiontree}()},
 \code{\link{predict.kmeans}()},
 \code{\link{predict.naivebayes}()}
 }

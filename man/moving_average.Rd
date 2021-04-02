@@ -27,9 +27,11 @@ A vector with the (weighted) moving average.
 \seealso{
 Other Machine Learning: 
 \code{\link{cross_validation_split}()},
+\code{\link{decision_tree}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{naive_bayes}()},
 \code{\link{naive_forecast}()},
+\code{\link{predict.decisiontree}()},
 \code{\link{predict.kmeans}()},
 \code{\link{predict.naivebayes}()}
 }

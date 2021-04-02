@@ -31,13 +31,13 @@ is.naivebayes(object)
 \item{laplace}{A value for Laplace smoothing to avoid zero probability problem, default \code{0} is equal to no smoothing.}
 }
 \value{
-A list from class naivebayes with levels and prior probabilities of \code{y} and names and likelihood distribution parameters of \code{x} categorized by the levels of factor \code{y}.
+A list from class \code{naivebayes} with levels and prior probabilities of \code{y} and names and likelihood distribution parameters of \code{x} categorized by the levels of factor \code{y}.
 }
 \description{
 
 }
 \details{
-The naive Bayes model is based on Bayes' theorem: \eqn{P(A|B) = P(B|A) * P(A) / P(B)}\cr
+The Naive Bayes model is based on Bayes' theorem: \eqn{P(A|B) = P(B|A) * P(A) / P(B)}\cr
   Adopted to a classification problem, the equation is: \eqn{P(y=k|X) = P(X|y=k) * P(y=k) / P(X)}, whereby
   \itemize{
   \item \eqn{P(y=k|X)} is the conditional probability of \code{y=k} given a feature set \code{X}. This probability is also called posterior probability.
@@ -91,9 +91,11 @@ The naive Bayes model is based on Bayes' theorem: \eqn{P(A|B) = P(B|A) * P(A) / 
 \seealso{
 Other Machine Learning: 
 \code{\link{cross_validation_split}()},
+\code{\link{decision_tree}()},
 \code{\link{k_nearest_neighbors}()},
 \code{\link{moving_average}()},
 \code{\link{naive_forecast}()},
+\code{\link{predict.decisiontree}()},
 \code{\link{predict.kmeans}()},
 \code{\link{predict.naivebayes}()}
 }

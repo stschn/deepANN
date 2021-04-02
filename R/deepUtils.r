@@ -1,3 +1,22 @@
+#' @title Renew a factor object
+#' @description
+#'
+#' @family Utils
+#'
+#' @param x A factor object.
+#'
+#' @return The renewed factor object \code{x}.
+#'
+#' @seealso \code{\link{factor}}.
+#' @export
+re.factor <- function(x) {
+  x <- as.factor(x)
+  oldlevels <- levels(x)
+  x <- as.factor(as.character(x))
+  levels(x) <- oldlevels[oldlevels %in% levels(x)]
+  x
+}
+
 #' @title Population variance
 #' @description
 #'

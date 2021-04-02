@@ -33,6 +33,7 @@ Other Utils:
 \code{\link{ntimesteps}()},
 \code{\link{nunits}()},
 \code{\link{probability}()},
+\code{\link{re.factor}()},
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},
 \code{\link{tensor}()},

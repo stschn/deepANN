@@ -31,7 +31,9 @@
     "Feedforward Network"          = "mlp",
     "Long Short-Term Memory"       = "lstm",
     "Convolutional Neural Network" = "cnn",
-    "Naive Bayes"                  = "naivebayes")
+    "Naive Bayes"                  = "naivebayes",
+    "Decision Tree"                = "decisiontree",
+    "Support Vector Machine"       = "supportvectormachine")
 
 .ProbabilityDistribution <-
   c("Categorical" = "categorical",
