@@ -391,8 +391,9 @@ predict.naivebayes <- function(object, x, ...) {
 #'
 #' @details A decision tree is a type of model that puts a certain feature from \code{x} onto a node, called split node, of the tree structure on the basis of
 #'   operations (e.g. gini impurity, information gain) and also uses a calculated value of the feature for each node for further separations into
-#'   left and right subnodes. At the end of the tree are the leaf nodes, each of which has a resulting level of \code{y}. \cr
-#'   \code{depth()} computes the depth of a tree.
+#'   left and right subnodes. At the end of the tree are the leaf nodes, each of which has a resulting level of \code{y}.\cr
+#'   \code{treeheight()} computes the height of a tree. The height of a tree is the number of nodes from the starting node on the path to its deepest leaf node.\cr
+#'   \code{treedepth()} computes the depth of a tree. The depth of a tree is the number of edges or arcs from the starting node on the path to its deepest leaf node.\cr
 #'
 #' @return A list from class \code{decisiontree} with split nodes and leaf nodes.
 #'
@@ -405,9 +406,13 @@ predict.naivebayes <- function(object, x, ...) {
 #'
 #'   x <- df[, -5L]
 #'   y <- df[[5L]]
+#'   # Build up decision tree
 #'   tree <- decision_tree(as.formula(PlayTennis ~ .), data = df)
+#'   # Compute height and depth of the tree
+#'   treeheigt(tree); treedepth(tree)
+#'   # Predict labels of the features
 #'   yhat <- predict(tree, x)
-#'   deepANN::accuracy(y, yhat)
+#'   accuracy(y, yhat)
 #'
 #' @export
 decision_tree <- function(object, ...) {
@@ -426,9 +431,15 @@ decision_tree.formula <- function(formula, data, maxdepth = 100L, ...) {
 
 #' @rdname decision_tree
 #' @export
-depth <- function(list) {
-  if (is.list(list) && length(list) == 0L) return(0L)
-  ifelse(is.list(list), 1L + max(sapply(list, depth)), 0L)
+treeheight <- function(node) {
+  if (is.list(node) && length(node) == 0L) return(0L)
+  ifelse(is.list(node), 1L + max(sapply(node, depth)), 0L)
+}
+
+#' @rdname decision_tree
+#' @export
+treedepth <- function(node) {
+  ifelse((d <- treeheight(node) - 1L) < 0L, 0L, d)
 }
 
 .nodematrix <- function(x, y) {
@@ -473,8 +484,8 @@ depth <- function(list) {
   m
 }
 
-.decision_tree <- function(x, y, tree, maxdepth, ...) {
-  if ((NCOL(x) > 1L) && (length(unique(y)) > 1L) && (depth(tree) < maxdepth)) { # identify split node
+.decision_tree <- function(x, y, tree, depth, ...) {
+  if ((NCOL(x) > 1L) && (length(unique(y)) > 1L) && (depth > 1L)) { # identify split node
     nodes <- lapply(x, function(column) {
       .nodematrix(column, y)
     })
@@ -507,8 +518,8 @@ depth <- function(list) {
     }}
     xleft[[split_column]] <- NULL
     xright[[split_column]] <- NULL
-    tree[["left"]] <- .decision_tree(xleft, yleft, tree[["left"]], maxdepth, ...)
-    tree[["right"]] <- .decision_tree(xright, yright, tree[["right"]], maxdepth, ...)
+    tree[["left"]] <- .decision_tree(xleft, yleft, tree[["left"]], depth - 1L, ...)
+    tree[["right"]] <- .decision_tree(xright, yright, tree[["right"]], depth - 1L, ...)
   } else { # implement leaf node
     if (length(unique(y)) == 1L) { # there's only one level of y remaining
       tree <- c(tree, list(y = levels(y)[which.max(table(y))]))

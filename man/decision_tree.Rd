@@ -3,7 +3,8 @@
 \name{decision_tree}
 \alias{decision_tree}
 \alias{decision_tree.formula}
-\alias{depth}
+\alias{treeheight}
+\alias{treedepth}
 \alias{decision_tree.default}
 \alias{is.decisiontree}
 \title{Decision Tree}
@@ -12,7 +13,9 @@ decision_tree(object, ...)
 
 \method{decision_tree}{formula}(formula, data, maxdepth = 100L, ...)
 
-depth(list)
+treeheight(node)
+
+treedepth(node)
 
 \method{decision_tree}{default}(x, y, maxdepth = 100L, ...)
 
@@ -42,8 +45,9 @@ A list from class \code{decisiontree} with split nodes and leaf nodes.
 \details{
 A decision tree is a type of model that puts a certain feature from \code{x} onto a node, called split node, of the tree structure on the basis of
   operations (e.g. gini impurity, information gain) and also uses a calculated value of the feature for each node for further separations into
-  left and right subnodes. At the end of the tree are the leaf nodes, each of which has a resulting level of \code{y}. \cr
-  \code{depth()} computes the depth of a tree.
+  left and right subnodes. At the end of the tree are the leaf nodes, each of which has a resulting level of \code{y}.\cr
+  \code{treeheight()} computes the height of a tree. The height of a tree is the number of nodes from the starting node on the path to its deepest leaf node.\cr
+  \code{treedepth()} computes the depth of a tree. The depth of a tree is the number of edges or arcs from the starting node on the path to its deepest leaf node.\cr
 }
 \examples{
   df <- data.frame(Outlook = factor(c("Sunny", "Sunny", "Overcast", "Rain", "Rain", "Rain", "Overcast", "Sunny", "Sunny", "Rain", "Sunny", "Overcast", "Overcast", "Rain")),
@@ -54,9 +58,13 @@ A decision tree is a type of model that puts a certain feature from \code{x} ont
 
   x <- df[, -5L]
   y <- df[[5L]]
+  # Build up decision tree
   tree <- decision_tree(as.formula(PlayTennis ~ .), data = df)
+  # Compute height and depth of the tree
+  treeheigt(tree); treedepth(tree)
+  # Predict labels of the features
   yhat <- predict(tree, x)
-  deepANN::accuracy(y, yhat)
+  accuracy(y, yhat)
 
 }
 \seealso{

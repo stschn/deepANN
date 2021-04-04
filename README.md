@@ -104,7 +104,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>k_nearest_neighbors()</code> identifies the categorical or continuous response and probability distributions of k nearest neighbors where appropriate of a query instance.</li>
   <li><code>moving_average()</code> calculates the (weighted) moving average.</li>
   <li><code>naive_bayes()</code> and <code>predict.naivebayes()</code> computes and predicts numeric values for classification solutions based on Bayes' theorem.</li>
-  <li><code>decision_tree()</code> and <code>predict.decisiontree()</code> builds up a decision tree and predicts categorical values for classification solutions. <code>depth()</code> computes the depth of a tree.</li>
+  <li><code>decision_tree()</code> and <code>predict.decisiontree()</code> builds up a decision tree and predicts categorical values for classification solutions. <code>treeheight()</code> computes the height of a tree, <code>treedepth()</code> the depth of a tree.</li>
   <li><code>predict.kmeans()</code> predicts kmeans cluster for feature data.</li>
 </ul>
 
