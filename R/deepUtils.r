@@ -315,6 +315,31 @@ vector_as_numeric <- function(x) {
   return(x)
 }
 
+#' @title Recursively transform all objects within a list to numeric values
+#' @description
+#'
+#' @family Utils
+#'
+#' @param l A list object.
+#'
+#' @return The list \code{l} with only numeric values.
+#' @export
+list_as_numeric <- function(l) {
+  lapply(l, function(element) {
+    if (any(class(element) %in% c("matrix"))) {
+      if (!is.numeric(element)) apply(element, 2L, vector_as_numeric)
+    } else {
+    if (any(class(element) %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
+      data.matrix(element)
+    } else {
+    if (!is.list(element)) {
+      vector_as_numeric(element)
+    } else {
+      list_as_numeric(element)
+    }}}
+  })
+}
+
 #' @title Convert data into an ANN compatible matrix with only numbers
 #' @description
 #'
@@ -501,24 +526,25 @@ as.marray <- function(data, ...) {
 
 #' @rdname marray
 #' @export
-as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = TRUE, reverse = FALSE) {
+as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE, reverse = FALSE) {
   dataclass <- class(data)
-  if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
-    if (numeric) data <- vector_as_numeric(data)
-  } else {
-  if ((any(dataclass %in% c("array"))) && (length(dim(data)) == 1L)) {
-    if (numeric) data <- as.array(vector_as_numeric(data))
-  } else {
-  if (any(dataclass %in% c("matrix"))) {
-    if ((!is.numeric(data)) && (numeric)) { data <- apply(data, 2L, vector_as_numeric) }
-  } else {
-  if (any(dataclass %in% c("list", "data.frame", "tbl_df", "tbl", "data.table"))) {
-    if (!numeric) {
-      data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), names(data)))
+  if (numeric) {
+    if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+      data <- vector_as_numeric(data)
     } else {
-      data <- matrix(unlist(lapply(data, vector_as_numeric)), ncol = length(data), dimnames = list(rownames(data), names(data)))
-    }
-  }}}}
+    if ((any(dataclass %in% c("array"))) && (length(dim(data)) == 1L)) {
+      data <- as.array(vector_as_numeric(data))
+    } else {
+    if (any(dataclass %in% c("matrix"))) {
+      if (!is.numeric(data)) { data <- apply(data, 2L, vector_as_numeric) }
+    } else {
+    if (any(dataclass %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
+      data <- data.matrix(data)
+    } else {
+    if (any(dataclass %in% c("list"))) {
+      data <- list_as_numeric(data)
+    }}}}}
+  }
   # x <- array(data)
   # order <- match.arg(order)
   # byrow = ifelse(order == "C", TRUE, FALSE)

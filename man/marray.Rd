@@ -16,7 +16,7 @@ as.marray(data, ...)
   dim = NULL,
   dimnames = NULL,
   order = c("C", "F"),
-  numeric = TRUE,
+  numeric = FALSE,
   reverse = FALSE
 )
 
@@ -93,6 +93,7 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{list_as_numeric}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
 \code{\link{ntimesteps}()},

@@ -82,7 +82,8 @@ This R library is currently structured in form of the following functional famil
   <li><code>distance()</code> calculates the distance between two numeric vectors.</li>
   <li><code>similarity()</code> calculates the similarity between two numeric or logical vectors.</li>
   <li><code>probability()</code> computes the probability of a categorical or continuous variable.</li>
-  <li><code>vector_as._numeric()</code> converts a vector into a vector with numeric values.</li>
+  <li><code>vector_as_numeric()</code> converts a vector into a vector with numeric values.</li>
+  <li><code>list_as_numeric()</code> recursively transforms the objects of a list into numeric values.</li>
   <li><code>as_ANN_matrix()</code> converts a data set into a matrix with adjusted character values and factor levels to their numeric indices if necessary.</li>
   <li><code>vector_as_ANN_matrix()</code> transforms a vector into a ANN compatible matrix.</li>
   <li><code>flatten</code> flattens data into a one-dimensional array.</li>

@@ -60,6 +60,7 @@ Other Utils:
 \code{\link{as_tensor_3D}()},
 \code{\link{degree}()},
 \code{\link{flatten}()},
+\code{\link{list_as_numeric}()},
 \code{\link{marray}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
