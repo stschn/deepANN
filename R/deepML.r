@@ -450,10 +450,15 @@ treedepth <- function(node) {
     occurences <- table(x)
     total <- sum(occurences)
     g <- lapply(lvls, function(lvl) {
-      gi1 <- deepANN::gini_impurity(y[x == lvl])
-      gi2 <- deepANN::gini_impurity(y[x != lvl])
-      impurity <- unname((occurences[lvl] / total * gi1) + (sum(occurences[-which(names(occurences) == lvl)]) / total * gi2))
-      gain <- unname(deepANN::gini_impurity(y) - impurity)
+      if (((l1 <- length((y1 <- y[x == lvl]))) > 0L) && ((l2 <- length((y2 <- y[x != lvl]))) > 0L)) {
+        gi1 <- deepANN::gini_impurity(y1)
+        gi2 <- deepANN::gini_impurity(y2)
+        impurity <- unname((occurences[lvl] / total * gi1) + (sum(occurences[-which(names(occurences) == lvl)]) / total * gi2))
+        gain <- unname(deepANN::gini_impurity(y) - impurity)
+      } else {
+        impurity <- ifelse(l1 == 0L, 1L, 0L)
+        gain <- ifelse(l1 == 0L, 0L, 1L)
+      }
       l <- list()
       l[[1L]] <- which(lvls == lvl)
       l[[2L]] <- impurity
@@ -469,10 +474,15 @@ treedepth <- function(node) {
     lvls <- ifelse(length(occurences) > 1L, head(stats::filter(occurences, c(0.5, 0.5)), -1L), occurences[1L])
     # lvls <- unlist(lapply(seq_len(NROW(occurences) - 1L), function(i) { mean(occurences[i:(i+1L)]) }))
     g <- lapply(lvls, function(lvl) {
-      gi1 <- deepANN::gini_impurity(y[x >= lvl])
-      gi2 <- deepANN::gini_impurity(y[x < lvl])
-      impurity <- unname(sum(x[x >= lvl] / total * gi1, x[x < lvl] / total * gi2))
-      gain <- unname(deepANN::gini_impurity(y) - impurity)
+      if (((l1 <- length((y1 <- y[x >= lvl]))) > 0L) && ((l2 <- length((y2 <- y[x < lvl]))) > 0L)) {
+        gi1 <- deepANN::gini_impurity(y[x >= lvl])
+        gi2 <- deepANN::gini_impurity(y[x < lvl])
+        impurity <- unname(sum(x[x >= lvl] / total * gi1, x[x < lvl] / total * gi2))
+        gain <- unname(deepANN::gini_impurity(y) - impurity)
+      } else {
+        impurity <- ifelse(l1 == 0L, 1L, 0L)
+        gain <- ifelse(l1 == 0L, 0L, 1L)
+      }
       l <- list()
       l[[1L]] <- lvl
       l[[2L]] <- impurity
@@ -486,7 +496,7 @@ treedepth <- function(node) {
 }
 
 .decision_tree <- function(x, y, tree, depth, ...) {
-  if ((NCOL(x) > 1L) && (length(unique(y)) > 1L) && (depth > 1L)) { # identify split node
+  if ((NCOL(x) > 1L) && (NROW(x) > 0L) && (length(unique(y)) > 1L) && (depth > 1L)) { # identify split node
     nodes <- lapply(x, function(column) {
       .nodematrix(column, y)
     })
@@ -525,6 +535,7 @@ treedepth <- function(node) {
     if (length(unique(y)) == 1L) { # there's only one level of y remaining
       tree <- c(tree, list(y = levels(y)[which.max(table(y))]))
     } else { # there's only one x remaining or the depth of the tree is reached
+    if (NROW(x) > 0L) {
       nodes <- lapply(x, function(column) {
         .nodematrix(column, y)
       })
@@ -553,7 +564,7 @@ treedepth <- function(node) {
       }}
       tree[["left"]] <- list(y = levels(yleft)[which.max(table(yleft))])
       tree[["right"]] <- list(y = levels(yright)[which.max(table(yright))])
-    }
+    }}
   }
   tree
 }
