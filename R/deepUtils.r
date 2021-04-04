@@ -843,7 +843,7 @@ nsubsequences.marray <- function(x, default = 0L) { nsubsequences.array(x, defau
 #'
 #' @export
 as_tensor_1D <- function(data, reverse = FALSE) {
-  as.tensor.default(flatten(data, order = "F"), order = "F", reverse = reverse)
+  as.tensor.default(deepANN::flatten(data, order = "F"), order = "F", reverse = reverse)
 }
 
 #' @title Transform data into a tensor with two ranks or dimensions.
