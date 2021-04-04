@@ -10,11 +10,11 @@
 \usage{
 decision_tree(object, ...)
 
-\method{decision_tree}{formula}(formula, data, depth = 100L, ...)
+\method{decision_tree}{formula}(formula, data, maxdepth = 100L, ...)
 
 depth(list)
 
-\method{decision_tree}{default}(x, y, depth = 100L, ...)
+\method{decision_tree}{default}(x, y, maxdepth = 100L, ...)
 
 is.decisiontree(object)
 }
@@ -27,7 +27,7 @@ is.decisiontree(object)
 
 \item{data}{A data frame, containing the variables in \code{formula}. Neither a matrix nor an array will be accepted.}
 
-\item{depth}{The maximum depth of the resulting tree. If this value, default \code{100}, is reached, the algorithm will stop.}
+\item{maxdepth}{The maximum depth of the resulting tree. If this value, default \code{100}, is reached, the algorithm will stop.}
 
 \item{x}{A matrix or data frame with feature values.}
 

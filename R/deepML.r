@@ -386,7 +386,7 @@ predict.naivebayes <- function(object, x, ...) {
 #' @param data A data frame, containing the variables in \code{formula}. Neither a matrix nor an array will be accepted.
 #' @param x A matrix or data frame with feature values.
 #' @param y A factor variable with categorical values for \code{x}.
-#' @param depth The maximum depth of the resulting tree. If this value, default \code{100}, is reached, the algorithm will stop.
+#' @param maxdepth The maximum depth of the resulting tree. If this value, default \code{100}, is reached, the algorithm will stop.
 #' @param ... Optional arguments.
 #'
 #' @details A decision tree is a type of model that puts a certain feature from \code{x} onto a node, called split node, of the tree structure on the basis of
@@ -416,11 +416,11 @@ decision_tree <- function(object, ...) {
 
 #' @rdname decision_tree
 #' @export
-decision_tree.formula <- function(formula, data, depth = 100L, ...) {
+decision_tree.formula <- function(formula, data, maxdepth = 100L, ...) {
   mf <- stats::model.frame(formula = formula, data = data)
   y <- unname(stats::model.response(mf))
   x <- mf[-1L]
-  out <- decision_tree.default(x, y, depth, ...)
+  out <- decision_tree.default(x, y, maxdepth, ...)
   return(out)
 }
 
@@ -473,8 +473,8 @@ depth <- function(list) {
   m
 }
 
-.decision_tree <- function(x, y, tree, depth, ...) {
-  if ((NCOL(x) > 1L) && (length(unique(y)) > 1L) && (depth(tree) < depth)) { # identify split node
+.decision_tree <- function(x, y, tree, maxdepth, ...) {
+  if ((NCOL(x) > 1L) && (length(unique(y)) > 1L) && (depth(tree) < maxdepth)) { # identify split node
     nodes <- lapply(x, function(column) {
       .nodematrix(column, y)
     })
@@ -507,8 +507,8 @@ depth <- function(list) {
     }}
     xleft[[split_column]] <- NULL
     xright[[split_column]] <- NULL
-    tree[["left"]] <- .decision_tree(xleft, yleft, tree[["left"]], depth, ...)
-    tree[["right"]] <- .decision_tree(xright, yright, tree[["right"]], depth, ...)
+    tree[["left"]] <- .decision_tree(xleft, yleft, tree[["left"]], maxdepth, ...)
+    tree[["right"]] <- .decision_tree(xright, yright, tree[["right"]], maxdepth, ...)
   } else { # implement leaf node
     if (length(unique(y)) == 1L) { # there's only one level of y remaining
       tree <- c(tree, list(y = levels(y)[which.max(table(y))]))
@@ -548,13 +548,13 @@ depth <- function(list) {
 
 #' @rdname decision_tree
 #' @export
-decision_tree.default <- function(x, y, depth = 100L, ...) {
+decision_tree.default <- function(x, y, maxdepth = 100L, ...) {
   x <- as.data.frame(x)
   y <- as.factor(y)
   tree <- list()
   tree[["xnames"]] <- names(x)
-  depth <- ifelse(depth < 1L, 1L, depth)
-  tree <- .decision_tree(x, y, tree, depth, ...)
+  maxdepth <- ifelse(maxdepth < 1L, 1L, maxdepth)
+  tree <- .decision_tree(x, y, tree, maxdepth, ...)
   tree <- structure(tree, class = c(class(tree), .deepANNClasses[["Decision Tree"]]))
   return(tree)
 }
