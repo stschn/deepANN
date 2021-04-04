@@ -409,7 +409,7 @@ predict.naivebayes <- function(object, x, ...) {
 #'   # Build up decision tree
 #'   tree <- decision_tree(as.formula(PlayTennis ~ .), data = df)
 #'   # Compute height and depth of the tree
-#'   treeheigt(tree); treedepth(tree)
+#'   treeheight(tree); treedepth(tree)
 #'   # Predict labels of the features
 #'   yhat <- predict(tree, x)
 #'   accuracy(y, yhat)
@@ -433,7 +433,7 @@ decision_tree.formula <- function(formula, data, maxdepth = 100L, ...) {
 #' @export
 treeheight <- function(node) {
   if (is.list(node) && length(node) == 0L) return(0L)
-  ifelse(is.list(node), 1L + max(sapply(node, depth)), 0L)
+  ifelse(is.list(node), 1L + max(sapply(node, treeheight)), 0L)
 }
 
 #' @rdname decision_tree

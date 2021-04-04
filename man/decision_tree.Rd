@@ -61,7 +61,7 @@ A decision tree is a type of model that puts a certain feature from \code{x} ont
   # Build up decision tree
   tree <- decision_tree(as.formula(PlayTennis ~ .), data = df)
   # Compute height and depth of the tree
-  treeheigt(tree); treedepth(tree)
+  treeheight(tree); treedepth(tree)
   # Predict labels of the features
   yhat <- predict(tree, x)
   accuracy(y, yhat)
