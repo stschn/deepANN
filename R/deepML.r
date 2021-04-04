@@ -466,7 +466,8 @@ treedepth <- function(node) {
     # The "levels" are the midpoints of the sorted continuous vector
     total <- sum(x)
     occurences <- unique(sort(x))
-    lvls <- ifelse(length(occurences) > 1L, head(filter(occurences, c(0.5, 0.5)), -1L), occurences[1L]) # midpoints of the values
+    lvls <- ifelse(length(occurences) > 1L, head(stats::filter(occurences, c(0.5, 0.5)), -1L), occurences[1L])
+    # lvls <- unlist(lapply(seq_len(NROW(occurences) - 1L), function(i) { mean(occurences[i:(i+1L)]) }))
     g <- lapply(lvls, function(lvl) {
       gi1 <- deepANN::gini_impurity(y[x >= lvl])
       gi2 <- deepANN::gini_impurity(y[x < lvl])
