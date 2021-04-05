@@ -496,7 +496,7 @@ treedepth <- function(node) {
 }
 
 .decision_tree <- function(x, y, tree, depth, ...) {
-  if ((NCOL(x) > 1L) && (NROW(x) > 0L) && (length(unique(y)) > 1L) && (depth > 1L)) { # identify split node
+  if ((NCOL(x) > 1L) && (length(unique(y)) > 1L) && (depth > 1L)) { # identify split node
     nodes <- lapply(x, function(column) {
       .nodematrix(column, y)
     })
@@ -529,13 +529,12 @@ treedepth <- function(node) {
     }}
     xleft[[split_column]] <- NULL
     xright[[split_column]] <- NULL
-    tree[["left"]] <- .decision_tree(xleft, yleft, tree[["left"]], depth - 1L, ...)
-    tree[["right"]] <- .decision_tree(xright, yright, tree[["right"]], depth - 1L, ...)
+    if (NROW(xleft) > 0L) tree[["left"]] <- .decision_tree(xleft, yleft, tree[["left"]], depth - 1L, ...)
+    if (NROW(xright) > 0L) tree[["right"]] <- .decision_tree(xright, yright, tree[["right"]], depth - 1L, ...)
   } else { # implement leaf node
     if (length(unique(y)) == 1L) { # there's only one level of y remaining
       tree <- c(tree, list(y = levels(y)[which.max(table(y))]))
     } else { # there's only one x remaining or the depth of the tree is reached
-    if (NROW(x) > 0L) {
       nodes <- lapply(x, function(column) {
         .nodematrix(column, y)
       })
@@ -564,7 +563,7 @@ treedepth <- function(node) {
       }}
       tree[["left"]] <- list(y = levels(yleft)[which.max(table(yleft))])
       tree[["right"]] <- list(y = levels(yright)[which.max(table(yright))])
-    }}
+    }
   }
   tree
 }

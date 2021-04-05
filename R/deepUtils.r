@@ -544,6 +544,9 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
     if (any(dataclass %in% c("list"))) {
       data <- list_as_numeric(data)
     }}}}}
+  } else {
+    if (any(dataclass %in% c("data.frame", "tbl_df", "tbl", "data.table")))
+      if (is.null(dim)) dim <- length(data)
   }
   # x <- array(data)
   # order <- match.arg(order)
