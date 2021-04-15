@@ -5,18 +5,17 @@
 #'
 #' @param x A numeric vector.
 #' @param type The type of outlier definition and detection.
-#'   \code{quartiles} refers to the method of Tukey (1977); Outliers are defined as elements more than 1.5 interquartile ranges above the upper quartile (75 percent) or below the lower quartile (25 percent). This method is useful when \code{x} is not normally distributed.
-#'   \code{mean} denotes maximum likelihood estimation; Outliers are defined as elements more than three standard deviations from the mean. This method is faster but less robust than \code{median}.
-#'   \code{median} denotes scaled median absolute deviation. Outliers are defined as elements more than three scaled MAD from the median; the scaled MAD is defined as c median(abs(x - median(x))), where c = -1/(sqrt(2) * erfcinv(3/2)).
 #' @param fill A value that is used to replace outliers; \code{NULL} (default) indicates no replacement.
-#' @param ... Dependent on \code{type}.
-#'   For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
-#'   For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{2}.
-#'   For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.
+#' @param ... Further arguments.
 #'
-#' @return Dependent on \code{fill}
-#'   By default (\code{NULL}), a named list of lower and upper boundaries and values.
-#'   Otherwise, the vector \code{x} with replaced outliers.
+#' @details The following types of outlier detection are implemented:
+#' \itemize{
+#' \item iqr: refers to the method of Tukey (1977); Outliers are defined as elements more than 1.5 interquartile ranges above the upper quartile (75 percent) or below the lower quartile (25 percent). This method is useful when \code{x} is not normally distributed. The parameter \code{k} can be specified as a further argument, default \code{1.5}.
+#' \item mean: denotes maximum likelihood estimation; Outliers are defined as elements more than three standard deviations from the mean. This method is faster but less robust than \code{median}. The parameter \code{k} can be specified as a further argument, default \code{2}.
+#' \item median: denotes scaled median absolute deviation. Outliers are defined as elements more than three scaled MAD from the median; the scaled MAD is defined as c median(abs(x - median(x))), where c = -1/(sqrt(2) * erfcinv(3/2)). The parameter \code{k} can be specified as a further argument, default \code{3}.
+#' }
+#'
+#' @return Dependent on \code{fill}, a named list of lower and upper boundaries and values (default), otherwise, the vector \code{x} with replaced outliers.
 #'
 #' @references
 #'   Tukey, John W. (1977): Exploratory Data Analysis. 1977. Reading: Addison-Wesley.
@@ -27,28 +26,27 @@
 #'   x <- c(57L, 59L, 60L, 100L, 59L, 58L, 57L, 58L, 300L, 61L, 62L, 60L, 62L, 58L, 57L, -12L)
 #'   outlier(x, type = "median")
 #' @export
-outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...) {
+outlier <- function(x, type = c("iqr", "mean", "median"), fill = NULL, ...) {
   type <- match.arg(type)
   params <- list(...)
   x <- c(t(x))
-  if (type == "quartiles") {
+  if (type == "iqr") {
     k <- ifelse(length(params) == 0, 1.5, params[[1L]])
-    q1 <- quantile(x, probs = 0.25, na.rm = T)
-    q3 <- quantile(x, probs = 0.75, na.rm = T)
-    lower_boundary <- q1 - (k * IQR(x))
-    upper_boundary <- q3 + (k * IQR(x))
+    xq <- stats::quantile(x, probs = c(0.25, 0.75), na.rm = TRUE) # iq_range <- xq[[2L]] - xq[[1L]]
+    lower_boundary <- xq[[1L]] - (k * stats::IQR(x))
+    upper_boundary <- xq[[2L]] + (k * stats::IQR(x))
   } else {
   if (type == "mean") {
     k <- ifelse(length(params) == 0, 2L, params[[1L]])
-    m <- mean(x, na.rm = T)
-    s <- sd(x, na.rm = T)
+    m <- mean(x, na.rm = TRUE)
+    s <- stats::sd(x, na.rm = TRUE)
     lower_boundary <- m - (k * s)
     upper_boundary <- m + (k * s)
   } else {
   if (type == "median") {
     k <- ifelse(length(params) == 0, 3L, params[[1L]])
-    m <- median(x, na.rm = T)
-    mad <- median(abs(x - m)) # median absolute deviation
+    m <- stats::median(x, na.rm = TRUE)
+    mad <- stats::median(abs(x - m)) # median absolute deviation
     s <- -1L / (sqrt(2L) * deepANN::erfcinv((3L / 2L))) # scaling factor
     smad <- s * mad # scaled mad
     lower_boundary <- m - (k * smad)
@@ -81,11 +79,11 @@ outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...
 #' @param dataset A data set, usually a data frame.
 #' @param columns The names or indices of the columns whose outlier values are to be replaced; if \code{NULL} (default), all corresponding columns are examined.
 #' @param type The type of outlier definition and detection.
-#'   \code{quartiles} refers to the method of Tukey (1977).
+#'   \code{iqr} refers to the method of Tukey (1977).
 #'   \code{mean} denotes maximum likelihood estimation.
 #'   \code{median} denotes scaled median absolute deviation.
 #' @param ... Dependent on \code{type}.
-#'   For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
+#'   For \code{iqr} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
 #'   For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{3}.
 #'   For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.
 #'
@@ -95,7 +93,7 @@ outlier <- function(x, type = c("quartiles", "mean", "median"), fill = NULL, ...
 #' @seealso \code{\link{outlier}}.
 #'
 #' @export
-outlier_dataset <- function(dataset, columns = NULL, type = c("quartiles", "mean", "median"), ...) {
+outlier_dataset <- function(dataset, columns = NULL, type = c("iqr", "mean", "median"), ...) {
   if (!is.null(columns)) {
     cnames <- names(dataset)
     if (!is.character(columns)) {
@@ -138,9 +136,9 @@ outlier_dataset <- function(dataset, columns = NULL, type = c("quartiles", "mean
 #' @export
 winsorize <- function(x, minx = NULL, maxx = NULL, probs = c(0.05, 0.95), na.rm = FALSE, type = 7) {
   if (is.null(minx) || is.null(maxx)) {
-    xq <- quantile(x = x, probs = probs, na.rm = na.rm, type = type)
-    if (is.null(minx)) minx <- xq[1L]
-    if (is.null(maxx)) maxx <- xq[2L]
+    xq <- stats::quantile(x = x, probs = probs, na.rm = na.rm, type = type)
+    if (is.null(minx)) minx <- xq[[1L]]
+    if (is.null(maxx)) maxx <- xq[[2L]]
   }
   x[x < minx] <- minx
   x[x > maxx] <- maxx

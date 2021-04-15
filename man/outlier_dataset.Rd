@@ -7,7 +7,7 @@
 outlier_dataset(
   dataset,
   columns = NULL,
-  type = c("quartiles", "mean", "median"),
+  type = c("iqr", "mean", "median"),
   ...
 )
 }
@@ -17,12 +17,12 @@ outlier_dataset(
 \item{columns}{The names or indices of the columns whose outlier values are to be replaced; if \code{NULL} (default), all corresponding columns are examined.}
 
 \item{type}{The type of outlier definition and detection.
-\code{quartiles} refers to the method of Tukey (1977).
+\code{iqr} refers to the method of Tukey (1977).
 \code{mean} denotes maximum likelihood estimation.
 \code{median} denotes scaled median absolute deviation.}
 
 \item{...}{Dependent on \code{type}.
-For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
+For \code{iqr} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
 For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{3}.
 For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.}
 }

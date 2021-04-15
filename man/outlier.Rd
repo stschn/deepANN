@@ -4,30 +4,30 @@
 \alias{outlier}
 \title{Definition and detection of outliers}
 \usage{
-outlier(x, type = c("quartiles", "mean", "median"), fill = NULL, ...)
+outlier(x, type = c("iqr", "mean", "median"), fill = NULL, ...)
 }
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{type}{The type of outlier definition and detection.
-\code{quartiles} refers to the method of Tukey (1977); Outliers are defined as elements more than 1.5 interquartile ranges above the upper quartile (75 percent) or below the lower quartile (25 percent). This method is useful when \code{x} is not normally distributed.
-\code{mean} denotes maximum likelihood estimation; Outliers are defined as elements more than three standard deviations from the mean. This method is faster but less robust than \code{median}.
-\code{median} denotes scaled median absolute deviation. Outliers are defined as elements more than three scaled MAD from the median; the scaled MAD is defined as c median(abs(x - median(x))), where c = -1/(sqrt(2) * erfcinv(3/2)).}
+\item{type}{The type of outlier definition and detection.}
 
 \item{fill}{A value that is used to replace outliers; \code{NULL} (default) indicates no replacement.}
 
-\item{...}{Dependent on \code{type}.
-For \code{quartiles} the constant \code{k} can be specified, otherwise it's value is \code{1.5}.
-For \code{mean} the constant \code{k} can be specified, otherwise it's value is \code{2}.
-For \code{median} the constant \code{k} can be specified, otherwise it's value is \code{3}.}
+\item{...}{Further arguments.}
 }
 \value{
-Dependent on \code{fill}
-  By default (\code{NULL}), a named list of lower and upper boundaries and values.
-  Otherwise, the vector \code{x} with replaced outliers.
+Dependent on \code{fill}, a named list of lower and upper boundaries and values (default), otherwise, the vector \code{x} with replaced outliers.
 }
 \description{
 
+}
+\details{
+The following types of outlier detection are implemented:
+\itemize{
+\item iqr: refers to the method of Tukey (1977); Outliers are defined as elements more than 1.5 interquartile ranges above the upper quartile (75 percent) or below the lower quartile (25 percent). This method is useful when \code{x} is not normally distributed. The parameter \code{k} can be specified as a further argument, default \code{1.5}.
+\item mean: denotes maximum likelihood estimation; Outliers are defined as elements more than three standard deviations from the mean. This method is faster but less robust than \code{median}. The parameter \code{k} can be specified as a further argument, default \code{2}.
+\item median: denotes scaled median absolute deviation. Outliers are defined as elements more than three scaled MAD from the median; the scaled MAD is defined as c median(abs(x - median(x))), where c = -1/(sqrt(2) * erfcinv(3/2)). The parameter \code{k} can be specified as a further argument, default \code{3}.
+}
 }
 \examples{
   x <- c(57L, 59L, 60L, 100L, 59L, 58L, 57L, 58L, 300L, 61L, 62L, 60L, 62L, 58L, 57L, -12L)
