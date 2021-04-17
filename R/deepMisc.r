@@ -38,3 +38,21 @@
 .ProbabilityDistribution <-
   c("Categorical" = "categorical",
     "Gaussian"    = "gaussian")
+
+# Re-exports
+
+#' Pipe operator
+#' @importFrom keras %>%
+#' @name %>%
+#' @rdname pipe
+#' @export
+#' @usage lhs %>% rhs
+NULL
+
+#' Multi-assign operator
+#' @importFrom keras %<-%
+#' @name %<-%
+#' @rdname multi-assign
+#' @export
+#' @usage c(x, y) %<-% values
+NULL
