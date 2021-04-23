@@ -4,7 +4,7 @@
 \alias{as_images_tensor_4D}
 \title{Convert image arrays to 4D tensor}
 \usage{
-as_images_tensor_4D(imagelist, height, width, channels = "rgb")
+as_images_tensor_4D(imagelist, height, width, channels = 3L)
 }
 \arguments{
 \item{imagelist}{A list of images returned by \code{as_images_array()}.}
@@ -25,8 +25,6 @@ A 4D array (tensor) with dimensions samples (number of images), height, width an
 
 }
 \examples{
-  # Make pipe operator available
-  '\%>\%' <- keras::'\%>\%'
   # Get image file names
   base_dir <- "c:/users/.../images" # any folder where image files are stored
   filelist <- list.files(path = base_dir, pattern = "\\\\.jpg$", full.names = T) # JPEG images

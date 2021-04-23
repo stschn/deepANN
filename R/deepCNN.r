@@ -16,21 +16,33 @@
 #' @export
 images_load <- function(images, FUN, ...) {
   if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
-  params <- list(...)
-  # params <- match.call(expand.dots = FALSE)$...
-  # param_values <- sapply(params, deparse)
   if (!is.null(FUN)) {
     img_list <- lapply(images, function(img_name) { FUN(img_name, ...) })
   } else {
-    # Per default, call image_load() from keras
-    if (length(params) >= 3L) {
-      target_size <- c(params[[1L]], params[[2L]]) # height, width
-      grayscale <- ifelse((params[[3L]] %in% c("gray")) || (params[[3L]] == 1L), TRUE, FALSE)
+    params <- list(...)
+    # params <- match.call(expand.dots = FALSE)$...
+    # param_values <- sapply(params, deparse)
+    if (length(params) > 0L) {
+      names_height <- c("height", "h")
+      names_width <- c("width", "w")
+      names_channel <- c("channel", "channels", "ch")
+      names_interpolation <- c("interpolation")
+
+      if (any(names_height %in% names(params))) height <- params[[which(names(params) %in% names_height)[1L]]] else height <- NULL
+      if (any(names_width %in% names(params))) width <- params[[which(names(params) %in% names_width)[1L]]] else width <- NULL
+      if (!any(unlist(lapply(list(height, width), is.null)))) target_size <- c(height, width) else target_size <- NULL
+
+      if (any(names_channel %in% names(params))) channels <- params[[which(names(params) %in% names_channel)[1L]]] else channels <- 3L
+      if (is.numeric(channels)) grayscale <- ifelse(channels == 1L, TRUE, FALSE) else grayscale <- ifelse(any(c("gray", "grayscale", "blackwhite") %in% channels), TRUE, FALSE)
+
+      if (any(names_interpolation %in% names(params))) interpolation <- params[[which(names(params) %in% names_interpolation)[1L]]] else interpolation <- "nearest"
     } else {
       target_size <- NULL
       grayscale <- FALSE
+      interpolation <- "nearest"
     }
-    img_list <- lapply(images, function(img_name) { keras::image_load(img_name, grayscale = grayscale, target_size = target_size) })
+    # By default, image_load() from keras is called
+    img_list <- lapply(images, function(img_name) { keras::image_load(img_name, grayscale = grayscale, target_size = target_size, interpolation = interpolation) })
   }
   return(img_list)
 }
@@ -51,11 +63,10 @@ images_load <- function(images, FUN, ...) {
 #' @export
 images_resize <- function(imagelist, FUN, ...) {
   if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
-  params <- list(...)
   if (!is.null(FUN)) {
     img_list <- lapply(imagelist, function(img) { FUN(img, ...) })
   } else {
-    # Per default, image_load() from keras does automatically resize images
+    # By default, image_load() from keras does automatically resize images
     img_list <- imagelist
   }
   return(img_list)
@@ -79,11 +90,10 @@ images_resize <- function(imagelist, FUN, ...) {
 #' @export
 as_images_array <- function(imagelist, FUN, ...) {
   if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
-  params <- list(...)
   if (!is.null(FUN)) {
     img_list <- lapply(imagelist, function(img) { FUN(img, ...) })
   } else {
-    # Per default, call image_to_array() from keras
+    # By default, image_to_array() from keras is called
     img_list <- lapply(imagelist, function(img) { keras::image_to_array(img) })
   }
   return(img_list)
@@ -105,8 +115,6 @@ as_images_array <- function(imagelist, FUN, ...) {
 #' @return A 4D array (tensor) with dimensions samples (number of images), height, width and channels.
 #'
 #' @examples
-#'   # Make pipe operator available
-#'   '%>%' <- keras::'%>%'
 #'   # Get image file names
 #'   base_dir <- "c:/users/.../images" # any folder where image files are stored
 #'   filelist <- list.files(path = base_dir, pattern = "\\.jpg$", full.names = T) # JPEG images
@@ -135,9 +143,9 @@ as_images_array <- function(imagelist, FUN, ...) {
 #'     as_images_array(FUN = magick_array, ch = "rgb") %>%
 #'     as_images_tensor_4D(height = height, width = width, channels = channels)
 #' @export
-as_images_tensor_4D <- function(imagelist, height, width, channels = "rgb") {
+as_images_tensor_4D <- function(imagelist, height, width, channels = 3L) {
   #feature <- keras::array_reshape(imagelist, dim = c(NROW(imagelist), height, width, channels))
-  tensor <- array(NA, dim = c((N <- NROW(imagelist)), height, width, ifelse((channels %in% c("gray")) || (channels == 1L), 1L, 3L)))
+  tensor <- array(NA, dim = c((N <- NROW(imagelist)), height, width, channels))
   for (i in 1L:N) { tensor[i, , , ] <- imagelist[[i]] }
   return(tensor)
 }
@@ -166,7 +174,7 @@ as_CNN_image_X <- function(images, height, width, channels = 3L, order = c("C", 
   if (is.null(dim(images))) {
     if (!all(file.exists(images))) { stop("images contains invalid file names.") }
     img_list <- lapply(images, function(imgname) {
-      keras::image_load(imgname, grayscale = ifelse(channels == 1L, T, F), target_size = c(height, width))
+      keras::image_load(imgname, grayscale = ifelse(channels == 1L, TRUE, FALSE), target_size = c(height, width))
     })
     img_array <- lapply(img_list, function(img) {
       keras::image_to_array(img) # The image is in format height x width x channels
