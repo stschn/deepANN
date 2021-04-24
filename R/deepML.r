@@ -164,7 +164,7 @@ k_nearest_neighbors.default <- function(x, y, query, k = 1L, ...) {
       eucl_dist <- sort(eucl_dist) # sort distances
       neighbors <- y[as.integer(names(eucl_dist)[1L:k])] # extract k values from y
       n_neighbors <- table(neighbors) # number of instances of each class
-      majority_class <- names(which.max(n_neighbors))# name of the majority class
+      majority_class <- names(which.max(n_neighbors)) # name of the majority class
       class_proba <- n_neighbors / k # probability of each class
       list(majority_class, class_proba)
     })
