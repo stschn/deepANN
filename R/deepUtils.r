@@ -601,6 +601,39 @@ is.marray <- function(x) {
   return(inherits(x, .deepANNClasses[["marray"]]))
 }
 
+#' @title Transpose multidimensional array
+#' @description This function transposes a multidimensional array by swapping the first two dimensions.
+#'
+#' @family Utils
+#'
+#' @param x A multidimensional array.
+#' @return The array \code{x} with the first two dimensions swapped.
+#'
+#' @seealso \code{\link{t}}.
+#'
+#' @export
+ta <- function(x) {
+  UseMethod("ta")
+}
+
+#' @rdname ta
+#' @export
+ta.array <- function(x) {
+  if (!(is.matrix(x) || ((is.array(x) || is.marray(x)) && (deepANN::ndim(x) >= 2L))))
+    stop("x must be a matrix or at least a two-dimensional array.")
+  d <- seq_along(dim(x))
+  d[1L:2L] <- 2L:1L # swap first two dimensions
+  aperm(x, d)
+}
+
+#' @rdname ta
+#' @export
+ta.marray <- function(x) { ta.array(x) }
+
+#' @rdname ta
+#' @export
+ta.matrix <- function(x) { ta.array(x) }
+
 #' @title Tensor
 #' @description
 #'   \code{tensor(data, ...)} creates a (reshaped) tensor (a n-dimensional array).\cr

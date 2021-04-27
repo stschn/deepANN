@@ -53,6 +53,7 @@ Other Utils:
 \code{\link{radian}()},
 \code{\link{re.factor}()},
 \code{\link{sd_pop}()},
+\code{\link{ta}()},
 \code{\link{tensor}()},
 \code{\link{var_pop}()},
 \code{\link{vector_as_ANN_matrix}()},
