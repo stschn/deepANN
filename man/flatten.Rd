@@ -24,7 +24,7 @@ The flatten data in form of a one-dimensional array.
 
 }
 \examples{
-v <- (1:24); dim(v); length(dim(v))
+v <- (1:24); dim(v); ndim(v)
 l <- list(x1 = 1:10, x2 = seq(10, 100, 10), x3 = list(a = 11, b = c(2, 23)))
 m <- matrix(1:24, nrow = 6); dim(m); length(m);
 a3 <- array(v, dim = c(4, 3, 2)); dim(a3); length(a3)
@@ -42,6 +42,7 @@ Other Utils:
 \code{\link{distance}()},
 \code{\link{list_as_numeric}()},
 \code{\link{marray}()},
+\code{\link{ndim}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
 \code{\link{ntimesteps}()},

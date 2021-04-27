@@ -25,6 +25,7 @@ Other Utils:
 \code{\link{distance}()},
 \code{\link{flatten}()},
 \code{\link{marray}()},
+\code{\link{ndim}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
 \code{\link{ntimesteps}()},

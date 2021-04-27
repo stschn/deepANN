@@ -424,7 +424,7 @@ vector_as_ANN_matrix <- function(x, ncol = 1, by = c("row", "col", "step"), reve
 #' @return The flatten data in form of a one-dimensional array.
 #'
 #' @examples
-#' v <- (1:24); dim(v); length(dim(v))
+#' v <- (1:24); dim(v); ndim(v)
 #' l <- list(x1 = 1:10, x2 = seq(10, 100, 10), x3 = list(a = 11, b = c(2, 23)))
 #' m <- matrix(1:24, nrow = 6); dim(m); length(m);
 #' a3 <- array(v, dim = c(4, 3, 2)); dim(a3); length(a3)
@@ -442,7 +442,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
   if (any(dataclass %in% c("list"))) {
     data <- array(unname(unlist(lapply(data, function(element) { element }))))
   } else {
-  if ((l <- length(dim(data))) > 1L) {
+  if ((l <- deepANN::ndim(data)) > 1L) {
     if (is.null(axis)) {
       if (l == 2L) { # matrix
         if (!byrow) { data <- array(as.matrix(data)) } else { data <- array(t(data))}
@@ -532,7 +532,7 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
     if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
       data <- vector_as_numeric(data)
     } else {
-    if ((any(dataclass %in% c("array"))) && (length(dim(data)) == 1L)) {
+    if ((any(dataclass %in% c("array"))) && (deepANN::ndim(data) == 1L)) {
       data <- as.array(vector_as_numeric(data))
     } else {
     if (any(dataclass %in% c("matrix"))) {
@@ -645,7 +645,7 @@ as.tensor.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
   if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
     if (numeric) data <- vector_as_numeric(data)
   } else {
-  if ((any(dataclass %in% c("array"))) && (length(dim(data)) == 1L)) {
+  if ((any(dataclass %in% c("array"))) && (deepANN::ndim(data) == 1L)) {
     if (numeric) data <- as.array(vector_as_numeric(data))
   } else {
   if (any(dataclass %in% c("matrix"))) {
@@ -707,6 +707,16 @@ as.tensor.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
 #' @rdname tensor
 #' @export
 is.tensor <- function(x) { return(inherits(x, .deepANNClasses[["Tensor"]])) }
+
+#' @title Number of dimensions
+#' @description
+#'
+#' @family Utils
+#'
+#' @param data A multidimensional data structure like array, tensor, marray, matrix or data.frame.
+#' @return Number of dimensions.
+#' @export
+ndim <- function(data) { length(dim(data)) }
 
 #' @title Number of samples within a data structure
 #' @description
