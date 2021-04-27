@@ -88,7 +88,9 @@ This R library is currently structured in form of the following functional famil
   <li><code>vector_as_ANN_matrix()</code> transforms a vector into a ANN compatible matrix.</li>
   <li><code>flatten</code> flattens data into a one-dimensional array.</li>
   <li><code>marray</code> and <code>as.marray</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
+  <li><code>ta()</code> transposes a multidimensional array by swapping the firt two dimensions.</li>
   <li><code>tensor</code> and <code>as.tensor</code> transform data into a n-dimensional tensor (array) and <code>is.tensor()</code checks for a tensor>.</li>
+  <li><code>ndim()</code> returns the number of dimensions of an array.</li>
   <li><code>nsamples()</code> extracts the number of samples within a data structure, usually a tensor.</li>
   <li><code>nunits()</code> extracts the number of units within a data structure, usually a tensor.</li>
   <li><code>ntimesteps()</code> extracts the number of timesteps within a data structure, usually a tensor.</li>
