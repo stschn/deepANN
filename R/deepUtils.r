@@ -634,6 +634,40 @@ ta.marray <- function(x) { ta.array(x) }
 #' @export
 ta.matrix <- function(x) { ta.array(x) }
 
+#' @title Combine matrices of a multidimensional array
+#' @description This function combines the respective first two dimensions of a multidimensional array by columns or rows.
+#'
+#' @family Utils
+#'
+#' @param x A multidimensional array.
+#' @param order The order in which elements of data should be read during combination.
+#'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#' @param ... Additional arguments to be passed to the method.
+#'
+#' @return A two-dimensional array with combined matrices of the first two dimensions of \code{x}.
+#'
+#' @export
+mbind <- function(x, ...) {
+  UseMethod("mbind")
+}
+
+#' @rdname mbind
+#' @export
+mbind.array <- function(x, order = c("C", "F")) {
+  if (!((is.array(x) || is.marray(x)) && (deepANN::ndim(x) >= 2L)))
+    stop("x must be a matrix or at least a two-dimensional array.")
+  order <- match.arg(order)
+  if (order == "C")
+    apply(x, 2L, base::identity) # rbind()
+  else
+    t(apply(x, 1L, base::identity)) # cbind()
+}
+
+#' @rdname mbind
+#' @export
+mbind.marray <- function(x, order = c("C", "F")) { mbind.array(x, order) }
+
 #' @title Tensor
 #' @description
 #'   \code{tensor(data, ...)} creates a (reshaped) tensor (a n-dimensional array).\cr

@@ -94,6 +94,7 @@ Other Utils:
 \code{\link{distance}()},
 \code{\link{flatten}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
