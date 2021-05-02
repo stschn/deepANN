@@ -469,15 +469,15 @@ treedepth <- function(node) {
   } else {
   if (any(col_class %in% .ContinuousClasses)) {
     # The "levels" are the midpoints of the sorted continuous vector
-    total <- sum(x)
+    total <- NROW(x) #total <- sum(x)
     occurences <- unique(sort(x))
     lvls <- ifelse(length(occurences) > 1L, head(stats::filter(occurences, c(0.5, 0.5)), -1L), occurences[1L])
     # lvls <- unlist(lapply(seq_len(NROW(occurences) - 1L), function(i) { mean(occurences[i:(i+1L)]) }))
     g <- lapply(lvls, function(lvl) {
       if (((l1 <- length((y1 <- y[x >= lvl]))) > 0L) && ((l2 <- length((y2 <- y[x < lvl]))) > 0L)) {
-        gi1 <- deepANN::gini_impurity(y[x >= lvl])
-        gi2 <- deepANN::gini_impurity(y[x < lvl])
-        impurity <- unname(sum(x[x >= lvl] / total * gi1, x[x < lvl] / total * gi2))
+        gi1 <- deepANN::gini_impurity(y1)
+        gi2 <- deepANN::gini_impurity(y2)
+        impurity <- unname(sum(NROW(x[x >= lvl]) / total * gi1, NROW(x[x < lvl]) / total * gi2))
         gain <- unname(deepANN::gini_impurity(y) - impurity)
       } else {
         impurity <- ifelse(l1 == 0L, 1L, 0L)
