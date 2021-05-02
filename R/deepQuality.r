@@ -1,3 +1,22 @@
+#' @title Sum of squared errors (SSE)
+#' @description
+#'
+#' @family Quality
+#'
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
+#'
+#' @details Sum of squared errors are also known as residual sum of squares (RSS).
+#'
+#' @return Sum of squared errors.
+#'
+#' @export
+sse <- function(actuals, preds, na.rm = FALSE) {
+  error <- actuals - preds
+  return(sum(error^2, na.rm = na.rm))
+}
+
 #' @title Mean absolute error (MAE)
 #' @description
 #'
