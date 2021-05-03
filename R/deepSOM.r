@@ -17,6 +17,16 @@
 #'
 #' @return The fitted SOM model.
 #'
+#' @examples
+#'   som <- fit_SOM()
+#'   # The following mapping schema indicates to which grid unit each individual input sample was assigned.
+#'   # The counting of the mapping starts at the bottom left, continues to the right, jumps up at the end of the row and starts with the left unit again.
+#'   # The first number is the number of the grid unit to which the first record is assigned. The second number is the number of the grid unit to which the second record is assigned, and so on.
+#'   som$unit.classif
+#'   table(som$unit.classif) # The total number of assigned input samples per each grid unit
+#'   # Codebook vector
+#'   som$codes
+#'
 #' @seealso \code{\link[kohonen]{unit.distances}}, \code{\link[kohonen]{supersom}}, \code{\link[kohonen]{plot.kohonen}},
 #'   \code{\link[stats]{dist}}, \code{\link[stats]{hclust}}.
 #'
@@ -50,14 +60,14 @@ fit_SOM <- function(x, xdim = NULL, ydim = NULL,
   # Counts within grid units (output units): how many input samples are mapped to each grid unit?
   plot(sommodel, type = "count")
   plot(sommodel, type = "mapping")
-  # The following mapping schema indicates to which grid unit each individual input sample was assigned
-  # The counting of the mapping starts at the bottom left, continues to the right, jumps up at the end of the row and starts with the left unit again
-  # The first number is the number of the grid unit to which the first record is assigned. The second number is the number of the grid unit to which the second record is assigned, and so on
-  cat(sommodel$unit.classif)
-  cat(table(sommodel$unit.classif)) # The total number of assigned input samples per each grid unit
+  # The following mapping schema indicates to which grid unit each individual input sample was assigned.
+  # The counting of the mapping starts at the bottom left, continues to the right, jumps up at the end of the row and starts with the left unit again.
+  # The first number is the number of the grid unit to which the first record is assigned. The second number is the number of the grid unit to which the second record is assigned, and so on.
+  #cat(sommodel$unit.classif)
+  #cat(table(sommodel$unit.classif)) # The total number of assigned input samples per each grid unit
 
   # Codebook vector: vector of the weights of a grid unit
-  cat(sommodel$codes)
+  #cat(sommodel$codes)
   plot(sommodel, type = "codes", palette.name = rainbow)
 
   # Neighbourhood distances
@@ -69,13 +79,13 @@ fit_SOM <- function(x, xdim = NULL, ydim = NULL,
   # Hierarchical clustering of codebook vectors
   distance_method <- match.arg(distance_method) # use first argument value for distance method
   agglomeration_method <- match.arg(agglomeration_method) # use first argument value for linkage algorithm
-  somcluster <- cutree(hclust(dist(getCodes(sommodel), method = distance_method), method = agglomeration_method), k = cluster)
+  somcluster <- stats::cutree(stats::hclust(dist(kohonen::getCodes(sommodel), method = distance_method), method = agglomeration_method), k = cluster)
   # Show the map/grid with different colours for every cluster
   plot(sommodel, type = "mapping", bgcol = colour_palette[somcluster])
-  add.cluster.boundaries(sommodel, somcluster)
+  kohonen::add.cluster.boundaries(sommodel, somcluster)
   # Show the same plot with graphical illustrations for the codebook vectors
   plot(sommodel, type = "codes", bgcol = colour_palette[somcluster])
-  add.cluster.boundaries(sommodel, somcluster)
+  kohonen::add.cluster.boundaries(sommodel, somcluster)
 
   return(sommodel)
 }

@@ -49,6 +49,17 @@ The fitted SOM model.
 \description{
 
 }
+\examples{
+  som <- fit_SOM()
+  # The following mapping schema indicates to which grid unit each individual input sample was assigned.
+  # The counting of the mapping starts at the bottom left, continues to the right, jumps up at the end of the row and starts with the left unit again.
+  # The first number is the number of the grid unit to which the first record is assigned. The second number is the number of the grid unit to which the second record is assigned, and so on.
+  som$unit.classif
+  table(som$unit.classif) # The total number of assigned input samples per each grid unit
+  # Codebook vector
+  som$codes
+
+}
 \seealso{
 \code{\link[kohonen]{unit.distances}}, \code{\link[kohonen]{supersom}}, \code{\link[kohonen]{plot.kohonen}},
   \code{\link[stats]{dist}}, \code{\link[stats]{hclust}}.
