@@ -38,7 +38,7 @@ This R library is currently structured in form of the following functional famil
 <ul>
   <li><code>get_season()</code> delivers corresponding seasons for a given date vector.</li>
   <li><code>lags()</code> builds a lagged data set.</li>
-  <li><code>build_stationary()</code> creates a stationary data series thru differencing.</li>
+  <li><code>stationary()</code> creates a stationary data series thru differencing.</li>
   <li><code>invert_differencing()</code> inverts a differenced data series.</li>
   <li><code>diffinv_simple()</code> inverts a simple-differenced data series.</li>
   <li><code>diff_log()</code> creates a log-differenced data series.</li>
