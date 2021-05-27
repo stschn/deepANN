@@ -26,6 +26,7 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{insert}()},
 \code{\link{list_as_numeric}()},
 \code{\link{marray}()},
 \code{\link{mbind}()},

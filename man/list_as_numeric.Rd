@@ -24,6 +24,7 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{insert}()},
 \code{\link{marray}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},

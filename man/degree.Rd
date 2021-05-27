@@ -26,6 +26,7 @@ Other Utils:
 \code{\link{as_tensor_3D}()},
 \code{\link{distance}()},
 \code{\link{flatten}()},
+\code{\link{insert}()},
 \code{\link{list_as_numeric}()},
 \code{\link{marray}()},
 \code{\link{mbind}()},

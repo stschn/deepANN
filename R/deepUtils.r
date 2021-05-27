@@ -594,6 +594,58 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
   return(x)
 }
 
+#' @title Multidimensional Array (marray)
+#' @family Utils
+#'
+#' @param a An array from type \code{marray}.
+#' @param x An R object which is inserted into \code{a}.
+#' @param index The position \code{x} should be inserted.
+#' @param order The order in which elements of \code{x} should be read during insertion.
+#'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#'
+#' @details For insertion, the last dimension of \code{a} is fixed and \code{x} is coerced into the remaining dimensions. If \code{a} is a
+#'   one-dimensional array, \code{x} is flattened.
+#'
+#' @return The marray \code{a} with inserted \code{x}.
+#' @seealso \code{\link{marray}}.
+#'
+#' @examples
+#'   ma1 <- marray(1:24)
+#'   ma2 <- marray(1:12, dim = c(4, 3))
+#'   ma3 <- marray(1:24, dim = c(4, 3, 2), order = "F")
+#'   x <- c(1:12)
+#'   insert(ma3, x, order = "F")
+#' @export
+insert <- function(data, ...) {
+  UseMethod("insert")
+}
+
+#' @rdname insert
+#' @export
+insert.marray <- function(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F")) {
+  if (!is.array(a))
+    stop("a must be an array.")
+  order <- match.arg(order)
+  adim <- dim(a)
+  lastdim <- adim[deepANN::ndim(a)]
+  if ((deepANN::ndim(a) > 1L) && !setequal(dim(x), xdim <- adim[-deepANN::ndim(a)])) { x <- marray(x, dim = xdim, order = order) } else { x <- deepANN::flatten(x) }
+  x <- as(x, "array")
+  # Convert array with fixed last dimension to list
+  alist <- lapply(seq_len(lastdim), function(idx) { do.call('[', c(list(a), rep(list(TRUE), deepANN::ndim(a) - 1L), idx)) })
+  # Insert x into list on right position
+  if (index <= 1L) { # first
+    alist <- append(alist, list(x), 0)
+  } else {
+  if (index > lastdim) { # last
+    alist <- append(alist, list(x), lastdim + 1L)
+  } else { # between
+    alist <- append(alist, list(x), index - 1L)
+  }}
+  if (deepANN::ndim(a) > 1L) adim[deepANN::ndim(a)] <- lastdim + 1L else adim <- adim + length(x)
+  marray(unlist(alist), dim = adim, order = "F")
+}
+
 #' @rdname marray
 #' @export
 is.marray <- function(x) {
