@@ -210,10 +210,8 @@ scaling <- function(x, type = c("minmax", "zscore", "log", "center"), use_attr =
 #'
 #' @export
 scale_dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", "log", "center"), invert = FALSE, ...) {
+  .checkcolumns(dataset, columns, as.names = FALSE)
   dataset <- as.data.frame(dataset)
-  if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) ||
-      (((is.character(columns))) && (!all(columns %in% names(dataset)))))
-    stop("columns are not in dataset.")
   cnames <- names(dataset)
   if (is.null(columns)) { columns <- seq_along(dataset) } # use all columns
   if (class(columns) %in% c("character")) {
@@ -252,14 +250,10 @@ scale_dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", 
 #'
 #' @export
 scale_train_test <- function(trainset, testset, columns = NULL, type = c("minmax", "zscore", "log", "center")) {
+  .checkcolumns(trainset, columns, as.names = FALSE)
+  .checkcolumns(testset, columns, as.names = FALSE)
   trainset <- as.data.frame(trainset)
   testset <- as.data.frame(testset)
-  if (((is.numeric(columns)) && (!all(columns %in% seq_along(trainset)))) ||
-      (((is.character(columns))) && (!all(columns %in% names(trainset)))))
-    stop("columns are not in train data set.")
-  if (((is.numeric(columns)) && (!all(columns %in% seq_along(testset)))) ||
-      (((is.character(columns))) && (!all(columns %in% names(testset)))))
-    stop("columns are not in test data set.")
   cnames <- names(trainset)
   if (is.null(columns)) { columns <- seq_along(trainset) } # use all columns
   if (class(columns) %in% c("character")) {

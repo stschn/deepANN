@@ -21,17 +21,7 @@
 #' @export
 dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "most", "least", "none"), effectcoding = FALSE, remove_columns = FALSE) {
   if (!is.null(columns)) {
-    cnames <- names(dataset)
-    if (!is.character(columns)) {
-      columns <- as.integer(columns)
-      if (!all(columns %in% c(1:NCOL(dataset))))
-        stop("column indices are not in dataset.")
-      col_names <- cnames[columns]
-    } else {
-      if (!all(columns %in% cnames))
-        stop("columns are not in dataset.")
-      col_names <- columns
-    }
+    col_names <- .checkcolumns(dataset, columns)
   } else {
     all_classes <- sapply(dataset, class)
     col_names <- unlist(lapply(seq_along(all_classes), function(i) {
@@ -97,15 +87,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 dummify_multilabel <- function(dataset, columns = NULL, split = ",", effectcoding = FALSE, prefix = FALSE, remove_columns = FALSE) {
   dataset <- as.data.frame(dataset)
   if (!is.null(columns)) {
-    cnames <- names(dataset)
-    if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) ||
-        (((is.character(columns))) && (!all(columns %in% cnames))))
-      stop("columns are not in dataset.")
-    if (!is.character(columns)) {
-      col_names <- cnames[columns]
-    } else {
-      col_names <- columns
-    }
+    col_names <- .checkcolumns(dataset, columns)
   } else {
     all_classes <- sapply(dataset, class)
     col_names <- unlist(lapply(seq_along(all_classes), function(i) {
@@ -117,7 +99,7 @@ dummify_multilabel <- function(dataset, columns = NULL, split = ",", effectcodin
 
   # Get all unique labels from multi-label columns
   l <- list()
-  for (col_name in col_names){
+  for (col_name in col_names) {
     l[[col_name]] <- lapply(strsplit(dataset[[col_name]], split = split), unique) # sapply() will cause problems if dataset consists of only one row
   }
   tags_column <- lapply(l, function(categories) { (z <- unique(unlist(categories)))[!is.na(z)] })
@@ -172,11 +154,10 @@ dummify_multilabel <- function(dataset, columns = NULL, split = ",", effectcodin
 #' @export
 append_rows <- function(dataset, columns = NULL, n = 1L, type = c("copy", "minmax")) {
   dataset <- as.data.frame(dataset)
-  if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) ||
-     (((is.character(columns))) && (!all(columns %in% names(dataset)))))
-       stop("columns are not in dataset.")
-  if (!is.null(columns))
+  if (!is.null(columns)) {
+    .checkcolumns(dataset, columns)
     dataset <- dataset[, columns, drop = FALSE]
+  }
   type <- match.arg(type)
   if (type == "copy") {
     dataset <- dataset[rep(seq_len(NROW(dataset)), n + 1), , drop = FALSE]
@@ -309,29 +290,8 @@ one_hot_decode <- function(m) {
 #'
 #' @export
 resample_imbalanced <- function(dataset, x, y, n = 1L, k = 1L, type = c("oversampling", "undersampling", "smote")) {
-
-  check_column <- function(dataset, column = NULL, as.int = TRUE, err_column = "columns") {
-    dataset <- as.data.frame(dataset)
-    cnames <- names(dataset)
-    result <- NULL
-    if (!is.null(column)) {
-      if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) ||
-          (((is.character(column))) && (!all(column %in% cnames))))
-        stop(paste0(err_column, " are not in dataset"))
-      if (as.int) {
-        if (class(column) %in% c("character")) {
-          result <- as.integer(which(cnames %in% column))
-        } else {
-          result <- as.integer(column)
-        }} else {
-          result <- column
-        }
-    }
-    return(result)
-  }
-
-  x <- check_column(dataset, x, err_column = "features")
-  y <- check_column(dataset, y, err_column = "targets")
+  x <- .checkcolumns(dataset, x, as.names = FALSE)
+  y <- .checkcolumns(dataset, y, as.names = FALSE)
 
   type <- match.arg(type)
   df <- as.data.frame(dataset)

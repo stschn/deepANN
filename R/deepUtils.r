@@ -1,20 +1,21 @@
-#' @title Renew a factor object
+#' @title Renew an (ordered) factor object
 #' @description
 #'
 #' @family Utils
 #'
-#' @param x A factor object.
+#' @param x An (ordered) factor object.
 #'
-#' @return The renewed factor object \code{x}.
+#' @return The renewed (ordered) factor object \code{x}.
 #'
 #' @seealso \code{\link{factor}}.
 #' @export
 re.factor <- function(x) {
+  of <- ifelse(is.ordered(x), TRUE, FALSE)
   x <- as.factor(x)
   oldlevels <- levels(x)
   x <- as.factor(as.character(x))
   levels(x) <- oldlevels[oldlevels %in% levels(x)]
-  x
+  if (!of) x else as.ordered(x)
 }
 
 #' @title Population variance
@@ -326,10 +327,10 @@ vector_as_numeric <- function(x) {
 #' @export
 list_as_numeric <- function(l) {
   lapply(l, function(element) {
-    if (any(class(element) %in% c("matrix"))) {
+    if (is.matrix(element)) {
       if (!is.numeric(element)) apply(element, 2L, vector_as_numeric)
     } else {
-    if (any(class(element) %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
+    if (is.data.frame(element)) {
       data.matrix(element)
     } else {
     if (!is.list(element)) {
@@ -435,11 +436,10 @@ vector_as_ANN_matrix <- function(x, ncol = 1, by = c("row", "col", "step"), reve
 flatten <- function(data, axis = NULL, order = c("C", "F")) {
   order <- match.arg(order)
   byrow <- ifelse(order %in% c("C"), TRUE, FALSE)
-  dataclass <- class(data)
-  if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+  if ((!all(is.na(data))) && (is.atomic(data)) && (!(deepANN::ndim(data) > 1L))) {
     data <- array(data)
   } else {
-  if (any(dataclass %in% c("list"))) {
+  if (is.list(data)) {
     data <- array(unname(unlist(lapply(data, function(element) { element }))))
   } else {
   if ((l <- deepANN::ndim(data)) > 1L) {
@@ -527,26 +527,26 @@ as.marray <- function(data, ...) {
 #' @rdname marray
 #' @export
 as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE, reverse = FALSE) {
-  dataclass <- class(data)
   if (numeric) {
-    if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+    if ((!all(is.na(data))) && (is.atomic(data)) && (!(deepANN::ndim(data) > 1L))) {
       data <- vector_as_numeric(data)
     } else {
-    if ((any(dataclass %in% c("array"))) && (deepANN::ndim(data) == 1L)) {
-      data <- as.array(vector_as_numeric(data))
-    } else {
-    if (any(dataclass %in% c("matrix"))) {
+    if (is.matrix(data)) {
       if (!is.numeric(data)) { data <- apply(data, 2L, vector_as_numeric) }
     } else {
-    if (any(dataclass %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
+    if (is.data.frame(data)) {
       data <- data.matrix(data)
     } else {
-    if (any(dataclass %in% c("list"))) {
-      data <- list_as_numeric(data)
-    }}}}}
+    if (is.list(data)) {
+      data <- unlist(list_as_numeric(data))
+    }}}}
   } else {
-    if (any(dataclass %in% c("data.frame", "tbl_df", "tbl", "data.table")))
+    if (is.data.frame(data)) {
       if (is.null(dim)) dim <- length(data)
+    } else {
+    if (is.list(data)) {
+      data <- unlist(data)
+    }}
   }
   # x <- array(data)
   # order <- match.arg(order)
@@ -708,25 +708,21 @@ as.tensor <- function(data, ...) {
 #' @rdname tensor
 #' @export
 as.tensor.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = TRUE, reverse = FALSE) {
-  dataclass <- class(data)
-  if ((!all(is.na(data))) && (is.atomic(data)) && (!any(dataclass %in% c("matrix", "array")))) {
+  if ((!all(is.na(data))) && (is.atomic(data)) && (!(deepANN::ndim(data) > 1L))) {
     if (numeric) data <- vector_as_numeric(data)
   } else {
-  if ((any(dataclass %in% c("array"))) && (deepANN::ndim(data) == 1L)) {
-    if (numeric) data <- as.array(vector_as_numeric(data))
-  } else {
-  if (any(dataclass %in% c("matrix"))) {
+  if (is.matrix(data)) {
     if ((!is.numeric(data)) && (numeric)) { data <- apply(data, 2L, vector_as_numeric) }
     # Reverse order of a matrix
     # by column: { data <- apply(data, 2L, rev) }; by row: { data <- t(apply(data, 1L, rev)) }}
   } else {
-  if (any(dataclass %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
+  if (is.data.frame(data)) {
     if (numeric) { data <- data.matrix(data) } else { data <- as.matrix(data) }
   } else {
-  if (any(dataclass %in% c("list"))) {
-    if (numeric) { data <- lapply(data, vector_as_numeric) }
+  if (is.list(data)) {
+    if (numeric) { data <- list_as_numeric(data) }
     data <- matrix(unlist(data), ncol = length(data), dimnames = list(rownames(data), names(data)))
-  }}}}}
+  }}}}
   # Preserve already given dimensions
   if (!is.null(dim(data))) olddim <- dim(data) else olddim <- length(data)
   x <- array(data, dim = olddim)

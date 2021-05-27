@@ -95,17 +95,7 @@ outlier <- function(x, type = c("iqr", "mean", "median"), fill = NULL, ...) {
 #' @export
 outlier_dataset <- function(dataset, columns = NULL, type = c("iqr", "mean", "median"), ...) {
   if (!is.null(columns)) {
-    cnames <- names(dataset)
-    if (!is.character(columns)) {
-      columns <- as.integer(columns)
-      if (!all(columns %in% c(1:NCOL(dataset))))
-        stop("column indices are not in dataset.")
-      col_names <- cnames[columns]
-    } else {
-      if (!all(columns %in% cnames))
-        stop("columns are not in dataset.")
-      col_names <- columns
-    }
+    col_names <- .checkcolumns(dataset, columns)
   } else {
     all_classes <- sapply(dataset, class)
     col_names <- unlist(lapply(seq_along(all_classes), function(i) {

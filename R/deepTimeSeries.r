@@ -89,15 +89,9 @@ stationary <- function(dataset, columns = 2L, differences = 1L, type = c("simple
   type <- match.arg(type)
   dataset <- as.data.frame(dataset)
   cnames <- names(dataset)
-  if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) ||
-      (((is.character(columns))) && (!all(columns %in% cnames))))
-    stop("columns are not in dataset.")
   if (is.null(columns)) columns <- cnames
-  if (is.character(columns)) {
-    columns <- which(cnames %in% columns)
-  } else {
-    columns <- as.integer(columns)
-  }
+  columns <- .checkcolumns(dataset, columns, as.names = FALSE)
+
   cnames <- cnames[columns]
   cnames <- do.call(paste0, list(cnames, suffix))
   if (type == "simple") {
@@ -317,15 +311,7 @@ period <- function(dataset, column = 1L, type = c("seq", "weekday", "monthday", 
   type <- match.arg(type)
   # period column
   dataset <- as.data.frame(dataset)
-  cnames <- names(dataset)
-  if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) ||
-      (((is.character(column))) && (!all(column %in% cnames))))
-    stop("periodic column is not in dataset.")
-  if (is.character(column)) {
-    column <- which(cnames %in% column)
-  } else {
-    column <- as.integer(column)
-  }
+  column <- .checkcolumns(dataset, column, as.names = FALSE)
   periods <- dataset[[column]] # extract periods as row vector
   if (type == "seq") {
     if (length(params) < 2) { stop("specify start index and increment of the sequence.", call. = FALSE) }
@@ -424,11 +410,7 @@ partition <- function(dataset, column = NULL, between = NULL, proportion = 0.7, 
     # rows <- eval(parse(text = expr), dataset, parent.frame())
     # if (!any(rows))
     #subset(dataset, eval(parse(text = expr)))
-    cnames <- names(dataset)
-    if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) ||
-        (((is.character(column))) && (!all(column %in% cnames))))
-      stop("column is not in dataset.", call. = FALSE)
-    if (!is.character(column)) column <- cnames[column]
+    column <- .checkcolumns(dataset, column)
     parts <- lapply(between, function(values) {
       if (length(values) == 1L)
         rows <- which((dataset[[column]] >= values[1L]))

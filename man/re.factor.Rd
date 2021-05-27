@@ -2,15 +2,15 @@
 % Please edit documentation in R/deepUtils.r
 \name{re.factor}
 \alias{re.factor}
-\title{Renew a factor object}
+\title{Renew an (ordered) factor object}
 \usage{
 re.factor(x)
 }
 \arguments{
-\item{x}{A factor object.}
+\item{x}{An (ordered) factor object.}
 }
 \value{
-The renewed factor object \code{x}.
+The renewed (ordered) factor object \code{x}.
 }
 \description{
 

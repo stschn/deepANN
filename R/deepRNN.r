@@ -36,29 +36,9 @@
 #' @export
 get_LSTM_XY <- function(dataset, x = NULL, y = 2L, other_columns = NULL, timesteps = 1L, xlag = 0L,
                         y_as_feature = c("none", "plain", "timesteps"), ylag = 0L) {
-
-  check_column <- function(dataset, column = NULL, as.int = TRUE, err_column = "columns") {
-    dataset <- as.data.frame(dataset)
-    cnames <- names(dataset)
-    result <- NULL
-    if (!is.null(column)) {
-      if (((is.numeric(column)) && (!all(column %in% seq_along(dataset)))) ||
-          (((is.character(column))) && (!all(column %in% cnames))))
-        stop(paste0(err_column, " are not in dataset"))
-      if (as.int) {
-        if (class(column) %in% c("character")) {
-          result <- as.integer(which(cnames %in% column))
-        } else {
-          result <- as.integer(column)
-        }} else {
-          result <- column
-        }
-    }
-    return(result)
-  }
-  x <- check_column(dataset, x, err_column = "features")
-  y <- check_column(dataset, y, err_column = "outcomes")
-  other_columns <- check_column(dataset, other_columns, err_column = "other columns")
+  if (!is.null(x)) x <- .checkcolumns(dataset, x, as.names = FALSE)
+  y <- .checkcolumns(dataset, y, as.names = FALSE)
+  if (!is.null(other_columns)) other_columns <- .checkcolumns(dataset, other_columns, as.names = FALSE)
 
   data_list <- list()
   y_sequence <- FALSE
