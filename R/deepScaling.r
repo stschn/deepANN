@@ -210,14 +210,12 @@ scaling <- function(x, type = c("minmax", "zscore", "log", "center"), use_attr =
 #'
 #' @export
 scale_dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", "log", "center"), invert = FALSE, ...) {
-  .checkcolumns(dataset, columns, as.names = FALSE)
   dataset <- as.data.frame(dataset)
   cnames <- names(dataset)
-  if (is.null(columns)) { columns <- seq_along(dataset) } # use all columns
-  if (class(columns) %in% c("character")) {
-    columns_idx <- as.integer(which(cnames %in% columns))
+  if (!is.null(columns)) {
+    columns_idx <- .checkcolumns(dataset, columns, as.names = FALSE)
   } else {
-    columns_idx <- as.integer(columns)
+    columns_idx <- seq_along(dataset) # use all columns
   }
   remaining_dataset <- dataset[-columns_idx]
   scaled_dataset <- dataset[columns_idx]
@@ -250,16 +248,13 @@ scale_dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", 
 #'
 #' @export
 scale_train_test <- function(trainset, testset, columns = NULL, type = c("minmax", "zscore", "log", "center")) {
-  .checkcolumns(trainset, columns, as.names = FALSE)
-  .checkcolumns(testset, columns, as.names = FALSE)
   trainset <- as.data.frame(trainset)
   testset <- as.data.frame(testset)
   cnames <- names(trainset)
-  if (is.null(columns)) { columns <- seq_along(trainset) } # use all columns
-  if (class(columns) %in% c("character")) {
-    columns_idx <- as.integer(which(cnames %in% columns))
+  if (!is.null(columns)) {
+    columns_idx <- .checkcolumns(trainset, columns, as.names = FALSE)
   } else {
-    columns_idx <- as.integer(columns)
+    columns_idx <- seq_along(trainset)
   }
   remaining_trainset <- trainset[-columns_idx]
   remaining_testset <- testset[-columns_idx]
