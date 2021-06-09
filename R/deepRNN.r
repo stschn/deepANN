@@ -527,8 +527,8 @@ predict_ANN <- function(model, x, batch_size = 1,
                         diff_type = NULL, timesteps = 1, lag = 0, differences = 1, invert_first_row = NULL, y = NULL,
                         type = "univariate") {
   Yhat <- model %>% predict(x, batch_size = batch_size)
-  dim_predict <- length(dim(Yhat)) # 2 without timesteps, 3 with timesteps
-  if (dim_predict == 2) { # useful for e.g. MLP or LSTM without sequence outcome
+  num_dim <- deepANN::ndim(Yhat) # 2 without timesteps, 3 with timesteps
+  if (num_dim == 2L) { # useful for e.g. MLP or LSTM without sequence outcome
     if (!is.null(scale_type)) {
       if (scale_type == "minmax") {
         if (length(scaler) < 2) stop("min-max rescaling needs min and max scalers.")
@@ -566,7 +566,7 @@ predict_ANN <- function(model, x, batch_size = 1,
       Yhat <- m
     }
   } else {
-  if (dim_predict == 3) {
+  if (num_dim == 3L) {
     rows <- dim(Yhat)[1L]
     tsteps <- dim(Yhat)[2L]
     outs <- dim(Yhat)[3L]
@@ -664,15 +664,11 @@ predict_ANN <- function(model, x, batch_size = 1,
 #'
 #' @export
 as_LSTM_period_outcome <- function(dataset, columns, timesteps = 1L, lag = 0L, type = "univariate") {
+  columns <- .checkcolumns(dataset, columns)
   dataset <- as.data.frame(dataset)
-  cnames <- names(dataset)
-  if (((is.numeric(columns)) && (!all(columns %in% seq_along(dataset)))) ||
-      (((is.character(columns))) && (!all(columns %in% cnames))))
-    stop("columns are not in dataset.", call. = FALSE)
-
   shift <- get_period_shift(timesteps, lag, type)
   if (shift > 0L) {
-    dataset <- dataset[-c(1:shift), columns]
+    dataset <- dataset[-c(1L:shift), columns]
   } else {
     dataset <- dataset[, columns]
   }
