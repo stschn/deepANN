@@ -51,6 +51,8 @@ Other Quality:
 \code{\link{rmsle}()},
 \code{\link{rmspe}()},
 \code{\link{sse}()},
-\code{\link{vc}()}
+\code{\link{vc}()},
+\code{\link{wape}()},
+\code{\link{wmape}()}
 }
 \concept{Quality}

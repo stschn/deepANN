@@ -9,3 +9,6 @@ lhs %>% rhs
 \description{
 Pipe operator
 }
+\details{
+R v4.1.0 directly provides simple native forward pipe operator |>. The simple form of the forward pipe inserts the left-hand side as the first argument in the right-hand side call.
+}

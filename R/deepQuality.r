@@ -54,6 +54,41 @@ mape <- function(actuals, preds, na.rm = FALSE) {
   return(mean(abs(error / actuals), na.rm = na.rm) * 100)
 }
 
+#' @title Weighted mean absolute percentage error (WMAPE)
+#' @description
+#'
+#' @family Quality
+#'
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param weights A numeric vector with weights.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
+#'
+#' @return Weighted mean absolute percentage error.
+#'
+#' @export
+wmape <- function(actuals, preds, weights, na.rm = FALSE) {
+  error <- actuals - preds
+  return((sum(abs(error) * weights, na.rm = na.rm) / sum(abs(actuals) * weights, na.rm = na.rm)) * 100)
+}
+
+#' @title Weighted average percentage error (WAPE)
+#' @description
+#'
+#' @family Quality
+#'
+#' @param actuals A numeric vector of actual values.
+#' @param preds A numeric vector of prediction values.
+#' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
+#'
+#' @return Weighted average percentage error.
+#'
+#' @export
+wape <- function(actuals, preds, na.rm = FALSE) {
+  error <- actuals - preds
+  return((sum(abs(error), na.rm = na.rm) / sum(abs(actuals), na.rm = na.rm)) * 100)
+}
+
 #' @title Mean squared error (MSE)
 #' @description
 #'

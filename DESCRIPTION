@@ -1,7 +1,7 @@
 Package: deepANN
 Type: Package
 Title: Neural Network Toolbox
-Version: 0.3.23
+Version: 0.3.24
 Author: person("Stephan", "Schneider", email = "stschn@vodafonemail.de", role = c("aut", "cre"))
 Maintainer: Stephan Schneider <stschn@vodafonemail.de>
 Description: A Toolbox for Machine & Deep Learning mainly with Tensorflow

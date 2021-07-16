@@ -54,6 +54,8 @@ This R library is currently structured in form of the following functional famil
   <li><code>sse()</code> calculates the sum of squared errors.</li>
   <li><code>mae()</code> calculates the mean absolute error.</li>
   <li><code>mape()</code> calculates the mean absolute percentage error.</li>
+  <li><code>wmape()</code> calculates the weighted mean absolute percentage error.</li>
+  <li><code>wape()</code> calculates the weighted average percentage error.</li>
   <li><code>mse()</code> calculates the mean squared error.</li>
   <li><code>msle()</code> calculates the mean squared logarithmic error.</li>
   <li><code>rmse()</code> calculates the root mean square error.</li>
@@ -101,6 +103,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>as_tensor_1D()</code> transforms data into a one-dimensional tensor (vector).</li>
   <li><code>as_tensor_2D()</code> transforms data into a two-dimensional tensor (matrix).</li>
   <li><code>as_tensor_3D()</code> transforms data into a three-dimensional tensor.</li>
+  <li><code>random_seed()</code> random number generator for reproducible results with Tensorflow/Keras.</li>
 </ul>
 
 <b>Machine Learning (ML)</b>

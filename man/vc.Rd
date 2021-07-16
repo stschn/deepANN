@@ -39,6 +39,8 @@ Other Quality:
 \code{\link{rmse}()},
 \code{\link{rmsle}()},
 \code{\link{rmspe}()},
-\code{\link{sse}()}
+\code{\link{sse}()},
+\code{\link{wape}()},
+\code{\link{wmape}()}
 }
 \concept{Quality}

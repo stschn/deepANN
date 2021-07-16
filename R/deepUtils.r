@@ -1018,3 +1018,19 @@ as_tensor_3D <- function(data, ncol = 1L, by = c("row", "col", "step"), reverse 
   # tensor <- array(m, dim = c(NROW(m) / ncol, ncol, NCOL(m)), dimnames = list(NULL, NULL, colnames(m)))
   as.tensor.default(array(m <- apply(as.matrix(data), 2L, vector_as_ANN_matrix, ncol, by, reverse), dim = c(NROW(m) / ncol, ncol, NCOL(m)), dimnames = list(NULL, NULL, colnames(m))), order = "F")
 }
+
+#' @title Random Number Generation with Tensorflow
+#' @description
+#'
+#' @family Utils
+#'
+#' @param seed Integer value(s) used as seeds for RNG.
+#' @details The combination of RNG from NumPy and Tensorflow allows to get reproducible results with Tensorflow/Keras.
+#'
+#' @export
+random_seed <- function(seed) {
+  seed <- as.integer(seed)
+  numpy <- reticulate::import("numpy", delay_load = TRUE)
+  numpy$random$seed(seed[1L])
+  tensorflow::tf$random$set_seed(ifelse(length(seed) == 1L, seed[1L], seed[2L]))
+}

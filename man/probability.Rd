@@ -74,6 +74,7 @@ Other Utils:
 \code{\link{ntimesteps}()},
 \code{\link{nunits}()},
 \code{\link{radian}()},
+\code{\link{random_seed}()},
 \code{\link{re.factor}()},
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},

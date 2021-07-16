@@ -142,6 +142,18 @@ k_nearest_neighbors <- function(object, ...) {
 #' @rdname k_nearest_neighbors
 #' @export
 k_nearest_neighbors.formula <- function(formula, data, query, k = 1L, ...) {
+  # Call <- match.call()
+  # mf <- match.call(expand.dots = FALSE)
+  # indx <- match(c("formula", "data", "query), names(Call), nomatch = 0L)
+  # if (indx[1L] == 0L)
+  #   stop("a 'formula' argument is required.")
+  # temp <- Call[c(1L, indx)]
+  # temp[[1L]] <- quote(stats::model.frame)
+  # m <- eval.parent(temp)
+  # Terms <- attr(m, "terms")
+  # y <- stats::model.response(m)
+  # x <- stats::model.matrix(Terms, m)
+  # x <- x[, -1L, drop = FALSE] # without intercept
   mf <- stats::model.frame(formula = formula, data = data)
   y <- stats::model.response(mf)
   x <- mf[-1L]
@@ -261,6 +273,18 @@ naive_bayes <- function(object, ...) {
 #' @rdname naive_bayes
 #' @export
 naive_bayes.formula <- function(formula, data, ...) {
+  # Call <- match.call()
+  # mf <- match.call(expand.dots = FALSE)
+  # indx <- match(c("formula", "data"), names(Call), nomatch = 0L)
+  # if (indx[1L] == 0L)
+  #   stop("a 'formula' argument is required.")
+  # temp <- Call[c(1L, indx)]
+  # temp[[1L]] <- quote(stats::model.frame)
+  # m <- eval.parent(temp)
+  # Terms <- attr(m, "terms")
+  # y <- stats::model.response(m)
+  # x <- stats::model.matrix(Terms, m)
+  # x <- x[, -1L, drop = FALSE] # without intercept
   mf <- stats::model.frame(formula = formula, data = data)
   y <- stats::model.response(mf)
   x <- mf[-1L]
@@ -422,6 +446,18 @@ decision_tree <- function(object, ...) {
 #' @rdname decision_tree
 #' @export
 decision_tree.formula <- function(formula, data, maxdepth = 100L, ...) {
+  # Call <- match.call()
+  # mf <- match.call(expand.dots = FALSE)
+  # indx <- match(c("formula", "data"), names(Call), nomatch = 0L)
+  # if (indx[1L] == 0L)
+  #   stop("a 'formula' argument is required.")
+  # temp <- Call[c(1L, indx)]
+  # temp[[1L]] <- quote(stats::model.frame)
+  # m <- eval.parent(temp)
+  # Terms <- attr(m, "terms")
+  # y <- stats::model.response(m)
+  # x <- stats::model.matrix(Terms, m)
+  # x <- x[, -1L, drop = FALSE] # without intercept
   mf <- stats::model.frame(formula = formula, data = data)
   y <- unname(stats::model.response(mf))
   x <- mf[-1L]
