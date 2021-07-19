@@ -62,6 +62,7 @@ Other Utils:
 \code{\link{re.factor}()},
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},
+\code{\link{slice}()},
 \code{\link{ta}()},
 \code{\link{tensor}()},
 \code{\link{var_pop}()},
