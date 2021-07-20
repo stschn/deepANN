@@ -12,7 +12,7 @@
 #' @seealso \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}.
 #'
 #' @examples
-#'   For an example see \code{\link{as_images_tensor_4D}}.
+#'   For an example see \code{\link{as_images_tensor}}.
 #' @export
 images_load <- function(images, FUN, ...) {
   if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
@@ -59,7 +59,7 @@ images_load <- function(images, FUN, ...) {
 #' @return A list of (resized) images.
 #'
 #' @examples
-#'   For an example see \code{\link{as_images_tensor_4D}}.
+#'   For an example see \code{\link{as_images_tensor}}.
 #' @export
 images_resize <- function(imagelist, FUN, ...) {
   if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
@@ -86,7 +86,7 @@ images_resize <- function(imagelist, FUN, ...) {
 #' @seealso \code{\link[keras]{image_to_array}}.
 #'
 #' @examples
-#'   For an example see \code{\link{as_images_tensor_4D}}.
+#'   For an example see \code{\link{as_images_tensor}}.
 #' @export
 as_images_array <- function(imagelist, FUN, ...) {
   if (!missing(FUN)) FUN <- match.fun(FUN) else FUN <- NULL
@@ -99,7 +99,7 @@ as_images_array <- function(imagelist, FUN, ...) {
   return(img_list)
 }
 
-#' @title Convert image arrays to 4D tensor
+#' @title Convert list of image arrays to a tensor
 #' @description
 #'
 #' @family Convolutional Neural Network (CNN)
@@ -107,18 +107,24 @@ as_images_array <- function(imagelist, FUN, ...) {
 #' @param imagelist A list of images returned by \code{as_images_array()}.
 #' @param height The height of an image, equal to the number of rows.
 #' @param width The width of an image, equal to the number of columns.
+#' @param depth The depth of an 3D image. The default value \code{NULL} indicates 2D images.
 #' @param channels The number of channels of an image. A color channel is a primary color (like red, green and blue),
 #'   equal to a color valence (denotes how light effects the color sensation of an eye or in common of the brain).
 #'   Primary colors can be mixed to produce any color.
 #'   A channel equal \code{1} indicates a grayscale image, \code{3} a color image.
 #'
-#' @return A 4D array (tensor) with dimensions samples (number of images), height, width and channels.
+#' @details The supported types of images are 2D and 3D images. The resulting tensor has the corresponding shapes:
+#' * 2D image: \code{samples} (number of images), \code{height}, \code{width} and \code{channels}.
+#' * 3D image: \code{samples} (number of images), \code{height}, \code{width}, \code{depth} and \code{channels}.
+#' @md
+#'
+#' @return A tensor of corresponding shape depending on the type of images (2D or 3D images).
 #'
 #' @examples
 #'   # Get image file names
 #'   base_dir <- "c:/users/.../images" # any folder where image files are stored
 #'   filelist <- list.files(path = base_dir, pattern = "\\.jpg$", full.names = T) # JPEG images
-#'   # Image dimensions
+#'   # Image dimensions (2D images)
 #'   height   <- 200L
 #'   width    <- 200L
 #'   channels <- 3L
@@ -127,7 +133,7 @@ as_images_array <- function(imagelist, FUN, ...) {
 #'   CNN_X <- images_load(filelist, h = height, w = width, ch = channels) %>%
 #'     images_resize() %>%
 #'     as_images_array() %>%
-#'     as_images_tensor_4D(height = height, width = width, channels = channels)
+#'     as_images_tensor(height = height, width = width, channels = channels)
 #'
 #'   # with magick
 #'   magick_resize <- function(img, height, width) {
@@ -141,12 +147,19 @@ as_images_array <- function(imagelist, FUN, ...) {
 #'   CNN_X <- images_load(filelist, FUN = magick::image_read) %>%
 #'     images_resize(FUN = magick_resize, h = height, w = width) %>%
 #'     as_images_array(FUN = magick_array, ch = "rgb") %>%
-#'     as_images_tensor_4D(height = height, width = width, channels = channels)
+#'     as_images_tensor(height = height, width = width, channels = channels)
 #' @export
-as_images_tensor_4D <- function(imagelist, height, width, channels = 3L) {
+as_images_tensor <- function(imagelist, height, width, depth = NULL, channels = 3L) {
   #feature <- keras::array_reshape(imagelist, dim = c(NROW(imagelist), height, width, channels))
-  tensor <- array(NA, dim = c((N <- NROW(imagelist)), height, width, channels))
-  for (i in 1L:N) { tensor[i, , , ] <- imagelist[[i]] }
+  if (is.null(depth)) {
+    # 2D image
+    tensor <- array(NA, dim = c((N <- NROW(imagelist)), height, width, channels))
+    for (i in 1L:N) { tensor[i, , , ] <- imagelist[[i]] }
+  } else {
+    # 3D image
+    tensor <- array(NA, dim = c((N <- NROW(imagelist)), height, width, depth, channels))
+    for (i in 1L:N) { tensor[i, , , , ] <- imagelist[[i]] }
+  }
   return(tensor)
 }
 

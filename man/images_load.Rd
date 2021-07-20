@@ -20,7 +20,7 @@ A list of images.
 
 }
 \examples{
-  For an example see \code{\link{as_images_tensor_4D}}.
+  For an example see \code{\link{as_images_tensor}}.
 }
 \seealso{
 \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}.
@@ -31,7 +31,7 @@ Other Convolutional Neural Network (CNN):
 \code{\link{as_CNN_temp_X}()},
 \code{\link{as_CNN_temp_Y}()},
 \code{\link{as_images_array}()},
-\code{\link{as_images_tensor_4D}()},
+\code{\link{as_images_tensor}()},
 \code{\link{images_resize}()}
 }
 \concept{Convolutional Neural Network (CNN)}
