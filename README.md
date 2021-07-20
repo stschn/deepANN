@@ -149,7 +149,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>images_load()</code> load images from different sources.</li>
   <li><code>images_resize()</code> resizes loaded images.</li>
   <li><code>as_images_array()</code> converts image representation into 3D array.</li>
-  <li><code>as_images_tensor_4D()</code> builds a 4D image tensor with dimensions samples, height, width and channels.</li>
+  <li><code>as_images_tensor()</code> builds an image tensor of corresponding shape depending on the type of images (2D or 3D images).</li>
   <li><code>as_CNN_image_X()</code> creates a 4D image feature array with the dimensions samples, height, width and channels either from already given image data or from images on a storage medium.</li>
   <li><code>as_CNN_image_Y()</code> creates a one-hot vector for the image labels.</li>
   <li><code>as_CNN_temp_X()</code> resamples a feature matrix into a 3D feature array with the dimensions samples, timesteps and units or into a 4D array with the dimensions samples, subsequences, timesteps and features.</li>
