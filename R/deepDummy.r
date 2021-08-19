@@ -31,7 +31,6 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
   if (length(col_names) == 0L) { stop("No character or factor column found.") }
   remove_level <- match.arg(remove_level)
   zero_value <- ifelse(!effectcoding, 0, -1)
-  is_df <- is.data.frame(dataset)
   for (col_name in col_names) {
     if (is.factor(dataset[[col_name]])) {
       lvl <- levels(dataset[[col_name]])
@@ -62,10 +61,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
       ifelse(values == l, 1, zero_value)
     })
     colnames(dummies) <- do.call(paste0, list(rep(col_name, length(lvl)), "_", lvl))
-    if (is_df)
-      dataset <- cbind.data.frame(dataset, dummies)
-    else
-      dataset <- cbind(dataset, dummies)
+    dataset <- cbind(dataset, as.data.frame(dummies))
     if (remove_columns == TRUE) dataset[[col_name]] <- NULL
   }
   return(dataset)
