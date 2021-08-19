@@ -371,7 +371,7 @@ as_ANN_matrix <- function(data) {
 #'
 #' @return The transformed or resampled vector \code{x} into a matrix.
 #'
-#' @seealso \code{\link{as_tensor_3D}}.
+#' @seealso \code{\link{as_tensor_3d}}.
 #'
 #' @export
 vector_as_ANN_matrix <- function(x, ncol = 1, by = c("row", "col", "step"), reverse = FALSE) {
@@ -461,7 +461,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
   return(data)
 }
 
-#' @title Multidimensional Array (marray)
+#' @title Multidimensional array (marray)
 #' @description
 #'   \code{marray(data, ...)} creates a reshaped multidimensional array.\cr
 #'   \code{as.marray(data, ...)} attempts to turn its argument into a \code{marray}.\cr
@@ -469,7 +469,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'
 #' @family Utils
 #'
-#' @param data Data to be reshaped to a multidimensional array.
+#' @param data The data to be reshaped to a multidimensional array.
 #' @param dim The dimensions for the created array. If \code{dim} is not defined (default) and \code{data} already has dimensions, these will be applied.
 #' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
 #' @param order The order in which elements of data should be read during rearrangement.
@@ -594,7 +594,40 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
   return(x)
 }
 
-#' @title Multidimensional Array (marray)
+#' @title Multidimensional array creation: 2D identity matrix
+#' @family Utils
+#'
+#' @param n The number of rows.
+#' @param m The number of columns, default \code{NULL}.
+#'
+#' @return An identity matrix with n rows and n or rather m columns.
+#'
+#' @details The Python package NumPy offers an analog array creation function \code{np.eye(n, m)}.
+#'
+#' @export
+eye <- function(n, m = NULL) {
+  mat <- matrix(0, nrow = n, ncol = n)
+  diag(mat) <- 1
+  if (!is.null(m)) mat <- cbind(mat, matrix(0, nrow = n, ncol = m - n))
+  return(marray(mat, order = "F"))
+}
+
+#' @title Multidimensional array creation: Vandermonde matrix
+#' @family Utils
+#'
+#' @param data The data to be reshaped to a Vandermonde matrix.
+#' @param n The number of columns of the resulting matrix.
+#'
+#' @return A Vandermonde matrix.
+#'
+#' @details The Python package NumPy offers an analog array creation function \code{np.vander(x, n)}.
+#'
+#' @export
+vander <- function(data, n) {
+  marray(outer(deepANN::flatten(data), seq(0, n - 1), "^"), order = "F")
+}
+
+#' @title Multidimensional array slicing
 #' @family Utils
 #'
 #' @param a A vector, matrix, or array.
@@ -640,7 +673,7 @@ slice.matrix <- function(a, ..., drop = TRUE) {
   slice.array(a, ..., drop = drop)
 }
 
-#' @title Multidimensional Array (marray)
+#' @title Multidimensional array insertion
 #' @family Utils
 #'
 #' @param a An array from type \code{marray}.
@@ -1013,10 +1046,10 @@ nsubsequences.marray <- function(x, default = 0L) { nsubsequences.array(x, defau
 #'
 #' @return A one-dimensional array.
 #'
-#' @seealso \code{\link{as_tensor_2D}}, \code{\link{as_tensor_3D}}.
+#' @seealso \code{\link{as_tensor_2d}}, \code{\link{as_tensor_3d}}.
 #'
 #' @export
-as_tensor_1D <- function(data, reverse = FALSE) {
+as_tensor_1d <- function(data, reverse = FALSE) {
   as.tensor.default(deepANN::flatten(data, order = "F"), order = "F", reverse = reverse)
 }
 
@@ -1030,10 +1063,10 @@ as_tensor_1D <- function(data, reverse = FALSE) {
 #'
 #' @return A 2D-tensor (two-dimensional array equal to a matrix).
 #'
-#' @seealso \code{\link{as_tensor_1D}}, \code{\link{as_tensor_3D}}.
+#' @seealso \code{\link{as_tensor_1d}}, \code{\link{as_tensor_3d}}.
 #'
 #' @export
-as_tensor_2D <- function(data, reverse = FALSE) {
+as_tensor_2d <- function(data, reverse = FALSE) {
   as.tensor.default(m <- as.matrix(data), dimnames = list(NULL, colnames(m)), order = "F", reverse = reverse)
 }
 
@@ -1050,10 +1083,10 @@ as_tensor_2D <- function(data, reverse = FALSE) {
 #'
 #' @return A 3D-tensor (three-dimensional array).
 #'
-#' @seealso \code{\link{as_tensor_1D}}, \code{\link{as_tensor_2D}}, \code{\link{vector_as_ANN_matrix}}.
+#' @seealso \code{\link{as_tensor_1d}}, \code{\link{as_tensor_2d}}, \code{\link{vector_as_ANN_matrix}}.
 #'
 #' @export
-as_tensor_3D <- function(data, ncol = 1L, by = c("row", "col", "step"), reverse = FALSE) {
+as_tensor_3d <- function(data, ncol = 1L, by = c("row", "col", "step"), reverse = FALSE) {
   # M <- NCOL(m)
   # N <- NROW(m) - ncol + 1
   # tensor <- array(NA, dim = c(N, ncol, M))

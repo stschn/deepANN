@@ -49,7 +49,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>partition()</code>subsets a data set/time series into several slices.</li>
 </ul>
 
-<b>Quality</b>
+<b>Metrics</b>
 <ul>
   <li><code>sse()</code> calculates the sum of squared errors.</li>
   <li><code>mae()</code> calculates the mean absolute error.</li>
@@ -91,6 +91,8 @@ This R library is currently structured in form of the following functional famil
   <li><code>vector_as_ANN_matrix()</code> transforms a vector into a ANN compatible matrix.</li>
   <li><code>flatten()</code> flattens data into a one-dimensional array.</li>
   <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
+  <li><code>eye()</code> creates a 2D identity matrix.</li>
+  <li><code>vander()</code> creates a Vandermonde matrix.</li>
   <li><code>slice()</code> extracts a part of an array.</li>
   <li><code>insert()</code> inserts an object into an array from type marray.</li>
   <li><code>tensor()</code> and <code>as.tensor()</code> transform data into a n-dimensional tensor (array) and <code>is.tensor()</code checks for a tensor>.</li>
@@ -101,9 +103,9 @@ This R library is currently structured in form of the following functional famil
   <li><code>nunits()</code> extracts the number of units within a data structure, usually a tensor.</li>
   <li><code>ntimesteps()</code> extracts the number of timesteps within a data structure, usually a tensor.</li>
   <li><code>nsubsequences()</code> extracts the number of subsequences within a data structure, usually a tensor.</li>
-  <li><code>as_tensor_1D()</code> transforms data into a one-dimensional tensor (vector).</li>
-  <li><code>as_tensor_2D()</code> transforms data into a two-dimensional tensor (matrix).</li>
-  <li><code>as_tensor_3D()</code> transforms data into a three-dimensional tensor.</li>
+  <li><code>as_tensor_1d()</code> transforms data into a one-dimensional tensor (vector).</li>
+  <li><code>as_tensor_2d()</code> transforms data into a two-dimensional tensor (matrix).</li>
+  <li><code>as_tensor_3d()</code> transforms data into a three-dimensional tensor.</li>
   <li><code>random_seed()</code> random number generator for reproducible results with Tensorflow/Keras.</li>
 </ul>
 
@@ -154,6 +156,19 @@ This R library is currently structured in form of the following functional famil
   <li><code>as_CNN_image_Y()</code> creates a one-hot vector for the image labels.</li>
   <li><code>as_CNN_temp_X()</code> resamples a feature matrix into a 3D feature array with the dimensions samples, timesteps and units or into a 4D array with the dimensions samples, subsequences, timesteps and features.</li>
   <li><code>as_CNN_temp_Y()</code> creates either a 2D outcome array with the dimensions samples and units respectively a 3D array with dimensions samples, timesteps and units for a metric outcome or a one-hot vector for a non-metric outcome.</li>
+  <li><code>build_CNN_lenet5()</code> build a CNN model from type LeNet-5.</li>
+  <li><code>build_CNN_alexnet()</code> build a CNN model from type AlexNet.</li>
+  <li><code>build_CNN_zfnet()</code> build a CNN model from type ZFNet.</li>
+  <li><code>build_CNN_vgg16()</code> build a CNN model from type VGG-16.</li>
+  <li><code>build_CNN_vgg19()</code> build a CNN model from type VGG-19.</li>
+  <li><code>build_CNN_resnet50()</code> build a CNN model from type ResNet-50.</li>
+  <li><code>build_CNN_inception_v3()</code> build a CNN model from type Inception v3.</li>
+  <li><code>build_CNN_inception_resnet_v2()</code> build a CNN model from type Inception-ResNet v2.</li>
+  <li><code>build_CNN_mobilenet()</code> build a CNN model from type MobileNet.</li>
+  <li><code>build_CNN_mobilenet_v2()</code> build a CNN model from type MobileNetV2.</li>
+  <li><code>build_CNN_mobilenet_v3()</code> build a CNN model from type MobileNetV3.</li>
+  <li><code>build_CNN_xception()</code> build a CNN model from type Xception.</li>
+  <li><code>build_CNN_nasnet()</code> build a CNN model from type NASNet-A.</li>
 </ul>
 
 <b>Self-Organizing Map (SOM)</b>

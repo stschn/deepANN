@@ -200,7 +200,7 @@ as_timesteps <- function(lag = 1L, type = "univariate") {
 #'   3. dimension: Features (f) = Number of features within a sequence of a period\cr
 #'   Note: A 3D-array with dimensions (s x t x f) can be interpret as f (s x t)-matrices.
 #'
-#' @seealso \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_Y}}, \code{\link{as_ANN_matrix}}, \code{\link{as_tensor_3D}}.
+#' @seealso \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_Y}}, \code{\link{as_ANN_matrix}}, \code{\link{as_tensor_3d}}.
 #'
 #' @export
 as_LSTM_X <- function(x, timesteps = 1L, reverse = FALSE) {
@@ -214,7 +214,7 @@ as_LSTM_X <- function(x, timesteps = 1L, reverse = FALSE) {
   # for (i in 1:variables) { tensor[, , i] <- matrix(variable_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
   m <- data.matrix(x) # as_ANN_matrix(x)
   timesteps <- ifelse(is.null(timesteps) || (timesteps < 1L), 1L, timesteps) # at least a timestep of 1 is needed
-  return(as_tensor_3D(data = m, ncol = timesteps, by = c("step"), reverse = reverse))
+  return(as_tensor_3d(data = m, ncol = timesteps, by = c("step"), reverse = reverse))
 }
 
 #' @title Outcomes (Y) data format for LSTM
@@ -231,7 +231,7 @@ as_LSTM_X <- function(x, timesteps = 1L, reverse = FALSE) {
 #'   if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{y}.
 #'
 #' @seealso \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_X}}, \code{\link{as_ANN_matrix}}, \code{\link{one_hot_encode}},
-#'   \code{\link{as_tensor_2D}}, \code{\link{as_tensor_3D}}.
+#'   \code{\link{as_tensor_2d}}, \code{\link{as_tensor_3d}}.
 #'
 #' @export
 as_LSTM_Y <- function(y, timesteps = 1L, reverse = FALSE) {
@@ -246,10 +246,10 @@ as_LSTM_Y <- function(y, timesteps = 1L, reverse = FALSE) {
   else {
     m <- data.matrix(y) # as_ANN_matrix(y)
     if ((is.null(timesteps)) || (timesteps <= 1L)) {
-      return(as_tensor_2D(data = m, reverse = reverse))
+      return(as_tensor_2d(data = m, reverse = reverse))
     } else {
       timesteps <- ifelse(timesteps < 2L, 2L, timesteps) # at least a timestep of 2 is needed for a sequence outcome
-      return(as_tensor_3D(data = m, ncol = timesteps, by = c("step"), reverse = reverse))
+      return(as_tensor_3d(data = m, ncol = timesteps, by = c("step"), reverse = reverse))
     }
   }
 }

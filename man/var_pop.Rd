@@ -35,11 +35,12 @@ The population variance and sample variance, implemented in \code{stats} package
 
 Other Utils: 
 \code{\link{as_ANN_matrix}()},
-\code{\link{as_tensor_1D}()},
-\code{\link{as_tensor_2D}()},
-\code{\link{as_tensor_3D}()},
+\code{\link{as_tensor_1d}()},
+\code{\link{as_tensor_2d}()},
+\code{\link{as_tensor_3d}()},
 \code{\link{degree}()},
 \code{\link{distance}()},
+\code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
@@ -59,6 +60,7 @@ Other Utils:
 \code{\link{slice}()},
 \code{\link{ta}()},
 \code{\link{tensor}()},
+\code{\link{vander}()},
 \code{\link{vector_as_ANN_matrix}()},
 \code{\link{vector_as_numeric}()}
 }

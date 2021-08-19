@@ -31,6 +31,7 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
   if (length(col_names) == 0L) { stop("No character or factor column found.") }
   remove_level <- match.arg(remove_level)
   zero_value <- ifelse(!effectcoding, 0, -1)
+  is_df <- is.data.frame(dataset)
   for (col_name in col_names) {
     if (is.factor(dataset[[col_name]])) {
       lvl <- levels(dataset[[col_name]])
@@ -61,7 +62,10 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
       ifelse(values == l, 1, zero_value)
     })
     colnames(dummies) <- do.call(paste0, list(rep(col_name, length(lvl)), "_", lvl))
-    dataset <- cbind(dataset, dummies)
+    if (is_df)
+      dataset <- cbind.data.frame(dataset, dummies)
+    else
+      dataset <- cbind(dataset, dummies)
     if (remove_columns == TRUE) dataset[[col_name]] <- NULL
   }
   return(dataset)
@@ -219,6 +223,11 @@ effectcoding <- function(x) {
 #'
 #' @seealso \code{\link{one_hot_decode}}.
 #'
+#' @examples
+#'   x <- factor(sample(lvls <- c("dog", "cat", "mouse"), 10, TRUE), levels = lvls)
+#'   one_hot_encode(x)
+#'   one_hot_encode(x, ordered = TRUE)
+#'
 #' @export
 one_hot_encode <- function(x, ordered = FALSE) {
   if (!is.factor(x)) x <- as.factor(x)
@@ -230,23 +239,29 @@ one_hot_encode <- function(x, ordered = FALSE) {
   # doesn't work with a single-level factor
   # m <- model.matrix(~0 + x)
 
-  if (!ordered) {
-    m <- lapply(levels(x), function(lvl) {
-      l <- (x == lvl) * 1
-      l[is.na(l)] <- 0
-      l
-    })
-    m <- do.call(cbind, m)
-    colnames(m) <- levels(x)
-  } else {
-    lvl <- levels(x)
-    m <- matrix(0, nrow = N <- NROW(x), ncol = nlevels(x))
-    colnames(m) <- lvl
-    for (i in 1L:N) {
-      m[i, lvl[1L:as.integer(x[[i]])]] <- 1
-    }
-  }
-  return(m)
+  # if (!ordered) {
+  #   m <- lapply(levels(x), function(lvl) {
+  #     l <- (x == lvl) * 1
+  #     l[is.na(l)] <- 0
+  #     l
+  #   })
+  #   m <- do.call(cbind, m)
+  #   colnames(m) <- levels(x)
+  # } else {
+  #   lvl <- levels(x)
+  #   m <- matrix(0, nrow = N <- NROW(x), ncol = nlevels(x))
+  #   colnames(m) <- lvl
+  #   for (i in 1L:N) {
+  #     m[i, lvl[1L:as.integer(x[[i]])]] <- 1
+  #   }
+  # }
+  # return(m)
+
+  lvls <- levels(x)
+  m <- matrix(0, nrow = (nlvls <- nlevels(x)), ncol = nlvls) # identity matrix
+  colnames(m) <- lvls
+  if (!ordered) diag(m) <- 1 else m[lower.tri(m, diag = TRUE)] <- 1
+  m[c(match(x, lvls)), ] # replicate rows (equal to levels)
 }
 
 #' @title One-hot decoding

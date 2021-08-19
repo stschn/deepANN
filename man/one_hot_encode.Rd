@@ -23,6 +23,12 @@ An unordered encoding creates an indicator matrix with the value \code{1} only f
   In opposite, an ordered encoding assumes an intrinsic order of all levels whereby a given level automatically means reaching and exceeding all previous levels.
   In that case, all previous levels are also encoded with value \code{1}.
 }
+\examples{
+  x <- factor(sample(lvls <- c("dog", "cat", "mouse"), 10, TRUE), levels = lvls)
+  one_hot_encode(x)
+  one_hot_encode(x, ordered = TRUE)
+
+}
 \seealso{
 \code{\link{one_hot_decode}}.
 

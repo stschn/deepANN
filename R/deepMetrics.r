@@ -1,7 +1,14 @@
+# Save division
+.divide <- function(dividend, divisor) {
+  quotient <- dividend / divisor
+  quotient[is.infinite(quotient) | is.nan(quotient) | is.na(quotient)] <- 0
+  quotient
+}
+
 #' @title Sum of squared errors (SSE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -20,7 +27,7 @@ sse <- function(actuals, preds, na.rm = FALSE) {
 #' @title Mean absolute error (MAE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -40,7 +47,7 @@ mae <- function(actuals, preds, na.rm = FALSE) {
 #' @title Mean absolute percentage error (MAPE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -51,13 +58,13 @@ mae <- function(actuals, preds, na.rm = FALSE) {
 #' @export
 mape <- function(actuals, preds, na.rm = FALSE) {
   error <- actuals - preds
-  return(mean(abs(error / actuals), na.rm = na.rm) * 100)
+  return(mean(abs(.divide(error, actuals)), na.rm = na.rm) * 100)
 }
 
 #' @title Weighted mean absolute percentage error (WMAPE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -67,7 +74,7 @@ mape <- function(actuals, preds, na.rm = FALSE) {
 #' @return Weighted mean absolute percentage error.
 #'
 #' @export
-wmape <- function(actuals, preds, weights, na.rm = FALSE) {
+wmape <- function(actuals, preds, weights = 1, na.rm = FALSE) {
   error <- actuals - preds
   return((sum(abs(error) * weights, na.rm = na.rm) / sum(abs(actuals) * weights, na.rm = na.rm)) * 100)
 }
@@ -75,7 +82,7 @@ wmape <- function(actuals, preds, weights, na.rm = FALSE) {
 #' @title Weighted average percentage error (WAPE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -92,7 +99,7 @@ wape <- function(actuals, preds, na.rm = FALSE) {
 #' @title Mean squared error (MSE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -111,7 +118,7 @@ mse <- function(actuals, preds, na.rm = FALSE) {
 #' @title Mean squared logarithmic error (MSLE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -138,7 +145,7 @@ msle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
 #' @title Root mean square error (RMSE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -154,7 +161,7 @@ rmse <- function(actuals, preds, na.rm = FALSE) {
 #' @title Root mean square logarithmic error (RMSLE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -171,7 +178,7 @@ rmsle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
 #' @title Root mean square percentage error (RMSPE)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -181,13 +188,13 @@ rmsle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
 #'
 #' @export
 rmspe <- function(actuals, preds, na.rm = FALSE) {
-  return(sqrt(mean(((actuals - preds) / actuals)^2, na.rm = na.rm)) * 100)
+  return(sqrt(mean(.divide((actuals - preds), actuals)^2, na.rm = na.rm)) * 100)
 }
 
 #' @title Huber loss
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -217,7 +224,7 @@ huber_loss <- function(actuals, preds, delta = 1.0, na.rm = FALSE) {
 #' @title Log-Cosh loss
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -235,7 +242,7 @@ log_cosh_loss <- function(actuals, preds, na.rm = FALSE) {
 #' @title Quantile loss
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -270,7 +277,7 @@ quantile_loss <- function(actuals, preds, q = 0.5, na.rm = FALSE) {
 #' @title Variance coefficient (VC)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals A numeric vector of actual values.
 #' @param preds A numeric vector of prediction values.
@@ -296,10 +303,10 @@ coerce_dimension <- function(x) {
   if ((is.atomic(x)) && (!any(xclass %in% c("matrix", "array")))) {
     x <- as.array(x)
   } else {
-  if (any(xclass %in% c("data.frame", "tbl_df", "tbl", "data.table"))) {
+  if (is.data.frame(x)) {
     x <- as.matrix(x)
   } else {
-  if (any(xclass %in% c("list"))) {
+  if (is.list(x)) {
     x <- matrix(unlist(x), ncol = length(x))
   }}}
   x <- as.array(x)
@@ -316,7 +323,7 @@ coerce_dimension <- function(x) {
 #' @title Classification accuracy
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param actuals Numeric data (vector, array, matrix, data frame or list) of actual values.
 #' @param preds Numeric data (vector, array, matrix, data frame or list) of prediction values.
@@ -363,24 +370,24 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
     })
     FN <- sum(unlist(false_negatives))
     if (type == "precision") {
-      return(TP / (TP + FP))
+      return(.divide(TP, (TP + FP)))
     } else {
     if (type == "recall") {
-      return(TP / (TP + FN))
+      return(.divide(TP, (TP + FN)))
     } else {
     if (type == "F1") {
       precision <- TP / (TP + FP)
       recall <- TP / (TP + FN)
-      return(2 * ((precision * recall) / (precision + recall)))
+      return(2 * .divide((precision * recall), (precision + recall)))
     } else {
     if (type == "tpr") {
-      return(TP / (TP + FN))
+      return(.divide(TP, (TP + FN)))
     } else {
     if (type == "fpr") {
-      return(TN / (TN + FP))
+      return(.divide(TN, (TN + FP)))
     } else {
     if (type == "misclassification") {
-      return((FP + FN) / (TP + TN + FP + FN))
+      return(.divide((FP + FN), (TP + TN + FP + FN)))
     } else {
     if (type == "kappa") {
       p0 <- (TP + TN) / (TP + TN + FP + FN) # standard accuracy
@@ -395,7 +402,7 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
 #' @title Gini impurity
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param x A vector of values, usually character labels as raw instances or as class frequencies.
 #'
@@ -422,7 +429,7 @@ gini_impurity <- function(x) {
 #' @title Shannon entropy
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param x A vector of values, usually character labels as raw instances or as class frequencies.
 #' @param base A positive or complex number: the base with respect to which logarithms are computed.
@@ -447,7 +454,7 @@ entropy <- function(x, base = NULL) {
 #' @title Cross entropy
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param p A vector of ground truth probabilities (true probability distribution).
 #' @param q A vector of estimated probabilities (estimated probability distribution).
@@ -480,7 +487,7 @@ cross_entropy <- function(p, q, base = NULL) {
 #' @title Error function (from MATLAB)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param x A numeric vector.
 #'
@@ -491,7 +498,7 @@ erf <- function(x) {2L * pnorm(x * sqrt(2L)) - 1L }
 #' @title Complementary error function (from MATLAB)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param x A numeric vector.
 #'
@@ -502,7 +509,7 @@ erfc <- function(x) {2L * pnorm(x * sqrt(2L), lower = F) }
 #' @title Inverse error function (from MATLAB)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param x A numeric vector.
 #'
@@ -513,7 +520,7 @@ erfinv <- function(x) { qnorm((1L + x) / 2L) / sqrt(2L) }
 #' @title Inverse complementary error function (from MATLAB)
 #' @description
 #'
-#' @family Quality
+#' @family Metrics
 #'
 #' @param x A numeric vector.
 #'

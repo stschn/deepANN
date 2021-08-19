@@ -11,7 +11,7 @@
 #'
 #' @export
 as_MLP_X <- function(x) {
-  return(as_tensor_2D(data.matrix(x)))
+  return(as_tensor_2d(data.matrix(x)))
 }
 
 #' @title Outcomes (Y) data format for SLP/MLP
@@ -35,7 +35,7 @@ as_MLP_Y <- function(y) {
     return(m)
   }
   # Metric outcome
-  else { return(as_tensor_2D(data.matrix(y))) }
+  else { return(as_tensor_2d(data.matrix(y))) }
 }
 
 #' @title Build SLP/MLP architecture

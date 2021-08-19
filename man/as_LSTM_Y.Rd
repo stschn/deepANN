@@ -23,7 +23,7 @@ Dependent on the type of \code{Y} and timesteps. If \code{y} is a factor, the re
 }
 \seealso{
 \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_X}}, \code{\link{as_ANN_matrix}}, \code{\link{one_hot_encode}},
-  \code{\link{as_tensor_2D}}, \code{\link{as_tensor_3D}}.
+  \code{\link{as_tensor_2d}}, \code{\link{as_tensor_3d}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as_LSTM_X}()},

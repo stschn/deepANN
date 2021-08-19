@@ -5,7 +5,7 @@
 \alias{as.marray}
 \alias{as.marray.default}
 \alias{is.marray}
-\title{Multidimensional Array (marray)}
+\title{Multidimensional array (marray)}
 \usage{
 marray(data, ...)
 
@@ -23,7 +23,7 @@ as.marray(data, ...)
 is.marray(x)
 }
 \arguments{
-\item{data}{Data to be reshaped to a multidimensional array.}
+\item{data}{The data to be reshaped to a multidimensional array.}
 
 \item{...}{Additional arguments to be passed to or from methods.}
 
@@ -87,11 +87,12 @@ This introduced multidimensional array, read m-array, defines an array as severa
 
 Other Utils: 
 \code{\link{as_ANN_matrix}()},
-\code{\link{as_tensor_1D}()},
-\code{\link{as_tensor_2D}()},
-\code{\link{as_tensor_3D}()},
+\code{\link{as_tensor_1d}()},
+\code{\link{as_tensor_2d}()},
+\code{\link{as_tensor_3d}()},
 \code{\link{degree}()},
 \code{\link{distance}()},
+\code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
@@ -110,6 +111,7 @@ Other Utils:
 \code{\link{slice}()},
 \code{\link{ta}()},
 \code{\link{tensor}()},
+\code{\link{vander}()},
 \code{\link{var_pop}()},
 \code{\link{vector_as_ANN_matrix}()},
 \code{\link{vector_as_numeric}()}

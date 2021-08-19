@@ -5,7 +5,7 @@
 \alias{slice.array}
 \alias{slice.marray}
 \alias{slice.matrix}
-\title{Multidimensional Array (marray)}
+\title{Multidimensional array slicing}
 \usage{
 slice(data, ...)
 
@@ -26,7 +26,7 @@ slice(data, ...)
 An extracted part of \code{a}.
 }
 \description{
-Multidimensional Array (marray)
+Multidimensional array slicing
 }
 \details{
 \code{slice} is an alternative way to handle indexing array objects, usually done with \code{\link[base]{[}}. The dimensions must be indexed by names,
@@ -44,11 +44,12 @@ Multidimensional Array (marray)
 \seealso{
 Other Utils: 
 \code{\link{as_ANN_matrix}()},
-\code{\link{as_tensor_1D}()},
-\code{\link{as_tensor_2D}()},
-\code{\link{as_tensor_3D}()},
+\code{\link{as_tensor_1d}()},
+\code{\link{as_tensor_2d}()},
+\code{\link{as_tensor_3d}()},
 \code{\link{degree}()},
 \code{\link{distance}()},
+\code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
@@ -67,6 +68,7 @@ Other Utils:
 \code{\link{similarity}()},
 \code{\link{ta}()},
 \code{\link{tensor}()},
+\code{\link{vander}()},
 \code{\link{var_pop}()},
 \code{\link{vector_as_ANN_matrix}()},
 \code{\link{vector_as_numeric}()}

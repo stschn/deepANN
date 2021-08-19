@@ -3,7 +3,7 @@
 \name{insert}
 \alias{insert}
 \alias{insert.marray}
-\title{Multidimensional Array (marray)}
+\title{Multidimensional array insertion}
 \usage{
 insert(data, ...)
 
@@ -24,7 +24,7 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 The marray \code{a} with inserted \code{x}.
 }
 \description{
-Multidimensional Array (marray)
+Multidimensional array insertion
 }
 \details{
 For insertion, the last dimension of \code{a} is fixed and \code{x} is coerced into the remaining dimensions. If \code{a} is a
@@ -42,11 +42,12 @@ For insertion, the last dimension of \code{a} is fixed and \code{x} is coerced i
 
 Other Utils: 
 \code{\link{as_ANN_matrix}()},
-\code{\link{as_tensor_1D}()},
-\code{\link{as_tensor_2D}()},
-\code{\link{as_tensor_3D}()},
+\code{\link{as_tensor_1d}()},
+\code{\link{as_tensor_2d}()},
+\code{\link{as_tensor_3d}()},
 \code{\link{degree}()},
 \code{\link{distance}()},
+\code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{list_as_numeric}()},
 \code{\link{marray}()},
@@ -65,6 +66,7 @@ Other Utils:
 \code{\link{slice}()},
 \code{\link{ta}()},
 \code{\link{tensor}()},
+\code{\link{vander}()},
 \code{\link{var_pop}()},
 \code{\link{vector_as_ANN_matrix}()},
 \code{\link{vector_as_numeric}()}

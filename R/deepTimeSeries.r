@@ -30,12 +30,12 @@ get_season <- function(dates) {
 #' @family Time Series
 #'
 #' @param x A vector for building a lagged data series or an entire data set.
-#' @param k The amount of period shifts (lags).
-#' @param between Controls whether only the lag for \code{k} is calculated (\code{FALSE}) or
-#'   all lags between the periods \code{1:k} are also considered (\code{TRUE}).
-#' @param na A sign which is used to indicate a missing value in a prior period.
+#' @param k The number of lags. A lag denotes a delay in time or a period shift. A lagged variable, also known as delayed variable, holds the values of past or future periodic values of the variable itself, depending on the direction of the shift.
+#'   The sign of \code{k} specifies the direction of the shift. A positive lag shifts sequence values forward in time, so into the future. A negative lag shifts sequence values back in time, so into the past.
+#' @param between  Controls whether only the desired \code{lag} is considered (\code{FALSE}) or all other lags between 1 to \code{lag} (\code{TRUE}).
+#' @param na A sign which is used to indicate a missing value in a shifted period.
 #'
-#' @return A lagged data series or a lagged data set.
+#' @return A lagged data series.
 #' @export
 lags <- function(x, k = 1, between = FALSE, na = NA) {
   x <- c(t(x))

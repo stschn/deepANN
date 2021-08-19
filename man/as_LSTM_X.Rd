@@ -24,7 +24,7 @@ A three-dimensional array of the resampled feature matrix \code{x} needed within
 
 }
 \seealso{
-\code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_Y}}, \code{\link{as_ANN_matrix}}, \code{\link{as_tensor_3D}}.
+\code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_Y}}, \code{\link{as_ANN_matrix}}, \code{\link{as_tensor_3d}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as_LSTM_Y}()},
