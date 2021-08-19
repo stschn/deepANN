@@ -320,7 +320,7 @@ build_CNN_lenet5 <- function(input_shape, classes, activation = "softmax", loss 
     keras::layer_dense(units = classes, activation = activation)
 
   # Create and compile model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "LeNet-5")
+  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "LeNet5")
   model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
@@ -530,7 +530,7 @@ build_CNN_vgg16 <- function(input_shape, classes, activation = "softmax", loss =
     keras::layer_dense(units = classes, activation = activation)
 
   # Create and compile model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG-16")
+  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG16")
   model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
@@ -603,7 +603,7 @@ build_CNN_vgg19 <- function(input_shape, classes, activation = "softmax", loss =
     keras::layer_dense(units = classes, activation = activation)
 
   # Create and compile model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG-19")
+  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG19")
   model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
@@ -728,7 +728,7 @@ build_CNN_resnet50 <- function(input_shape, classes, activation = "softmax", los
     keras::layer_dense(units = classes, activation = activation)
 
   # Create and compile model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ResNet-50")
+  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ResNet50")
   model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
@@ -1001,7 +1001,7 @@ build_CNN_inception_v3 <- function(input_shape, classes, activation = "softmax",
     keras::layer_dense(units = classes, activation = activation)
 
   # Create and compile model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception v3")
+  model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_v3")
   model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
@@ -1167,7 +1167,7 @@ build_CNN_inception_resnet_v2 <- function(input_shape, classes, activation = "so
     keras::layer_dense(units = classes, activation = activation)
 
   # Create and compile model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception-ResNet v2")
+  model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_ResNet_v2")
   model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
@@ -1985,7 +1985,7 @@ build_CNN_nasnet <- function(input_shape, classes, activation = "softmax", penul
     keras::layer_dense(units = classes, activation = activation)
 
   # Create and compile model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "NASNet-A")
+  model <- keras::keras_model(inputs = inputs, outputs = x, name = "NASNet_A")
   model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
