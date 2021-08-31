@@ -5,7 +5,7 @@ Version: 0.4.00
 Author: person("Stephan", "Schneider", email = "stschn@vodafonemail.de", role = c("aut", "cre"))
 Maintainer: Stephan Schneider <stschn@vodafonemail.de>
 Description: A Toolbox for Machine & Deep Learning mainly with Tensorflow
-   SLP/MLP, LSTM, CNN, SOM.
+   SLP/MLP, RNN/LSTM, CNN.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
@@ -13,6 +13,5 @@ URL: https://github.com/stschn/deepANN/
 Imports:
    reticulate (>= 1.16),
    tensorflow (>= 2.0.0),
-   keras (>= 2.3.0.0),
-   kohonen (>= 3.0.10)
+   keras (>= 2.3.0.0)
 RoxygenNote: 7.1.1

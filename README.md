@@ -170,8 +170,3 @@ This R library is currently structured in form of the following functional famil
   <li><code>build_CNN_xception()</code> build a CNN model from type Xception.</li>
   <li><code>build_CNN_nasnet()</code> build a CNN model from type NASNet-A.</li>
 </ul>
-
-<b>Self-Organizing Map (SOM)</b>
-<ul>
-  <li><code>fit_SOM()</code> encapsulates a complete SOM analysis.</li>
-</ul>
