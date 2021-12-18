@@ -327,25 +327,37 @@ coerce_dimension <- function(x) {
 #'
 #' @param actuals Numeric data (vector, array, matrix, data frame or list) of actual values.
 #' @param preds Numeric data (vector, array, matrix, data frame or list) of prediction values.
-#' @param type Denotes the calculated type (\code{standard} (default), \code{precision}, \code{recall}, \code{F1}-score, \code{tpr}, \code{fpr}, \code{kappa} or \code{misclassification}-error of accuracy derivative from confusion matrix.
+#' @param type Denotes the calculated type of accuracy derivative from confusion matrix.
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
 #'
-#' @details
-#'   \eqn{Standard Accuracy = Number of correct predictions / Total number of predictions}.\cr
-#'   \eqn{Precision = True Positives / (True Positives + False Positives)}. The denominator is the total predicted positives.\cr
-#'   \eqn{Recall = True Positives / (True Positives + False Negatives)}. The denominator is the total actual positives.\cr
-#'   \eqn{F1 = 2 * Precision * Recall / (Precision + Recall)}.\cr
-#'   \eqn{TPR (True Positive Rate) or sensitivity = True Positives / (True Positives + False Negatives)}.\cr
-#'   \eqn{FPR (False Positive Rate) or specificity = True Negatives / (True Negatives + False Positives)}.\cr
-#'   \eqn{Kappa statistics = (p0 - pe) / (1 - pe)}.\cr
-#'   \eqn{Misclassification error = Number of incorrect predictions / Total number of predictions}.\cr
+#' @details The following accuracy types are implemented:
+#'   \itemize{
+#'   \item Standard: \eqn{Number of correct predictions / Total number of predictions}
+#'   \item Misclassification error: \eqn{Number of incorrect predictions / Total number of predictions}
+#'   \item TPR (True Positive Rate), also sensitivity, recall or hit rate: \eqn{TP / (TP + FN)}
+#'   \item TNR (True Negative Rate), also specificity or selectivity: \eqn{TN / (TN + FP)}
+#'   \item PPV (Positive Predictive Value), also precision: \eqn{TP / (TP + FP)}
+#'   \item NPV (Negative Predictive Value): \eqn{TN / (TN + FN)}
+#'   \item FNR (False Negative Rate), also miss rate: \eqn{FN / (FN + TP)}
+#'   \item FPR (False Positive rate), also fall-out: \eqn{FP / (FP + TN)}
+#'   \item FDR (False Discovery Rate): \eqn{FP / (FP + TP)}
+#'   \item FOR (False Omission Rate): \eqn{FN / (FN + TN)}
+#'   \item LR+ (Positive Likelihood Ratio): \eqn{TPR / FPR}
+#'   \item LR- (Negative Likelihood Ratio): \eqn{FNR / TNR}
+#'   \item DOR (Diagnostics Odds Ratio): \eqn{LR+ / LR-}
+#'   \item TS (Threat Score), also critical succes index: \eqn{TP (TP + FN + FP)}
+#'   \item F1 score: \eqn{2 * Precision * Recall / (Precision + Recall)}
+#'   \item MCC (Matthews Correlation Coefficient), also phi coefficient: \eqn{TP * TN - FP * FN / \sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))}
+#'   \item FM (Fowlkes-Mallows index): \eqn{\sqrt((TP / (TP + FP)) * (TP / (TP * FN)))}
+#'   \item Kappa statistics: \eqn{(p0 - pe) / (1 - pe)}
+#'   }
 #'
 #'   Standard accuracy and misclassification error are mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
 #'
 #' @return The type-specific accuracy of a classification problem.
 #'
 #' @export
-accuracy <- function(actuals, preds, type = c("standard", "precision", "recall", "F1", "tpr", "fpr", "kappa", "misclassification"), na.rm = FALSE) {
+accuracy <- function(actuals, preds, type = c("standard", "misclass", "tpr", "tnr", "ppv", "npv", "fnr", "fpr", "fdr", "for", "lrplus", "lrminus", "dor", "ts", "f1", "mcc", "fm", "kappa"), na.rm = FALSE) {
   actuals <- coerce_dimension(actuals)
   preds <- coerce_dimension(preds)
   stopifnot(identical(dim(actuals), dim(preds)), identical(length(actuals), length(preds)))
@@ -369,25 +381,66 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
       sum((actuals[i, ] != preds[i, ] & preds[i, ] == 0), na.rm = na.rm)
     })
     FN <- sum(unlist(false_negatives))
-    if (type == "precision") {
-      return(.divide(TP, (TP + FP)))
-    } else {
-    if (type == "recall") {
-      return(.divide(TP, (TP + FN)))
-    } else {
-    if (type == "F1") {
-      precision <- TP / (TP + FP)
-      recall <- TP / (TP + FN)
-      return(2 * .divide((precision * recall), (precision + recall)))
+
+    if (type == "misclass") {
+      return(.divide((FP + FN), (TP + TN + FP + FN)))
     } else {
     if (type == "tpr") {
       return(.divide(TP, (TP + FN)))
     } else {
-    if (type == "fpr") {
+    if (type == "tnr") {
       return(.divide(TN, (TN + FP)))
     } else {
-    if (type == "misclassification") {
-      return(.divide((FP + FN), (TP + TN + FP + FN)))
+    if (type == "ppv") {
+      return(.divide(TP, (TP + FP)))
+    } else {
+    if (type == "npv") {
+      return(.divide(TN, (TN + FN)))
+    } else {
+    if (type == "fnr") {
+      return(.divide(FN, (FN + TP)))
+    } else {
+    if (type == "fpr") {
+      return(.divide(FP, (FP + TN)))
+    } else {
+    if (type == "fdr") {
+      return(.divide(FP, (FP + TP)))
+    } else {
+    if (type == "for") {
+      return(.divide(FN, (FN + TN)))
+    } else {
+    if (type == "lrplus") {
+      tpr <- .divide(TP, (TP + FN))
+      fpr <- .divide(FP, (FP + TN))
+      return(.divide(tpr, fpr))
+    } else {
+    if (type == "lrminus") {
+      fnr <- .divide(FN, (FN + TP))
+      tnr <- .divide(TN, (TN + FP))
+      return(.divide(fnr, tnr))
+    } else {
+    if (type == "dor") {
+      tpr <- .divide(TP, (TP + FN))
+      fpr <- .divide(FP, (FP + TN))
+      lrplus <- .divide(tpr, fpr)
+      fnr <- .divide(FN, (FN + TP))
+      tnr <- .divide(TN, (TN + FP))
+      lrminus <- .divide(fnr, tnr)
+      return(.divide(lrplus, lrminus))
+    } else {
+    if (type == "ts") {
+      return(.divide(TP, (TP + FN + FP)))
+    } else {
+    if (type == "f1") {
+      precision <- TP / (TP + FP)
+      recall <- TP / (TP + FN)
+      return(2 * .divide((precision * recall), (precision + recall)))
+    } else {
+    if (type == "mcc") {
+      return(.divide((TP * TN) - (FP * FN), sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))))
+    } else {
+    if (type == "fm") {
+      return(sqrt(.divide(TP, TP + FP) * .divide(TP, TP + FN)))
     } else {
     if (type == "kappa") {
       p0 <- (TP + TN) / (TP + TN + FP + FN) # standard accuracy
@@ -395,7 +448,7 @@ accuracy <- function(actuals, preds, type = c("standard", "precision", "recall",
       pno <- ((FN + TN) / (TP + TN + FP + FN)) * ((FP + TN) / (TP + TN + FP + FN))
       pe <- pyes + pno
       return(1 - ((1 - p0) / (1 - pe)))
-    }}}}}}}
+    }}}}}}}}}}}}}}}}}
   }
 }
 
