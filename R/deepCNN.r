@@ -283,20 +283,20 @@ as_CNN_temp_Y <- function(y, timesteps = 1L, reverse = FALSE) {
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 32x32x1 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type LeNet-5.
 #'
@@ -304,9 +304,16 @@ as_CNN_temp_Y <- function(y, timesteps = 1L, reverse = FALSE) {
 #'   \url{http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf}
 #'
 #' @export
-build_CNN_lenet5 <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_lenet5 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(32, 32, 1)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   blocks <- inputs %>%
@@ -314,14 +321,18 @@ build_CNN_lenet5 <- function(input_shape, classes, activation = "softmax", loss 
     keras::layer_average_pooling_2d(pool_size = 2, strides = 1, padding = 'valid') %>%
     keras::layer_conv_2d(filters = 16L, kernel_size = c(5L, 5L), strides = 1L, activation = 'tanh', padding = 'valid') %>%
     keras::layer_average_pooling_2d(pool_size = 2L, strides = 2L, padding = 'valid') %>%
-    keras::layer_conv_2d(filters = 120L, kernel_size = c(5L, 5L), strides = 1L, activation = 'tanh', padding = 'valid') %>%
-    keras::layer_flatten() %>%
-    keras::layer_dense(units = 84L, activation = "tanh") %>%
-    keras::layer_dense(units = classes, activation = activation)
+    keras::layer_conv_2d(filters = 120L, kernel_size = c(5L, 5L), strides = 1L, activation = 'tanh', padding = 'valid')
 
-  # Create and compile model
+  if (include_top) {
+    # Classification block
+    blocks <- blocks %>%
+      keras::layer_flatten() %>%
+      keras::layer_dense(units = 84L, activation = "tanh") %>%
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
+
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "LeNet5")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -331,20 +342,20 @@ build_CNN_lenet5 <- function(input_shape, classes, activation = "softmax", loss 
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 227x227x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from typ AlexNet.
 #'
@@ -352,9 +363,16 @@ build_CNN_lenet5 <- function(input_shape, classes, activation = "softmax", loss 
 #'   \url{https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf}
 #'
 #' @export
-build_CNN_alexnet <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "adam", metrics = c('accuracy')) {
+build_CNN_alexnet <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(227, 227, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   blocks <- inputs %>%
@@ -376,28 +394,28 @@ build_CNN_alexnet <- function(input_shape, classes, activation = "softmax", loss
 
     keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
     keras::layer_batch_normalization() %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same') %>%
+    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
 
-    keras::layer_flatten() %>%
+  if (include_top) {
+    # Classification block
+    blocks <- blocks %>%
+      keras::layer_flatten() %>%
 
-    keras::layer_dense(units = 4096, activation = 'relu', input_shape = c(height * width * channels)) %>%
-    #keras::layer_batch_normalization() %>%
-    keras::layer_dropout(rate = 0.5) %>%
+      keras::layer_dense(units = 4096, activation = 'relu') %>%
+      #keras::layer_batch_normalization() %>%
+      keras::layer_dropout(rate = 0.5) %>%
 
-    keras::layer_dense(units = 4096, activation = 'relu') %>%
-    #keras::layer_batch_normalization() %>%
-    keras::layer_dropout(rate = 0.5) %>%
+      keras::layer_dense(units = 4096, activation = 'relu') %>%
+      #keras::layer_batch_normalization() %>%
+      keras::layer_dropout(rate = 0.5) %>%
 
-    keras::layer_dense(units = 1000, activation = 'relu') %>%
-    #keras::layer_batch_normalization() %>%
+      keras::layer_dense(units = classes) %>%
+      #keras::layer_batch_normalization() %>%
+      keras::layer_activation(activation = "softmax")
+  }
 
-    keras::layer_dense(units = classes) %>%
-    #keras::layer_batch_normalization() %>%
-    keras::layer_activation(activation = activation)
-
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "AlexNet")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -407,20 +425,20 @@ build_CNN_alexnet <- function(input_shape, classes, activation = "softmax", loss
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type ZFNet.
 #'
@@ -428,9 +446,16 @@ build_CNN_alexnet <- function(input_shape, classes, activation = "softmax", loss
 #'   \url{https://arxiv.org/pdf/1311.2901.pdf}
 #'
 #' @export
-build_CNN_zfnet <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_zfnet <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(224, 224, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   blocks <- inputs %>%
@@ -447,21 +472,24 @@ build_CNN_zfnet <- function(input_shape, classes, activation = "softmax", loss =
     keras::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
 
     keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'valid') %>%
+    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
 
-    keras::layer_flatten() %>%
+  if (include_top) {
+    # Classification block
+    blocks <- blocks %>%
+      keras::layer_flatten() %>%
 
-    keras::layer_dense(units = 4096, activation = "relu") %>%
-    keras::layer_dropout(rate = 0.5) %>%
+      keras::layer_dense(units = 4096, activation = "relu") %>%
+      keras::layer_dropout(rate = 0.5) %>%
 
-    keras::layer_dense(units = 4096, activation = "relu") %>%
-    keras::layer_dropout(rate = 0.5) %>%
+      keras::layer_dense(units = 4096, activation = "relu") %>%
+      keras::layer_dropout(rate = 0.5) %>%
 
-    keras::layer_dense(units = classes, activation = activation)
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
 
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ZFNet")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -471,20 +499,20 @@ build_CNN_zfnet <- function(input_shape, classes, activation = "softmax", loss =
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type VGG-16.
 #'
@@ -494,9 +522,16 @@ build_CNN_zfnet <- function(input_shape, classes, activation = "softmax", loss =
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/vgg16.py}
 #'
 #' @export
-build_CNN_vgg16 <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_vgg16 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(224, 224, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   blocks <- inputs %>%
@@ -521,17 +556,20 @@ build_CNN_vgg16 <- function(input_shape, classes, activation = "softmax", loss =
     keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
     keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
     keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid')
 
-    keras::layer_flatten() %>%
-    keras::layer_dense(units = 4096, activation = "relu") %>%
-    keras::layer_dense(units = 4096, activation = "relu") %>%
+  if (include_top) {
+    # Classification block
+    blocks <- blocks %>%
+      keras::layer_flatten() %>%
+      keras::layer_dense(units = 4096, activation = "relu") %>%
+      keras::layer_dense(units = 4096, activation = "relu") %>%
 
-    keras::layer_dense(units = classes, activation = activation)
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
 
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG16")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -541,20 +579,20 @@ build_CNN_vgg16 <- function(input_shape, classes, activation = "softmax", loss =
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type VGG-19.
 #'
@@ -564,9 +602,16 @@ build_CNN_vgg16 <- function(input_shape, classes, activation = "softmax", loss =
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/vgg19.py}
 #'
 #' @export
-build_CNN_vgg19 <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_vgg19 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(224, 224, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   blocks <- inputs %>%
@@ -594,17 +639,20 @@ build_CNN_vgg19 <- function(input_shape, classes, activation = "softmax", loss =
     keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
     keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
     keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid')
 
-    keras::layer_flatten() %>%
-    keras::layer_dense(units = 4096, activation = "relu") %>%
-    keras::layer_dense(units = 4096, activation = "relu") %>%
+  if (include_top) {
+    # Classification block
+    blocks <- blocks %>%
+      keras::layer_flatten() %>%
+      keras::layer_dense(units = 4096, activation = "relu") %>%
+      keras::layer_dense(units = 4096, activation = "relu") %>%
 
-    keras::layer_dense(units = classes, activation = activation)
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
 
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG19")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -614,20 +662,20 @@ build_CNN_vgg19 <- function(input_shape, classes, activation = "softmax", loss =
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type ResNet-50.
 #'
@@ -638,7 +686,7 @@ build_CNN_vgg19 <- function(input_shape, classes, activation = "softmax", loss =
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/resnet50.py}
 #'
 #' @export
-build_CNN_resnet50 <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_resnet50 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
 
   # The identity block is the standard block used in ResNet. The input and output dimensions match up.
   .identity_block <- function(object, filters, kernel_size = c(3, 3), strides = c(1, 1)) {
@@ -692,8 +740,15 @@ build_CNN_resnet50 <- function(input_shape, classes, activation = "softmax", los
     return(object)
   }
 
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(224, 224, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   blocks <- inputs %>%
@@ -722,14 +777,17 @@ build_CNN_resnet50 <- function(input_shape, classes, activation = "softmax", los
 
     .convolutional_block(filters = c(512, 512, 2048)) %>%
     .identity_block(filters = c(512, 512, 2048)) %>%
-    .identity_block(filters = c(512, 512, 2048)) %>%
+    .identity_block(filters = c(512, 512, 2048))
 
-    keras::layer_global_average_pooling_2d() %>% # another implementation: layer_average_pooling_2d(pool_size = c(2, 2))
-    keras::layer_dense(units = classes, activation = activation)
+  if (include_top) {
+    # Classification block
+    blocks <- blocks %>%
+      keras::layer_global_average_pooling_2d() %>% # another implementation: layer_average_pooling_2d(pool_size = c(2, 2))
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
 
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ResNet50")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -739,20 +797,20 @@ build_CNN_resnet50 <- function(input_shape, classes, activation = "softmax", los
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 299x299x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type Inception v3.
 #'
@@ -762,7 +820,7 @@ build_CNN_resnet50 <- function(input_shape, classes, activation = "softmax", los
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/inception_v3.py}
 #'
 #' @export
-build_CNN_inception_v3 <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_inception_v3 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
 
   .conv2d_bn <- function(object, filters, kernel_size, strides = c(1, 1), padding = 'same') {
     object <- object %>%
@@ -772,8 +830,15 @@ build_CNN_inception_v3 <- function(input_shape, classes, activation = "softmax",
     return(object)
   }
 
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(299, 299, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   x <- inputs %>%
@@ -995,14 +1060,15 @@ build_CNN_inception_v3 <- function(input_shape, classes, activation = "softmax",
 
   x <- keras::layer_concatenate(inputs = c(branch1x1, branch3x3, branch3x3dbl, branch_pool), axis = 3)
 
-  # Classification block
-  x <- x %>%
-    keras::layer_global_average_pooling_2d() %>%
-    keras::layer_dense(units = classes, activation = activation)
+  if (include_top) {
+    # Classification block
+    x <- x %>%
+      keras::layer_global_average_pooling_2d() %>%
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
 
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_v3")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -1012,20 +1078,20 @@ build_CNN_inception_v3 <- function(input_shape, classes, activation = "softmax",
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 299x299x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type Inception-ResNet v2.
 #'
@@ -1035,7 +1101,7 @@ build_CNN_inception_v3 <- function(input_shape, classes, activation = "softmax",
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/inception_resnet_v2.py}
 #'
 #' @export
-build_CNN_inception_resnet_v2 <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_inception_resnet_v2 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
 
   .conv2d_bn <- function(object, filters, kernel_size, strides = 1, padding = 'same', activation = 'relu', use_bias = FALSE) {
     object <- object %>% keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = padding, use_bias = use_bias)
@@ -1090,8 +1156,15 @@ build_CNN_inception_resnet_v2 <- function(input_shape, classes, activation = "so
     return(object)
   }
 
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(299, 299, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   # Stem block: 35 x 35 x 192
@@ -1161,14 +1234,15 @@ build_CNN_inception_resnet_v2 <- function(input_shape, classes, activation = "so
   # Final convolutional block: 8 x 8 x 1536
   x <- .conv2d_bn(x, filters = 1536, kernel_size = 1)
 
-  # Classification block
-  x <- x %>%
-    keras::layer_global_average_pooling_2d() %>%
-    keras::layer_dense(units = classes, activation = activation)
+  if (include_top) {
+    # Classification block
+    x <- x %>%
+      keras::layer_global_average_pooling_2d() %>%
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
 
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_ResNet_v2")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -1178,9 +1252,10 @@ build_CNN_inception_resnet_v2 <- function(input_shape, classes, activation = "so
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #' @param alpha Controls the width of the network.
 #'   * if \code{alpha < 1.0}, proportionally decreases the number of filters in each layer.
 #'   * if \code{alpha > 1.0}, proportionally increases the number of filters in each layer.
@@ -1188,17 +1263,16 @@ build_CNN_inception_resnet_v2 <- function(input_shape, classes, activation = "so
 #' @md
 #' @param depth_multiplier Depth multiplier for depthwise convolution (also called the resolution multiplier).
 #' @param dropout Dropout rate.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type MobileNet.
 #'
@@ -1208,7 +1282,7 @@ build_CNN_inception_resnet_v2 <- function(input_shape, classes, activation = "so
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet.py}
 #'
 #' @export
-build_CNN_mobilenet <- function(input_shape, classes, activation = "softmax", alpha = 1.0, depth_multiplier = 1, dropout = 1e-3, loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_mobilenet <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, alpha = 1.0, depth_multiplier = 1, dropout = 1e-3, ...) {
 
   .conv_block <- function(object, filters, alpha, kernel_size = c(3, 3), strides = c(1, 1)) {
     filters <- as.integer(filters * alpha)
@@ -1239,8 +1313,15 @@ build_CNN_mobilenet <- function(input_shape, classes, activation = "softmax", al
     return(x)
   }
 
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(224, 224, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   x <- inputs %>%
@@ -1257,17 +1338,21 @@ build_CNN_mobilenet <- function(input_shape, classes, activation = "softmax", al
     .depthwise_conv_block(512, alpha, depth_multiplier) %>%
     .depthwise_conv_block(512, alpha, depth_multiplier) %>%
     .depthwise_conv_block(1024, alpha, depth_multiplier, strides = c(2, 2)) %>%
-    .depthwise_conv_block(1024, alpha, depth_multiplier) %>%
-    keras::layer_global_average_pooling_2d() %>%
-    keras::layer_reshape(target_shape = c(1, 1, as.integer(1024 * alpha))) %>%
-    keras::layer_dropout(rate = dropout) %>%
-    keras::layer_conv_2d(filters = classes, kernel_size = c(1, 1), padding = 'same') %>%
-    keras::layer_reshape(target_shape = c(classes)) %>%
-    keras::layer_activation(activation = activation)
+    .depthwise_conv_block(1024, alpha, depth_multiplier)
 
-  # Create and compile model
+  if (include_top) {
+    # Classification block
+    x <- x %>%
+      keras::layer_global_average_pooling_2d() %>%
+      keras::layer_reshape(target_shape = c(1, 1, as.integer(1024 * alpha))) %>%
+      keras::layer_dropout(rate = dropout) %>%
+      keras::layer_conv_2d(filters = classes, kernel_size = c(1, 1), padding = 'same') %>%
+      keras::layer_reshape(target_shape = c(classes)) %>%
+      keras::layer_activation(activation = "softmax")
+  }
+
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNet")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -1277,25 +1362,25 @@ build_CNN_mobilenet <- function(input_shape, classes, activation = "softmax", al
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param alpha Controls the width of the network. This is known as the width multiplier in the MobileNetV2 paper, but the name is kept for consistency with MobileNetV1.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param alpha Controls the width of the network.
 #'   * if \code{alpha < 1.0}, proportionally decreases the number of filters in each layer.
 #'   * if \code{alpha > 1.0}, proportionally increases the number of filters in each layer.
-#'   * if \code{alpha = 1.0}, default number of filters from the paper are used at each layer.
+#'   * if \code{alpha = 1.0}, default number of filters from the paper are used in each layer.
 #' @md
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type MobileNetV2.
 #'
@@ -1305,7 +1390,7 @@ build_CNN_mobilenet <- function(input_shape, classes, activation = "softmax", al
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet_v2.py}
 #'
 #' @export
-build_CNN_mobilenet_v2 <- function(input_shape, classes, activation = "softmax", alpha = 1.0, loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_mobilenet_v2 <- function(include_top = TRUE, input_tensor = NULL, input_shape, classes = 1000, alpha = 1.0, ...) {
 
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
@@ -1359,8 +1444,15 @@ build_CNN_mobilenet_v2 <- function(input_shape, classes, activation = "softmax",
     return(x)
   }
 
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(224, 224, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   channel_axis <- ifelse(keras::k_image_data_format() == 'channels_last', -1, 1)
@@ -1399,13 +1491,17 @@ build_CNN_mobilenet_v2 <- function(input_shape, classes, activation = "softmax",
   x <- x %>%
     keras::layer_conv_2d(filters = last_block_filters, kernel_size = 1, use_bias = FALSE) %>%
     keras::layer_batch_normalization(axis = channel_axis, epsilon = 1e-3, momentum = 0.999) %>%
-    keras::layer_activation_relu(max_value = 6.) %>%
-    keras::layer_global_average_pooling_2d() %>%
-    keras::layer_dense(units = classes, activation = activation)
+    keras::layer_activation_relu(max_value = 6.)
 
-  # Create and compile model
+  if (include_top) {
+    # Classification block
+    x <- x %>%
+      keras::layer_global_average_pooling_2d() %>%
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
+
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNetV2")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -1415,9 +1511,10 @@ build_CNN_mobilenet_v2 <- function(input_shape, classes, activation = "softmax",
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #' @param type Model type either \code{large} (default) or \code{small}. These models are targeted at high and low resource use cases respectively.
 #' @param minimalistic In addition to large and small models this module also contains so-called minimalistic models.
 #'   These models have the same per-layer dimensions characteristic as MobilenetV3 however, they don't utilize any of the advanced blocks (squeeze-and-excite units, hard-swish, and 5x5 convolutions).
@@ -1427,17 +1524,16 @@ build_CNN_mobilenet_v2 <- function(input_shape, classes, activation = "softmax",
 #'   * if \code{alpha > 1.0}, proportionally increases the number of filters in each layer.
 #'   * if \code{alpha = 1.0}, default number of filters from the paper are used at each layer.
 #' @md
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type MobileNetV3.
 #'
@@ -1447,7 +1543,7 @@ build_CNN_mobilenet_v2 <- function(input_shape, classes, activation = "softmax",
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet_v3.py}
 #'
 #' @export
-build_CNN_mobilenet_v3 <- function(input_shape, classes, activation = "softmax", type = c("large", "small"), minimalistic = FALSE, alpha = 1.0, loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_mobilenet_v3 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, type = c("large", "small"), minimalistic = FALSE, alpha = 1.0, ...) {
 
   # Custom activation function
   activation_hard_sigmoid <- function(x, alpha = 0, max_value = 6., threshold = 0) {
@@ -1589,8 +1685,15 @@ build_CNN_mobilenet_v3 <- function(input_shape, classes, activation = "softmax",
     se_ratio <- 0.25
   }
 
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(224, 224, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   channel_axis <- ifelse(keras::k_image_data_format() == 'channels_last', -1, 1)
@@ -1614,24 +1717,26 @@ build_CNN_mobilenet_v3 <- function(input_shape, classes, activation = "softmax",
   x <- keras::layer_conv_2d(x, filters = last_conv_channels, kernel_size = 1, padding = 'same', use_bias = FALSE)
   x <- keras::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
   x <- layer_activation(x)
-  x <- keras::layer_global_average_pooling_2d(x)
 
-  if (channel_axis == -1) {
-    x <- keras::layer_reshape(x, target_shape = c(1, 1, last_conv_channels))
-  } else {
-    x <- keras::layer_reshape(x, target_shape = c(last_conv_channels, 1, 1))
+  if (include_top) {
+    x <- keras::layer_global_average_pooling_2d(x)
+
+    if (channel_axis == -1) {
+      x <- keras::layer_reshape(x, target_shape = c(1, 1, last_conv_channels))
+    } else {
+      x <- keras::layer_reshape(x, target_shape = c(last_conv_channels, 1, 1))
+    }
+
+    x <- keras::layer_conv_2d(x, filters = last_point_channels, kernel_size = 1, padding = 'same')
+    x <- layer_activation(x)
+    x <- keras::layer_dropout(x, rate = 0.2)
+    x <- keras::layer_conv_2d(x, filters = classes, kernel_size = 1, padding = 'same')
+    x <- keras::layer_flatten(x)
+    x <- keras::layer_activation(x, activation = "softmax")
   }
 
-  x <- keras::layer_conv_2d(x, filters = last_point_channels, kernel_size = 1, padding = 'same')
-  x <- layer_activation(x)
-  x <- keras::layer_dropout(x, rate = 0.2)
-  x <- keras::layer_conv_2d(x, filters = classes, kernel_size = 1, padding = 'same')
-  x <- keras::layer_flatten(x)
-  x <- keras::layer_activation(x, activation = activation)
-
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNetV3")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -1641,20 +1746,20 @@ build_CNN_mobilenet_v3 <- function(input_shape, classes, activation = "softmax",
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 299x299x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 #'
 #' @return A CNN model object from type Xception.
 #'
@@ -1664,12 +1769,19 @@ build_CNN_mobilenet_v3 <- function(input_shape, classes, activation = "softmax",
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/xception.py}
 #'
 #' @export
-build_CNN_xception <- function(input_shape, classes, activation = "softmax", loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_xception <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
 
   channel_axis <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
 
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(299, 299, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   x <- inputs %>%
@@ -1753,13 +1865,15 @@ build_CNN_xception <- function(input_shape, classes, activation = "softmax", los
     keras::layer_batch_normalization(axis = channel_axis) %>%
     keras::layer_activation(activation = 'relu')
 
-  x <- x %>%
-    keras::layer_global_average_pooling_2d() %>%
-    keras::layer_dense(units = classes, activation = activation)
+  if (include_top) {
+    # Classification block
+    x <- x %>%
+      keras::layer_global_average_pooling_2d() %>%
+      keras::layer_dense(units = classes, activation = "softmax")
+  }
 
-  # Create and compile model
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Xception")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }
@@ -1769,9 +1883,11 @@ build_CNN_xception <- function(input_shape, classes, activation = "softmax", los
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of.
-#' @param activation Activation function for the output layer.
+#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param default_size Specifies the default image size of the model. If no value is specified (default) the size is set equal to 331 for NASNetLarge. For NASNetMobile the default size is 224.
 #' @param penultimate_filters Number of filters in the penultimate layer.
 #' @param num_blocks Number of repeated blocks of the NASNet model.
 #' @param stem_block_filters Number of filters in the initial stem block.
@@ -1781,12 +1897,8 @@ build_CNN_xception <- function(input_shape, classes, activation = "softmax", los
 #'   * if \code{filter_multiplier > 1.0}, proportionally increases the number of filters in each layer.
 #'   * if \code{filter_multiplier = 1.0}, default number of filters from the paper are used at each layer.
 #' @md
-#' @param loss Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-#'   The loss value that will be minimized by the model will then be the sum of all individual losses.
-#' @param optimizer Name of optimizer or optimizer instance.
-#' @param metrics Vector or list of metrics to be evaluated by the model during training and testing.
 #'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the \code{default_size} is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 #'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 #'
@@ -1801,6 +1913,9 @@ build_CNN_xception <- function(input_shape, classes, activation = "softmax", los
 #'     \code{stem_block_filters = 32} \cr
 #'     \code{skip_reduction = FALSE}
 #'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'
 #' @return A CNN model object from type NASNet-A.
 #'
 #' @references Zoph, B., Vasudevan, V., Shlens, J., Le, Q. V. (2017). Learning Transferable Architectures for Scalable Image Recognition. arXiv:1707.07012 [cs]. https://arxiv.org/abs/1707.07012. \cr
@@ -1809,7 +1924,7 @@ build_CNN_xception <- function(input_shape, classes, activation = "softmax", los
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/nasnet.py}
 #'
 #' @export
-build_CNN_nasnet <- function(input_shape, classes, activation = "softmax", penultimate_filters = 4032, num_blocks = 6, stem_block_filters = 96, skip_reduction = TRUE, filter_multiplier = 2, loss = "categorical_crossentropy", optimizer = "sgd", metrics = c('accuracy')) {
+build_CNN_nasnet <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, default_size = NULL, penultimate_filters = 4032, num_blocks = 6, stem_block_filters = 96, skip_reduction = TRUE, filter_multiplier = 2, ...) {
 
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
@@ -1947,8 +2062,17 @@ build_CNN_nasnet <- function(input_shape, classes, activation = "softmax", penul
   channel_dim <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
   filters <- floor(penultimate_filters / 24)
 
+  # Determine proper input shape
+  if (is.null(default_size)) default_size <- 331
+  if (length(default_size) == 1L) default_size <- c(default_size, default_size)
+  if (is.null(input_shape)) input_shape <- c(default_size, 3)
+
   # Input layer
-  inputs <- keras::layer_input(shape = input_shape)
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
 
   # Building blocks
   x <- inputs %>%
@@ -1979,14 +2103,15 @@ build_CNN_nasnet <- function(input_shape, classes, activation = "softmax", penul
     c(x, p) %<-% .normal_cell(x, p, filters = filters * filter_multiplier^2)
   }
 
-  x <- x %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_global_average_pooling_2d() %>%
-    keras::layer_dense(units = classes, activation = activation)
+  x <- x %>% keras::layer_activation(activation = 'relu')
 
-  # Create and compile model
+  if (include_top) {
+    keras::layer_global_average_pooling_2d() %>%
+    keras::layer_dense(units = classes, activation = "softmax")
+  }
+
+  # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "NASNet_A")
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
 
   return(model)
 }

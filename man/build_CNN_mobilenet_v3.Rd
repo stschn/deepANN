@@ -5,23 +5,24 @@
 \title{Build MobileNetV3}
 \usage{
 build_CNN_mobilenet_v3(
-  input_shape,
-  classes,
-  activation = "softmax",
+  include_top = TRUE,
+  input_tensor = NULL,
+  input_shape = NULL,
+  classes = 1000,
   type = c("large", "small"),
   minimalistic = FALSE,
   alpha = 1,
-  loss = "categorical_crossentropy",
-  optimizer = "sgd",
-  metrics = c("accuracy")
+  ...
 )
 }
 \arguments{
+\item{include_top}{Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.}
+
+\item{input_tensor}{Optional tensor to use as image input for the model.}
+
 \item{input_shape}{Dimensionality of the input not including the samples axis.}
 
-\item{classes}{Number of classes or labels the outcome consists of.}
-
-\item{activation}{Activation function for the output layer.}
+\item{classes}{Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.}
 
 \item{type}{Model type either \code{large} (default) or \code{small}. These models are targeted at high and low resource use cases respectively.}
 
@@ -35,13 +36,6 @@ While these models are less efficient on CPU, they are much more performant on G
 \item if \code{alpha > 1.0}, proportionally increases the number of filters in each layer.
 \item if \code{alpha = 1.0}, default number of filters from the paper are used at each layer.
 }}
-
-\item{loss}{Name of objective function or objective function. If the model has multiple outputs, different loss on each output can be used by passing a dictionary or a list of objectives.
-The loss value that will be minimized by the model will then be the sum of all individual losses.}
-
-\item{optimizer}{Name of optimizer or optimizer instance.}
-
-\item{metrics}{Vector or list of metrics to be evaluated by the model during training and testing.}
 }
 \value{
 A CNN model object from type MobileNetV3.
@@ -50,12 +44,15 @@ A CNN model object from type MobileNetV3.
 
 }
 \details{
-The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. \cr
+The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
 one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 
 For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+
+For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
 }
 \references{
 Howard, A., Sandler, M., Chu, G., Chen, L.-C., Chen, B., Tan, M., Wang, W., Zhu, Y., Pang, R., Vasudevan, V., Le, Q. V., Adam, H. (2019): Searching for MobileNetV3. arXiv:1905.02244v5 \link{cs}. https://arxiv.org/abs/1905.02244. \cr
