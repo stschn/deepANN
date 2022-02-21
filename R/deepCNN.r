@@ -284,9 +284,11 @@ as_CNN_temp_Y <- function(y, timesteps = 1L, reverse = FALSE) {
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 32x32x1 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -304,7 +306,11 @@ as_CNN_temp_Y <- function(y, timesteps = 1L, reverse = FALSE) {
 #'   \url{http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf}
 #'
 #' @export
-build_CNN_lenet5 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(32, 32, 1)
 
@@ -328,11 +334,24 @@ build_CNN_lenet5 <- function(include_top = TRUE, input_tensor = NULL, input_shap
     blocks <- blocks %>%
       keras::layer_flatten() %>%
       keras::layer_dense(units = 84L, activation = "tanh") %>%
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "LeNet5")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -343,9 +362,11 @@ build_CNN_lenet5 <- function(include_top = TRUE, input_tensor = NULL, input_shap
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 227x227x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -363,7 +384,11 @@ build_CNN_lenet5 <- function(include_top = TRUE, input_tensor = NULL, input_shap
 #'   \url{https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf}
 #'
 #' @export
-build_CNN_alexnet <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(227, 227, 3)
 
@@ -411,11 +436,24 @@ build_CNN_alexnet <- function(include_top = TRUE, input_tensor = NULL, input_sha
 
       keras::layer_dense(units = classes) %>%
       #keras::layer_batch_normalization() %>%
-      keras::layer_activation(activation = "softmax")
+      keras::layer_activation(activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "AlexNet")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -426,9 +464,11 @@ build_CNN_alexnet <- function(include_top = TRUE, input_tensor = NULL, input_sha
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -446,7 +486,11 @@ build_CNN_alexnet <- function(include_top = TRUE, input_tensor = NULL, input_sha
 #'   \url{https://arxiv.org/pdf/1311.2901.pdf}
 #'
 #' @export
-build_CNN_zfnet <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(224, 224, 3)
 
@@ -485,11 +529,24 @@ build_CNN_zfnet <- function(include_top = TRUE, input_tensor = NULL, input_shape
       keras::layer_dense(units = 4096, activation = "relu") %>%
       keras::layer_dropout(rate = 0.5) %>%
 
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ZFNet")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -500,9 +557,11 @@ build_CNN_zfnet <- function(include_top = TRUE, input_tensor = NULL, input_shape
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -522,7 +581,11 @@ build_CNN_zfnet <- function(include_top = TRUE, input_tensor = NULL, input_shape
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/vgg16.py}
 #'
 #' @export
-build_CNN_vgg16 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(224, 224, 3)
 
@@ -565,11 +628,24 @@ build_CNN_vgg16 <- function(include_top = TRUE, input_tensor = NULL, input_shape
       keras::layer_dense(units = 4096, activation = "relu") %>%
       keras::layer_dense(units = 4096, activation = "relu") %>%
 
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG16")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -580,9 +656,11 @@ build_CNN_vgg16 <- function(include_top = TRUE, input_tensor = NULL, input_shape
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -602,7 +680,11 @@ build_CNN_vgg16 <- function(include_top = TRUE, input_tensor = NULL, input_shape
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/vgg19.py}
 #'
 #' @export
-build_CNN_vgg19 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(224, 224, 3)
 
@@ -648,11 +730,24 @@ build_CNN_vgg19 <- function(include_top = TRUE, input_tensor = NULL, input_shape
       keras::layer_dense(units = 4096, activation = "relu") %>%
       keras::layer_dense(units = 4096, activation = "relu") %>%
 
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG19")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -663,9 +758,11 @@ build_CNN_vgg19 <- function(include_top = TRUE, input_tensor = NULL, input_shape
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -686,7 +783,7 @@ build_CNN_vgg19 <- function(include_top = TRUE, input_tensor = NULL, input_shape
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/resnet50.py}
 #'
 #' @export
-build_CNN_resnet50 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   # The identity block is the standard block used in ResNet. The input and output dimensions match up.
   .identity_block <- function(object, filters, kernel_size = c(3, 3), strides = c(1, 1)) {
@@ -740,6 +837,10 @@ build_CNN_resnet50 <- function(include_top = TRUE, input_tensor = NULL, input_sh
     return(object)
   }
 
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(224, 224, 3)
 
@@ -783,11 +884,24 @@ build_CNN_resnet50 <- function(include_top = TRUE, input_tensor = NULL, input_sh
     # Classification block
     blocks <- blocks %>%
       keras::layer_global_average_pooling_2d() %>% # another implementation: layer_average_pooling_2d(pool_size = c(2, 2))
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ResNet50")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -798,9 +912,11 @@ build_CNN_resnet50 <- function(include_top = TRUE, input_tensor = NULL, input_sh
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 299x299x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -820,7 +936,7 @@ build_CNN_resnet50 <- function(include_top = TRUE, input_tensor = NULL, input_sh
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/inception_v3.py}
 #'
 #' @export
-build_CNN_inception_v3 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   .conv2d_bn <- function(object, filters, kernel_size, strides = c(1, 1), padding = 'same') {
     object <- object %>%
@@ -829,6 +945,10 @@ build_CNN_inception_v3 <- function(include_top = TRUE, input_tensor = NULL, inpu
       keras::layer_activation(activation = 'relu')
     return(object)
   }
+
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
 
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(299, 299, 3)
@@ -1064,11 +1184,24 @@ build_CNN_inception_v3 <- function(include_top = TRUE, input_tensor = NULL, inpu
     # Classification block
     x <- x %>%
       keras::layer_global_average_pooling_2d() %>%
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_v3")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -1079,9 +1212,11 @@ build_CNN_inception_v3 <- function(include_top = TRUE, input_tensor = NULL, inpu
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 299x299x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -1101,7 +1236,7 @@ build_CNN_inception_v3 <- function(include_top = TRUE, input_tensor = NULL, inpu
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/inception_resnet_v2.py}
 #'
 #' @export
-build_CNN_inception_resnet_v2 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   .conv2d_bn <- function(object, filters, kernel_size, strides = 1, padding = 'same', activation = 'relu', use_bias = FALSE) {
     object <- object %>% keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = padding, use_bias = use_bias)
@@ -1155,6 +1290,10 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, input_tensor = NUL
     if (!is.null(activation)) object <- keras::layer_activation(object, activation = activation)
     return(object)
   }
+
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
 
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(299, 299, 3)
@@ -1238,11 +1377,24 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, input_tensor = NUL
     # Classification block
     x <- x %>%
       keras::layer_global_average_pooling_2d() %>%
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_ResNet_v2")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -1253,9 +1405,11 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, input_tensor = NUL
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #' @param alpha Controls the width of the network.
 #'   * if \code{alpha < 1.0}, proportionally decreases the number of filters in each layer.
 #'   * if \code{alpha > 1.0}, proportionally increases the number of filters in each layer.
@@ -1282,7 +1436,7 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, input_tensor = NUL
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet.py}
 #'
 #' @export
-build_CNN_mobilenet <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, alpha = 1.0, depth_multiplier = 1, dropout = 1e-3, ...) {
+build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", alpha = 1.0, depth_multiplier = 1, dropout = 1e-3) {
 
   .conv_block <- function(object, filters, alpha, kernel_size = c(3, 3), strides = c(1, 1)) {
     filters <- as.integer(filters * alpha)
@@ -1312,6 +1466,10 @@ build_CNN_mobilenet <- function(include_top = TRUE, input_tensor = NULL, input_s
       keras::layer_activation_relu(max_value = 6.)
     return(x)
   }
+
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
 
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(224, 224, 3)
@@ -1348,11 +1506,24 @@ build_CNN_mobilenet <- function(include_top = TRUE, input_tensor = NULL, input_s
       keras::layer_dropout(rate = dropout) %>%
       keras::layer_conv_2d(filters = classes, kernel_size = c(1, 1), padding = 'same') %>%
       keras::layer_reshape(target_shape = c(classes)) %>%
-      keras::layer_activation(activation = "softmax")
+      keras::layer_activation(activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNet")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -1363,9 +1534,11 @@ build_CNN_mobilenet <- function(include_top = TRUE, input_tensor = NULL, input_s
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #' @param alpha Controls the width of the network.
 #'   * if \code{alpha < 1.0}, proportionally decreases the number of filters in each layer.
 #'   * if \code{alpha > 1.0}, proportionally increases the number of filters in each layer.
@@ -1390,7 +1563,7 @@ build_CNN_mobilenet <- function(include_top = TRUE, input_tensor = NULL, input_s
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet_v2.py}
 #'
 #' @export
-build_CNN_mobilenet_v2 <- function(include_top = TRUE, input_tensor = NULL, input_shape, classes = 1000, alpha = 1.0, ...) {
+build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape, classes = 1000, classifier_activation = "softmax", alpha = 1.0) {
 
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
@@ -1443,6 +1616,10 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, input_tensor = NULL, inpu
     if ((in_channels == pointwise_filters) && (strides == 1)) x <- keras::layer_add(inputs = c(object, x))
     return(x)
   }
+
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
 
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(224, 224, 3)
@@ -1497,11 +1674,24 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, input_tensor = NULL, inpu
     # Classification block
     x <- x %>%
       keras::layer_global_average_pooling_2d() %>%
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNetV2")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -1512,9 +1702,11 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, input_tensor = NULL, inpu
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #' @param type Model type either \code{large} (default) or \code{small}. These models are targeted at high and low resource use cases respectively.
 #' @param minimalistic In addition to large and small models this module also contains so-called minimalistic models.
 #'   These models have the same per-layer dimensions characteristic as MobilenetV3 however, they don't utilize any of the advanced blocks (squeeze-and-excite units, hard-swish, and 5x5 convolutions).
@@ -1543,7 +1735,7 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, input_tensor = NULL, inpu
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet_v3.py}
 #'
 #' @export
-build_CNN_mobilenet_v3 <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, type = c("large", "small"), minimalistic = FALSE, alpha = 1.0, ...) {
+build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", type = c("large", "small"), minimalistic = FALSE, alpha = 1.0) {
 
   # Custom activation function
   activation_hard_sigmoid <- function(x, alpha = 0, max_value = 6., threshold = 0) {
@@ -1685,6 +1877,10 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, input_tensor = NULL, inpu
     se_ratio <- 0.25
   }
 
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(224, 224, 3)
 
@@ -1732,11 +1928,24 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, input_tensor = NULL, inpu
     x <- keras::layer_dropout(x, rate = 0.2)
     x <- keras::layer_conv_2d(x, filters = classes, kernel_size = 1, padding = 'same')
     x <- keras::layer_flatten(x)
-    x <- keras::layer_activation(x, activation = "softmax")
+    x <- keras::layer_activation(x, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNetV3")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -1747,9 +1956,11 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, input_tensor = NULL, inpu
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
 #' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 299x299x3 is used. \cr
 #'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
@@ -1769,9 +1980,13 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, input_tensor = NULL, inpu
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/xception.py}
 #'
 #' @export
-build_CNN_xception <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, ...) {
+build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   channel_axis <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
+
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
 
   # Determine proper input shape
   if (is.null(input_shape)) input_shape <- c(299, 299, 3)
@@ -1869,11 +2084,24 @@ build_CNN_xception <- function(include_top = TRUE, input_tensor = NULL, input_sh
     # Classification block
     x <- x %>%
       keras::layer_global_average_pooling_2d() %>%
-      keras::layer_dense(units = classes, activation = "softmax")
+      keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Xception")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }
@@ -1884,9 +2112,11 @@ build_CNN_xception <- function(include_top = TRUE, input_tensor = NULL, input_sh
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #' @param default_size Specifies the default image size of the model. If no value is specified (default) the size is set equal to 331 for NASNetLarge. For NASNetMobile the default size is 224.
 #' @param penultimate_filters Number of filters in the penultimate layer.
 #' @param num_blocks Number of repeated blocks of the NASNet model.
@@ -1924,7 +2154,7 @@ build_CNN_xception <- function(include_top = TRUE, input_tensor = NULL, input_sh
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/nasnet.py}
 #'
 #' @export
-build_CNN_nasnet <- function(include_top = TRUE, input_tensor = NULL, input_shape = NULL, classes = 1000, default_size = NULL, penultimate_filters = 4032, num_blocks = 6, stem_block_filters = 96, skip_reduction = TRUE, filter_multiplier = 2, ...) {
+build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", default_size = NULL, penultimate_filters = 4032, num_blocks = 6, stem_block_filters = 96, skip_reduction = TRUE, filter_multiplier = 2) {
 
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
@@ -2062,6 +2292,10 @@ build_CNN_nasnet <- function(include_top = TRUE, input_tensor = NULL, input_shap
   channel_dim <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
   filters <- floor(penultimate_filters / 24)
 
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
   # Determine proper input shape
   if (is.null(default_size)) default_size <- 331
   if (length(default_size) == 1L) default_size <- c(default_size, default_size)
@@ -2107,11 +2341,24 @@ build_CNN_nasnet <- function(include_top = TRUE, input_tensor = NULL, input_shap
 
   if (include_top) {
     keras::layer_global_average_pooling_2d() %>%
-    keras::layer_dense(units = classes, activation = "softmax")
+    keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "NASNet_A")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
 
   return(model)
 }

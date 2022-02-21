@@ -6,26 +6,31 @@
 \usage{
 build_CNN_nasnet(
   include_top = TRUE,
+  weights = "imagenet",
   input_tensor = NULL,
   input_shape = NULL,
   classes = 1000,
+  classifier_activation = "softmax",
   default_size = NULL,
   penultimate_filters = 4032,
   num_blocks = 6,
   stem_block_filters = 96,
   skip_reduction = TRUE,
-  filter_multiplier = 2,
-  ...
+  filter_multiplier = 2
 )
 }
 \arguments{
 \item{include_top}{Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.}
 
+\item{weights}{One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.}
+
 \item{input_tensor}{Optional tensor to use as image input for the model.}
 
 \item{input_shape}{Dimensionality of the input not including the samples axis.}
 
-\item{classes}{Number of classes or labels the outcome consists of, only to be specified if \code{include_top = TRUE}.}
+\item{classes}{Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.}
+
+\item{classifier_activation}{A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.}
 
 \item{default_size}{Specifies the default image size of the model. If no value is specified (default) the size is set equal to 331 for NASNetLarge. For NASNetMobile the default size is 224.}
 
