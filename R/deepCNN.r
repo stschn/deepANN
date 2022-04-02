@@ -2372,6 +2372,9 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 #' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
 #' @param input_tensor Optional tensor to use as image input for the model.
 #' @param input_shape Dimensionality of the input not including the samples axis.
+#' @param dropout Dropout rate applied between downsampling and upsampling phases.
+#' @param filters Number of filters of the first convolution.
+#' @param num_layers Number of downsizing blocks in the encoder.
 #' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
 #' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
 #'
@@ -2391,7 +2394,24 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   see also: \url{https://arxiv.org/pdf/1505.04597.pdf} \cr
 #'
 #' @export
-build_CNN_unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1, classifier_activation = "sigmoid") {
+build_CNN_unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, dropout = 0.5, filters = 64, num_layers = 4, classes = 1, classifier_activation = "sigmoid") {
+
+  .conv2d_block <- function(object, use_batch_norm = TRUE, dropout = 0.3, filters = 16, kernel_size = c(3, 3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same') {
+    x <- object %>%
+      keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, activation = activation, kernel_initializer = kernel_initializer, padding = padding, use_bias = !use_batch_norm)
+    if (use_batch_norm) {
+      x <- keras::layer_batch_normalization(x)
+    }
+    if (dropout > 0) {
+      x <- keras::layer_dropout(x, rate = dropout)
+    }
+    x <- x %>%
+      keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, activation = activation, kernel_initializer = kernel_initializer, padding = padding, use_bias = !use_batch_norm)
+    if (use_batch_norm) {
+      x <- keras::layer_batch_normalization(x)
+    }
+    return(x)
+  }
 
   # Check for valid weights
   if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
@@ -2408,63 +2428,88 @@ build_CNN_unet <- function(include_top = TRUE, weights = "imagenet", input_tenso
   }
 
   # Building blocks
-  conv1 <- inputs %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  pool1 <- conv1 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
-  conv2 <- pool1 %>%
-    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  pool2 <- conv2 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
-  conv3 <- pool2 %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu')
-  pool3 <- conv3 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
-  conv4 <- pool3 %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  drop4 <- conv4 %>% keras::layer_dropout(rate = 0.5)
-  pool4 <- drop4 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  x <- inputs
+  down_layers <- list()
 
-  conv5 <- pool4 %>%
-    keras::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  drop5 <- conv5 %>% keras::layer_dropout(rate = 0.5)
+  for (i in seq_len(num_layers)) {
+    x <- .conv2d_block(x, use_batch_norm = FALSE, dropout = 0, filters = filters)
+    down_layers[[i]] <- x
+    x <- keras::layer_max_pooling_2d(x, pool_size = c(2, 2), strides = c(2, 2))
+    filters <- filters * 2
+  }
 
-  up6 <- drop5 %>%
-    keras::layer_upsampling_2d(size = c(2, 2)) %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  merge6 <- keras::layer_concatenate(inputs = c(drop4, up6), axis = 3)
-  conv6 <- merge6 %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  if (dropout > 0) {
+    x <- keras::layer_dropout(x, rate = dropout)
+  }
 
-  up7 <- conv6 %>%
-    keras::layer_upsampling_2d(size = c(2, 2)) %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  merge7 <- keras::layer_concatenate(inputs = c(conv3, up7), axis = 3)
-  conv7 <- merge7 %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  x <- .conv2d_block(x, use_batch_norm = FALSE, dropout = 0, filters = filters)
 
-  up8 <- conv7 %>%
-    keras::layer_upsampling_2d(size = c(2, 2)) %>%
-    keras::layer_conv_2d(filters = 128, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  merge8 <- keras::layer_concatenate(inputs = c(conv2, up8), axis = 3)
-  conv8 <- merge8 %>%
-    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  for (conv in rev(down_layers)) {
+    filters <- filters / 2L
+    x <- keras::layer_conv_2d_transpose(x, filters = filters, kernel_size = c(2, 2), strides = c(2, 2), padding = 'same')
+    x <- keras::layer_concatenate(list(conv, x))
+    x <- .conv2d_block(x, use_batch_norm = FALSE, dropout = 0, filters = filters)
+  }
 
-  up9 <- conv8 %>%
-    keras::layer_upsampling_2d(size = c(2, 2)) %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  merge9 <- keras::layer_concatenate(inputs = c(conv1, up9), axis = 3)
-  conv9 <- merge9 %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-    keras::layer_conv_2d(filters = 2, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  blocks <- x
 
-  blocks <- conv9
+  # conv1 <- inputs %>%
+  #   keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # pool1 <- conv1 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  # conv2 <- pool1 %>%
+  #   keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # pool2 <- conv2 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  # conv3 <- pool2 %>%
+  #   keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu')
+  # pool3 <- conv3 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  # conv4 <- pool3 %>%
+  #   keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # drop4 <- conv4 %>% keras::layer_dropout(rate = 0.5)
+  # pool4 <- drop4 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  #
+  # conv5 <- pool4 %>%
+  #   keras::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # drop5 <- conv5 %>% keras::layer_dropout(rate = 0.5)
+  #
+  # up6 <- drop5 %>%
+  #   keras::layer_upsampling_2d(size = c(2, 2)) %>%
+  #   keras::layer_conv_2d(filters = 512, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # merge6 <- keras::layer_concatenate(inputs = c(drop4, up6), axis = 3)
+  # conv6 <- merge6 %>%
+  #   keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  #
+  # up7 <- conv6 %>%
+  #   keras::layer_upsampling_2d(size = c(2, 2)) %>%
+  #   keras::layer_conv_2d(filters = 256, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # merge7 <- keras::layer_concatenate(inputs = c(conv3, up7), axis = 3)
+  # conv7 <- merge7 %>%
+  #   keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  #
+  # up8 <- conv7 %>%
+  #   keras::layer_upsampling_2d(size = c(2, 2)) %>%
+  #   keras::layer_conv_2d(filters = 128, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # merge8 <- keras::layer_concatenate(inputs = c(conv2, up8), axis = 3)
+  # conv8 <- merge8 %>%
+  #   keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  #
+  # up9 <- conv8 %>%
+  #   keras::layer_upsampling_2d(size = c(2, 2)) %>%
+  #   keras::layer_conv_2d(filters = 64, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # merge9 <- keras::layer_concatenate(inputs = c(conv1, up9), axis = 3)
+  # conv9 <- merge9 %>%
+  #   keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras::layer_conv_2d(filters = 2, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  #
+  # blocks <- conv9
 
   if (include_top) {
     # Classification block

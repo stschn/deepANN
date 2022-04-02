@@ -9,6 +9,9 @@ build_CNN_unet(
   weights = "imagenet",
   input_tensor = NULL,
   input_shape = NULL,
+  dropout = 0.5,
+  filters = 64,
+  num_layers = 4,
   classes = 1,
   classifier_activation = "sigmoid"
 )
@@ -21,6 +24,12 @@ build_CNN_unet(
 \item{input_tensor}{Optional tensor to use as image input for the model.}
 
 \item{input_shape}{Dimensionality of the input not including the samples axis.}
+
+\item{dropout}{Dropout rate applied between downsampling and upsampling phases.}
+
+\item{filters}{Number of filters of the first convolution.}
+
+\item{num_layers}{Number of downsizing blocks in the encoder.}
 
 \item{classes}{Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.}
 
