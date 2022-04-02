@@ -169,4 +169,5 @@ This R library is currently structured in form of the following functional famil
   <li><code>build_CNN_mobilenet_v3()</code> build a CNN model from type MobileNetV3.</li>
   <li><code>build_CNN_xception()</code> build a CNN model from type Xception.</li>
   <li><code>build_CNN_nasnet()</code> build a CNN model from type NASNet-A.</li>
+  <li><code>build_CNN_unet()</code> build a CNN model from type U-Net.</li>
 </ul>
