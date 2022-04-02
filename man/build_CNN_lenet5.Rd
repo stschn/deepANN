@@ -63,6 +63,7 @@ Other Convolutional Neural Network (CNN):
 \code{\link{build_CNN_mobilenet}()},
 \code{\link{build_CNN_nasnet}()},
 \code{\link{build_CNN_resnet50}()},
+\code{\link{build_CNN_unet}()},
 \code{\link{build_CNN_vgg16}()},
 \code{\link{build_CNN_vgg19}()},
 \code{\link{build_CNN_xception}()},

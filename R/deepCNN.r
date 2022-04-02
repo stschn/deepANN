@@ -2362,3 +2362,131 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 
   return(model)
 }
+
+#' @title Build U-Net
+#' @description
+#'
+#' @family Convolutional Neural Network (CNN)
+#'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
+#' @param input_tensor Optional tensor to use as image input for the model.
+#' @param input_shape Dimensionality of the input not including the samples axis.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
+#'
+#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 256x256x1 is used. \cr
+#'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
+#'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
+#'
+#'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
+#'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
+#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'
+#' @return A CNN model object from type U-Net.
+#'
+#' @references  Ronneberger, O., Fischer, P., Brox T. (2015): U-Net: Convolutional Networks f?r Biomedical Image Segmentation. In: Navab, N., Hornegger, J., Wells, W., Frangi, A. (Hrsg.): Medical Image Computing and Computer-Assisted Intervention - MICCAI 2015. Lecture Notes in Computer Science, vol 9351. Part III. pp. 234-241. Cham: Springer. \url{https://doi.org/10.1007/978-3-319-24574-4_28}. \cr
+#'   see also: \url{https://arxiv.org/pdf/1505.04597.pdf} \cr
+#'
+#' @export
+build_CNN_unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1, classifier_activation = "sigmoid") {
+
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(256, 256, 1)
+
+  # Input layer
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+    inputs <- input_tensor
+  }
+
+  # Building blocks
+  conv1 <- inputs %>%
+    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  pool1 <- conv1 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  conv2 <- pool1 %>%
+    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  pool2 <- conv2 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  conv3 <- pool2 %>%
+    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu')
+  pool3 <- conv3 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  conv4 <- pool3 %>%
+    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  drop4 <- conv4 %>% keras::layer_dropout(rate = 0.5)
+  pool4 <- drop4 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+
+  conv5 <- pool4 %>%
+    keras::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  drop5 <- conv5 %>% keras::layer_dropout(rate = 0.5)
+
+  up6 <- drop5 %>%
+    keras::layer_upsampling_2d(size = c(2, 2)) %>%
+    keras::layer_conv_2d(filters = 512, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  merge6 <- keras::layer_concatenate(inputs = c(drop4, up6), axis = 3)
+  conv6 <- merge6 %>%
+    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+
+  up7 <- conv6 %>%
+    keras::layer_upsampling_2d(size = c(2, 2)) %>%
+    keras::layer_conv_2d(filters = 256, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  merge7 <- keras::layer_concatenate(inputs = c(conv3, up7), axis = 3)
+  conv7 <- merge7 %>%
+    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+
+  up8 <- conv7 %>%
+    keras::layer_upsampling_2d(size = c(2, 2)) %>%
+    keras::layer_conv_2d(filters = 128, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  merge8 <- keras::layer_concatenate(inputs = c(conv2, up8), axis = 3)
+  conv8 <- merge8 %>%
+    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+
+  up9 <- conv8 %>%
+    keras::layer_upsampling_2d(size = c(2, 2)) %>%
+    keras::layer_conv_2d(filters = 64, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  merge9 <- keras::layer_concatenate(inputs = c(conv1, up9), axis = 3)
+  conv9 <- merge9 %>%
+    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+    keras::layer_conv_2d(filters = 2, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+
+  blocks <- conv9
+
+  if (include_top) {
+    # Classification block
+    blocks <- blocks %>%
+      keras::layer_conv_2d(filters = classes, kernel_size = c(1, 1), activation = classifier_activation)
+  }
+
+  # Create model
+  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "UNet")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
+
+  return(model)
+}
