@@ -66,6 +66,8 @@ This R library is currently structured in form of the following functional famil
   <li><code>quantile_loss()</code> calculates the quantile loss.</li>
   <li><code>vc()</code> calculates the variance coefficient.</li>
   <li><code>accuracy()</code> calculates the accuracy for a single-label or multi-label classification task.</li>
+  <li><code>dice()</code> calculates the Dice coefficient.</li>
+  <li><code>iou()</code> calculates the Intersection-over-Union (IoU) coefficient.</li>
   <li><code>gini_impurity()</code> calculates the Gini impurity.</li>
   <li><code>entropy()</code> calculates the Shannon entropy.</li>
   <li><code>cross_entropy()</code> calculates the cross-entropy.</li>

@@ -55,6 +55,7 @@ The following accuracy types are implemented:
 \seealso{
 Other Metrics: 
 \code{\link{cross_entropy}()},
+\code{\link{dice}()},
 \code{\link{entropy}()},
 \code{\link{erfcinv}()},
 \code{\link{erfc}()},
@@ -62,6 +63,7 @@ Other Metrics:
 \code{\link{erf}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
+\code{\link{iou}()},
 \code{\link{log_cosh_loss}()},
 \code{\link{mae}()},
 \code{\link{mape}()},

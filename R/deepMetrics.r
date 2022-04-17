@@ -452,6 +452,57 @@ accuracy <- function(actuals, preds, type = c("standard", "misclass", "tpr", "tn
   }
 }
 
+
+#' @title Dice coefficient
+#' @description
+#'
+#' @family Metrics
+#'
+#' @param actuals A multidimensional array of actual values.
+#' @param preds A multidimensional array of prediction values.
+#' @param smooth A smoothing factor to avoid division by zero.
+#'
+#' @details This metric is used for evaluation of the results within image segmentation. \code{actuals} as well as \code{preds} are binary encoded
+#'   image data masks in form of a n-dimensional array, mainly a two-dimensional array with the dimensions height and width for every channel. A value of
+#'   \code{1} indicates the background (e.g. white color), a value equal \code{0} indicates the object (e.g. black color).
+#'
+#' @return Dice coefficient.
+#'
+#' @export
+dice <- function(actuals, preds, smooth = 1) {
+  actuals <- deepANN::flatten(actuals)
+  preds <- deepANN::flatten(preds)
+  intersection <- sum(actuals * preds)
+  union <- sum(actuals) + sum(preds)
+  out <- (2 * intersection + smooth) / (union + smooth)
+  return(out)
+}
+
+#' @title Intersection-over-Union (IoU, Jaccard Index)
+#' @description
+#'
+#' @family Metrics
+#'
+#' @param actuals A multidimensional array of actual values.
+#' @param preds A multidimensional array of prediction values.
+#' @param smooth A smoothing factor to avoid division by zero.
+#'
+#' @details This metric is used for evaluation of the results within image segmentation. \code{actuals} as well as \code{preds} are binary encoded
+#'   image data masks in form of a n-dimensional array, mainly a two-dimensional array with the dimensions height and width for every channel. A value of
+#'   \code{1} indicates the background (e.g. white color), a value equal \code{0} indicates the object (e.g. black color).
+#'
+#' @return Intersection-over-Union (IoU, Jaccard Index).
+#'
+#' @export
+iou <- function(actuals, preds, smooth = 1) {
+  actuals <- deepANN::flatten(actuals)
+  preds <- deepANN::flatten(preds)
+  intersection <- sum(abs(actuals * preds))
+  union <- sum(actuals) + sum(preds) - intersection
+  out <- (intersection + smooth) / (union + smooth)
+  return(out)
+}
+
 #' @title Gini impurity
 #' @description
 #'
