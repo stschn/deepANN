@@ -40,8 +40,13 @@ The \code{input shape} is usually \code{c(height, width, channels)} for a 2D ima
   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 
-  For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-  Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+  For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+
+  \code{base_model <- build_CNN_inception_v3(include_top = FALSE)} \cr
+  \code{base_model$trainable <- FALSE} \cr
+  \code{outputs <- base_model$output \%>\%} \cr
+  \code{layer_dense(units = 1, activation = "linear")} \cr
+  \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 }
 \references{
 Szegedy, C., Vanhoucke, V., Ioffe, S., Shlens, J., Wojna, Z. (2015): Rethinking the Inception Architecture for Computer Vision. arXiv:1512.00567 [cs]. http://arxiv.org/abs/1512.00567. \cr

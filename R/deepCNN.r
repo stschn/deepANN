@@ -297,8 +297,13 @@ as_CNN_temp_Y <- function(y, timesteps = 1L, reverse = FALSE) {
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_lenet5(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type LeNet-5.
 #'
@@ -375,8 +380,13 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_alexnet(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from typ AlexNet.
 #'
@@ -477,8 +487,13 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_zfnet(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type ZFNet.
 #'
@@ -570,8 +585,13 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_vgg16(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type VGG-16.
 #'
@@ -669,8 +689,13 @@ build_CNN_vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_vgg19(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type VGG-19.
 #'
@@ -771,8 +796,13 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_resnet50(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type ResNet-50.
 #'
@@ -925,8 +955,13 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_inception_v3(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type Inception v3.
 #'
@@ -1225,8 +1260,13 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_resnet_v2(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type Inception-ResNet v2.
 #'
@@ -1425,8 +1465,13 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_mobilenet(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type MobileNet.
 #'
@@ -1552,8 +1597,13 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_mobilenet_v2(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type MobileNetV2.
 #'
@@ -1724,8 +1774,13 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_mobilenet_v3(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type MobileNetV3.
 #'
@@ -1969,8 +2024,13 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_xception(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type Xception.
 #'
@@ -2143,8 +2203,13 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
 #'     \code{stem_block_filters = 32} \cr
 #'     \code{skip_reduction = FALSE}
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_nasnet(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type NASNet-A.
 #'
@@ -2385,8 +2450,13 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
 #'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 #'
-#'   For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-#'   Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- build_CNN_unet(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
 #' @return A CNN model object from type U-Net.
 #'

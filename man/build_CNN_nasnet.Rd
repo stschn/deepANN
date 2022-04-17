@@ -71,8 +71,13 @@ The current parameter defaults are the values for the \strong{large NASNet model
 \code{stem_block_filters = 32} \cr
 \code{skip_reduction = FALSE}
 
-For a regression problem, \code{include_top} must be set to \code{FALSE}. The result can be stored in e.g. \code{base_model} with no trainable weights (\code{base_model$trainable = FALSE}).
-Now new layers can be created and separately stored, e.g. \code{flatten_layer, dense_layer_1, dense_layer_2, output_layer}. Finally the base model and the new layers can be concatenated with \code{model <- keras_model_sequential(layers = c(base_model, flatten_layer, dense_layer_1, dense_layer_2, output_layer))}.
+For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+
+\code{base_model <- build_CNN_nasnet(include_top = FALSE)} \cr
+\code{base_model$trainable <- FALSE} \cr
+\code{outputs <- base_model$output \%>\%} \cr
+\code{layer_dense(units = 1, activation = "linear")} \cr
+\code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 }
 \references{
 Zoph, B., Vasudevan, V., Shlens, J., Le, Q. V. (2017). Learning Transferable Architectures for Scalable Image Recognition. arXiv:1707.07012 \link{cs}. https://arxiv.org/abs/1707.07012. \cr
