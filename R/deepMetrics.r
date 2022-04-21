@@ -5,6 +5,21 @@
   quotient
 }
 
+#' @title Standard error
+#' @description
+#'
+#' @family Metrics
+#'
+#' @param x A numeric vector.
+#' @param na.rm A logical value indicating whether missing values should be removed.
+#'
+#' @return Standard error.
+#'
+#' @export
+stderror <- function(x, na.rm = FALSE) {
+  return(.divide(dividend = stats::sd(x, na.rm = na.rm), divisor = sqrt(length(x))))
+}
+
 #' @title Sum of squared errors (SSE)
 #' @description
 #'

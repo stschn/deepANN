@@ -43,6 +43,7 @@ Other Metrics:
 \code{\link{rmse}()},
 \code{\link{rmspe}()},
 \code{\link{sse}()},
+\code{\link{stderror}()},
 \code{\link{vc}()},
 \code{\link{wape}()},
 \code{\link{wmape}()}

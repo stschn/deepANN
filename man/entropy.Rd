@@ -48,6 +48,7 @@ Other Metrics:
 \code{\link{rmsle}()},
 \code{\link{rmspe}()},
 \code{\link{sse}()},
+\code{\link{stderror}()},
 \code{\link{vc}()},
 \code{\link{wape}()},
 \code{\link{wmape}()}

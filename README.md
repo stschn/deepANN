@@ -51,6 +51,7 @@ This R library is currently structured in form of the following functional famil
 
 <b>Metrics</b>
 <ul>
+  <li><code>stderror()</code> calculates the standard error.</li>
   <li><code>sse()</code> calculates the sum of squared errors.</li>
   <li><code>mae()</code> calculates the mean absolute error.</li>
   <li><code>mape()</code> calculates the mean absolute percentage error.</li>
