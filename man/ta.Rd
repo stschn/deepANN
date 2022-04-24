@@ -52,6 +52,7 @@ Other Utils:
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},
 \code{\link{slice}()},
+\code{\link{squeeze}()},
 \code{\link{tensor}()},
 \code{\link{vander}()},
 \code{\link{var_pop}()},

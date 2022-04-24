@@ -52,6 +52,7 @@ Other Utils:
 \code{\link{re.factor}()},
 \code{\link{similarity}()},
 \code{\link{slice}()},
+\code{\link{squeeze}()},
 \code{\link{ta}()},
 \code{\link{tensor}()},
 \code{\link{vander}()},

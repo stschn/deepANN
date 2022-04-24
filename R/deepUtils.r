@@ -627,6 +627,48 @@ vander <- function(data, n) {
   marray(outer(deepANN::flatten(data), seq(0, n - 1), "^"), order = "F")
 }
 
+#' @title Trim multidimensional array
+#' @description Remove dimensions of length one from a multidimensional array.
+#'
+#' @family Utils
+#'
+#' @param a A multidimensional array.
+#' @param axis The dimensions which should be removed. If \code{NULL} (default), all dimensions of length one are removed.
+#' @param order The order in which elements of data should be read during rearrangement after removing of corresponding dimensions.
+#'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#' @return The array \code{a} usually without dimensions of length one.
+#'
+#' @export
+squeeze <- function(a, ...) {
+  UseMethod("squeeze")
+}
+
+#' @rdname squeeze
+#' @export
+squeeze.array <- function(a, axis = NULL, order = c("C", "F")) {
+  if (!is.array(a))
+    stop("a must be an array.")
+  order <- match.arg(order)
+  adim <- dim(a)
+  if (is.null(axis)) {
+    newdim <- adim[!adim %in% c(1)]
+  } else {
+    axis1 <- which(adim %in% c(1))
+    remove_axis <- axis1[axis1 %in% axis]
+    newdim <- adim[-remove_axis]
+  }
+  return(marray(deepANN::flatten(a, order = c("F")), dim = newdim, order = order))
+}
+
+#' @rdname squeeze
+#' @export
+squeeze.marray <- function(a, axis = NULL, order = c("C", "F")) { squeeze.array(a, axis, order) }
+
+#' @rdname squeeze
+#' @export
+squeeze.matrix <- function(a, axis = NULL, order = c("C", "F")) { squeeze.array(a, axis, order) }
+
 #' @title Multidimensional array slicing
 #' @family Utils
 #'

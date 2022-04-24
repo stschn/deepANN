@@ -96,6 +96,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
   <li><code>eye()</code> creates a 2D identity matrix.</li>
   <li><code>vander()</code> creates a Vandermonde matrix.</li>
+  <li><code>squeeze()</code> removes dimensions of length one from array.</li>
   <li><code>slice()</code> extracts a part of an array.</li>
   <li><code>insert()</code> inserts an object into an array from type marray.</li>
   <li><code>tensor()</code> and <code>as.tensor()</code> transform data into a n-dimensional tensor (array) and <code>is.tensor()</code> checks for a tensor.</li>

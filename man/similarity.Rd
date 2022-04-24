@@ -58,6 +58,7 @@ Other Utils:
 \code{\link{re.factor}()},
 \code{\link{sd_pop}()},
 \code{\link{slice}()},
+\code{\link{squeeze}()},
 \code{\link{ta}()},
 \code{\link{tensor}()},
 \code{\link{vander}()},
