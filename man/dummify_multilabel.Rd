@@ -42,6 +42,7 @@ Other Dummifying:
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},
 \code{\link{remove_columns}()},
-\code{\link{resample_imbalanced}()}
+\code{\link{resample_imbalanced}()},
+\code{\link{sparse_encode}()}
 }
 \concept{Dummifying}

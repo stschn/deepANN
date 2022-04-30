@@ -202,6 +202,26 @@ effectcoding <- function(x) {
   return(ifelse(x == 0, -1, 1))
 }
 
+#' @title Sparse encoding
+#'
+#' @family Dummifying
+#'
+#' @param x A vector with values (levels) of a categorical variable.
+#'
+#' @return An array with numeric encoded levels of \code{x}.
+#'
+#' @seealso \code{\link{one_hot_encode}}.
+#'
+#' @examples
+#'   x <- factor(sample(lvls <- c("dog", "cat", "mouse"), 10, TRUE), levels = lvls)
+#'   sparse_encode(x)
+#'
+#' @export
+sparse_encode <- function(x) {
+  if (!is.factor(x)) x <- as.factor(x)
+  return(as.array(as.integer(x) - 1L))
+}
+
 #' @title One-hot encoding
 #' @description \code{one_hot_encode} rebuilds a categorical variable to a so-called 'one-hot vector'.
 #'   Within a sample (row) of a one-hot vector (matrix) each level of the variable is rebuild in the binary form \code{(0|1,0|1,0|1,...)}.
@@ -217,7 +237,7 @@ effectcoding <- function(x) {
 #'
 #' @return A matrix with all levels as columns with either \code{0} or \code{1} values.
 #'
-#' @seealso \code{\link{one_hot_decode}}.
+#' @seealso \code{\link{one_hot_decode}}, \code{\link{sparse_encode}}.
 #'
 #' @examples
 #'   x <- factor(sample(lvls <- c("dog", "cat", "mouse"), 10, TRUE), levels = lvls)

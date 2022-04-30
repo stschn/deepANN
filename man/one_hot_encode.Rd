@@ -30,7 +30,7 @@ An unordered encoding creates an indicator matrix with the value \code{1} only f
 
 }
 \seealso{
-\code{\link{one_hot_decode}}.
+\code{\link{one_hot_decode}}, \code{\link{sparse_encode}}.
 
 Other Dummifying: 
 \code{\link{append_rows}()},
@@ -39,6 +39,7 @@ Other Dummifying:
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{remove_columns}()},
-\code{\link{resample_imbalanced}()}
+\code{\link{resample_imbalanced}()},
+\code{\link{sparse_encode}()}
 }
 \concept{Dummifying}

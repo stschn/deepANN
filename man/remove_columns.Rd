@@ -25,6 +25,7 @@ Other Dummifying:
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},
-\code{\link{resample_imbalanced}()}
+\code{\link{resample_imbalanced}()},
+\code{\link{sparse_encode}()}
 }
 \concept{Dummifying}

@@ -9,6 +9,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>dummify()</code> creates dummy variables for non-metric variables.</li>
   <li><code>dummify_multilabel()</code> creates dummy variables for multi-label character variables.</li>
   <li><code>effectcoding()</code> changes a binary 0/1 encoded variable into a -1/1 encoded variable.</li>
+  <li><code>sparse_encode()</code> builds a simple numeric encoded array.</li>
   <li><code>one_hot_encode()</code> builds a one-hot vector in form of a matrix.</li>
   <li><code>one_hot_decode()</code> restores a one-hote encoded matrix to a single vector.</li>
   <li><code>resample_imbalanced()</code> creates dummy rows for an imbalanced data set thru the techniques oversampling, undersampling or SMOTE.</li>
