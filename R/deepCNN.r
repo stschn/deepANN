@@ -214,17 +214,19 @@ as_CNN_image_X <- function(images, height, width, channels = 3L, order = c("C", 
 #' @family Convolutional Neural Network (CNN)
 #'
 #' @param y The labels of the images either as factors for single-label classification or as a numeric or logical matrix for multi-label classification.
+#' @param encoding The type of encoding: one-hot encoding or sparse encoding.
 #'
 #' @return A one-hot encoded vector or matrix for the image labels.
 #'
 #' @seealso \code{\link{one_hot_encode}}, \code{\link{as_CNN_image_X}}
 #'
 #' @export
-as_CNN_image_Y <- function(y) {
+as_CNN_image_Y <- function(y, encoding = c("one_hot", "sparse")) {
   # Single-label classification
   if (isTRUE((NCOL(f <- Filter(is.factor, y)) > 0L) && (length(f) > 0))) {
+    encoding = match.arg(encoding)
     f <- as.data.frame(f)
-    m <- lapply(f, deepANN::one_hot_encode)
+    m <- lapply(f, if (encoding == "one_hot") deepANN::one_hot_encode else deepANN::sparse_encode)
     m <- do.call(cbind, m)
     return(m)
   }

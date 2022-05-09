@@ -4,19 +4,21 @@
 \alias{as_MLP_Y}
 \title{Outcomes (Y) data format for SLP/MLP}
 \usage{
-as_MLP_Y(y)
+as_MLP_Y(y, encoding = c("one_hot", "sparse"))
 }
 \arguments{
 \item{y}{An outcome data set, usually a vector, matrix or data frame.}
+
+\item{encoding}{The type of encoding: one-hot encoding or sparse encoding.}
 }
 \value{
-A two-dimensional array of the outcome \code{Y}. For a factor outcome, the result is a one-hot vector.
+A two-dimensional array of the outcome \code{y}. For a factor outcome, the result is an encoded matrix.
 }
 \description{
 
 }
 \seealso{
-\code{\link{as_MLP_X}}, \code{\link{one_hot_encode}}.
+\code{\link{as_MLP_X}}, \code{\link{one_hot_encode}}, \code{\link{sparse_encode}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as_MLP_X}()},

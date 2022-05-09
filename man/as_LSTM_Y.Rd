@@ -4,7 +4,12 @@
 \alias{as_LSTM_Y}
 \title{Outcomes (Y) data format for LSTM}
 \usage{
-as_LSTM_Y(y, timesteps = 1L, reverse = FALSE)
+as_LSTM_Y(
+  y,
+  timesteps = 1L,
+  reverse = FALSE,
+  encoding = c("one_hot", "sparse")
+)
 }
 \arguments{
 \item{y}{An outcome data set, usually a vector, matrix or data frame, returned by \code{get_LSTM_XY}.}
@@ -12,9 +17,11 @@ as_LSTM_Y(y, timesteps = 1L, reverse = FALSE)
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{y}.}
 
 \item{reverse}{Controls the order of the values in the resampled outcome matrix \code{Y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).}
+
+\item{encoding}{The type of encoding: one-hot encoding or sparse encoding.}
 }
 \value{
-Dependent on the type of \code{Y} and timesteps. If \code{y} is a factor, the result is a one-hot vector.
+Dependent on the type of \code{y} and timesteps. If \code{y} is a factor, the result is a one-hot vector.
   If \code{timesteps = NULL|1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{y},
   if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{y}.
 }
@@ -22,7 +29,7 @@ Dependent on the type of \code{Y} and timesteps. If \code{y} is a factor, the re
 
 }
 \seealso{
-\code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_X}}, \code{\link{as_ANN_matrix}}, \code{\link{one_hot_encode}},
+\code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_X}}, \code{\link{as_ANN_matrix}}, \code{\link{one_hot_encode}}, \code{\link{sparse_encode}}
   \code{\link{as_tensor_2d}}, \code{\link{as_tensor_3d}}.
 
 Other Recurrent Neural Network (RNN): 

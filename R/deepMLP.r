@@ -20,17 +20,19 @@ as_MLP_X <- function(x) {
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
 #' @param y An outcome data set, usually a vector, matrix or data frame.
+#' @param encoding The type of encoding: one-hot encoding or sparse encoding.
 #'
-#' @return A two-dimensional array of the outcome \code{Y}. For a factor outcome, the result is a one-hot vector.
+#' @return A two-dimensional array of the outcome \code{y}. For a factor outcome, the result is an encoded matrix.
 #'
-#' @seealso \code{\link{as_MLP_X}}, \code{\link{one_hot_encode}}.
+#' @seealso \code{\link{as_MLP_X}}, \code{\link{one_hot_encode}}, \code{\link{sparse_encode}}.
 #'
 #' @export
-as_MLP_Y <- function(y) {
+as_MLP_Y <- function(y, encoding = c("one_hot", "sparse")) {
   # Factor outcome must be rebuild as a one-hot vector
   if (isTRUE((NCOL(f <- Filter(is.factor, y)) > 0L) && (length(f) > 0))) {
+    encoding <- match.arg(encoding)
     f <- as.data.frame(f)
-    m <- lapply(f, deepANN::one_hot_encode)
+    m <- lapply(f, if (encoding == "one_hot") deepANN::one_hot_encode else deepANN::sparse_encode)
     m <- do.call(cbind, m)
     return(m)
   }

@@ -4,10 +4,12 @@
 \alias{as_CNN_image_Y}
 \title{Create a one-hot vector for image labels (output)}
 \usage{
-as_CNN_image_Y(y)
+as_CNN_image_Y(y, encoding = c("one_hot", "sparse"))
 }
 \arguments{
 \item{y}{The labels of the images either as factors for single-label classification or as a numeric or logical matrix for multi-label classification.}
+
+\item{encoding}{The type of encoding: one-hot encoding or sparse encoding.}
 }
 \value{
 A one-hot encoded vector or matrix for the image labels.
