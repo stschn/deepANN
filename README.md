@@ -96,7 +96,8 @@ This R library is currently structured in form of the following functional famil
   <li><code>flatten()</code> flattens data into a one-dimensional array.</li>
   <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
   <li><code>dimC()</code> get or set the dimension of an object in row-major ordering (C-style).</li>
-  <li><code>reshape.array()</code> reshape an array equivalent to numpy.reshape from Python.</li>
+  <li><code>reshape.array()</code> reshape an array equivalent to <code>numpy.reshape</code> from Python.</li>
+  <li><code>expand_dims()</code> expand the shape of an array analogous to <code>numpy.expand_dims</code> from Python.</li>
   <li><code>eye()</code> creates a 2D identity matrix.</li>
   <li><code>vander()</code> creates a Vandermonde matrix.</li>
   <li><code>squeeze()</code> removes dimensions of length one from array.</li>

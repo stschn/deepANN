@@ -41,6 +41,7 @@ Other Utils:
 \code{\link{degree}()},
 \code{\link{dimC<-}()},
 \code{\link{distance}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},

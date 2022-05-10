@@ -470,6 +470,48 @@ reshape.array <- function(a, dim = NULL, order = c("C", "F")) {
 #' @export
 reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a, dim = dim, order = order) }
 
+#' @title Expand the shape of an array
+#' @description Insert a new axis that will appear at the axis position in the expanded array shape.
+#'
+#' @family Utils
+#'
+#' @param a An array.
+#' @param axis Index position of the new axis in the expanded array. Negative numbers count from the back.
+#'
+#' @return The expanded array \code{a} with new shape.
+#'
+#' @export
+expand_dims <- function(a, axis = -1L) {
+  d <- if (!is.null(dim(a) -> da)) da else length(a)
+  nd <- length(d)
+  naxis <- length(axis)
+
+  wd <- axis
+  neg <- wd < 0L
+  if (any(neg))
+    wd[neg] <- wd[neg] + nd + naxis + 1L
+
+  if (min(wd) < 1L)
+    stop("Implicit additional dims for expansions with negative indexes are not supported.")
+
+  if ((max_wd <- max(wd)) > nd + naxis) {
+    # Implicitly pad on right
+    wd <- unique(c(wd), (nd + 1L):max_wd)
+    ndout <- max_wd
+  } else
+    ndout <- nd + naxis
+
+  if (anyDuplicated(wd)) {
+    wd <- unique(wd)
+  }
+
+  dims <- rep(1L, ndout)
+  dims[-wd] <- d
+
+  dim(a) <- dims
+  a
+}
+
 #' @title Flatten data into a one-dimensional array
 #' @description
 #'
