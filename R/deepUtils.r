@@ -835,8 +835,6 @@ ta <- function(a, ...) {
 #' @rdname ta
 #' @export
 ta.array <- function(a, perm = NULL) {
-  if (!(is.matrix(a) || ((is.array(a) || is.marray(a)) && (deepANN::ndim(a) >= 2L))))
-    stop("a must be a matrix or at least a two-dimensional array.")
   if (is.null(perm)) {
     aperm(a)
   } else {
