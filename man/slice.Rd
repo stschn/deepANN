@@ -7,7 +7,7 @@
 \alias{slice.matrix}
 \title{Multidimensional array slicing}
 \usage{
-slice(data, ...)
+slice(a, ...)
 
 \method{slice}{array}(a, ..., drop = TRUE)
 
@@ -16,9 +16,9 @@ slice(data, ...)
 \method{slice}{matrix}(a, ..., drop = TRUE)
 }
 \arguments{
-\item{...}{Indexing instructions in form of \code{name = value} pairs. The names of the arguments specify the dimensions and the values its values.}
-
 \item{a}{A vector, matrix, or array.}
+
+\item{...}{Indexing instructions in form of \code{name = value} pairs. The names of the arguments specify the dimensions and the values its values.}
 
 \item{drop}{For matrices and arrays. If \code{TRUE} the result is coerced to the lowest possible dimension. This only works for extracting elements, not for the replacement. See \code{\link[base]{drop}} for further details.}
 }
@@ -48,12 +48,12 @@ Other Utils:
 \code{\link{as_tensor_2d}()},
 \code{\link{as_tensor_3d}()},
 \code{\link{degree}()},
+\code{\link{dimC<-}()},
 \code{\link{distance}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
-\code{\link{marray}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},
@@ -64,6 +64,7 @@ Other Utils:
 \code{\link{radian}()},
 \code{\link{random_seed}()},
 \code{\link{re.factor}()},
+\code{\link{reshape.array}()},
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},
 \code{\link{squeeze}()},

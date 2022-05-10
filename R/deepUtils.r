@@ -409,6 +409,67 @@ vector_as_ANN_matrix <- function(x, ncol = 1, by = c("row", "col", "step"), reve
   return(m)
 }
 
+#' @rdname marray
+#'
+#' @family Utils
+#'
+#' @param x An object to get or set dimensions on.
+#' @param value A integerish vector of new dimensions.
+#'
+#' @return The (redimensioned) object \code{x}.
+#'
+#' @references Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.
+#'
+#' @export
+`dimC<-` <- function(x, value) {
+  if (is.null(value)) {
+    if (is.null(dim(x)))
+      return(x)
+
+    if (deepANN::ndim(x) > 1L)
+      x <- deepANN::ta(x)
+
+    dim(x) <- NULL
+    return(x)
+  }
+
+  dx <- dim(x)
+  if (identical(dx, as.integer(value)))
+    return(x)
+
+  if (!is.null(dx))
+    x <- deepANN::ta(x)
+
+  dim(x) <- rev(value)
+  deepANN::ta(x)
+}
+
+#' @title Reshape an array
+#'
+#' @family Utils
+#'
+#' @param a An array.
+#' @param dim A integerish vector of new dimensions to be set on the array.
+#' @param order The order in which elements of \code{a} should be read during rearrangement.
+#'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#'
+#' @return The (redimensioned) array \code{a}.
+#'
+#' @export
+reshape.array <- function(a, dim = NULL, order = c("C", "F")) {
+  order <- match.arg(order)
+  if (isTRUE(c("C") %in% order))
+    dimC(a) <- dim
+  else
+    dim(a) <- dim
+  a
+}
+
+#' @rdname reshape.array
+#' @export
+reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a, dim = dim, order = order) }
+
 #' @title Flatten data into a one-dimensional array
 #' @description
 #'
@@ -548,50 +609,35 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
       data <- unlist(data)
     }}
   }
-  # x <- array(data)
-  # order <- match.arg(order)
-  # byrow = ifelse(order == "C", TRUE, FALSE)
-  # if (!is.null(dim) && ((ldim <- length(dim)) >= 2L)) {
-  #   if (ldim == 2L) {
-  #     x <- as.array(matrix(x, nrow = dim[1L], ncol = dim[2L], byrow = byrow))
-  #   } else {
-  #   if (ldim == 3L){
-  #     x <- array(x, dim = dim)
-  #     if (byrow) {
-  #       x <- array(x, dim = c(dim[2L], dim[1L], dim[3L]))
-  #       x <- aperm(x, perm = c(2L, 1L, 3L))
-  #     }
-  #   } else {
-  #   if (!byrow) {
-  #     dim(x) <- dim
-  #   } else {
-  #     x <- keras::array_reshape(x, dim = dim, order = order)
-  #   }}}
-  # }
+
   if (is.null(dim)) {
     if (!is.null(dim(data))) dim <- dim(data) else dim <- length(data)
   }
-  x <- array(data, dim = dim)
-  order <- match.arg(order)
-  if (((ldim <- length(dim)) >= 2L) && (order == "C")) {
-    newdim <- c(dim[2L], dim[1L], dim[-c(1L:2L)])
-    x <- array(x, dim = newdim)
-    x <- aperm(x, perm = c(2L, 1L, if (ldim > 2L) c(3L:ldim)))
-  }
+  if (!is.array(data)) data <- array(data)
+  data <- reshape.array(a = data, dim = dim, order = order)
+
   if (reverse) {
-    if (ldim == 1L) x <- rev(x)
+    if (ldim == 1L) data <- rev(data)
     if (ldim >= 2L) {
       fixed_dimension <- seq_len(ldim)[-c(1L:2L)]
       if (order == "F") {
-        x <- apply(x, c(2L, fixed_dimension), rev)
+        data <- apply(data, c(2L, fixed_dimension), rev)
       } else {
-        x <- aperm(apply(x, c(1L, fixed_dimension), rev), perm = c(2L, 1L, fixed_dimension))
+        data <- aperm(apply(data, c(1L, fixed_dimension), rev), perm = c(2L, 1L, fixed_dimension))
       }
     }
   }
-  if (!is.null(dimnames)) { dimnames(x) <- dimnames }
-  x <- structure(x, class = c(class(x), .deepANNClasses[["marray"]]))
-  return(x)
+
+  if (!is.null(dimnames)) { dimnames(data) <- dimnames }
+  data <- structure(data, class = c(class(data), .deepANNClasses[["marray"]]))
+  return(data)
+}
+
+#' @rdname marray
+#' @export
+is.marray <- function(x) {
+  # return(.deepANNClasses[["marray"]] %in% class(x))
+  return(inherits(x, .deepANNClasses[["marray"]]))
 }
 
 #' @title Multidimensional array creation: 2D identity matrix
@@ -689,7 +735,7 @@ squeeze.matrix <- function(a, axis = NULL, order = c("C", "F")) { squeeze.array(
 #'   slice(a, l = 2) # the values of the array of the second element of the last dimension (4th dimension)
 #'   slice(a, i = 1, j = 3) the values of the array of the first element of the first dimension (1st row) and the third element of the second dimension (3rd column) across all bunches of the remaining dimensions 3 and 4.
 #' @export
-slice <- function(data, ...) {
+slice <- function(a, ...) {
   UseMethod("slice")
 }
 
@@ -738,15 +784,13 @@ slice.matrix <- function(a, ..., drop = TRUE) {
 #'   x <- c(1:12)
 #'   insert(ma3, x, order = "F")
 #' @export
-insert <- function(data, ...) {
+insert <- function(a, ...) {
   UseMethod("insert")
 }
 
 #' @rdname insert
 #' @export
-insert.marray <- function(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F")) {
-  if (!is.array(a))
-    stop("a must be an array.")
+insert.array <- function(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F")) {
   order <- match.arg(order)
   adim <- dim(a)
   lastdim <- adim[deepANN::ndim(a)]
@@ -767,45 +811,42 @@ insert.marray <- function(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c
   marray(unlist(alist), dim = adim, order = "F")
 }
 
-#' @rdname marray
+#' @rdname insert
 #' @export
-is.marray <- function(x) {
-  # return(.deepANNClasses[["marray"]] %in% class(x))
-  return(inherits(x, .deepANNClasses[["marray"]]))
-}
+insert.marray <- function(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F")) { insert.array(a, x, index, order) }
 
 #' @title Transpose multidimensional array
-#' @description This function transposes a multidimensional array by swapping the first two dimensions.
+#' @description This function transposes a multidimensional array.
 #'
 #' @family Utils
 #'
-#' @param x A multidimensional array.
-#' @return The array \code{x} with the first two dimensions swapped.
+#' @param a A multidimensional array.
+#' @param perm The permutation vector of the dimensions. The default \code{NULL} indicates to reverse the order of the dimensions.
+#'
+#' @return The array \code{a} with swapped dimensions.
 #'
 #' @seealso \code{\link{t}}.
 #'
 #' @export
-ta <- function(x) {
+ta <- function(a, ...) {
   UseMethod("ta")
 }
 
 #' @rdname ta
 #' @export
-ta.array <- function(x) {
-  if (!(is.matrix(x) || ((is.array(x) || is.marray(x)) && (deepANN::ndim(x) >= 2L))))
-    stop("x must be a matrix or at least a two-dimensional array.")
-  d <- seq_along(dim(x))
-  d[1L:2L] <- 2L:1L # swap first two dimensions
-  aperm(x, d)
+ta.array <- function(a, perm = NULL) {
+  if (!(is.matrix(a) || ((is.array(a) || is.marray(a)) && (deepANN::ndim(a) >= 2L))))
+    stop("a must be a matrix or at least a two-dimensional array.")
+  if (is.null(perm)) {
+    aperm(a)
+  } else {
+    aperm(a, perm)
+  }
 }
 
 #' @rdname ta
 #' @export
-ta.marray <- function(x) { ta.array(x) }
-
-#' @rdname ta
-#' @export
-ta.matrix <- function(x) { ta.array(x) }
+ta.marray <- function(a, perm = NULL) { ta.array(a, perm) }
 
 #' @title Combine matrices of a multidimensional array
 #' @description This function combines the respective first two dimensions of a multidimensional array by columns or rows.

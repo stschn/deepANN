@@ -4,25 +4,24 @@
 \alias{ta}
 \alias{ta.array}
 \alias{ta.marray}
-\alias{ta.matrix}
 \title{Transpose multidimensional array}
 \usage{
-ta(x)
+ta(a, ...)
 
-\method{ta}{array}(x)
+\method{ta}{array}(a, perm = NULL)
 
-\method{ta}{marray}(x)
-
-\method{ta}{matrix}(x)
+\method{ta}{marray}(a, perm = NULL)
 }
 \arguments{
-\item{x}{A multidimensional array.}
+\item{a}{A multidimensional array.}
+
+\item{perm}{The permutation vector of the dimensions. The default \code{NULL} indicates to reverse the order of the dimensions.}
 }
 \value{
-The array \code{x} with the first two dimensions swapped.
+The array \code{a} with swapped dimensions.
 }
 \description{
-This function transposes a multidimensional array by swapping the first two dimensions.
+This function transposes a multidimensional array.
 }
 \seealso{
 \code{\link{t}}.
@@ -33,12 +32,12 @@ Other Utils:
 \code{\link{as_tensor_2d}()},
 \code{\link{as_tensor_3d}()},
 \code{\link{degree}()},
+\code{\link{dimC<-}()},
 \code{\link{distance}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
-\code{\link{marray}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},
@@ -49,6 +48,7 @@ Other Utils:
 \code{\link{radian}()},
 \code{\link{random_seed}()},
 \code{\link{re.factor}()},
+\code{\link{reshape.array}()},
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},
 \code{\link{slice}()},

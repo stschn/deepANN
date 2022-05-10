@@ -2,10 +2,13 @@
 % Please edit documentation in R/deepUtils.r
 \name{insert}
 \alias{insert}
+\alias{insert.array}
 \alias{insert.marray}
 \title{Multidimensional array insertion}
 \usage{
-insert(data, ...)
+insert(a, ...)
+
+\method{insert}{array}(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F"))
 
 \method{insert}{marray}(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F"))
 }
@@ -46,11 +49,11 @@ Other Utils:
 \code{\link{as_tensor_2d}()},
 \code{\link{as_tensor_3d}()},
 \code{\link{degree}()},
+\code{\link{dimC<-}()},
 \code{\link{distance}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{list_as_numeric}()},
-\code{\link{marray}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},
@@ -61,6 +64,7 @@ Other Utils:
 \code{\link{radian}()},
 \code{\link{random_seed}()},
 \code{\link{re.factor}()},
+\code{\link{reshape.array}()},
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},
 \code{\link{slice}()},
