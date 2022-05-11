@@ -47,6 +47,12 @@ The \code{input shape} is usually \code{c(height, width, channels)} for a 2D ima
   \code{outputs <- base_model$output \%>\%} \cr
   \code{layer_dense(units = 1, activation = "linear")} \cr
   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+
+  \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+  \code{blocks <- inputs \%>\% } \cr
+  \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+  \code{layer_max_pooling_2d()} \cr
+  \code{model <- build_CNN_xception(input_tensor = blocks)}
 }
 \references{
 Chollet, F. (2017): Xception: Deep Learning with Depthwise Separable Convolutions. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Honolulu, 2017, pp. 1251-1258. https//doi.org/10.1109/CVPR.2017.195. \cr

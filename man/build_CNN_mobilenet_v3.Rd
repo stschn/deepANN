@@ -63,6 +63,12 @@ For a task with another top layer block, e.g. a regression problem, use the foll
 \code{outputs <- base_model$output \%>\%} \cr
 \code{layer_dense(units = 1, activation = "linear")} \cr
 \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+
+\code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+\code{blocks <- inputs \%>\% } \cr
+\code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+\code{layer_max_pooling_2d()} \cr
+\code{model <- build_CNN_mobilenet_v3(input_tensor = blocks)}
 }
 \references{
 Howard, A., Sandler, M., Chu, G., Chen, L.-C., Chen, B., Tan, M., Wang, W., Zhu, Y., Pang, R., Vasudevan, V., Le, Q. V., Adam, H. (2019): Searching for MobileNetV3. arXiv:1905.02244v5 \link{cs}. https://arxiv.org/abs/1905.02244. \cr

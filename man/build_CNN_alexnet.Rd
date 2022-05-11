@@ -47,6 +47,14 @@ The \code{input shape} is usually \code{c(height, width, channels)} for a 2D ima
   \code{outputs <- base_model$output \%>\%} \cr
   \code{layer_dense(units = 1, activation = "linear")} \cr
   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+
+  For a task with another input layer, use the following code template: \cr
+
+  \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+  \code{blocks <- inputs \%>\% } \cr
+  \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+  \code{layer_max_pooling_2d()} \cr
+  \code{model <- build_CNN_alexnet(input_tensor = blocks)}
 }
 \references{
 Krizhevsky, A., Sutskever, I., Hinton, G. E. (2012): ImageNet Classification with Deep Convolutional Neural Networks. In F. C. N. Pereira, C. J. C. Burges, L. Bottou, K. Q. Weinberger (Hrsg.): Advances in Neural Information Processing Systems 25 (NIPS 2012) (Bd. 25, pp. 1097-1105). Curran Associates. \cr

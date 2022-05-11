@@ -307,6 +307,14 @@ as_CNN_temp_Y <- function(y, timesteps = 1L, reverse = FALSE) {
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_lenet5(input_tensor = blocks)}
+#'
 #' @return A CNN model object from type LeNet-5.
 #'
 #' @references LeCun, Y., Bottou, L., Bengio, Y., Haffner, P. (1998): Gradient-Based Learning Applied to Document Recognition. In: Proceedings of the IEEE, 86 (1998) 11, pp. 2278-2324. https://doi.org/10.1109/5.726791 \cr
@@ -325,7 +333,10 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -344,6 +355,9 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "LeNet5")
 
@@ -390,6 +404,14 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_alexnet(input_tensor = blocks)}
+#'
 #' @return A CNN model object from typ AlexNet.
 #'
 #' @references Krizhevsky, A., Sutskever, I., Hinton, G. E. (2012): ImageNet Classification with Deep Convolutional Neural Networks. In F. C. N. Pereira, C. J. C. Burges, L. Bottou, K. Q. Weinberger (Hrsg.): Advances in Neural Information Processing Systems 25 (NIPS 2012) (Bd. 25, pp. 1097-1105). Curran Associates. \cr
@@ -408,7 +430,10 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -451,6 +476,9 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
       keras::layer_activation(activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "AlexNet")
 
@@ -497,6 +525,14 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_zfnet(input_tensor = blocks)}
+#'
 #' @return A CNN model object from type ZFNet.
 #'
 #' @references Zeiler, M. D., Fergus, R. (2013). Visualizing and Understanding Convolutional Networks. arXiv:1311.2901 [cs]. \cr
@@ -515,7 +551,10 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -549,6 +588,9 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ZFNet")
 
@@ -595,6 +637,14 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_vgg16(input_tensor = blocks)}
+#'
 #' @return A CNN model object from type VGG-16.
 #'
 #' @references Simonyan, K., Zisserman, A. (2015): Very Deep Convolutional Networks for Large-Scale Image Recognition. arXiv:1409.1556v6 [cs]. \url{http://arxiv.org/abs/1409.1556}. \cr
@@ -615,7 +665,10 @@ build_CNN_vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tens
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -653,6 +706,9 @@ build_CNN_vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tens
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG16")
 
@@ -699,6 +755,14 @@ build_CNN_vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_vgg19(input_tensor = blocks)}
+#'
 #' @return A CNN model object from type VGG-19.
 #'
 #' @references Simonyan, K., Zisserman, A. (2015): Very Deep Convolutional Networks for Large-Scale Image Recognition. arXiv:1409.1556v6 [cs]. \url{http://arxiv.org/abs/1409.1556}. \cr
@@ -719,7 +783,10 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -760,6 +827,9 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG19")
 
@@ -805,6 +875,14 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'   \code{outputs <- base_model$output \%>\%} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+#'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_resnet50(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type ResNet-50.
 #'
@@ -880,7 +958,10 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -919,6 +1000,9 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ResNet50")
 
@@ -965,6 +1049,14 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_inception_v3(input_tensor = blocks)}
+#'
 #' @return A CNN model object from type Inception v3.
 #'
 #' @references Szegedy, C., Vanhoucke, V., Ioffe, S., Shlens, J., Wojna, Z. (2015): Rethinking the Inception Architecture for Computer Vision. arXiv:1512.00567 [cs]. http://arxiv.org/abs/1512.00567. \cr
@@ -994,7 +1086,10 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -1224,6 +1319,9 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_v3")
 
@@ -1269,6 +1367,14 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   \code{outputs <- base_model$output \%>\%} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+#'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_resnet_v2(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type Inception-ResNet v2.
 #'
@@ -1344,7 +1450,10 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -1422,6 +1531,9 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_ResNet_v2")
 
@@ -1475,6 +1587,14 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   For a task with another input layer, use the following code template: \cr
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_mobilenet(input_tensor = blocks)}
+#'
 #' @return A CNN model object from type MobileNet.
 #'
 #' @references Howard, A. G., Zhu, M., Chen, B., Kalenichenko, D., Wang, W., Weyand, T., Andreetto, M., Adam, H. (2017): MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications. arXiv:1704.04861v1 [cs]. https://arxiv.org/abs/1704.04861. \cr
@@ -1525,7 +1645,10 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -1556,6 +1679,9 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
       keras::layer_activation(activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNet")
 
@@ -1606,6 +1732,12 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
 #'   \code{outputs <- base_model$output \%>\%} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_mobilenet_v2(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type MobileNetV2.
 #'
@@ -1680,7 +1812,10 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -1729,6 +1864,9 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNetV2")
 
@@ -1783,6 +1921,12 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   \code{outputs <- base_model$output \%>\%} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_mobilenet_v3(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type MobileNetV3.
 #'
@@ -1945,7 +2089,10 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -1988,6 +2135,9 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
     x <- keras::layer_activation(x, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNetV3")
 
@@ -2034,6 +2184,12 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_xception(input_tensor = blocks)}
+#'
 #' @return A CNN model object from type Xception.
 #'
 #' @references Chollet, F. (2017): Xception: Deep Learning with Depthwise Separable Convolutions. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Honolulu, 2017, pp. 1251-1258. https//doi.org/10.1109/CVPR.2017.195. \cr
@@ -2057,7 +2213,10 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -2149,6 +2308,9 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
       keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "Xception")
 
@@ -2212,6 +2374,12 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
 #'   \code{outputs <- base_model$output \%>\%} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+#'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_nasnet(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type NASNet-A.
 #'
@@ -2372,7 +2540,10 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -2411,6 +2582,9 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
     keras::layer_dense(units = classes, activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = x, name = "NASNet_A")
 
@@ -2460,6 +2634,12 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
+#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_2d()} \cr
+#'   \code{model <- build_CNN_unet(input_tensor = blocks)}
+#'
 #' @return A CNN model object from type U-Net.
 #'
 #' @references  Ronneberger, O., Fischer, P., Brox T. (2015): U-Net: Convolutional Networks f?r Biomedical Image Segmentation. In: Navab, N., Hornegger, J., Wells, W., Frangi, A. (Hrsg.): Medical Image Computing and Computer-Assisted Intervention - MICCAI 2015. Lecture Notes in Computer Science, vol 9351. Part III. pp. 234-241. Cham: Springer. \url{https://doi.org/10.1007/978-3-319-24574-4_28}. \cr
@@ -2496,7 +2676,10 @@ build_CNN_unet <- function(include_top = TRUE, weights = "imagenet", input_tenso
   if (is.null(input_tensor)) {
     inputs <- keras::layer_input(shape = input_shape)
   } else {
-    inputs <- input_tensor
+    if (!keras::k_is_keras_tensor(input_tensor))
+      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    else
+      inputs <- input_tensor
   }
 
   # Building blocks
@@ -2589,6 +2772,9 @@ build_CNN_unet <- function(include_top = TRUE, weights = "imagenet", input_tenso
       keras::layer_conv_2d(filters = classes, kernel_size = c(1, 1), activation = classifier_activation)
   }
 
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "UNet")
 

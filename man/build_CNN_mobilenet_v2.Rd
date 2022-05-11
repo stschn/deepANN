@@ -55,6 +55,12 @@ For a task with another top layer block, e.g. a regression problem, use the foll
 \code{outputs <- base_model$output \%>\%} \cr
 \code{layer_dense(units = 1, activation = "linear")} \cr
 \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+
+\code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+\code{blocks <- inputs \%>\% } \cr
+\code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+\code{layer_max_pooling_2d()} \cr
+\code{model <- build_CNN_mobilenet_v2(input_tensor = blocks)}
 }
 \references{
 Sandler, M., Howard, A. G., Zhu, M., Zhmoginov, A., & Chen, L.-C. (2019). MobileNetV2: Inverted Residuals and Linear Bottlenecks. arXiv:1801.04381v4 \link{cs}. https://arxiv.org/abs/1801.04381. \cr

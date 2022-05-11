@@ -56,6 +56,12 @@ The \code{input shape} is usually \code{c(height, width, channels)} for a 2D ima
   \code{outputs <- base_model$output \%>\%} \cr
   \code{layer_dense(units = 1, activation = "linear")} \cr
   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+
+  \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+  \code{blocks <- inputs \%>\% } \cr
+  \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+  \code{layer_max_pooling_2d()} \cr
+  \code{model <- build_CNN_unet(input_tensor = blocks)}
 }
 \references{
 Ronneberger, O., Fischer, P., Brox T. (2015): U-Net: Convolutional Networks f?r Biomedical Image Segmentation. In: Navab, N., Hornegger, J., Wells, W., Frangi, A. (Hrsg.): Medical Image Computing and Computer-Assisted Intervention - MICCAI 2015. Lecture Notes in Computer Science, vol 9351. Part III. pp. 234-241. Cham: Springer. \url{https://doi.org/10.1007/978-3-319-24574-4_28}. \cr

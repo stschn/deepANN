@@ -47,6 +47,14 @@ The \code{input shape} is usually \code{c(height, width, channels)} for a 2D ima
   \code{outputs <- base_model$output \%>\%} \cr
   \code{layer_dense(units = 1, activation = "linear")} \cr
   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+
+  For a task with another input layer, use the following code template: \cr
+
+  \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+  \code{blocks <- inputs \%>\% } \cr
+  \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+  \code{layer_max_pooling_2d()} \cr
+  \code{model <- build_CNN_resnet_v2(input_tensor = blocks)}
 }
 \references{
 Szegedy, C., Ioffe, S., Vanhoucke, V., Alemi, A. (2016): Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning. arXiv:1602.07261 [cs]. http://arxiv.org/abs/1602.07261. \cr
