@@ -735,18 +735,19 @@ squeeze <- function(a, ...) {
 #' @rdname squeeze
 #' @export
 squeeze.array <- function(a, axis = NULL, order = c("C", "F")) {
-  if (!is.array(a))
-    stop("a must be an array.")
   order <- match.arg(order)
-  adim <- dim(a)
+  da <- dim(a)
   if (is.null(axis)) {
-    newdim <- adim[!adim %in% c(1)]
+    newdim <- da[!da %in% c(1)]
   } else {
-    axis1 <- which(adim %in% c(1))
+    axis1 <- which(da %in% c(1))
     remove_axis <- axis1[axis1 %in% axis]
-    newdim <- adim[-remove_axis]
+    if (isFALSE((is.integer(remove_axis)) && (length(remove_axis) == 0))) # check for integer (empty)
+      newdim <- da[-remove_axis]
+    else
+      newdim <- da
   }
-  return(marray(deepANN::flatten(a, order = c("F")), dim = newdim, order = order))
+  return(reshape.array(a, dim = newdim, order = order))
 }
 
 #' @rdname squeeze
