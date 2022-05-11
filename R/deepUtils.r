@@ -480,6 +480,8 @@ reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a
 #'
 #' @return The expanded array \code{a} with new shape.
 #'
+#' @references Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.
+#'
 #' @export
 expand_dims <- function(a, axis = -1L) {
   d <- if (!is.null(dim(a) -> da)) da else length(a)
@@ -878,11 +880,7 @@ ta <- function(a, ...) {
 #' @rdname ta
 #' @export
 ta.array <- function(a, perm = NULL) {
-  if (is.null(perm)) {
-    aperm(a)
-  } else {
-    aperm(a, perm)
-  }
+  aperm(a, perm = perm)
 }
 
 #' @rdname ta

@@ -17,6 +17,9 @@ The expanded array \code{a} with new shape.
 \description{
 Insert a new axis that will appear at the axis position in the expanded array shape.
 }
+\references{
+Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.
+}
 \seealso{
 Other Utils: 
 \code{\link{as_ANN_matrix}()},
