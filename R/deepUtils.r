@@ -540,30 +540,20 @@ expand_dims <- function(a, axis = -1L) {
 #' @export
 flatten <- function(data, axis = NULL, order = c("C", "F")) {
   order <- match.arg(order)
-  byrow <- ifelse(order %in% c("C"), TRUE, FALSE)
   if ((!all(is.na(data))) && (is.atomic(data)) && (!(deepANN::ndim(data) > 1L))) {
     data <- array(data)
   } else {
+  if (is.data.frame(data)) {
+    data <- as.matrix(data)
+  } else {
   if (is.list(data)) {
-    data <- array(unname(unlist(lapply(data, function(element) { element }))))
-  } else {
-  if ((l <- deepANN::ndim(data)) > 1L) {
-    if (is.null(axis)) {
-      if (l == 2L) { # matrix
-        if (!byrow) { data <- array(as.matrix(data)) } else { data <- array(t(data))}
-      } else { # n-dimensional arrays with n > 2
-        # coerce n-dimensional array to stacked matrices
-        fixed_dimension <- seq_len(l)[-c(1L:2L)]
-        data <- array(unlist(list(apply(data, c(ifelse(byrow, 1L, 2L), fixed_dimension), function(element) { element }))))
-        #data <- aperm(data, perm = rev(seq_along(dim(data)))) # byrow
-      }
-    } else {
-      data <- array(unlist(list(apply(data, MARGIN = axis, function(element) { element }))))
-    }
-  } else {
-    data <- array(data)
+    data <- array(unlist(data))
   }}}
-  return(data)
+  if (is.null(axis)) {
+    return(as.array(as.vector(reshape.array(data, order = order))))
+  } else {
+    return(as.array(as.vector(reshape.array(apply(a, MARGIN = axis, FUN = identity), order = order))))
+  }
 }
 
 #' @title Multidimensional array (marray)
@@ -645,14 +635,9 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
     if (is.list(data)) {
       data <- unlist(list_as_numeric(data))
     }}}}
-  } else {
-    if (is.data.frame(data)) {
-      if (is.null(dim)) dim <- length(data)
-    } else {
-    if (is.list(data)) {
-      data <- unlist(data)
-    }}
   }
+  if (is.data.frame(data)) data <- as.matrix(data)
+  if (is.list(data)) data <- array(unlist(data))
 
   if (is.null(dim)) {
     if (!is.null(dim(data))) dim <- dim(data) else dim <- length(data)
