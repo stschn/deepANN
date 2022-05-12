@@ -28,7 +28,7 @@ is.marray(x)
 \arguments{
 \item{x}{An R object.}
 
-\item{value}{A integerish vector of new dimensions.}
+\item{value}{An integerish vector of new dimensions.}
 
 \item{data}{The data to be reshaped to a multidimensional array.}
 

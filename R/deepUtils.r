@@ -414,7 +414,7 @@ vector_as_ANN_matrix <- function(x, ncol = 1, by = c("row", "col", "step"), reve
 #' @family Utils
 #'
 #' @param x An object to get or set dimensions on.
-#' @param value A integerish vector of new dimensions.
+#' @param value An integerish vector of new dimensions.
 #'
 #' @return The (redimensioned) object \code{x}.
 #'
@@ -749,7 +749,7 @@ squeeze.array <- function(a, axis = NULL, order = c("C", "F")) {
     else
       newdim <- da
   }
-  return(reshape.array(a, dim = newdim, order = order))
+  return(marray(a, dim = newdim, order = order))
 }
 
 #' @rdname squeeze
