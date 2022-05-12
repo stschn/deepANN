@@ -7,12 +7,12 @@
 scale_log(x, invert = FALSE)
 }
 \arguments{
-\item{x}{A numeric vector whose elements should be log transformed.}
+\item{x}{A numeric object whose elements should be log transformed.}
 
-\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
+\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is already scaled and scaling will be inverted.}
 }
 \value{
-A vector of same length as \code{x} with log transformed values.
+Transformed \code{x} with log transformed values.
 }
 \description{
 

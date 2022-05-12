@@ -7,16 +7,16 @@
 scale_center(x, use_attr = TRUE, invert = FALSE, const = NULL)
 }
 \arguments{
-\item{x}{A numeric vector whose elements should be scaled thru centering.}
+\item{x}{A numeric object whose elements should be scaled thru centering.}
 
-\item{use_attr}{A logical value indicating whether the scaling factor \code{const} is stored as named attribute of the scaled vector \code{x}.}
+\item{use_attr}{A logical value indicating whether the scaling factor \code{const} is stored as named attribute of the scaled \code{x}.}
 
-\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
+\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is already scaled and scaling will be inverted.}
 
 \item{const}{A constant value that is subtracted from all values in \code{x}. By default (\code{NULL}), the mean of \code{x} is used as the constant value.}
 }
 \value{
-A vector of same length as \code{x} with (mean) centered values.
+Transformed \code{x} with (mean) centered values.
 }
 \description{
 

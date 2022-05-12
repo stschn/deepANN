@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepScaling.r
 \name{scaling}
 \alias{scaling}
-\title{Scaling of a numeric vector}
+\title{Scaling of a numeric object}
 \usage{
 scaling(
   x,
@@ -13,18 +13,18 @@ scaling(
 )
 }
 \arguments{
-\item{x}{A numeric vector whose elements should be scaled.}
+\item{x}{A numeric object whose elements should be scaled.}
 
 \item{type}{Type of scaling with supported techniques min-max scaling (\code{minmax}), z-score scaling (\code{zscore}), log transformation (\code{log}) and centering (\code{center}).}
 
-\item{use_attr}{A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.}
+\item{use_attr}{A logical value indicating whether scaling factors like \code{min}, \code{max}, \code{mean} and \code{sd} are stored as named attributes of the scaled \code{x}.}
 
-\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
+\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is already scaled and scaling will be inverted.}
 
 \item{...}{Further arguments depend on the type of scaling. Min-max scaling, z-score scaling and centering need two or one further arguments if necessary.}
 }
 \value{
-The scaled or re-scaled (inverted) numeric vector \code{x}.
+The scaled or re-scaled (inverted) \code{x}.
 }
 \description{
 

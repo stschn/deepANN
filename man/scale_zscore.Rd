@@ -7,18 +7,18 @@
 scale_zscore(x, use_attr = TRUE, invert = FALSE, meanx = NULL, sdx = NULL)
 }
 \arguments{
-\item{x}{A numeric vector whose elements should be scaled thru z-score scaling.}
+\item{x}{A numeric object whose elements should be scaled thru z-score scaling.}
 
-\item{use_attr}{A logical value indicating whether scaling factors \code{mean} and \code{sd} are stored as named attributes of the scaled vector \code{x}.}
+\item{use_attr}{A logical value indicating whether scaling factors \code{mean} and \code{sd} are stored as named attributes of the scaled \code{x}.}
 
-\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
+\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is already scaled and scaling will be inverted.}
 
 \item{meanx}{A given mean value for scaling. If this value is \code{NULL} the mean of \code{x} is used.}
 
 \item{sdx}{A given standard deviation value for scaling. If this value is \code{NULL} the standard deviation of \code{x} is used.}
 }
 \value{
-A vector of same length as \code{x} with z-score scaled values.
+Transformed \code{x} with z-score scaled values.
 }
 \description{
 

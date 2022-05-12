@@ -7,18 +7,18 @@
 scale_minmax(x, use_attr = TRUE, invert = FALSE, minx = NULL, maxx = NULL)
 }
 \arguments{
-\item{x}{A numeric vector whose elements should be scaled thru min-max scaling.}
+\item{x}{A numeric object whose elements should be scaled thru min-max scaling.}
 
-\item{use_attr}{A logical value indicating whether scaling factors \code{min} and \code{max} are stored as named attributes of the scaled vector \code{x}.}
+\item{use_attr}{A logical value indicating whether scaling factors \code{min} and \code{max} are stored as named attributes of the scaled \code{x}.}
 
-\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is an already scaled vector and scaling will be inverted.}
+\item{invert}{A logical value indicating the direction of scaling. If set to \code{TRUE}, \code{x} is already scaled and scaling will be inverted.}
 
 \item{minx}{A given minimum value for scaling. If this value is \code{NULL} the minimum of \code{x} is used.}
 
 \item{maxx}{A given maximum value for scaling. If this value is \code{NULL} the maximum of \code{x} is used.}
 }
 \value{
-A vector of same length as \code{x} with min-max scaled values between 0 and 1.
+Transformed \code{x} with min-max scaled values between 0 and 1.
 }
 \description{
 
