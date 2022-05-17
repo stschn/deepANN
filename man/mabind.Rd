@@ -4,10 +4,12 @@
 \alias{mabind}
 \title{Combine multidimensional arrays along a specified dimension}
 \usage{
-mabind(..., axis = -1, order = c("C", "F"))
+mabind(..., input_shape = NULL, axis = -1, order = c("C", "F"))
 }
 \arguments{
-\item{...}{Any numbers of objects they are coerced to arrays. The dimensions of these objects must be equal. The objects can be packed into a \code{list}.}
+\item{...}{Any numbers of objects they are coerced to arrays. The objects can be packed into a \code{list}. The dimensions of these objects must be equal if they are not to be coerced into a certain \code{input_shape}.}
+
+\item{input_shape}{The dimension the input objects are to be coerced. By default \code{NULL}, the original dimensions are used.}
 
 \item{axis}{The dimension along the objects are combined. By default (\code{-1}), the last dimension is used for binding the arrays.}
 

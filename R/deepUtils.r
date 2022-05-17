@@ -539,7 +539,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
   if (is.null(axis)) {
     return(as.array(as.vector(reshape.array(data, order = order))))
   } else {
-    return(as.array(as.vector(reshape.array(apply(a, MARGIN = axis, FUN = identity), order = order))))
+    return(as.array(as.vector(reshape.array(apply(data, MARGIN = axis, FUN = identity), order = order))))
   }
 }
 
@@ -547,7 +547,8 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'
 #' @family Utils
 #'
-#' @param ... Any numbers of objects they are coerced to arrays. The dimensions of these objects must be equal. The objects can be packed into a \code{list}.
+#' @param ... Any numbers of objects they are coerced to arrays. The objects can be packed into a \code{list}. The dimensions of these objects must be equal if they are not to be coerced into a certain \code{input_shape}.
+#' @param input_shape The dimension the input objects are to be coerced. By default \code{NULL}, the original dimensions are used.
 #' @param axis The dimension along the objects are combined. By default (\code{-1}), the last dimension is used for binding the arrays.
 #' @param order The order in which elements of the objects should be read during coercing to arrays.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
@@ -563,7 +564,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #' mabind(a1, a2, a3, axis = 1) # output is an 12x3x2 array
 #' mabind(a1, a2, a3, axis = 2) # output is an 4x9x2 array
 #' @export
-mabind <- function(..., axis = -1, order = c("C", "F")) {
+mabind <- function(..., input_shape = NULL, axis = -1, order = c("C", "F")) {
   order <- match.arg(order)
   list_of_arrays <- list(...)
   # If arrays are coerced into a list like list(a1, a2, a3, ...), flat arguments into a simple list
@@ -571,7 +572,7 @@ mabind <- function(..., axis = -1, order = c("C", "F")) {
     list_of_arrays <- unlist(list_of_arrays, recursive = FALSE)
 
   # Transform objects to arrays
-  list_of_arrays <- lapply(list_of_arrays, function(a) { deepANN::marray(a, order = order) })
+  list_of_arrays <- lapply(list_of_arrays, function(a) { deepANN::marray(a, dim = input_shape, order = order) })
   # Coerce all arguments to have the same number of dimensions (by adding one, if necessary)
   # and permute them to put the join dimension (axis) last.
   N <- max(1, sapply(list_of_arrays, function(a) deepANN::ndim(a)))
