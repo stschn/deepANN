@@ -17,7 +17,7 @@ mae(actuals, preds, na.rm = FALSE)
 Mean absolute error.
 }
 \description{
-
+Mean absolute error (MAE)
 }
 \details{
 In Machine and Deep Learning, MAE is also known as L1 loss function.

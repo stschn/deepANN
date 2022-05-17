@@ -13,7 +13,7 @@ diff_log(x)
 The log-differenced \code{x}.
 }
 \description{
-
+Log-differencing of a numeric vector
 }
 \seealso{
 \code{\link{stationary}}, \code{\link{diffinv_log}}.

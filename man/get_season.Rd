@@ -13,7 +13,7 @@ get_season(dates)
 A vector with same length as \code{dates} with seasonal values \code{Winter, Spring, Summer, Fall}.
 }
 \description{
-
+Get season from given dates
 }
 \references{
 \url{https://stackoverflow.com/questions/9500114/find-which-season-a-particular-date-belongs-to}.

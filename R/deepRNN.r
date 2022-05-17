@@ -105,7 +105,6 @@ get_LSTM_XY <- function(dataset, x = NULL, y = 2L, other_columns = NULL, timeste
 }
 
 #' @title Period shift
-#' @description
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
@@ -148,7 +147,6 @@ start_invert_differencing <- function(invert_first_row, differences = 1L, timest
 }
 
 #' @title Get ANN lag from ARIMA(X) lag
-#' @description
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
@@ -167,7 +165,6 @@ as_lag <- function(arima_lag = 0L, type = "univariate") {
 }
 
 #' @title Get ANN timesteps from ANN lag
-#' @description
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
@@ -186,7 +183,6 @@ as_timesteps <- function(lag = 1L, type = "univariate") {
 }
 
 #' @title Features (X) data format for LSTM
-#' @description
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
@@ -218,7 +214,6 @@ as_LSTM_X <- function(x, timesteps = 1L, reverse = FALSE) {
 }
 
 #' @title Outcomes (Y) data format for LSTM
-#' @description
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
@@ -257,7 +252,6 @@ as_LSTM_Y <- function(y, timesteps = 1L, reverse = FALSE, encoding = c("one_hot"
 }
 
 #' @title Recreation of a data frame based on preformatted X and Y data sets
-#' @description
 #'
 #' @family Recurrent Neural Network (RNN)
 #'
@@ -495,7 +489,6 @@ fit_LSTM <- function(model, x, y, timesteps = 1L, batch_size = 1, epochs = 10, v
 }
 
 #' @title Predict with ANN model
-#' @description
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #' @family Recurrent Neural Network (RNN)
@@ -678,7 +671,6 @@ as_LSTM_period_outcome <- function(dataset, columns, timesteps = 1L, lag = 0L, t
 }
 
 #' @title Save model weights to file
-#' @description
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #' @family Recurrent Neural Network (RNN)
@@ -698,7 +690,6 @@ save_weights_ANN <- function(model, filename) {
 }
 
 #' @title Load model weights from file
-#' @description
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #' @family Recurrent Neural Network (RNN)

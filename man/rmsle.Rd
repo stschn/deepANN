@@ -19,7 +19,7 @@ rmsle(actuals, preds, alpha = 1, na.rm = FALSE)
 Root mean square logarithmic error.
 }
 \description{
-
+Root mean square logarithmic error (RMSLE)
 }
 \seealso{
 Other Metrics: 

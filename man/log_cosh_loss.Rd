@@ -17,7 +17,7 @@ log_cosh_loss(actuals, preds, na.rm = FALSE)
 Log-Cosh loss.
 }
 \description{
-
+Log-Cosh loss
 }
 \seealso{
 Other Metrics: 

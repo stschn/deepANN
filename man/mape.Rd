@@ -17,7 +17,7 @@ mape(actuals, preds, na.rm = FALSE)
 Mean absolute percentage error.
 }
 \description{
-
+Mean absolute percentage error (MAPE)
 }
 \seealso{
 Other Metrics: 

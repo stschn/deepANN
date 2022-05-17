@@ -25,7 +25,7 @@ accuracy(
 The type-specific accuracy of a classification problem.
 }
 \description{
-
+Classification accuracy
 }
 \details{
 The following accuracy types are implemented:

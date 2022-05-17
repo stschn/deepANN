@@ -18,7 +18,7 @@ Defaults to \code{NULL} is equal to e = \code{exp(1)}.}
 Cross entropy.
 }
 \description{
-
+Cross entropy
 }
 \details{
 Cross entropy quantifies the difference between two probability distributions.

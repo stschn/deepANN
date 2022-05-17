@@ -17,7 +17,7 @@ get_period_shift(timesteps = 1L, lag = 0L, type = "univariate")
 The period shift.
 }
 \description{
-
+Period shift
 }
 \details{
 The period shift denotes the number of past periods starting from a certain period t, whose values of X are needed

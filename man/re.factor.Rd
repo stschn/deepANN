@@ -13,7 +13,7 @@ re.factor(x)
 The renewed (ordered) factor object \code{x}.
 }
 \description{
-
+Renew an (ordered) factor object
 }
 \seealso{
 \code{\link{factor}}.
@@ -31,6 +31,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

@@ -53,7 +53,7 @@ build_CNN_nasnet(
 A CNN model object from type NASNet-A.
 }
 \description{
-
+Build NASNet-A
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the \code{default_size} is used. \cr

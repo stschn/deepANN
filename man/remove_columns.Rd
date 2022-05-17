@@ -15,7 +15,7 @@ remove_columns(dataset, value = 0)
 The \code{dataset} without those columns that contain only one specific value.
 }
 \description{
-
+Remove columns with only one specific value
 }
 \seealso{
 Other Dummifying: 

@@ -30,7 +30,7 @@ build_CNN_inception_v3(
 A CNN model object from type Inception v3.
 }
 \description{
-
+Build Inception v3
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 299x299x3 is used. \cr

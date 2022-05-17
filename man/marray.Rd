@@ -6,7 +6,7 @@
 \alias{as.marray}
 \alias{as.marray.default}
 \alias{is.marray}
-\title{Multidimensional array (marray)}
+\title{Multidimensional array}
 \usage{
 dimC(x) <- value
 
@@ -57,16 +57,13 @@ An array from type \code{marray}.
   \code{is.marray(x)} tests if its argument is a \code{marray}.\cr
 }
 \details{
-This introduced multidimensional array, read m-array, defines an array as several bunches of matrices.
-  Usually, an R array with more than two dimensions can be interpret as a bunch of bunch of bunch... of matrices.
-  The first two dimensions define the matrix while the remaining dimensions define the corresponding bunches.
-  For e.g., an 4x3x2 array has 2 bunches of each 4x3 matrix. An 6x4x3x2 array has 2 bunches, each of these two bunches has 3 bunches and each of these three bunches again contains a 6x4 matrix.
+This introduced n-dimensional array is an equivalent to \code{ndarray} class from NumPy (\url{https://numpy.org/}), a famous package in Python.
+  Usually, an n-dimensional array is a multidimensional container consisting of bunches of bunches of bunches... of matrices.
+  The first two dimensions define the matrix while the remaining dimensions define the corresponding bunches. For e.g., an 4x3x2 array has 2 bunches of each 4x3 matrix.
+  An 6x4x3x2 array has 2 bunches, each of these two bunches has 3 bunches and each of these three bunches again contains a 6x4 matrix.
 
-  The behavior of \code{marray} is quite similar to that of numpy from Python. While column-major ordering is identically,
-  row-major ordering differs. An array from type \code{marray} always order data within the matrices, and not along the remaining axis.
-
-  In this context, the function \code{array_reshape} from reticulate package, which is consistent with libraries like NumPy, differs from the base function \code{dim}.
-  While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
+  The behavior of \code{marray} is similar to that of ndarray from NumPy. R follows a column-major ordering (Fortran-style) during building up an array,
+  wile Python respectively NumPy prefers row-major ordering (C-style) but offers both. For a comparison see \url{https://rstudio.github.io/reticulate/articles/arrays.html}.
 }
 \examples{
   # Vector input with explicit dimensions
@@ -88,11 +85,9 @@ This introduced multidimensional array, read m-array, defines an array as severa
 }
 \references{
 Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.
-
-\url{https://rstudio.github.io/reticulate/articles/arrays.html}.
 }
 \seealso{
-\code{\link{array}}, \code{\link{dim}}.
+\code{\link{array}}, \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
 
 Other Utils: 
 \code{\link{as_ANN_matrix}()},
@@ -106,6 +101,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},
@@ -140,6 +136,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

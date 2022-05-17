@@ -21,7 +21,7 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 The flatten data in form of a one-dimensional array.
 }
 \description{
-
+Flatten data into a one-dimensional array
 }
 \examples{
 v <- (1:24); dim(v); ndim(v)
@@ -45,6 +45,7 @@ Other Utils:
 \code{\link{eye}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

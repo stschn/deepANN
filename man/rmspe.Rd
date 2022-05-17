@@ -17,7 +17,7 @@ rmspe(actuals, preds, na.rm = FALSE)
 Root mean square percentage error.
 }
 \description{
-
+Root mean square percentage error (RMSPE)
 }
 \seealso{
 Other Metrics: 

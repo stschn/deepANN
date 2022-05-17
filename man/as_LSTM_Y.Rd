@@ -26,7 +26,7 @@ Dependent on the type of \code{y} and timesteps. If \code{y} is a factor, the re
   if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{y}.
 }
 \description{
-
+Outcomes (Y) data format for LSTM
 }
 \seealso{
 \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_X}}, \code{\link{as_ANN_matrix}}, \code{\link{one_hot_encode}}, \code{\link{sparse_encode}}

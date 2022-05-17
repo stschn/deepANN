@@ -34,7 +34,7 @@ is.naivebayes(object)
 A list from class \code{naivebayes} with levels and prior probabilities of \code{y} and names and likelihood distribution parameters of \code{x} categorized by the levels of factor \code{y}.
 }
 \description{
-
+Naive Bayes
 }
 \details{
 The Naive Bayes model is based on Bayes' theorem: \eqn{P(A|B) = P(B|A) * P(A) / P(B)}\cr

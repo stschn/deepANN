@@ -13,5 +13,5 @@ coerce_dimension(x)
 The coerced data structure, either an array with no trailing dimension of 1 or a matrix.
 }
 \description{
-
+Coerce data to an array with no trailing dimension of 1 or to a matrix
 }

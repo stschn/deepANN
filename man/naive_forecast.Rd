@@ -18,7 +18,7 @@ If drift is more than 1 the mean value of the changes over time is used; default
 A series of naive predicted values based upon \code{x}.
 }
 \description{
-
+Naive forecasting
 }
 \details{
 The following naive forecast approaches are implemented:

@@ -19,7 +19,7 @@ Dependent on the type of \code{y} and timesteps. If \code{y} is a factor, the re
   if \code{timesteps >= 2} a 3D-array with the dimensions samples, timesteps and number of output units, representing a sequence or multi-step outcome.
 }
 \description{
-
+Outcomes (Y) data format for a temporal CNN
 }
 \seealso{
 \code{\link{get_LSTM_XY}}, \code{\link{as_CNN_temp_X}}.

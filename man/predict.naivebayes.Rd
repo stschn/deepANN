@@ -17,7 +17,7 @@
 Numeric values for classifying the features within \code{x} to the levels of \code{y} stored in \code{object}.
 }
 \description{
-
+Prediction for Naive Bayes
 }
 \seealso{
 Other Machine Learning: 

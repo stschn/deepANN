@@ -15,7 +15,7 @@ load_weights_ANN(model, filename)
 The model object.
 }
 \description{
-
+Load model weights from file
 }
 \seealso{
 \code{\link{save_weights_ANN}}, \code{\link[base]{files}},

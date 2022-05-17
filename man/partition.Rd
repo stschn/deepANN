@@ -27,7 +27,7 @@ partition(
 Subsets of \code{dataset} usually for training and test purposes for Machine and Deep Learning tasks.
 }
 \description{
-
+Subset data set/time series into several slices
 }
 \details{
 If no column and between values are specified a typically split into two slices is done.

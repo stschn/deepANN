@@ -39,7 +39,7 @@ build_CNN_unet(
 A CNN model object from type U-Net.
 }
 \description{
-
+Build U-Net
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 256x256x1 is used. \cr

@@ -33,7 +33,7 @@ probability(x, ...)
 Probability of \code{x}.
 }
 \description{
-
+Probability
 }
 \details{
 \code{x} is a scalar or vector with values from either a categorical or a continuous variable, the probability is calculated for.
@@ -69,6 +69,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

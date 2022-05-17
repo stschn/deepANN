@@ -13,7 +13,7 @@ erfc(x)
 Complementary error function, defined as 1 - \code{erf}.
 }
 \description{
-
+Complementary error function (from MATLAB)
 }
 \seealso{
 Other Metrics: 

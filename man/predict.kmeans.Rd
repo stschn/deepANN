@@ -15,7 +15,7 @@
 A vector of predicted labels.
 }
 \description{
-
+Prediction for kmeans
 }
 \seealso{
 \code{\link[stats]{kmeans}}.

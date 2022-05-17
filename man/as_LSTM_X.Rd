@@ -21,7 +21,7 @@ A three-dimensional array of the resampled feature matrix \code{x} needed within
   Note: A 3D-array with dimensions (s x t x f) can be interpret as f (s x t)-matrices.
 }
 \description{
-
+Features (X) data format for LSTM
 }
 \seealso{
 \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_Y}}, \code{\link{as_ANN_matrix}}, \code{\link{as_tensor_3d}}.

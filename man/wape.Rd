@@ -17,7 +17,7 @@ wape(actuals, preds, na.rm = FALSE)
 Weighted average percentage error.
 }
 \description{
-
+Weighted average percentage error (WAPE)
 }
 \seealso{
 Other Metrics: 

@@ -19,7 +19,7 @@ quantile_loss(actuals, preds, q = 0.5, na.rm = FALSE)
 Quantile loss.
 }
 \description{
-
+Quantile loss
 }
 \details{
 This loss function tries to give different penalties to overestimation and underestimation.

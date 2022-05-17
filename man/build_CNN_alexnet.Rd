@@ -30,7 +30,7 @@ build_CNN_alexnet(
 A CNN model object from typ AlexNet.
 }
 \description{
-
+Build AlexNet
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 227x227x3 is used. \cr

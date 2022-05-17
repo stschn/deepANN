@@ -1,5 +1,4 @@
 #' @title Load images from different sources like from files or web
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -48,7 +47,6 @@ images_load <- function(images, FUN, ...) {
 }
 
 #' @title Resize loaded images
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -73,7 +71,6 @@ images_resize <- function(imagelist, FUN, ...) {
 }
 
 #' @title Convert (resized) images to 3D arrays
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -100,7 +97,6 @@ as_images_array <- function(imagelist, FUN, ...) {
 }
 
 #' @title Convert list of image arrays to a tensor
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -164,7 +160,6 @@ as_images_tensor <- function(imagelist, height, width, depth = NULL, channels = 
 }
 
 #' @title Create a 4-dimensional array for image features (input)
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -209,7 +204,6 @@ as_CNN_image_X <- function(images, height, width, channels = 3L, order = c("C", 
 }
 
 #' @title Create a one-hot vector for image labels (output)
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -235,7 +229,6 @@ as_CNN_image_Y <- function(y, encoding = c("one_hot", "sparse")) {
 }
 
 #' @title Features (X) data format for a temporal CNN
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -259,7 +252,6 @@ as_CNN_temp_X <- function(x, timesteps = 1L, subsequences = NULL, reverse = FALS
 }
 
 #' @title Outcomes (Y) data format for a temporal CNN
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -281,7 +273,6 @@ as_CNN_temp_Y <- function(y, timesteps = 1L, reverse = FALSE) {
 # Predefined CNN architectures
 
 #' @title Build LeNet-5
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -378,7 +369,6 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
 }
 
 #' @title Build AlexNet
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -499,7 +489,6 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
 }
 
 #' @title Build ZFNet
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -611,7 +600,6 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
 }
 
 #' @title Build VGG-16
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -729,7 +717,6 @@ build_CNN_vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tens
 }
 
 #' @title Build VGG-19
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -850,7 +837,6 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
 }
 
 #' @title Build ResNet-50
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1023,7 +1009,6 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
 }
 
 #' @title Build Inception v3
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1342,7 +1327,6 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 }
 
 #' @title Build Inception-ResNet v2
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1554,7 +1538,6 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
 }
 
 #' @title Build MobileNet
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1702,7 +1685,6 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
 }
 
 #' @title Build MobileNetV2
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1887,7 +1869,6 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
 }
 
 #' @title Build MobileNetV3
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -2158,7 +2139,6 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 }
 
 #' @title Build Xception
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -2331,7 +2311,6 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
 }
 
 #' @title Build NASNet-A
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -2605,7 +2584,6 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 }
 
 #' @title Build U-Net
-#' @description
 #'
 #' @family Convolutional Neural Network (CNN)
 #'

@@ -13,7 +13,7 @@ as_ANN_matrix(data)
 A matrix with only numbers.
 }
 \description{
-
+Convert data into an ANN compatible matrix with only numbers
 }
 \seealso{
 Other Utils: 
@@ -28,6 +28,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

@@ -19,7 +19,7 @@ as_CNN_temp_X(x, timesteps = 1L, subsequences = NULL, reverse = FALSE)
 A 3D-array with dimensions samples, timesteps and features or a 4D-array with dimensions samples, subsequences, timesteps and features.
 }
 \description{
-
+Features (X) data format for a temporal CNN
 }
 \seealso{
 \code{\link{get_LSTM_XY}}, \code{\link{as_CNN_temp_Y}}.

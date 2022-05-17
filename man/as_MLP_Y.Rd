@@ -15,7 +15,7 @@ as_MLP_Y(y, encoding = c("one_hot", "sparse"))
 A two-dimensional array of the outcome \code{y}. For a factor outcome, the result is an encoded matrix.
 }
 \description{
-
+Outcomes (Y) data format for SLP/MLP
 }
 \seealso{
 \code{\link{as_MLP_X}}, \code{\link{one_hot_encode}}, \code{\link{sparse_encode}}.

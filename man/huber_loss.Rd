@@ -19,7 +19,7 @@ huber_loss(actuals, preds, delta = 1, na.rm = FALSE)
 Huber loss.
 }
 \description{
-
+Huber loss
 }
 \details{
 Huber loss is less sensitive to outliers than MSE.

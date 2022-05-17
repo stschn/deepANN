@@ -13,7 +13,7 @@ ndim(data)
 Number of dimensions.
 }
 \description{
-
+Number of dimensions
 }
 \seealso{
 Other Utils: 
@@ -29,6 +29,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},

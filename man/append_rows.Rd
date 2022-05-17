@@ -21,7 +21,7 @@ append_rows(dataset, columns = NULL, n = 1L, type = c("copy", "minmax"))
 The dataset consisting of selected columns with dummy rows.
 }
 \description{
-
+Append dummy rows
 }
 \seealso{
 \code{\link{dummify}}.

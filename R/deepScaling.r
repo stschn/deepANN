@@ -1,5 +1,4 @@
 #' @title Min-Max Scaling
-#' @description
 #'
 #' @family Scaling
 #'
@@ -44,7 +43,6 @@ scale_minmax <- function(x, use_attr = TRUE, invert = FALSE, minx = NULL, maxx =
 }
 
 #' @title Z-Score Scaling
-#' @description
 #'
 #' @family Scaling
 #'
@@ -89,7 +87,6 @@ scale_zscore <- function(x, use_attr = TRUE, invert = FALSE, meanx = NULL, sdx =
 }
 
 #' @title (Mean) Centering
-#' @description
 #'
 #' @family Scaling
 #'
@@ -123,7 +120,6 @@ scale_center <- function(x, use_attr = TRUE, invert = FALSE, const = NULL) {
 }
 
 #' @title Log Transformation
-#' @description
 #'
 #' @family Scaling
 #'
@@ -145,7 +141,6 @@ scale_log <- function(x, invert = FALSE) {
 }
 
 #' @title Scaling of a numeric object
-#' @description
 #'
 #' @family Scaling
 #'
@@ -194,7 +189,6 @@ scaling <- function(x, type = c("minmax", "zscore", "log", "center"), use_attr =
 }
 
 #' @title Scaling of a data set
-#' @description
 #'
 #' @family Scaling
 #'
@@ -229,7 +223,6 @@ scale_dataset <- function(dataset, columns = NULL, type = c("minmax", "zscore", 
 }
 
 #' @title Scaling of a train and test data set
-#' @description
 #'
 #' @family Scaling
 #'

@@ -13,7 +13,7 @@ diff_percentage(x)
 The percentage-differenced \code{x}.
 }
 \description{
-
+Percentage-differencing of a numeric vector
 }
 \seealso{
 \code{\link{stationary}}, \code{\link{diffinv_percentage}}.

@@ -13,7 +13,7 @@ as_MLP_X(x)
 A two-dimensional array of the feature matrix \code{x}.
 }
 \description{
-
+Features (X) data format for SLP/MLP
 }
 \seealso{
 \code{\link{as_MLP_Y}}.

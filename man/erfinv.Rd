@@ -13,7 +13,7 @@ erfinv(x)
 Inverse error function.
 }
 \description{
-
+Inverse error function (from MATLAB)
 }
 \seealso{
 Other Metrics: 

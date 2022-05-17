@@ -40,7 +40,7 @@ is.decisiontree(object)
 A list from class \code{decisiontree} with split nodes and leaf nodes.
 }
 \description{
-
+Decision Tree
 }
 \details{
 A decision tree is a type of model that puts a certain feature from \code{x} onto a node, called split node, of the tree structure on the basis of

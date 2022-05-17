@@ -53,7 +53,7 @@ A two- or three-dimensional array with predicted outcome values.
   A three-dimensional array results for \code{fit_LSTM} if \code{return_sequences = TRUE}.
 }
 \description{
-
+Predict with ANN model
 }
 \seealso{
 \code{\link{fit_MLP}}, \code{\link{as_MLP_X}}, \code{\link{fit_LSTM}}, \code{\link{as_LSTM_X}},

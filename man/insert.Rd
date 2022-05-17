@@ -55,6 +55,7 @@ Other Utils:
 \code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

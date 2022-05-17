@@ -19,7 +19,7 @@ msle(actuals, preds, alpha = 1, na.rm = FALSE)
 Mean squared logarithmic error.
 }
 \description{
-
+Mean squared logarithmic error (MSLE)
 }
 \seealso{
 Other Metrics: 

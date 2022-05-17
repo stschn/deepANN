@@ -1,5 +1,4 @@
 #' @title Features (X) data format for SLP/MLP
-#' @description
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
@@ -15,7 +14,6 @@ as_MLP_X <- function(x) {
 }
 
 #' @title Outcomes (Y) data format for SLP/MLP
-#' @description
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
 #'
@@ -42,7 +40,6 @@ as_MLP_Y <- function(y, encoding = c("one_hot", "sparse")) {
 
 #' @title Build SLP/MLP architecture
 #' @description
-#'
 #' \code{build_MLP} creates a sequential feedforward model (SLP, MLP) with stacked dense layers and optional dropout layers.
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)

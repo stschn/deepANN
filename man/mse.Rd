@@ -17,7 +17,7 @@ mse(actuals, preds, na.rm = FALSE)
 Mean squared error.
 }
 \description{
-
+Mean squared error (MSE)
 }
 \details{
 In Machine and Deep Learning, MSE is also known as L2 loss function.

@@ -15,7 +15,7 @@ diffinv_percentage(delta, origin)
 The inverted \code{delta}.
 }
 \description{
-
+Invert a percentage-differenced vector
 }
 \seealso{
 \code{\link{diff_percentage}}.

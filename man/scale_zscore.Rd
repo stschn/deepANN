@@ -21,7 +21,7 @@ scale_zscore(x, use_attr = TRUE, invert = FALSE, meanx = NULL, sdx = NULL)
 Transformed \code{x} with z-score scaled values.
 }
 \description{
-
+Z-Score Scaling
 }
 \seealso{
 \code{\link{scaling}}.

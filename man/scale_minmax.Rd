@@ -21,7 +21,7 @@ scale_minmax(x, use_attr = TRUE, invert = FALSE, minx = NULL, maxx = NULL)
 Transformed \code{x} with min-max scaled values between 0 and 1.
 }
 \description{
-
+Min-Max Scaling
 }
 \seealso{
 \code{\link{scaling}}.

@@ -17,7 +17,7 @@ dice(actuals, preds, smooth = 1)
 Dice coefficient.
 }
 \description{
-
+Dice coefficient
 }
 \details{
 This metric is used for evaluation of the results within image segmentation. \code{actuals} as well as \code{preds} are binary encoded

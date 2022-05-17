@@ -27,7 +27,7 @@ scaling(
 The scaled or re-scaled (inverted) \code{x}.
 }
 \description{
-
+Scaling of a numeric object
 }
 \seealso{
 \code{\link{scale_minmax}}, \code{\link{scale_zscore}}, \code{\link{scale_log}}, \code{\link{scale_center}}.

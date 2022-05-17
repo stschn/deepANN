@@ -30,7 +30,7 @@ dummify_multilabel(
 The data set with encoded dummy variables.
 }
 \description{
-
+Create dummy variables for multi-label columns
 }
 \seealso{
 \code{\link{effectcoding}}, \code{\link[base]{strsplit}}.

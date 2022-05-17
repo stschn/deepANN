@@ -27,7 +27,7 @@ scale_dataset(
 The scaled \code{dataset}.
 }
 \description{
-
+Scaling of a data set
 }
 \seealso{
 \code{\link{scaling}}

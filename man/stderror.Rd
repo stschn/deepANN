@@ -15,7 +15,7 @@ stderror(x, na.rm = FALSE)
 Standard error.
 }
 \description{
-
+Standard error
 }
 \seealso{
 Other Metrics: 

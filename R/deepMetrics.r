@@ -6,7 +6,6 @@
 }
 
 #' @title Standard error
-#' @description
 #'
 #' @family Metrics
 #'
@@ -21,7 +20,6 @@ stderror <- function(x, na.rm = FALSE) {
 }
 
 #' @title Sum of squared errors (SSE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -40,7 +38,6 @@ sse <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Mean absolute error (MAE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -60,7 +57,6 @@ mae <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Mean absolute percentage error (MAPE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -77,7 +73,6 @@ mape <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Weighted mean absolute percentage error (WMAPE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -95,7 +90,6 @@ wmape <- function(actuals, preds, weights = 1, na.rm = FALSE) {
 }
 
 #' @title Weighted average percentage error (WAPE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -112,7 +106,6 @@ wape <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Mean squared error (MSE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -131,7 +124,6 @@ mse <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Mean squared logarithmic error (MSLE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -158,7 +150,6 @@ msle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
 }
 
 #' @title Root mean square error (RMSE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -174,7 +165,6 @@ rmse <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Root mean square logarithmic error (RMSLE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -191,7 +181,6 @@ rmsle <- function(actuals, preds, alpha = 1, na.rm = FALSE) {
 }
 
 #' @title Root mean square percentage error (RMSPE)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -207,7 +196,6 @@ rmspe <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Huber loss
-#' @description
 #'
 #' @family Metrics
 #'
@@ -237,7 +225,6 @@ huber_loss <- function(actuals, preds, delta = 1.0, na.rm = FALSE) {
 }
 
 #' @title Log-Cosh loss
-#' @description
 #'
 #' @family Metrics
 #'
@@ -255,7 +242,6 @@ log_cosh_loss <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Quantile loss
-#' @description
 #'
 #' @family Metrics
 #'
@@ -290,7 +276,6 @@ quantile_loss <- function(actuals, preds, q = 0.5, na.rm = FALSE) {
 }
 
 #' @title Variance coefficient (VC)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -306,7 +291,6 @@ vc <- function(actuals, preds, na.rm = FALSE) {
 }
 
 #' @title Coerce data to an array with no trailing dimension of 1 or to a matrix
-#' @description
 #'
 #' @param x A data structure like vector, matrix, array, data frame or list.
 #'
@@ -336,7 +320,6 @@ coerce_dimension <- function(x) {
 }
 
 #' @title Classification accuracy
-#' @description
 #'
 #' @family Metrics
 #'
@@ -469,7 +452,6 @@ accuracy <- function(actuals, preds, type = c("standard", "misclass", "tpr", "tn
 
 
 #' @title Dice coefficient
-#' @description
 #'
 #' @family Metrics
 #'
@@ -494,7 +476,6 @@ dice <- function(actuals, preds, smooth = 1) {
 }
 
 #' @title Intersection-over-Union (IoU, Jaccard Index)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -519,7 +500,6 @@ iou <- function(actuals, preds, smooth = 1) {
 }
 
 #' @title Gini impurity
-#' @description
 #'
 #' @family Metrics
 #'
@@ -546,7 +526,6 @@ gini_impurity <- function(x) {
 }
 
 #' @title Shannon entropy
-#' @description
 #'
 #' @family Metrics
 #'
@@ -571,7 +550,6 @@ entropy <- function(x, base = NULL) {
 }
 
 #' @title Cross entropy
-#' @description
 #'
 #' @family Metrics
 #'
@@ -604,7 +582,6 @@ cross_entropy <- function(p, q, base = NULL) {
 }
 
 #' @title Error function (from MATLAB)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -615,7 +592,6 @@ cross_entropy <- function(p, q, base = NULL) {
 erf <- function(x) {2L * pnorm(x * sqrt(2L)) - 1L }
 
 #' @title Complementary error function (from MATLAB)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -626,7 +602,6 @@ erf <- function(x) {2L * pnorm(x * sqrt(2L)) - 1L }
 erfc <- function(x) {2L * pnorm(x * sqrt(2L), lower = F) }
 
 #' @title Inverse error function (from MATLAB)
-#' @description
 #'
 #' @family Metrics
 #'
@@ -637,7 +612,6 @@ erfc <- function(x) {2L * pnorm(x * sqrt(2L), lower = F) }
 erfinv <- function(x) { qnorm((1L + x) / 2L) / sqrt(2L) }
 
 #' @title Inverse complementary error function (from MATLAB)
-#' @description
 #'
 #' @family Metrics
 #'

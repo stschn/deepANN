@@ -15,7 +15,7 @@ sd_pop(x, na.rm = FALSE)
 The population standard deviation.
 }
 \description{
-
+Population standard deviation
 }
 \details{
 The population standard deviation and sample standard deviation, implemented in \code{stats} package, differ in the denominator.
@@ -41,6 +41,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

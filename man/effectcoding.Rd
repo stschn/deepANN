@@ -13,7 +13,7 @@ effectcoding(x)
 \code{x} encoded with -1/1 value pairs.
 }
 \description{
-
+Effectcoding
 }
 \references{
 \url{http://www.faqs.org/faqs/ai-faq/neural-nets/part2/}.

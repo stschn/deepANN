@@ -17,7 +17,7 @@ rmse(actuals, preds, na.rm = FALSE)
 Root mean square error.
 }
 \description{
-
+Root mean square error (RMSE)
 }
 \seealso{
 Other Metrics: 

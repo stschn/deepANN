@@ -30,7 +30,7 @@ build_CNN_vgg19(
 A CNN model object from type VGG-19.
 }
 \description{
-
+Build VGG-19
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr

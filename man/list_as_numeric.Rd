@@ -13,7 +13,7 @@ list_as_numeric(l)
 The list \code{l} with only numeric values.
 }
 \description{
-
+Recursively transform all objects within a list to numeric values
 }
 \seealso{
 Other Utils: 
@@ -28,6 +28,7 @@ Other Utils:
 \code{\link{eye}()},
 \code{\link{flatten}()},
 \code{\link{insert}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

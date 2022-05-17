@@ -1,5 +1,4 @@
 #' @title Create dummy variables for categorical (nominal or ordinal) columns
-#' @description
 #'
 #' @family Dummifying
 #'
@@ -68,7 +67,6 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
 }
 
 #' @title Create dummy variables for multi-label columns
-#' @description
 #'
 #' @family Dummifying
 #'
@@ -136,7 +134,6 @@ dummify_multilabel <- function(dataset, columns = NULL, split = ",", effectcodin
 }
 
 #' @title Append dummy rows
-#' @description
 #'
 #' @family Dummifying
 #'
@@ -185,7 +182,6 @@ append_rows <- function(dataset, columns = NULL, n = 1L, type = c("copy", "minma
 }
 
 #' @title Effectcoding
-#' @description
 #'
 #' @family Dummifying
 #'
@@ -388,7 +384,6 @@ resample_imbalanced <- function(dataset, x, y, n = 1L, k = 1L, type = c("oversam
 }
 
 #' @title Remove columns with only one specific value
-#' @description
 #'
 #' @family Dummifying
 #'

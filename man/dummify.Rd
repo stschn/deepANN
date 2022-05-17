@@ -32,7 +32,7 @@ dummify(
 The \code{dataset} with encoded dummy variables.
 }
 \description{
-
+Create dummy variables for categorical (nominal or ordinal) columns
 }
 \seealso{
 \code{\link{effectcoding}}, \code{\link{append_rows}}.

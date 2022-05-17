@@ -19,7 +19,7 @@ wmape(actuals, preds, weights = 1, na.rm = FALSE)
 Weighted mean absolute percentage error.
 }
 \description{
-
+Weighted mean absolute percentage error (WMAPE)
 }
 \seealso{
 Other Metrics: 

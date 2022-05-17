@@ -28,7 +28,7 @@ A named list dependent on the \code{type}.\cr
   \code{center}: The first element stores the constant value, the second element the scaled train data set and the third element the scaled test data set.
 }
 \description{
-
+Scaling of a train and test data set
 }
 \seealso{
 \code{\link{scaling}}

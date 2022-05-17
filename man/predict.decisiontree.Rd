@@ -17,7 +17,7 @@
 A vector with levels of \code{y} as the results of classifying the samples of \code{x}.
 }
 \description{
-
+Prediction for Decision Tree
 }
 \seealso{
 Other Machine Learning: 

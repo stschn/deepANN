@@ -13,7 +13,7 @@ erf(x)
 Error function as the integral of the Gaussian distribution with 0 mean and variance 1/2.
 }
 \description{
-
+Error function (from MATLAB)
 }
 \seealso{
 Other Metrics: 

@@ -33,7 +33,7 @@ k_nearest_neighbors(object, ...)
 A named list with the response and a matrix with class-probability distributions where appropriate for \code{query}.
 }
 \description{
-
+K-nearest neighbors
 }
 \details{
 The response of k-nearest neighbors is either the majority class of k neighbors for a categorical response or the mean of k neighbors for a continuous outcome.

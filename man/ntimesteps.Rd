@@ -24,7 +24,7 @@ ntimesteps(data, ...)
 Number of timesteps.
 }
 \description{
-
+Number of timesteps within a data structure
 }
 \details{
 The number of timesteps is stored in the second dimension of a three-dimensional \code{x}, usually used for a LSTM,
@@ -44,6 +44,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

@@ -16,7 +16,7 @@ Defaults to \code{NULL} indicates that the base is automatically determined by t
 Entropy.
 }
 \description{
-
+Shannon entropy
 }
 \details{
 Shannon entropy is a concept from information theory and represents a quantification of the level

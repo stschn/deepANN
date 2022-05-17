@@ -1,5 +1,4 @@
 #' @title Renew an (ordered) factor object
-#' @description
 #'
 #' @family Utils
 #'
@@ -19,7 +18,6 @@ re.factor <- function(x) {
 }
 
 #' @title Population variance
-#' @description
 #'
 #' @family Utils
 #'
@@ -45,7 +43,6 @@ var_pop <- function(x, y = NULL, na.rm = FALSE, use) {
 }
 
 #' @title Population standard deviation
-#' @description
 #'
 #' @family Utils
 #'
@@ -68,7 +65,6 @@ sd_pop <- function(x, na.rm = FALSE) {
 }
 
 #' @title Degree to radian
-#' @description
 #'
 #' @family Utils
 #'
@@ -82,7 +78,6 @@ sd_pop <- function(x, na.rm = FALSE) {
 radian <- function(degree) { return((degree * pi) / 180) }
 
 #' @title Radian to degree
-#' @description
 #'
 #' @family Utils
 #'
@@ -96,7 +91,6 @@ radian <- function(degree) { return((degree * pi) / 180) }
 degree <- function(radian) { return((radian * 180) / pi) }
 
 #' @title Distance
-#' @description
 #'
 #' @family Utils
 #'
@@ -171,7 +165,6 @@ distance <- function(x, y, type = c("euclidean", "squared euclidean", "manhattan
 }
 
 #' @title Similarity
-#' @description
 #'
 #' @family Utils
 #'
@@ -218,7 +211,6 @@ similarity <- function(x, y, type = c("jaccard", "tanimoto", "ruzicka"), ...) {
 }
 
 #' @title Probability
-#' @description
 #'
 #' @family Utils
 #'
@@ -301,7 +293,6 @@ probability.numeric <- function(x, FUN, ...) {
 }
 
 #' @title Transform a vector to a numeric vector
-#' @description
 #'
 #' @family Utils
 #'
@@ -317,7 +308,6 @@ vector_as_numeric <- function(x) {
 }
 
 #' @title Recursively transform all objects within a list to numeric values
-#' @description
 #'
 #' @family Utils
 #'
@@ -342,7 +332,6 @@ list_as_numeric <- function(l) {
 }
 
 #' @title Convert data into an ANN compatible matrix with only numbers
-#' @description
 #'
 #' @family Utils
 #'
@@ -359,7 +348,6 @@ as_ANN_matrix <- function(data) {
 }
 
 #' @title Transform a vector into a ANN compatible matrix
-#' @description
 #'
 #' @family Utils
 #'
@@ -515,7 +503,6 @@ expand_dims <- function(a, axis = -1L) {
 }
 
 #' @title Flatten data into a one-dimensional array
-#' @description
 #'
 #' @family Utils
 #'
@@ -556,7 +543,64 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
   }
 }
 
-#' @title Multidimensional array (marray)
+#' @title Combine multidimensional arrays along a specified dimension
+#'
+#' @family Utils
+#'
+#' @param ... Any numbers of objects they are coerced to arrays. The dimensions of these objects must be equal. The objects can be packed into a \code{list}.
+#' @param axis The dimension along the objects are combined. By default (\code{-1}), the last dimension is used for binding the arrays.
+#' @param order The order in which elements of the objects should be read during coercing to arrays.
+#'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
+#'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#'
+#' @return An array as a combination of all input arrays along a specified dimension.
+#'
+#' @examples
+#' a1 <- marray(1:24, dim = c(4, 3, 2), order = "F"); a1
+#' a2 <- marray(-1:-24, dim = c(4, 3, 2), order = "F"); a2
+#' a3 <- marray(sample(24), dim = c(4, 3, 2), order = "F"); a3
+#' mabind(a1, a2, a3) # output is an 4x3x6 array
+#' mabind(a1, a2, a3, axis = 1) # output is an 12x3x2 array
+#' mabind(a1, a2, a3, axis = 2) # output is an 4x9x2 array
+#' @export
+mabind <- function(..., axis = -1, order = c("C", "F")) {
+  order <- match.arg(order)
+  list_of_arrays <- list(...)
+  # If arrays are coerced into a list like list(a1, a2, a3, ...), flat arguments into a simple list
+  if (any(sapply(list_of_arrays, is.list)))
+    list_of_arrays <- unlist(list_of_arrays, recursive = FALSE)
+
+  # Transform objects to arrays
+  list_of_arrays <- lapply(list_of_arrays, function(a) { deepANN::marray(a, order = order) })
+  # Coerce all arguments to have the same number of dimensions (by adding one, if necessary)
+  # and permute them to put the join dimension (axis) last.
+  N <- max(1, sapply(list_of_arrays, function(a) deepANN::ndim(a)))
+  if ((axis < 0L) || (axis > N)) axis <- N
+
+  # Construct matrix of dimensions
+  # Rows are equal to the length of the dimension(s) and Cols are equal to to length of array list
+  all_dims <- sapply(list_of_arrays, dim)
+  if (!(is.matrix(all_dims) && all(apply(all_dims, 1L, function(x) length(unique(x)) == 1L) == TRUE)))
+    stop("All input arrays must have the same number of dimensions.", call. = FALSE)
+
+  perm <- seq_len(N)
+  #if (!(axis < 0)) perm <- as.integer(append(perm[!perm %in% axis], axis)) # put axis last
+  if (!(axis == N)) perm <- as.integer(c(perm[-axis], axis)) # put axis last
+
+  # Adopt dimensions of arrays, if necessary
+  if (any(perm != seq_along(perm)))
+    for (i in seq_along(list_of_arrays))
+      list_of_arrays[[i]] <- deepANN::ta(list_of_arrays[[i]], perm)
+
+  # Construct output array
+  out <- array(unlist(list_of_arrays), dim = c(all_dims[-axis, 1L], sum(all_dims[axis, ])))
+  # Permute the output array to put the join dimension back in the right place
+  if (any(order(perm) != seq_along(perm)))
+    out <- deepANN::ta(out, order(perm))
+  out
+}
+
+#' @title Multidimensional array
 #' @description
 #'   \code{marray(data, ...)} creates a reshaped multidimensional array.\cr
 #'   \code{as.marray(data, ...)} attempts to turn its argument into a \code{marray}.\cr
@@ -575,21 +619,17 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #' @param x An R object.
 #' @param ... Additional arguments to be passed to or from methods.
 #'
-#' @details This introduced multidimensional array, read m-array, defines an array as several bunches of matrices.
-#'   Usually, an R array with more than two dimensions can be interpret as a bunch of bunch of bunch... of matrices.
-#'   The first two dimensions define the matrix while the remaining dimensions define the corresponding bunches.
-#'   For e.g., an 4x3x2 array has 2 bunches of each 4x3 matrix. An 6x4x3x2 array has 2 bunches, each of these two bunches has 3 bunches and each of these three bunches again contains a 6x4 matrix.
+#' @details This introduced n-dimensional array is an equivalent to \code{ndarray} class from NumPy (\url{https://numpy.org/}), a famous package in Python.
+#'   Usually, an n-dimensional array is a multidimensional container consisting of bunches of bunches of bunches... of matrices.
+#'   The first two dimensions define the matrix while the remaining dimensions define the corresponding bunches. For e.g., an 4x3x2 array has 2 bunches of each 4x3 matrix.
+#'   An 6x4x3x2 array has 2 bunches, each of these two bunches has 3 bunches and each of these three bunches again contains a 6x4 matrix.
 #'
-#'   The behavior of \code{marray} is quite similar to that of numpy from Python. While column-major ordering is identically,
-#'   row-major ordering differs. An array from type \code{marray} always order data within the matrices, and not along the remaining axis.
-#'
-#'   In this context, the function \code{array_reshape} from reticulate package, which is consistent with libraries like NumPy, differs from the base function \code{dim}.
-#'   While \code{dim} will fill new dimensions in column-major (Fortran-style) ordering, \code{array_reshape} allows both row-major (C-style) ordering and column-major (Fortran-style) ordering.
+#'   The behavior of \code{marray} is similar to that of ndarray from NumPy. R follows a column-major ordering (Fortran-style) during building up an array,
+#'   wile Python respectively NumPy prefers row-major ordering (C-style) but offers both. For a comparison see \url{https://rstudio.github.io/reticulate/articles/arrays.html}.
 #'
 #' @return An array from type \code{marray}.
 #'
-#' @seealso \code{\link{array}}, \code{\link{dim}}.
-#' @references \url{https://rstudio.github.io/reticulate/articles/arrays.html}.
+#' @seealso \code{\link{array}}, \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
 #'
 #' @examples
 #'   # Vector input with explicit dimensions
@@ -1010,7 +1050,6 @@ as.tensor.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
 is.tensor <- function(x) { return(inherits(x, .deepANNClasses[["Tensor"]])) }
 
 #' @title Number of dimensions
-#' @description
 #'
 #' @family Utils
 #'
@@ -1020,7 +1059,6 @@ is.tensor <- function(x) { return(inherits(x, .deepANNClasses[["Tensor"]])) }
 ndim <- function(data) { length(dim(data)) }
 
 #' @title Number of samples within a data structure
-#' @description
 #'
 #' @family Utils
 #'
@@ -1050,7 +1088,6 @@ nsamples.marray <- function(x) { nsamples.array(x) }
 nsamples.matrix <- function(x) { return(dim(x)[1L]) }
 
 #' @title Number of units within a data structure
-#' @description
 #'
 #' @family Utils
 #'
@@ -1082,7 +1119,6 @@ nunits.marray <- function(x) { nunits.array(x) }
 nunits.matrix <- function(x) { return(dim(x)[2L]) }
 
 #' @title Number of timesteps within a data structure
-#' @description
 #'
 #' @family Utils
 #'
@@ -1114,7 +1150,6 @@ ntimesteps.tensor <- function(x, default = 1L) { ntimesteps.array(x, default) }
 ntimesteps.marray <- function(x, default = 1L) { ntimesteps.array(x, default) }
 
 #' @title Number of subsequences within a data structure
-#' @description
 #'
 #' @family Utils
 #'
@@ -1144,7 +1179,6 @@ nsubsequences.tensor <- function(x, default = 0L) { nsubsequences.array(x, defau
 nsubsequences.marray <- function(x, default = 0L) { nsubsequences.array(x, default) }
 
 #' @title Transform data into a 1D tensor
-#' @description
 #'
 #' @family Utils
 #'
@@ -1161,7 +1195,6 @@ as_tensor_1d <- function(data, reverse = FALSE) {
 }
 
 #' @title Transform data into a tensor with two ranks or dimensions.
-#' @description
 #'
 #' @family Utils
 #'
@@ -1178,7 +1211,6 @@ as_tensor_2d <- function(data, reverse = FALSE) {
 }
 
 #' @title Transform data into a tensor with three ranks or dimensions.
-#' @description
 #'
 #' @family Utils
 #'
@@ -1206,7 +1238,6 @@ as_tensor_3d <- function(data, ncol = 1L, by = c("row", "col", "step"), reverse 
 }
 
 #' @title Random Number Generation with Tensorflow
-#' @description
 #'
 #' @family Utils
 #'

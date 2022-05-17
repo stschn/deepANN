@@ -20,7 +20,7 @@ The option \code{step} stands for a stepwise order of the values row by row (e.g
 A 3D-tensor (three-dimensional array).
 }
 \description{
-
+Transform data into a tensor with three ranks or dimensions.
 }
 \seealso{
 \code{\link{as_tensor_1d}}, \code{\link{as_tensor_2d}}, \code{\link{vector_as_ANN_matrix}}.
@@ -37,6 +37,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

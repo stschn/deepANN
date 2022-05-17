@@ -30,7 +30,7 @@ build_CNN_xception(
 A CNN model object from type Xception.
 }
 \description{
-
+Build Xception
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 299x299x3 is used. \cr

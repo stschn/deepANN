@@ -15,7 +15,7 @@ scale_log(x, invert = FALSE)
 Transformed \code{x} with log transformed values.
 }
 \description{
-
+Log Transformation
 }
 \seealso{
 \code{\link{scaling}}.

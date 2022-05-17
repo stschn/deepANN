@@ -19,7 +19,7 @@ scale_center(x, use_attr = TRUE, invert = FALSE, const = NULL)
 Transformed \code{x} with (mean) centered values.
 }
 \description{
-
+(Mean) Centering
 }
 \seealso{
 \code{\link{scaling}}.

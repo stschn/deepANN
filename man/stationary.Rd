@@ -32,7 +32,7 @@ of the stationary data series (\code{TRUE}).}
 The data set with newly created columns for the stationary data series.
 }
 \description{
-
+Build a stationary data series by differencing
 }
 \details{
 Differencing is a method of transforming a time series. The equations for the different types of differencing are\cr

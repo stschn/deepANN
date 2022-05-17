@@ -25,7 +25,7 @@ The option \code{step} stands for a stepwise order of the values row by row (e.g
 The transformed or resampled vector \code{x} into a matrix.
 }
 \description{
-
+Transform a vector into a ANN compatible matrix
 }
 \seealso{
 \code{\link{as_tensor_3d}}.
@@ -43,6 +43,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

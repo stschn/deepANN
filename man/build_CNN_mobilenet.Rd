@@ -44,7 +44,7 @@ build_CNN_mobilenet(
 A CNN model object from type MobileNet.
 }
 \description{
-
+Build MobileNet
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr

@@ -19,7 +19,7 @@ outlier(x, type = c("iqr", "mean", "median"), fill = NULL, ...)
 Dependent on \code{fill}, a named list of lower and upper boundaries and values (default), otherwise, the vector \code{x} with replaced outliers.
 }
 \description{
-
+Definition and detection of outliers
 }
 \details{
 The following types of outlier detection are implemented:

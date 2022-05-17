@@ -17,7 +17,7 @@ invert_differencing(delta, origin, type = c("simple", "log", "percentage"))
 The inverted \code{delta}.
 }
 \description{
-
+Invert a differenced data series
 }
 \seealso{
 \code{\link{stationary}}.

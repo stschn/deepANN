@@ -17,7 +17,7 @@ moving_average(x, n = 3L, weights = NULL)
 A vector with the (weighted) moving average.
 }
 \description{
-
+Weighted moving average
 }
 \examples{
   x <- c(855, 847, 1000, 635, 346, 2146, 1328, 1322, 3124, 1012, 1280, 2435, 1016, 3465, 1107, 1172, 3432, 836, 142, 345, 2603, 739, 716, 880, 1008, 112, 361)

@@ -15,7 +15,7 @@ as_tensor_2d(data, reverse = FALSE)
 A 2D-tensor (two-dimensional array equal to a matrix).
 }
 \description{
-
+Transform data into a tensor with two ranks or dimensions.
 }
 \seealso{
 \code{\link{as_tensor_1d}}, \code{\link{as_tensor_3d}}.
@@ -32,6 +32,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

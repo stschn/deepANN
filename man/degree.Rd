@@ -13,7 +13,7 @@ degree(radian)
 The degree of \code{radian}.
 }
 \description{
-
+Radian to degree
 }
 \examples{
   degree(pi) # 180
@@ -31,6 +31,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

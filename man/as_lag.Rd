@@ -15,7 +15,7 @@ as_lag(arima_lag = 0L, type = "univariate")
 The lag number for a LSTM.
 }
 \description{
-
+Get ANN lag from ARIMA(X) lag
 }
 \seealso{
 Other Recurrent Neural Network (RNN): 

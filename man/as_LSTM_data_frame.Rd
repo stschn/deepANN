@@ -35,7 +35,7 @@ A data frame with outcome column(s) and a further resampled feature matrix.
   x1(t1), x1(t2), x1(t3)...x2(t1), x2(t2), x2(t3)...x3(t1), x3(t2), x3(t3)...
 }
 \description{
-
+Recreation of a data frame based on preformatted X and Y data sets
 }
 \seealso{
 \code{\link{get_LSTM_XY}}.

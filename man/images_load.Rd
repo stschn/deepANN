@@ -17,7 +17,7 @@ images_load(images, FUN, ...)
 A list of images.
 }
 \description{
-
+Load images from different sources like from files or web
 }
 \examples{
   For an example see \code{\link{as_images_tensor}}.

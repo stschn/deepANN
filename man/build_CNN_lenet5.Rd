@@ -30,7 +30,7 @@ build_CNN_lenet5(
 A CNN model object from type LeNet-5.
 }
 \description{
-
+Build LeNet-5
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 32x32x1 is used. \cr

@@ -17,7 +17,7 @@ vc(actuals, preds, na.rm = FALSE)
 Variance coefficient.
 }
 \description{
-
+Variance coefficient (VC)
 }
 \seealso{
 Other Metrics: 

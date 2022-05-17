@@ -15,7 +15,7 @@ diffinv_log(delta, origin)
 The inverted \code{delta}.
 }
 \description{
-
+Invert a log-differenced vector
 }
 \seealso{
 \code{\link{diff_log}}.

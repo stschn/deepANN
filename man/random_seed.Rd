@@ -10,7 +10,7 @@ random_seed(seed)
 \item{seed}{Integer value(s) used as seeds for RNG.}
 }
 \description{
-
+Random Number Generation with Tensorflow
 }
 \details{
 The combination of RNG from NumPy and Tensorflow allows to get reproducible results with Tensorflow/Keras.
@@ -29,6 +29,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

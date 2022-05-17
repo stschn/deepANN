@@ -17,7 +17,7 @@ images_resize(imagelist, FUN, ...)
 A list of (resized) images.
 }
 \description{
-
+Resize loaded images
 }
 \examples{
   For an example see \code{\link{as_images_tensor}}.

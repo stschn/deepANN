@@ -17,7 +17,7 @@ as_images_array(imagelist, FUN, ...)
 A list of images represented in 3D arrays with dimensions height, width and channels.
 }
 \description{
-
+Convert (resized) images to 3D arrays
 }
 \examples{
   For an example see \code{\link{as_images_tensor}}.

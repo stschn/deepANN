@@ -24,7 +24,7 @@ nsubsequences(data, ...)
 Number of subsequences.
 }
 \description{
-
+Number of subsequences within a data structure
 }
 \details{
 The number of subsequences is stored in the second dimension of a four-dimensional \code{x}, usually used for a temporal CNN.
@@ -43,6 +43,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

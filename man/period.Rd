@@ -32,7 +32,7 @@ period(
 A subset of \code{dataset} with periodically specified data.
 }
 \description{
-
+Subset data set/time series to specific periodically data
 }
 \seealso{
 Other Time Series: 

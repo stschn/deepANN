@@ -1,5 +1,4 @@
 #' @title Get season from given dates
-#' @description
 #'
 #' @family Time Series
 #'
@@ -62,7 +61,6 @@ lags <- function(x, k = 1, between = FALSE, na = NA) {
 }
 
 #' @title Build a stationary data series by differencing
-#' @description
 #'
 #' @family Time Series
 #'
@@ -113,7 +111,6 @@ stationary <- function(dataset, columns = 2L, differences = 1L, type = c("simple
 }
 
 #' @title Invert a differenced data series
-#' @description
 #'
 #' @family Time Series
 #'
@@ -140,7 +137,6 @@ invert_differencing <- function(delta, origin, type = c("simple", "log", "percen
 }
 
 #' @title Invert a simple-differenced vector
-#' @description
 #'
 #' @family Time Series
 #'
@@ -173,7 +169,6 @@ diffinv_simple <- function(delta, origin) {
 }
 
 #' @title Log-differencing of a numeric vector
-#' @description
 #'
 #' @family Time Series
 #'
@@ -194,7 +189,6 @@ diff_log <- function(x) {
 }
 
 #' @title Invert a log-differenced vector
-#' @description
 #'
 #' @family Time Series
 #'
@@ -227,7 +221,6 @@ diffinv_log <- function(delta, origin) {
 }
 
 #' @title Percentage-differencing of a numeric vector
-#' @description
 #'
 #' @family Time Series
 #'
@@ -247,7 +240,6 @@ diff_percentage <- function(x) {
 }
 
 #' @title Invert a percentage-differenced vector
-#' @description
 #'
 #' @family Time Series
 #'
@@ -280,7 +272,6 @@ diffinv_percentage <- function(delta, origin) {
 }
 
 #' @title Subset data set/time series to specific periodically data
-#' @description
 #'
 #' @family Time Series
 #'
@@ -375,7 +366,6 @@ period <- function(dataset, column = 1L, type = c("seq", "weekday", "monthday", 
 }
 
 #' @title Subset data set/time series into several slices
-#' @description
 #'
 #' @family Time Series
 #'

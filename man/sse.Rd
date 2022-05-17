@@ -17,7 +17,7 @@ sse(actuals, preds, na.rm = FALSE)
 Sum of squared errors.
 }
 \description{
-
+Sum of squared errors (SSE)
 }
 \details{
 Sum of squared errors are also known as residual sum of squares (RSS).

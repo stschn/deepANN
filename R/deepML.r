@@ -25,7 +25,6 @@ cross_validation_split <- function(dataset, folds = 3L, shuffle = FALSE) {
 }
 
 #' @title Naive forecasting
-#' @description
 #'
 #' @family Machine Learning
 #'
@@ -67,7 +66,6 @@ naive_forecast <- function(x, drift = 0, na = NA) {
 }
 
 #' @title Weighted moving average
-#' @description
 #'
 #' @family Machine Learning
 #'
@@ -104,7 +102,6 @@ moving_average <- function(x, n = 3L, weights = NULL) {
 }
 
 #' @title K-nearest neighbors
-#' @description
 #'
 #' @family Machine Learning
 #'
@@ -201,7 +198,6 @@ k_nearest_neighbors.default <- function(x, y, query, k = 1L, ...) {
 }
 
 #' @title Naive Bayes
-#' @description
 #'
 #' @family Machine Learning
 #'
@@ -344,7 +340,6 @@ naive_bayes.default <- function(x, y, laplace = 0, FUN, ...) {
 is.naivebayes <- function(object) { return(inherits(object, .deepANNClasses[["Naive Bayes"]])) }
 
 #' @title Prediction for Naive Bayes
-#' @description
 #'
 #' @family Machine Learning
 #'
@@ -401,7 +396,6 @@ predict.naivebayes <- function(object, x, ...) {
 }
 
 #' @title Decision Tree
-#' @description
 #'
 #' @family Machine Learning
 #'
@@ -622,7 +616,6 @@ decision_tree.default <- function(x, y, maxdepth = 100L, ...) {
 is.decisiontree <- function(object) { return(inherits(object, .deepANNClasses[["Decision Tree"]])) }
 
 #' @title Prediction for Decision Tree
-#' @description
 #'
 #' @family Machine Learning
 #'
@@ -658,7 +651,6 @@ predict.decisiontree <- function(object, x, ...) {
 }
 
 #' @title Prediction for kmeans
-#' @description
 #'
 #' @family Machine Learning
 #'

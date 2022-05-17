@@ -1,5 +1,4 @@
 #' @title Definition and detection of outliers
-#' @description
 #'
 #' @family Outlier
 #'
@@ -72,7 +71,6 @@ outlier <- function(x, type = c("iqr", "mean", "median"), fill = NULL, ...) {
 }
 
 #' @title Replace outliers in columns of a data set with \code{NA}
-#' @description
 #'
 #' @family Outlier
 #'

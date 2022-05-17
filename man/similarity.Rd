@@ -19,7 +19,7 @@ similarity(x, y, type = c("jaccard", "tanimoto", "ruzicka"), ...)
 The similarity between \code{x} and \code{y}.
 }
 \description{
-
+Similarity
 }
 \details{
 The following types of similarity measures are implemented:
@@ -47,6 +47,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

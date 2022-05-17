@@ -13,7 +13,7 @@ gini_impurity(x)
 The Gini impurity.
 }
 \description{
-
+Gini impurity
 }
 \details{
 Gini impurity is the probability of how often a randomly chosen element from a set \code{x} would be

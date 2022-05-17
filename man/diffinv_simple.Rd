@@ -15,7 +15,7 @@ diffinv_simple(delta, origin)
 A vector whose elements are the cumulative sums of \code{delta} and \code{origin}.
 }
 \description{
-
+Invert a simple-differenced vector
 }
 \seealso{
 \code{\link{stationary}}, \code{\link[base]{cumsum}}.

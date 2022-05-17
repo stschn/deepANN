@@ -15,7 +15,7 @@ as_timesteps(lag = 1L, type = "univariate")
 The timesteps number for a LSTM.
 }
 \description{
-
+Get ANN timesteps from ANN lag
 }
 \seealso{
 \code{\link{as_lag}}

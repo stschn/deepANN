@@ -46,7 +46,7 @@ While these models are less efficient on CPU, they are much more performant on G
 A CNN model object from type MobileNetV3.
 }
 \description{
-
+Build MobileNetV3
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr

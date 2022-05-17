@@ -27,7 +27,7 @@ nsamples(data, ...)
 Number of samples.
 }
 \description{
-
+Number of samples within a data structure
 }
 \details{
 The number of samples is stored in the first dimension of \code{x}.
@@ -46,6 +46,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsubsequences}()},

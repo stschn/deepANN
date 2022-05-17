@@ -17,7 +17,7 @@ iou(actuals, preds, smooth = 1)
 Intersection-over-Union (IoU, Jaccard Index).
 }
 \description{
-
+Intersection-over-Union (IoU, Jaccard Index)
 }
 \details{
 This metric is used for evaluation of the results within image segmentation. \code{actuals} as well as \code{preds} are binary encoded

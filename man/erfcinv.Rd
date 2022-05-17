@@ -13,7 +13,7 @@ erfcinv(x)
 Inverse complementary error function.
 }
 \description{
-
+Inverse complementary error function (from MATLAB)
 }
 \seealso{
 Other Metrics: 

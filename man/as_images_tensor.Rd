@@ -24,7 +24,7 @@ A channel equal \code{1} indicates a grayscale image, \code{3} a color image.}
 A tensor of corresponding shape depending on the type of images (2D or 3D images).
 }
 \description{
-
+Convert list of image arrays to a tensor
 }
 \details{
 The supported types of images are 2D and 3D images. The resulting tensor has the corresponding shapes:

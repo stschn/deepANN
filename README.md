@@ -105,6 +105,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>insert()</code> inserts an object into an array from type marray.</li>
   <li><code>tensor()</code> and <code>as.tensor()</code> transform data into a n-dimensional tensor (array) and <code>is.tensor()</code> checks for a tensor.</li>
   <li><code>ta()</code> transposes a multidimensional array by swapping dimensions.</li>
+  <li><code>mabind()</code> combines input arrays to a output array along a specified dimension.</li>
   <li><code>mbind()</code> combines the respective first two dimensions of a multidimensional array by rows or columns into a two-dimensional array.</li>
   <li><code>ndim()</code> returns the number of dimensions of an array.</li>
   <li><code>nsamples()</code> extracts the number of samples within a data structure, usually a tensor.</li>

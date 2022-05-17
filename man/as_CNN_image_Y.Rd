@@ -15,7 +15,7 @@ as_CNN_image_Y(y, encoding = c("one_hot", "sparse"))
 A one-hot encoded vector or matrix for the image labels.
 }
 \description{
-
+Create a one-hot vector for image labels (output)
 }
 \seealso{
 \code{\link{one_hot_encode}}, \code{\link{as_CNN_image_X}}

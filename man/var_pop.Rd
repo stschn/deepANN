@@ -20,7 +20,7 @@ This must be (an abbreviation of) one of the strings \code{everything}, \code{al
 The population variance.
 }
 \description{
-
+Population variance
 }
 \details{
 The population variance and sample variance, implemented in \code{stats} package, differ in the denominator.
@@ -46,6 +46,7 @@ Other Utils:
 \code{\link{flatten}()},
 \code{\link{insert}()},
 \code{\link{list_as_numeric}()},
+\code{\link{mabind}()},
 \code{\link{mbind}()},
 \code{\link{ndim}()},
 \code{\link{nsamples}()},

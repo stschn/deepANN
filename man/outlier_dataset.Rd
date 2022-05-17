@@ -30,7 +30,7 @@ For \code{median} the constant \code{k} can be specified, otherwise it's value i
 The \code{dataset} with replaced outliers.
 }
 \description{
-
+Replace outliers in columns of a data set with \code{NA}
 }
 \seealso{
 \code{\link{outlier}}.
