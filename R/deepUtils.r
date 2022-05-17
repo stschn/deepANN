@@ -536,11 +536,9 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
   if (is.list(data)) {
     data <- array(unlist(data))
   }}}
-  if (is.null(axis)) {
-    return(as.array(as.vector(reshape.array(data, order = order))))
-  } else {
-    return(as.array(as.vector(reshape.array(apply(data, MARGIN = axis, FUN = identity), order = order))))
-  }
+  if (!is.null(axis))
+    data <- apply(data, MARGIN = axis, FUN = identity)
+  return(as.array(as.vector(reshape.array(data, order = order))))
 }
 
 #' @title Combine multidimensional arrays along a specified dimension
