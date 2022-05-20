@@ -4,6 +4,24 @@ Machine and Deep Learning Toolbox
 
 This R library is currently structured in form of the following functional families:
 
+<b>Array</b>
+<ul>
+  <li><code>ndim()</code> returns the number of dimensions of an array.</li>
+  <li><code>dimC()</code> get or set the dimension of an object in row-major ordering (C-style).</li>
+  <li><code>reshape.array()</code> reshape an array equivalent to <code>numpy.reshape</code> from Python.</li>
+  <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
+  <li><code>expand_dims()</code> expand the shape of an array analogous to <code>numpy.expand_dims</code> from Python.</li>
+  <li><code>flatten()</code> flattens data into a one-dimensional array.</li>
+  <li><code>transpose()</code> transposes a multidimensional array by swapping dimensions.</li>
+  <li><code>eye()</code> creates a 2D identity matrix.</li>
+  <li><code>vander()</code> creates a Vandermonde matrix.</li>
+  <li><code>squeeze()</code> removes dimensions of length one from array.</li>
+  <li><code>slice()</code> extracts a part of an array.</li>
+  <li><code>insert()</code> inserts an object into an array from type marray.</li>
+  <li><code>mabind()</code> combines input arrays to a output array along a specified dimension.</li>
+  <li><code>mamatrix()</code> shrinks a multidimensional array by rows or columns into a matrix.</li>
+</ul>
+
 <b>Dummy</b>
 <ul>
   <li><code>dummify()</code> creates dummy variables for non-metric variables.</li>
@@ -93,21 +111,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>list_as_numeric()</code> recursively transforms the objects of a list into numeric values.</li>
   <li><code>as_ANN_matrix()</code> converts a data set into a matrix with adjusted character values and factor levels to their numeric indices if necessary.</li>
   <li><code>vector_as_ANN_matrix()</code> transforms a vector into a ANN compatible matrix.</li>
-  <li><code>flatten()</code> flattens data into a one-dimensional array.</li>
-  <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
-  <li><code>dimC()</code> get or set the dimension of an object in row-major ordering (C-style).</li>
-  <li><code>reshape.array()</code> reshape an array equivalent to <code>numpy.reshape</code> from Python.</li>
-  <li><code>expand_dims()</code> expand the shape of an array analogous to <code>numpy.expand_dims</code> from Python.</li>
-  <li><code>eye()</code> creates a 2D identity matrix.</li>
-  <li><code>vander()</code> creates a Vandermonde matrix.</li>
-  <li><code>squeeze()</code> removes dimensions of length one from array.</li>
-  <li><code>slice()</code> extracts a part of an array.</li>
-  <li><code>insert()</code> inserts an object into an array from type marray.</li>
   <li><code>tensor()</code> and <code>as.tensor()</code> transform data into a n-dimensional tensor (array) and <code>is.tensor()</code> checks for a tensor.</li>
-  <li><code>ta()</code> transposes a multidimensional array by swapping dimensions.</li>
-  <li><code>mabind()</code> combines input arrays to a output array along a specified dimension.</li>
-  <li><code>mbind()</code> combines the respective first two dimensions of a multidimensional array by rows or columns into a two-dimensional array.</li>
-  <li><code>ndim()</code> returns the number of dimensions of an array.</li>
   <li><code>nsamples()</code> extracts the number of samples within a data structure, usually a tensor.</li>
   <li><code>nunits()</code> extracts the number of units within a data structure, usually a tensor.</li>
   <li><code>ntimesteps()</code> extracts the number of timesteps within a data structure, usually a tensor.</li>
