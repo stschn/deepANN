@@ -7,6 +7,7 @@ This R library is currently structured in form of the following functional famil
 <b>Array</b>
 <ul>
   <li><code>ndim()</code> returns the number of dimensions of an array.</li>
+  <li><code>nsize()</code> returns the number of elements of an array.</li>
   <li><code>dimC()</code> get or set the dimension of an object in row-major ordering (C-style).</li>
   <li><code>reshape.array()</code> reshape an array equivalent to <code>numpy.reshape</code> from Python.</li>
   <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
@@ -19,6 +20,8 @@ This R library is currently structured in form of the following functional famil
   <li><code>slice()</code> extracts a part of an array.</li>
   <li><code>insert()</code> inserts an object into an array from type marray.</li>
   <li><code>mabind()</code> combines input arrays to a output array along a specified dimension.</li>
+  <li><code>column_stack()</code> stacks 1D arrays as columns into a 2D array.</li>
+  <li><code>row_stack()</code> stacks 1D arrays as rows into a 2D array.</li>
   <li><code>mamatrix()</code> shrinks a multidimensional array by rows or columns into a matrix.</li>
 </ul>
 

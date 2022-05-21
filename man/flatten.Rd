@@ -34,6 +34,7 @@ flatten(data, order = "F"); flatten(data, order = "C")
 }
 \seealso{
 Other Array: 
+\code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{eye}()},
 \code{\link{insert}()},
@@ -41,7 +42,9 @@ Other Array:
 \code{\link{mamatrix}()},
 \code{\link{marray}()},
 \code{\link{ndim}()},
+\code{\link{nsize}()},
 \code{\link{reshape.array}()},
+\code{\link{row_stack}()},
 \code{\link{slice}()},
 \code{\link{squeeze}()},
 \code{\link{transpose}()},

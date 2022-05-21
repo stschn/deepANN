@@ -32,6 +32,7 @@ Remove dimensions of length one from a multidimensional array.
 }
 \seealso{
 Other Array: 
+\code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
@@ -40,7 +41,9 @@ Other Array:
 \code{\link{mamatrix}()},
 \code{\link{marray}()},
 \code{\link{ndim}()},
+\code{\link{nsize}()},
 \code{\link{reshape.array}()},
+\code{\link{row_stack}()},
 \code{\link{slice}()},
 \code{\link{transpose}()},
 \code{\link{vander}()}

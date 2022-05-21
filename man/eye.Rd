@@ -22,6 +22,7 @@ The Python package NumPy offers an analog array creation function \code{np.eye(n
 }
 \seealso{
 Other Array: 
+\code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{flatten}()},
 \code{\link{insert}()},
@@ -29,7 +30,9 @@ Other Array:
 \code{\link{mamatrix}()},
 \code{\link{marray}()},
 \code{\link{ndim}()},
+\code{\link{nsize}()},
 \code{\link{reshape.array}()},
+\code{\link{row_stack}()},
 \code{\link{slice}()},
 \code{\link{squeeze}()},
 \code{\link{transpose}()},

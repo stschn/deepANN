@@ -21,5 +21,5 @@ PackageInstallArgs: --no-multiarch --with-keep.source
 PackageRoxygenize: rd,collate,namespace,vignette
 
 PythonType: conda
-PythonVersion: 3.8.5
-PythonPath: C:\ProgramData\Miniconda3\envs\AI\python.exe
+PythonVersion: 3.10.4
+PythonPath: C:/Users/sschneid/.conda/envs/MW/python.exe
