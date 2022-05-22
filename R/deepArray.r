@@ -96,7 +96,7 @@ reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a
 #'
 #' @export
 expand_dims <- function(a, axis = -1L) {
-  d <- if (!is.null(dim(a) -> da)) da else length(a)
+  d <- dim(a) %null% length(a) #d <- if (!is.null(dim(a) -> da)) da else length(a)
   nd <- length(d)
   naxis <- length(axis)
 
@@ -376,9 +376,8 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
   if (is.data.frame(data)) data <- as.matrix(data)
   if (is.list(data)) data <- array(unlist(data))
 
-  if (is.null(dim)) {
-    if (!is.null(dim(data))) dim <- dim(data) else dim <- length(data)
-  }
+  if (is.null(dim))
+    dim <- dim(data) %null% length(data) #if (!is.null(dim(data))) dim <- dim(data) else dim <- length(data)
   if (!is.array(data)) data <- array(data)
   data <- reshape.array(a = data, dim = dim, order = order)
 

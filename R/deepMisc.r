@@ -73,6 +73,25 @@ day.name <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 #' @export
 day.abb <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
+#' NULL assignment operator
+#'
+#' @param x object that is checked for \code{NULL}.
+#' @param y result if \code{x} is \code{NULL}.
+#'
+#' @details Checking for \code{NULL} is very common practice in R. This operator shortens the handling of such checks and the return of corresponding values.
+#'
+#' @return Either \code{x} or \code{y}.
+#' @export
+#'
+#' @examples
+#' x <- marray(1:24, dim = c(4, 3, 2))
+#' x <- marray(1:24)
+#' x <- 1:24
+#' # The dim() result for the first x is 4 3 2, for the second x 24 and for the third x NULL.
+#' # To get a corresponding behavior between a one-dimensional array and a simple vector you can write:
+#' dim(x) %null% length(x)
+`%null%` <- function(x, y) { if (is.null(x)) y else x }
+
 # Re-exports
 
 #' Pipe operator
