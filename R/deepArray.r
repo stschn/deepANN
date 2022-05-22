@@ -3,6 +3,7 @@
 #' @family Array
 #'
 #' @param x A multidimensional data structure like array, marray, tensor, matrix or data.frame.
+#' @details This function corresponds to \code{ndarray.ndim} from NumPy.
 #' @return Number of dimensions.
 #' @export
 ndim <- function(x) { length(dim(x)) }
@@ -12,6 +13,7 @@ ndim <- function(x) { length(dim(x)) }
 #' @family Array
 #'
 #' @param x A multidimensional data structure like array, marray, tensor, matrix or data.frame.
+#' @details This function corresponds to \code{ndarray.size} from NumPy.
 #' @return Number of elements.
 #' @export
 nsize <- function(x) { prod(dim(x)) }
@@ -62,6 +64,7 @@ nsize <- function(x) { prod(dim(x)) }
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #'
+#' @details This function corresponds to \code{reshape()} from NumPy.
 #' @return The (redimensioned) array \code{a}.
 #'
 #' @export
@@ -86,6 +89,7 @@ reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a
 #' @param a An array.
 #' @param axis Index position of the new axis in the expanded array. Negative numbers count from the back.
 #'
+#' @details This function corresponds to \code{expand_dims()} from NumPy.
 #' @return The expanded array \code{a} with new shape.
 #'
 #' @references Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.
@@ -134,6 +138,7 @@ expand_dims <- function(a, axis = -1L) {
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #'
+#' @details This function corresponds to \code{ndarray.flatten()} from NumPy.
 #' @return The flatten data in form of a one-dimensional array.
 #'
 #' @examples
@@ -172,6 +177,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #'
+#' @details This function corresponds to \code{concatenate()} from NumPy.
 #' @return An array as a combination of all input arrays along a specified dimension.
 #'
 #' @examples
@@ -228,6 +234,7 @@ mabind <- function(..., input_shape = NULL, axis = -1, order = c("C", "F")) {
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #'
+#' @details This function corresponds to \code{column_stack()} from NumPy.
 #' @return An 2D array formed by stacking all input arrays.
 #'
 #' @examples
@@ -250,7 +257,8 @@ column_stack <- function(..., order = c("C", "F")) {
     stop("All input arrays must have the same length (number of elements).", call. = FALSE)
 
   # Construct 2D array (matrix)
-  matrix(unlist(list_of_arrays), ncol = length(list_of_arrays))
+  #matrix(unlist(list_of_arrays), ncol = length(list_of_arrays))
+  do.call(cbind, list_of_arrays)
 }
 
 #' @title Stack 1D arrays as rows into a 2D array
@@ -262,6 +270,7 @@ column_stack <- function(..., order = c("C", "F")) {
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #'
+#' @details This function corresponds to \code{row_stack()} from NumPy.
 #' @return An 2D array formed by stacking all input arrays.
 #'
 #' @examples
@@ -284,7 +293,8 @@ row_stack <- function(..., order = c("C", "F")) {
     stop("All input arrays must have the same length (number of elements).", call. = FALSE)
 
   # Construct 2D array (matrix)
-  matrix(unlist(list_of_arrays), nrow = length(list_of_arrays), byrow = TRUE)
+  #matrix(unlist(list_of_arrays), nrow = length(list_of_arrays), byrow = TRUE)
+  do.call(rbind, list_of_arrays)
 }
 
 #' @title Multidimensional array
@@ -402,9 +412,8 @@ is.marray <- function(x) {
 #' @param n The number of rows.
 #' @param m The number of columns, default \code{NULL}.
 #'
+#' @details This function corresponds to \code{eye()} from NumPy.
 #' @return An identity matrix with n rows and n or rather m columns.
-#'
-#' @details The Python package NumPy offers an analog array creation function \code{np.eye(n, m)}.
 #'
 #' @export
 eye <- function(n, m = NULL) {
@@ -420,9 +429,8 @@ eye <- function(n, m = NULL) {
 #' @param data The data to be reshaped to a Vandermonde matrix.
 #' @param n The number of columns of the resulting matrix.
 #'
+#' @details This function corresponds to \code{vander()} from NumPy.
 #' @return A Vandermonde matrix.
-#'
-#' @details The Python package NumPy offers an analog array creation function \code{np.vander(x, n)}.
 #'
 #' @export
 vander <- function(data, n) {
@@ -439,6 +447,8 @@ vander <- function(data, n) {
 #' @param order The order in which elements of data should be read during rearrangement after removing of corresponding dimensions.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
+#'
+#' @details This function corresponds to \code{squeeze()} from NumPy.
 #' @return The array \code{a} usually without dimensions of length one.
 #'
 #' @export

@@ -23,6 +23,9 @@ The flatten data in form of a one-dimensional array.
 \description{
 Flatten data into a one-dimensional array
 }
+\details{
+This function corresponds to \code{ndarray.flatten()} from NumPy.
+}
 \examples{
 v <- (1:24); dim(v); ndim(v)
 l <- list(x1 = 1:10, x2 = seq(10, 100, 10), x3 = list(a = 11, b = c(2, 23)))

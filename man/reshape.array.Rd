@@ -24,6 +24,9 @@ The (redimensioned) array \code{a}.
 \description{
 Reshape an array
 }
+\details{
+This function corresponds to \code{reshape()} from NumPy.
+}
 \seealso{
 Other Array: 
 \code{\link{column_stack}()},

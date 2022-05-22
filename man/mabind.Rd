@@ -23,6 +23,9 @@ An array as a combination of all input arrays along a specified dimension.
 \description{
 Combine multidimensional arrays along a specified dimension
 }
+\details{
+This function corresponds to \code{concatenate()} from NumPy.
+}
 \examples{
 a1 <- marray(1:24, dim = c(4, 3, 2), order = "F"); a1
 a2 <- marray(-1:-24, dim = c(4, 3, 2), order = "F"); a2

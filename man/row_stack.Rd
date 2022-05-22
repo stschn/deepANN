@@ -19,6 +19,9 @@ An 2D array formed by stacking all input arrays.
 \description{
 Stack 1D arrays as rows into a 2D array
 }
+\details{
+This function corresponds to \code{row_stack()} from NumPy.
+}
 \examples{
 a <- 1:3
 b <- 4:6

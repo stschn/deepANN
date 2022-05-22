@@ -18,7 +18,7 @@ An identity matrix with n rows and n or rather m columns.
 Multidimensional array creation: 2D identity matrix
 }
 \details{
-The Python package NumPy offers an analog array creation function \code{np.eye(n, m)}.
+This function corresponds to \code{eye()} from NumPy.
 }
 \seealso{
 Other Array: 

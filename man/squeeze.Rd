@@ -30,6 +30,9 @@ The array \code{a} usually without dimensions of length one.
 \description{
 Remove dimensions of length one from a multidimensional array.
 }
+\details{
+This function corresponds to \code{squeeze()} from NumPy.
+}
 \seealso{
 Other Array: 
 \code{\link{column_stack}()},

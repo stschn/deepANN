@@ -9,9 +9,9 @@ This R library is currently structured in form of the following functional famil
   <li><code>ndim()</code> returns the number of dimensions of an array.</li>
   <li><code>nsize()</code> returns the number of elements of an array.</li>
   <li><code>dimC()</code> get or set the dimension of an object in row-major ordering (C-style).</li>
-  <li><code>reshape.array()</code> reshape an array equivalent to <code>numpy.reshape</code> from Python.</li>
+  <li><code>reshape.array()</code> reshapes an array to new dimension.</li>
   <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
-  <li><code>expand_dims()</code> expand the shape of an array analogous to <code>numpy.expand_dims</code> from Python.</li>
+  <li><code>expand_dims()</code> expands the shape of an array by inserting a new axis.</li>
   <li><code>flatten()</code> flattens data into a one-dimensional array.</li>
   <li><code>transpose()</code> transposes a multidimensional array by swapping dimensions.</li>
   <li><code>eye()</code> creates a 2D identity matrix.</li>
@@ -19,7 +19,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>squeeze()</code> removes dimensions of length one from array.</li>
   <li><code>slice()</code> extracts a part of an array.</li>
   <li><code>insert()</code> inserts an object into an array from type marray.</li>
-  <li><code>mabind()</code> combines input arrays to a output array along a specified dimension.</li>
+  <li><code>mabind()</code> combines input arrays to an output array along a specified dimension.</li>
   <li><code>column_stack()</code> stacks 1D arrays as columns into a 2D array.</li>
   <li><code>row_stack()</code> stacks 1D arrays as rows into a 2D array.</li>
   <li><code>mamatrix()</code> shrinks a multidimensional array by rows or columns into a matrix.</li>

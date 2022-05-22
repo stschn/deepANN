@@ -15,6 +15,9 @@ Number of elements.
 \description{
 Number of dimensions
 }
+\details{
+This function corresponds to \code{ndarray.size} from NumPy.
+}
 \seealso{
 Other Array: 
 \code{\link{column_stack}()},

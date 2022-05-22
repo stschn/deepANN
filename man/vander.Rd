@@ -18,7 +18,7 @@ A Vandermonde matrix.
 Multidimensional array creation: Vandermonde matrix
 }
 \details{
-The Python package NumPy offers an analog array creation function \code{np.vander(x, n)}.
+This function corresponds to \code{vander()} from NumPy.
 }
 \seealso{
 Other Array: 
