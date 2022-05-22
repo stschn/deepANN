@@ -16,6 +16,10 @@ This R library is currently structured in form of the following functional famil
   <li><code>transpose()</code> transposes a multidimensional array by swapping dimensions.</li>
   <li><code>eye()</code> creates a 2D identity matrix.</li>
   <li><code>vander()</code> creates a Vandermonde matrix.</li>
+  <li><code>ones()</code> creates an array filled with ones.</li>
+  <li><code>zeros()</code> creates an array filled with zeros.</li>
+  <li><code>empty()</code> creates an array filled with NA.</li>
+  <li><code>full()</code> creates an array filled with value.</li>
   <li><code>squeeze()</code> removes dimensions of length one from array.</li>
   <li><code>slice()</code> extracts a part of an array.</li>
   <li><code>insert()</code> inserts an object into an array from type marray.</li>

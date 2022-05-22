@@ -359,6 +359,7 @@ as.marray <- function(data, ...) {
 #' @rdname marray
 #' @export
 as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE, reverse = FALSE) {
+  order <- match.arg(order)
   if (numeric) {
     if ((!all(is.na(data))) && (is.atomic(data)) && (!(deepANN::ndim(data) > 1L))) {
       data <- vector_as_numeric(data)
@@ -434,6 +435,60 @@ eye <- function(n, m = NULL) {
 #' @export
 vander <- function(data, n) {
   marray(outer(deepANN::flatten(data), seq(0, n - 1), "^"), order = "F")
+}
+
+#' @title Multidimensional array creation: array filled with ones
+#' @family Array
+#'
+#' @param dim Shape of the new array.
+#'
+#' @details This function corresponds to \code{ones()} from NumPy.
+#' @return An array of ones with the given shape.
+#'
+#' @export
+ones <- function(dim = NULL) {
+  marray(rep(1L, prod(dim)), dim = dim)
+}
+
+#' @title Multidimensional array creation: array filled with zeros
+#' @family Array
+#'
+#' @param dim Shape of the new array.
+#'
+#' @details This function corresponds to \code{zeros()} from NumPy.
+#' @return An array of zeros with the given shape.
+#'
+#' @export
+zeros <- function(dim = NULL) {
+  marray(rep(0L, prod(dim)), dim = dim)
+}
+
+#' @title Multidimensional array creation: array filled with NA
+#' @family Array
+#'
+#' @param dim Shape of the new array.
+#'
+#' @details This function corresponds to \code{empty()} from NumPy with the difference that instead of arbitrary values \code{NA} are set.
+#' @return An array of \code{NA} with the given shape.
+#'
+#' @export
+empty <- function(dim = NULL) {
+  marray(rep(NA, prod(dim)), dim = dim)
+}
+
+#' @title Multidimensional array creation: array filled with value
+#' @family Array
+#'
+#' @param dim Shape of the new array.
+#' @param fill_value Value to fill the array.
+#' @param order Whether to store multidimensional array in C- or Fortran-contiguous (row- or column-wise) order.
+#'
+#' @details This function corresponds to \code{full()} from NumPy.
+#' @return An array of \code{fill_value} with the given shape.
+#'
+#' @export
+full <- function(dim = NULL, fill_value = NA, order = c("C", "F")) {
+  marray(rep(fill_value, prod(dim) -> N)[seq_len(N)], dim = dim, order = order)
 }
 
 #' @title Trim multidimensional array

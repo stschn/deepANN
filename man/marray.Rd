@@ -82,18 +82,22 @@ This introduced n-dimensional array is an equivalent to \code{ndarray} class fro
 Other Array: 
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
+\code{\link{empty}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},
 \code{\link{mamatrix}()},
 \code{\link{ndim}()},
 \code{\link{nsize}()},
+\code{\link{ones}()},
 \code{\link{reshape.array}()},
 \code{\link{row_stack}()},
 \code{\link{slice}()},
 \code{\link{squeeze}()},
 \code{\link{transpose}()},
-\code{\link{vander}()}
+\code{\link{vander}()},
+\code{\link{zeros}()}
 }
 \concept{Array}

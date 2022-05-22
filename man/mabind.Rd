@@ -38,18 +38,22 @@ mabind(a1, a2, a3, axis = 2) # output is an 4x9x2 array
 Other Array: 
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
+\code{\link{empty}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mamatrix}()},
 \code{\link{marray}()},
 \code{\link{ndim}()},
 \code{\link{nsize}()},
+\code{\link{ones}()},
 \code{\link{reshape.array}()},
 \code{\link{row_stack}()},
 \code{\link{slice}()},
 \code{\link{squeeze}()},
 \code{\link{transpose}()},
-\code{\link{vander}()}
+\code{\link{vander}()},
+\code{\link{zeros}()}
 }
 \concept{Array}
