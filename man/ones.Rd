@@ -35,6 +35,7 @@ Other Array:
 \code{\link{ndim}()},
 \code{\link{nsize}()},
 \code{\link{reshape.array}()},
+\code{\link{rot90}()},
 \code{\link{row_stack}()},
 \code{\link{slice}()},
 \code{\link{squeeze}()},

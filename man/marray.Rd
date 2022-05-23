@@ -115,6 +115,7 @@ Other Array:
 \code{\link{nsize}()},
 \code{\link{ones}()},
 \code{\link{reshape.array}()},
+\code{\link{rot90}()},
 \code{\link{row_stack}()},
 \code{\link{slice}()},
 \code{\link{squeeze}()},

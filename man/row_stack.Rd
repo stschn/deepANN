@@ -45,6 +45,7 @@ Other Array:
 \code{\link{nsize}()},
 \code{\link{ones}()},
 \code{\link{reshape.array}()},
+\code{\link{rot90}()},
 \code{\link{slice}()},
 \code{\link{squeeze}()},
 \code{\link{transpose}()},

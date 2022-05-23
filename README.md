@@ -28,6 +28,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>insert()</code> inserts an object into an array.</li>
   <li><code>transpose()</code> transposes an array by swapping dimensions.</li>
   <li><code>flip()</code> reverses the order of the elements of an array along axes.</li>
+  <li><code>rot90()</code> rotates an array by 90 degrees in the plane specified by axes.</li>
 </ul>
 
 <b>Dummy</b>
