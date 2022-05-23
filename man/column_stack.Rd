@@ -31,8 +31,10 @@ column_stack(a, b)
 Other Array: 
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

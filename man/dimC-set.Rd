@@ -24,8 +24,10 @@ Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.
 Other Array: 
 \code{\link{column_stack}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{ones}
 \alias{ones}
-\title{Multidimensional array creation: array filled with ones}
+\title{Create array filled with ones}
 \usage{
 ones(dim = NULL)
 }
@@ -13,7 +13,7 @@ ones(dim = NULL)
 An array of ones with the given shape.
 }
 \description{
-Multidimensional array creation: array filled with ones
+Create array filled with ones
 }
 \details{
 This function corresponds to \code{ones()} from NumPy.
@@ -23,8 +23,10 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

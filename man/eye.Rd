@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{eye}
 \alias{eye}
-\title{Multidimensional array creation: 2D identity matrix}
+\title{Create 2D identity matrix}
 \usage{
 eye(n, m = NULL)
 }
@@ -15,7 +15,7 @@ eye(n, m = NULL)
 An identity matrix with n rows and n or rather m columns.
 }
 \description{
-Multidimensional array creation: 2D identity matrix
+Create 2D identity matrix
 }
 \details{
 This function corresponds to \code{eye()} from NumPy.
@@ -25,7 +25,9 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

@@ -2,18 +2,9 @@
 % Please edit documentation in R/deepArray.r
 \name{squeeze}
 \alias{squeeze}
-\alias{squeeze.array}
-\alias{squeeze.marray}
-\alias{squeeze.matrix}
-\title{Trim multidimensional array}
+\title{Compress the shape of an array}
 \usage{
-squeeze(a, ...)
-
-\method{squeeze}{array}(a, axis = NULL, order = c("C", "F"))
-
-\method{squeeze}{marray}(a, axis = NULL, order = c("C", "F"))
-
-\method{squeeze}{matrix}(a, axis = NULL, order = c("C", "F"))
+squeeze(a, axis = NULL, order = c("C", "F"))
 }
 \arguments{
 \item{a}{A multidimensional array.}
@@ -38,8 +29,10 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

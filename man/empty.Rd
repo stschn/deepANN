@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{empty}
 \alias{empty}
-\title{Multidimensional array creation: array filled with NA}
+\title{Create array filled with NA}
 \usage{
 empty(dim = NULL)
 }
@@ -13,7 +13,7 @@ empty(dim = NULL)
 An array of \code{NA} with the given shape.
 }
 \description{
-Multidimensional array creation: array filled with NA
+Create array filled with NA
 }
 \details{
 This function corresponds to \code{empty()} from NumPy with the difference that instead of arbitrary values \code{NA} are set.
@@ -22,8 +22,10 @@ This function corresponds to \code{empty()} from NumPy with the difference that 
 Other Array: 
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

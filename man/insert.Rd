@@ -2,15 +2,9 @@
 % Please edit documentation in R/deepArray.r
 \name{insert}
 \alias{insert}
-\alias{insert.array}
-\alias{insert.marray}
-\title{Multidimensional array insertion}
+\title{Insert into multidimensional array}
 \usage{
-insert(a, ...)
-
-\method{insert}{array}(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F"))
-
-\method{insert}{marray}(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F"))
+insert(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F"))
 }
 \arguments{
 \item{a}{An array from type \code{marray}.}
@@ -27,7 +21,7 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 The marray \code{a} with inserted \code{x}.
 }
 \description{
-Multidimensional array insertion
+Insert into multidimensional array
 }
 \details{
 For insertion, the last dimension of \code{a} is fixed and \code{x} is coerced into the remaining dimensions. If \code{a} is a
@@ -47,8 +41,10 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{mabind}()},
 \code{\link{mamatrix}()},

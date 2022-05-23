@@ -4,6 +4,8 @@
 \alias{marray}
 \alias{as.marray}
 \alias{as.marray.default}
+\alias{as.marray.data.frame}
+\alias{as.marray.list}
 \alias{is.marray}
 \title{Multidimensional array}
 \usage{
@@ -12,6 +14,24 @@ marray(data, ...)
 as.marray(data, ...)
 
 \method{as.marray}{default}(
+  data,
+  dim = NULL,
+  dimnames = NULL,
+  order = c("C", "F"),
+  numeric = FALSE,
+  reverse = FALSE
+)
+
+\method{as.marray}{data.frame}(
+  data,
+  dim = NULL,
+  dimnames = NULL,
+  order = c("C", "F"),
+  numeric = FALSE,
+  reverse = FALSE
+)
+
+\method{as.marray}{list}(
   data,
   dim = NULL,
   dimnames = NULL,
@@ -83,8 +103,10 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

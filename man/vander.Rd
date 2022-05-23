@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{vander}
 \alias{vander}
-\title{Multidimensional array creation: Vandermonde matrix}
+\title{Create Vandermonde matrix}
 \usage{
 vander(data, n)
 }
@@ -15,7 +15,7 @@ vander(data, n)
 A Vandermonde matrix.
 }
 \description{
-Multidimensional array creation: Vandermonde matrix
+Create Vandermonde matrix
 }
 \details{
 This function corresponds to \code{vander()} from NumPy.
@@ -25,8 +25,10 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

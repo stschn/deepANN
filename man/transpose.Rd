@@ -2,15 +2,9 @@
 % Please edit documentation in R/deepArray.r
 \name{transpose}
 \alias{transpose}
-\alias{transpose.array}
-\alias{transpose.marray}
 \title{Transpose multidimensional array}
 \usage{
-transpose(a, ...)
-
-\method{transpose}{array}(a, perm = NULL)
-
-\method{transpose}{marray}(a, perm = NULL)
+transpose(a, perm = NULL)
 }
 \arguments{
 \item{a}{A multidimensional array.}
@@ -30,8 +24,10 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

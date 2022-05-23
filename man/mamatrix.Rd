@@ -2,24 +2,18 @@
 % Please edit documentation in R/deepArray.r
 \name{mamatrix}
 \alias{mamatrix}
-\alias{mamatrix.array}
-\alias{mamatrix.marray}
-\title{Shrink multidimensional array to matrix}
+\title{Shrink an array to matrix}
 \usage{
-mamatrix(a, ...)
-
-\method{mamatrix}{array}(a, order = c("C", "F"))
-
-\method{mamatrix}{marray}(a, order = c("C", "F"))
+mamatrix(a, order = c("C", "F"))
 }
 \arguments{
 \item{a}{A multidimensional array.}
 
-\item{...}{Additional arguments to be passed to the method.}
-
 \item{order}{The order in which elements of data should be read during combination.
 By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.}
+
+\item{...}{Additional arguments to be passed to the method.}
 }
 \value{
 A two-dimensional array with combined matrices of the first two dimensions of \code{x}.
@@ -32,8 +26,10 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

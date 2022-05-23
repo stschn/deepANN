@@ -2,18 +2,9 @@
 % Please edit documentation in R/deepArray.r
 \name{slice}
 \alias{slice}
-\alias{slice.array}
-\alias{slice.marray}
-\alias{slice.matrix}
-\title{Multidimensional array slicing}
+\title{Slice multidimensional array}
 \usage{
-slice(a, ...)
-
-\method{slice}{array}(a, ..., drop = TRUE)
-
-\method{slice}{marray}(a, ..., drop = TRUE)
-
-\method{slice}{matrix}(a, ..., drop = TRUE)
+slice(a, ..., drop = TRUE)
 }
 \arguments{
 \item{a}{A vector, matrix, or array.}
@@ -26,7 +17,7 @@ slice(a, ...)
 An extracted part of \code{a}.
 }
 \description{
-Multidimensional array slicing
+Slice multidimensional array
 }
 \details{
 \code{slice} is an alternative way to handle indexing array objects, usually done with \code{\link[base]{[}}. The dimensions must be indexed by names,
@@ -46,8 +37,10 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
+\code{\link{expand_dims}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
+\code{\link{flip}()},
 \code{\link{full}()},
 \code{\link{insert}()},
 \code{\link{mabind}()},

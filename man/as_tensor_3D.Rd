@@ -31,7 +31,6 @@ Other Utils:
 \code{\link{as_tensor_2d}()},
 \code{\link{degree}()},
 \code{\link{distance}()},
-\code{\link{expand_dims}()},
 \code{\link{list_as_numeric}()},
 \code{\link{nsamples}()},
 \code{\link{nsubsequences}()},
