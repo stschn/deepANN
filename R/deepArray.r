@@ -302,7 +302,12 @@ expand_dims <- function(a, axis = -1L) {
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #'
 #' @details This function corresponds to \code{squeeze()} from NumPy.
+#'   The base R function \code{\link{drop}} does the same as this function. In opposite to \code{drop} this function
+#'   allows reordering the elements of the newly created array as well as specifying only certain axes.
+#'
 #' @return The array \code{a} usually without dimensions of length one.
+#'
+#' @seealso \code{\link{drop}}.
 #'
 #' @export
 squeeze <- function(a, axis = NULL, order = c("C", "F")) {

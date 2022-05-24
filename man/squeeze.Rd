@@ -23,8 +23,12 @@ Compress the shape of an array by removing dimensions of length one from the arr
 }
 \details{
 This function corresponds to \code{squeeze()} from NumPy.
+  The base R function \code{\link{drop}} does the same as this function. In opposite to \code{drop} this function
+  allows reordering the elements of the newly created array as well as specifying only certain axes.
 }
 \seealso{
+\code{\link{drop}}.
+
 Other Array: 
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
