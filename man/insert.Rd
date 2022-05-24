@@ -37,6 +37,7 @@ insert(a, b, axis = 2L)
 \seealso{
 Other Array: 
 \code{\link{column_stack}()},
+\code{\link{delete}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
 \code{\link{expand_dims}()},

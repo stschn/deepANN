@@ -23,6 +23,7 @@ Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.
 \seealso{
 Other Array: 
 \code{\link{column_stack}()},
+\code{\link{delete}()},
 \code{\link{empty}()},
 \code{\link{expand_dims}()},
 \code{\link{eye}()},

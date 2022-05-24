@@ -21,6 +21,7 @@ This function corresponds to \code{empty()} from NumPy with the difference that 
 \seealso{
 Other Array: 
 \code{\link{column_stack}()},
+\code{\link{delete}()},
 \code{\link{dimC<-}()},
 \code{\link{expand_dims}()},
 \code{\link{eye}()},

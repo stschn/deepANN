@@ -21,6 +21,7 @@ This function corresponds to \code{zeros()} from NumPy.
 \seealso{
 Other Array: 
 \code{\link{column_stack}()},
+\code{\link{delete}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},
 \code{\link{expand_dims}()},
