@@ -2,12 +2,12 @@
 % Please edit documentation in R/deepArray.r
 \name{squeeze}
 \alias{squeeze}
-\title{Compress the shape of an array}
+\title{Array compressing}
 \usage{
 squeeze(a, axis = NULL, order = c("C", "F"))
 }
 \arguments{
-\item{a}{A multidimensional array.}
+\item{a}{An array.}
 
 \item{axis}{The dimensions which should be removed. If \code{NULL} (default), all dimensions of length one are removed.}
 
@@ -19,7 +19,7 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 The array \code{a} usually without dimensions of length one.
 }
 \description{
-Remove dimensions of length one from a multidimensional array.
+Compress the shape of an array by removing dimensions of length one from the array.
 }
 \details{
 This function corresponds to \code{squeeze()} from NumPy.

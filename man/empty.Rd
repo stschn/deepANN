@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{empty}
 \alias{empty}
-\title{Create array filled with NA}
+\title{Array creation}
 \usage{
 empty(dim = NULL)
 }
@@ -13,7 +13,7 @@ empty(dim = NULL)
 An array of \code{NA} with the given shape.
 }
 \description{
-Create array filled with NA
+Create array filled with NA.
 }
 \details{
 This function corresponds to \code{empty()} from NumPy with the difference that instead of arbitrary values \code{NA} are set.

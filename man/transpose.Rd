@@ -2,20 +2,20 @@
 % Please edit documentation in R/deepArray.r
 \name{transpose}
 \alias{transpose}
-\title{Transpose multidimensional array}
+\title{Array transposition}
 \usage{
 transpose(a, perm = NULL)
 }
 \arguments{
-\item{a}{A multidimensional array.}
+\item{a}{An array.}
 
-\item{perm}{The permutation vector of the dimensions. The default \code{NULL} indicates to reverse the order of the dimensions.}
+\item{perm}{The permutation vector of the dimensions. The default \code{NULL} indicates to reverse the order of all dimensions.}
 }
 \value{
 The array \code{a} with swapped dimensions.
 }
 \description{
-Transpose multidimensional array
+Transpose an array.
 }
 \seealso{
 \code{\link{t}}.

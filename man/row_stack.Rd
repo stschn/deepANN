@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{row_stack}
 \alias{row_stack}
-\title{Stack 1D arrays as rows into a 2D array}
+\title{Array stack}
 \usage{
 row_stack(..., order = c("C", "F"))
 }
@@ -17,7 +17,7 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 An 2D array formed by stacking all input arrays.
 }
 \description{
-Stack 1D arrays as rows into a 2D array
+Stack 1D arrays as rows into a 2D array.
 }
 \details{
 This function corresponds to \code{row_stack()} from NumPy.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{full}
 \alias{full}
-\title{Create array filled with value}
+\title{Array creation}
 \usage{
 full(dim = NULL, fill_value = NA, order = c("C", "F"))
 }
@@ -17,7 +17,7 @@ full(dim = NULL, fill_value = NA, order = c("C", "F"))
 An array of \code{fill_value} with the given shape.
 }
 \description{
-Create array filled with value
+Create array filled with value.
 }
 \details{
 This function corresponds to \code{full()} from NumPy.

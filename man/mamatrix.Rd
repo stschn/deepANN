@@ -2,12 +2,12 @@
 % Please edit documentation in R/deepArray.r
 \name{mamatrix}
 \alias{mamatrix}
-\title{Shrink an array to matrix}
+\title{Array to matrix}
 \usage{
 mamatrix(a, order = c("C", "F"))
 }
 \arguments{
-\item{a}{A multidimensional array.}
+\item{a}{An array.}
 
 \item{order}{The order in which elements of data should be read during combination.
 By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
@@ -19,7 +19,7 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 A two-dimensional array with combined matrices of the first two dimensions of \code{x}.
 }
 \description{
-This function combines the respective first two dimensions of a multidimensional array by columns or rows.
+Shrinks an array by combining the respective first two dimensions of the array by columns or rows.
 }
 \seealso{
 Other Array: 

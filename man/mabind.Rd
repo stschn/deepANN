@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{mabind}
 \alias{mabind}
-\title{Combine multidimensional arrays along a specified dimension}
+\title{Array binding}
 \usage{
 mabind(..., input_shape = NULL, axis = -1, order = c("C", "F"))
 }
@@ -21,7 +21,7 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 An array as a combination of all input arrays along a specified dimension.
 }
 \description{
-Combine multidimensional arrays along a specified dimension
+Combine arrays along a specified dimension.
 }
 \details{
 This function corresponds to \code{concatenate()} from NumPy.

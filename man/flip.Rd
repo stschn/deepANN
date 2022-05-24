@@ -2,9 +2,9 @@
 % Please edit documentation in R/deepArray.r
 \name{flip}
 \alias{flip}
-\title{Reverse the order of elements in an array along the given axes}
+\title{Array flip}
 \usage{
-flip(a, axis = -1L)
+flip(a, axis = 1L)
 }
 \arguments{
 \item{a}{An array.}
@@ -15,7 +15,7 @@ flip(a, axis = -1L)
 The reversed array \code{a} along axes.
 }
 \description{
-Reverse the order of elements in an array along the given axes
+Reverse the order of elements in an array along the given axes.
 }
 \details{
 This function corresponds to \code{flip()} from NumPy.

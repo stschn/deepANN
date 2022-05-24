@@ -8,7 +8,7 @@
 #' @export
 ndim <- function(x) { length(dim(x)) }
 
-#' @title Number of dimensions
+#' @title Number of elements
 #'
 #' @family Array
 #'
@@ -204,7 +204,8 @@ is.marray <- function(x) {
   return(inherits(x, .deepANNClasses[["marray"]]))
 }
 
-#' @title Flatten data into a one-dimensional array
+#' @title Data flattening
+#' @description Flatten data into a one-dimensional array.
 #'
 #' @family Array
 #'
@@ -289,13 +290,12 @@ expand_dims <- function(a, axis = -1L) {
   a
 }
 
-#' @title Compress the shape of an array
-#'
-#' @description Remove dimensions of length one from a multidimensional array.
+#' @title Array compressing
+#' @description Compress the shape of an array by removing dimensions of length one from the array.
 #'
 #' @family Array
 #'
-#' @param a A multidimensional array.
+#' @param a An array.
 #' @param axis The dimensions which should be removed. If \code{NULL} (default), all dimensions of length one are removed.
 #' @param order The order in which elements of data should be read during rearrangement after removing of corresponding dimensions.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
@@ -321,12 +321,12 @@ squeeze <- function(a, axis = NULL, order = c("C", "F")) {
   return(marray(a, dim = newdim, order = order))
 }
 
-#' @title Shrink an array to matrix
-#' @description This function combines the respective first two dimensions of a multidimensional array by columns or rows.
+#' @title Array to matrix
+#' @description Shrinks an array by combining the respective first two dimensions of the array by columns or rows.
 #'
 #' @family Array
 #'
-#' @param a A multidimensional array.
+#' @param a An array.
 #' @param order The order in which elements of data should be read during combination.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
@@ -345,7 +345,8 @@ mamatrix <- function(a, order = c("C", "F")) {
     t(apply(a, 1L, base::identity)) # cbind()
 }
 
-#' @title Slice multidimensional array
+#' @title Array slicing
+#' @description Slice an array by using indices i, j, k etc.
 #'
 #' @family Array
 #'
@@ -374,7 +375,8 @@ slice <- function(a, ..., drop = TRUE) {
   do.call(`[`, c(list(a), args, list(drop = drop)))
 }
 
-#' @title Combine multidimensional arrays along a specified dimension
+#' @title Array binding
+#' @description Combine arrays along a specified dimension.
 #'
 #' @family Array
 #'
@@ -414,8 +416,8 @@ mabind <- function(..., input_shape = NULL, axis = -1, order = c("C", "F")) {
   # Rows are equal to the length of the dimension(s) and Cols are equal to to length of array list
   all_dims <- sapply(list_of_arrays, dim)
   if (is.vector(all_dims)) all_dims <- t(all_dims)
-  if (!(is.matrix(all_dims) && all(apply(all_dims, 1L, function(x) length(unique(x)) == 1L) == TRUE)))
-    stop("All input arrays must have the same number of dimensions.", call. = FALSE)
+  if (!(is.matrix(all_dims) && all(apply(all_dims[-axis, ], 1L, function(x) length(unique(x)) == 1L) == TRUE)))
+    stop("All input arrays must have the same shape (number of dimensions), excluding axis.", call. = FALSE)
 
   perm <- seq_len(N)
   #if (!(axis < 0)) perm <- as.integer(append(perm[!perm %in% axis], axis)) # put axis last
@@ -433,7 +435,8 @@ mabind <- function(..., input_shape = NULL, axis = -1, order = c("C", "F")) {
   out
 }
 
-#' @title Stack 1D arrays as columns into a 2D array
+#' @title Array stack
+#' @description Stack 1D arrays as columns into a 2D array.
 #'
 #' @family Array
 #'
@@ -469,7 +472,8 @@ column_stack <- function(..., order = c("C", "F")) {
   do.call(cbind, list_of_arrays)
 }
 
-#' @title Stack 1D arrays as rows into a 2D array
+#' @title Array stack
+#' @description Stack 1D arrays as rows into a 2D array.
 #'
 #' @family Array
 #'
@@ -505,7 +509,8 @@ row_stack <- function(..., order = c("C", "F")) {
   do.call(rbind, list_of_arrays)
 }
 
-#' @title Create 2D identity matrix
+#' @title Array creation
+#' @description Create 2D identity matrix.
 #'
 #' @family Array
 #'
@@ -523,7 +528,8 @@ eye <- function(n, m = NULL) {
   return(marray(mat, order = "F"))
 }
 
-#' @title Create Vandermonde matrix
+#' @title Array creation
+#' @description Create Vandermonde matrix.
 #'
 #' @family Array
 #'
@@ -538,7 +544,8 @@ vander <- function(data, n) {
   marray(outer(deepANN::flatten(data), seq(0, n - 1), "^"), order = "F")
 }
 
-#' @title Create array filled with ones
+#' @title Array creation
+#' @description Create array filled with ones.
 #' @family Array
 #'
 #' @param dim Shape of the new array.
@@ -551,7 +558,8 @@ ones <- function(dim = NULL) {
   marray(rep(1L, prod(dim)), dim = dim)
 }
 
-#' @title Create array filled with zeros
+#' @title Array creation
+#' @description Create array filled with zeros.
 #'
 #' @family Array
 #'
@@ -565,7 +573,8 @@ zeros <- function(dim = NULL) {
   marray(rep(0L, prod(dim)), dim = dim)
 }
 
-#' @title Create array filled with NA
+#' @title Array creation
+#' @description Create array filled with NA.
 #'
 #' @family Array
 #'
@@ -579,7 +588,8 @@ empty <- function(dim = NULL) {
   marray(rep(NA, prod(dim)), dim = dim)
 }
 
-#' @title Create array filled with value
+#' @title Array creation
+#' @description Create array filled with value.
 #'
 #' @family Array
 #'
@@ -595,57 +605,50 @@ full <- function(dim = NULL, fill_value = NA, order = c("C", "F")) {
   marray(rep(fill_value, prod(dim) -> N)[seq_len(N)], dim = dim, order = order)
 }
 
-#' @title Insert into multidimensional array
+#' @title Array insertion
+#' @description Insert an object into an array.
 #'
 #' @family Array
 #'
-#' @param a An array from type \code{marray}.
-#' @param x An R object which is inserted into \code{a}.
-#' @param index The position \code{x} should be inserted.
+#' @param a An array.
+#' @param x An R object to insert into \code{a}.
+#' @param axis The axis along which to insert \code{x}.
 #' @param order The order in which elements of \code{x} should be read during insertion.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #'
-#' @details For insertion, the last dimension of \code{a} is fixed and \code{x} is coerced into the remaining dimensions. If \code{a} is a
-#'   one-dimensional array, \code{x} is flattened.
+#' @details This function corresponds partially to \code{insert()} and \code{append()} from NumPy.
 #'
-#' @return The marray \code{a} with inserted \code{x}.
-#' @seealso \code{\link{marray}}.
+#' @return The array \code{a} with \code{x} inserted.
 #'
 #' @examples
-#'   ma1 <- marray(1:24)
-#'   ma2 <- marray(1:12, dim = c(4, 3))
-#'   ma3 <- marray(1:24, dim = c(4, 3, 2), order = "F")
-#'   x <- c(1:12)
-#'   insert(ma3, x, order = "F")
+#' # original array
+#' a <- array(seq.int(2 * 3 * 4), dim = c(2, 3, 4))
+#' # slice to be added to the second axis
+#' b <- array(100L + seq.int(2 * 1 * 4), dim = c(2, 1, 4))
+#' insert(a, b, axis = 2L)
+#'
 #' @export
-insert <- function(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F")) {
+insert <- function(a, x, axis = -1L, order = c("C", "F")) {
   order <- match.arg(order)
-  adim <- dim(a)
-  lastdim <- adim[deepANN::ndim(a)]
-  if ((deepANN::ndim(a) > 1L) && !setequal(dim(x), xdim <- adim[-deepANN::ndim(a)])) { x <- marray(x, dim = xdim, order = order) } else { x <- deepANN::flatten(x) }
-  x <- as(x, "array")
-  # Convert array with fixed last dimension to list
-  alist <- lapply(seq_len(lastdim), function(idx) { do.call('[', c(list(a), rep(list(TRUE), deepANN::ndim(a) - 1L), idx)) })
-  # Insert x into list on right position
-  if (index <= 1L) { # first
-    alist <- append(alist, list(x), 0)
-  } else {
-  if (index > lastdim) { # last
-    alist <- append(alist, list(x), lastdim + 1L)
-  } else { # between
-    alist <- append(alist, list(x), index - 1L)
-  }}
-  if (deepANN::ndim(a) > 1L) adim[deepANN::ndim(a)] <- lastdim + 1L else adim <- adim + length(x)
-  marray(unlist(alist), dim = adim, order = "F")
+  d <- dim(a)
+  nd <- deepANN::ndim(a)
+  axis[which((axis < 0L) | (axis > nd))] <- nd
+
+  # Reshape x with the same dimension as a but replacing the axis dimension with 1
+  d[axis] <- 1L
+  x <- marray(x, dim = d, order = order)
+  # Just bind the arrays along axis
+  mabind(a, x, axis = axis)
 }
 
-#' @title Transpose multidimensional array
+#' @title Array transposition
+#' @description Transpose an array.
 #'
 #' @family Array
 #'
-#' @param a A multidimensional array.
-#' @param perm The permutation vector of the dimensions. The default \code{NULL} indicates to reverse the order of the dimensions.
+#' @param a An array.
+#' @param perm The permutation vector of the dimensions. The default \code{NULL} indicates to reverse the order of all dimensions.
 #'
 #' @return The array \code{a} with swapped dimensions.
 #'
@@ -656,7 +659,8 @@ transpose <- function(a, perm = NULL) {
   aperm(a, perm = perm)
 }
 
-#' @title Reverse the order of elements in an array along the given axes
+#' @title Array flip
+#' @description Reverse the order of elements in an array along the given axes.
 #'
 #' @family Array
 #'
@@ -667,7 +671,7 @@ transpose <- function(a, perm = NULL) {
 #' @return The reversed array \code{a} along axes.
 #'
 #' @export
-flip <- function(a, axis = -1L) {
+flip <- function(a, axis = 1L) {
   d <- dim(a) %null% length(a)
   nd <- length(d)
   axis[which((axis < 0L) | (axis > nd))] <- nd
@@ -676,7 +680,8 @@ flip <- function(a, axis = -1L) {
   do.call('[', c(list(a), l))
 }
 
-#' @title Rotate an array by 90 degrees in the plane specified by axes
+#' @title Array rotation
+#' @description Rotate an array by 90 degrees in the plane specified by axes.
 #'
 #' @family Array
 #'

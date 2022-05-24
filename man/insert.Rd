@@ -2,41 +2,39 @@
 % Please edit documentation in R/deepArray.r
 \name{insert}
 \alias{insert}
-\title{Insert into multidimensional array}
+\title{Array insertion}
 \usage{
-insert(a, x, index = dim(a)[deepANN::ndim(a)] + 1L, order = c("C", "F"))
+insert(a, x, axis = -1L, order = c("C", "F"))
 }
 \arguments{
-\item{a}{An array from type \code{marray}.}
+\item{a}{An array.}
 
-\item{x}{An R object which is inserted into \code{a}.}
+\item{x}{An R object to insert into \code{a}.}
 
-\item{index}{The position \code{x} should be inserted.}
+\item{axis}{The axis along which to insert \code{x}.}
 
 \item{order}{The order in which elements of \code{x} should be read during insertion.
 By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.}
 }
 \value{
-The marray \code{a} with inserted \code{x}.
+The array \code{a} with \code{x} inserted.
 }
 \description{
-Insert into multidimensional array
+Insert an object into an array.
 }
 \details{
-For insertion, the last dimension of \code{a} is fixed and \code{x} is coerced into the remaining dimensions. If \code{a} is a
-  one-dimensional array, \code{x} is flattened.
+This function corresponds partially to \code{insert()} and \code{append()} from NumPy.
 }
 \examples{
-  ma1 <- marray(1:24)
-  ma2 <- marray(1:12, dim = c(4, 3))
-  ma3 <- marray(1:24, dim = c(4, 3, 2), order = "F")
-  x <- c(1:12)
-  insert(ma3, x, order = "F")
+# original array
+a <- array(seq.int(2 * 3 * 4), dim = c(2, 3, 4))
+# slice to be added to the second axis
+b <- array(100L + seq.int(2 * 1 * 4), dim = c(2, 1, 4))
+insert(a, b, axis = 2L)
+
 }
 \seealso{
-\code{\link{marray}}.
-
 Other Array: 
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},

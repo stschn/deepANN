@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{rot90}
 \alias{rot90}
-\title{Rotate an array by 90 degrees in the plane specified by axes}
+\title{Array rotation}
 \usage{
 rot90(a, k = 1L, axes = c(1L, 2L))
 }
@@ -17,7 +17,7 @@ rot90(a, k = 1L, axes = c(1L, 2L))
 A rotated view of \code{a}.
 }
 \description{
-Rotate an array by 90 degrees in the plane specified by axes
+Rotate an array by 90 degrees in the plane specified by axes.
 }
 \details{
 This function corresponds to \code{rot90()} from NumPy.

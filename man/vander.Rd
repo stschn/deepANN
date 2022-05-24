@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{vander}
 \alias{vander}
-\title{Create Vandermonde matrix}
+\title{Array creation}
 \usage{
 vander(data, n)
 }
@@ -15,7 +15,7 @@ vander(data, n)
 A Vandermonde matrix.
 }
 \description{
-Create Vandermonde matrix
+Create Vandermonde matrix.
 }
 \details{
 This function corresponds to \code{vander()} from NumPy.

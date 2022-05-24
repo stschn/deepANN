@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{slice}
 \alias{slice}
-\title{Slice multidimensional array}
+\title{Array slicing}
 \usage{
 slice(a, ..., drop = TRUE)
 }
@@ -17,7 +17,7 @@ slice(a, ..., drop = TRUE)
 An extracted part of \code{a}.
 }
 \description{
-Slice multidimensional array
+Slice an array by using indices i, j, k etc.
 }
 \details{
 \code{slice} is an alternative way to handle indexing array objects, usually done with \code{\link[base]{[}}. The dimensions must be indexed by names,

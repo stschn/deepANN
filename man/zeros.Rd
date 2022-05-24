@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{zeros}
 \alias{zeros}
-\title{Create array filled with zeros}
+\title{Array creation}
 \usage{
 zeros(dim = NULL)
 }
@@ -13,7 +13,7 @@ zeros(dim = NULL)
 An array of zeros with the given shape.
 }
 \description{
-Create array filled with zeros
+Create array filled with zeros.
 }
 \details{
 This function corresponds to \code{zeros()} from NumPy.

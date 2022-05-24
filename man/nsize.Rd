@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{nsize}
 \alias{nsize}
-\title{Number of dimensions}
+\title{Number of elements}
 \usage{
 nsize(x)
 }
@@ -13,7 +13,7 @@ nsize(x)
 Number of elements.
 }
 \description{
-Number of dimensions
+Number of elements
 }
 \details{
 This function corresponds to \code{ndarray.size} from NumPy.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{ones}
 \alias{ones}
-\title{Create array filled with ones}
+\title{Array creation}
 \usage{
 ones(dim = NULL)
 }
@@ -13,7 +13,7 @@ ones(dim = NULL)
 An array of ones with the given shape.
 }
 \description{
-Create array filled with ones
+Create array filled with ones.
 }
 \details{
 This function corresponds to \code{ones()} from NumPy.

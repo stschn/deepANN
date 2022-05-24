@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{eye}
 \alias{eye}
-\title{Create 2D identity matrix}
+\title{Array creation}
 \usage{
 eye(n, m = NULL)
 }
@@ -15,7 +15,7 @@ eye(n, m = NULL)
 An identity matrix with n rows and n or rather m columns.
 }
 \description{
-Create 2D identity matrix
+Create 2D identity matrix.
 }
 \details{
 This function corresponds to \code{eye()} from NumPy.

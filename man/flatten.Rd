@@ -2,7 +2,7 @@
 % Please edit documentation in R/deepArray.r
 \name{flatten}
 \alias{flatten}
-\title{Flatten data into a one-dimensional array}
+\title{Data flattening}
 \usage{
 flatten(data, axis = NULL, order = c("C", "F"))
 }
@@ -21,7 +21,7 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 The flatten data in form of a one-dimensional array.
 }
 \description{
-Flatten data into a one-dimensional array
+Flatten data into a one-dimensional array.
 }
 \details{
 This function corresponds to \code{ndarray.flatten()} from NumPy.
