@@ -188,7 +188,7 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
   }
 
   if (!is.null(dimnames)) { dimnames(data) <- dimnames }
-  data <- structure(data, class = c(class(data), .deepANNClasses[["marray"]]))
+  if (!is.marray(data)) data <- structure(data, class = c(class(data), .deepANNClasses[["marray"]]))
   return(data)
 }
 
@@ -430,7 +430,7 @@ mabind <- function(..., input_shape = NULL, axis = -1, order = c("C", "F")) {
   # Rows are equal to the length of the dimension(s) and Cols are equal to to length of array list
   all_dims <- sapply(list_of_arrays, dim)
   if (is.vector(all_dims)) all_dims <- t(all_dims)
-  if (!(is.matrix(all_dims) && all(apply(all_dims[-axis, ], 1L, function(x) length(unique(x)) == 1L) == TRUE)))
+  if (!(is.matrix(all_dims) && all(apply(all_dims[-axis, , drop = FALSE], 1L, function(x) length(unique(x)) == 1L) == TRUE)))
     stop("All input arrays must have the same shape (number of dimensions), excluding axis.", call. = FALSE)
 
   perm <- seq_len(N)
