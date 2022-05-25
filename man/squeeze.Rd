@@ -30,6 +30,7 @@ This function corresponds to \code{squeeze()} from NumPy.
 \code{\link{drop}}.
 
 Other Array: 
+\code{\link{DIM}()},
 \code{\link{column_stack}()},
 \code{\link{delete}()},
 \code{\link{dimC<-}()},

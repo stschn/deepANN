@@ -40,6 +40,7 @@ delete(a, axis = c(1L, 2L))
 }
 \seealso{
 Other Array: 
+\code{\link{DIM}()},
 \code{\link{column_stack}()},
 \code{\link{dimC<-}()},
 \code{\link{empty}()},

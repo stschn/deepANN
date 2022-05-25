@@ -36,6 +36,7 @@ mabind(a1, a2, a3, axis = 2) # output is an 4x9x2 array
 }
 \seealso{
 Other Array: 
+\code{\link{DIM}()},
 \code{\link{column_stack}()},
 \code{\link{delete}()},
 \code{\link{dimC<-}()},

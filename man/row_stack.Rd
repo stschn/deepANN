@@ -29,6 +29,7 @@ row_stack(a, b)
 }
 \seealso{
 Other Array: 
+\code{\link{DIM}()},
 \code{\link{column_stack}()},
 \code{\link{delete}()},
 \code{\link{dimC<-}()},

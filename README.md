@@ -8,6 +8,7 @@ This R library is currently structured in form of the following functional famil
 <ul>
   <li><code>ndim()</code> returns the number of dimensions of an array.</li>
   <li><code>nsize()</code> returns the number of elements of an array.</li>
+  <li><code>DIM()</code> returns the dimension of an object or its length.</li>
   <li><code>dimC()</code> get or set the dimension of an object in row-major ordering (C-style).</li>
   <li><code>reshape.array()</code> reshapes an array to new dimension.</li>
   <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>

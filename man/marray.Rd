@@ -100,6 +100,7 @@ This introduced n-dimensional array is an equivalent to \code{ndarray} class fro
 \code{\link{array}}, \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
 
 Other Array: 
+\code{\link{DIM}()},
 \code{\link{column_stack}()},
 \code{\link{delete}()},
 \code{\link{dimC<-}()},

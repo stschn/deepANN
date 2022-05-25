@@ -23,6 +23,7 @@ Shrinks an array by combining the respective first two dimensions of the array b
 }
 \seealso{
 Other Array: 
+\code{\link{DIM}()},
 \code{\link{column_stack}()},
 \code{\link{delete}()},
 \code{\link{dimC<-}()},

@@ -20,6 +20,7 @@ This function corresponds to \code{ndarray.ndim} from NumPy.
 }
 \seealso{
 Other Array: 
+\code{\link{DIM}()},
 \code{\link{column_stack}()},
 \code{\link{delete}()},
 \code{\link{dimC<-}()},

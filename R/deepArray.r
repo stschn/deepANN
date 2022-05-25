@@ -18,6 +18,16 @@ ndim <- function(x) { length(dim(x)) }
 #' @export
 nsize <- function(x) { prod(dim(x)) }
 
+#' @title Retrieve dimensions of an object or its length
+#'
+#' @family Array
+#'
+#' @param x An R object.
+#' @return The number of dimensions or in cases of an atomic object the length.
+#' @references Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.
+#' @export
+DIM <- function(x) { dim(x) %null% length(x) }
+
 #' @title Dimensions of an object
 #' @description Retrieve or set the dimensions of an object in row-major order.
 #'
@@ -161,8 +171,7 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
   if (is.data.frame(data)) data <- as.matrix(data)
   if (is.list(data)) data <- array(unlist(data))
 
-  if (is.null(dim))
-    dim <- dim(data) %null% length(data) #if (!is.null(dim(data))) dim <- dim(data) else dim <- length(data)
+  if (is.null(dim)) dim <- deepANN::DIM(data)
   if (!is.array(data)) data <- array(data)
   data <- reshape.array(a = data, dim = dim, order = order)
 
@@ -260,7 +269,7 @@ flatten <- function(data, axis = NULL, order = c("C", "F")) {
 #'
 #' @export
 expand_dims <- function(a, axis = -1L) {
-  d <- dim(a) %null% length(a) #d <- if (!is.null(dim(a) -> da)) da else length(a)
+  d <- deepANN::DIM(a)
   nd <- length(d)
   naxis <- length(axis)
 
@@ -636,13 +645,15 @@ full <- function(dim = NULL, fill_value = NA, order = c("C", "F")) {
 #' @export
 insert <- function(a, x, axis = -1L, order = c("C", "F")) {
   order <- match.arg(order)
-  d <- dim(a)
+  d <- deepANN::DIM(a)
   nd <- deepANN::ndim(a)
   axis[which((axis < 0L) | (axis > nd))] <- nd
 
   # Reshape x with the same dimension as a but replacing the axis dimension with 1
-  d[axis] <- 1L
-  x <- marray(x, dim = d, order = order)
+  if (nd > 1L) {
+    d[axis] <- 1L
+    x <- marray(x, dim = d, order = order)
+  }
   # Just bind the arrays along axis
   mabind(a, x, axis = axis)
 }
@@ -678,8 +689,14 @@ insert <- function(a, x, axis = -1L, order = c("C", "F")) {
 #' @export
 delete <- function(a, axis = 1L, order = c("C", "F")) {
   order <- match.arg(order)
-  d <- dim(a)
+  d <- deepANN::DIM(a)
   nd <- deepANN::ndim(a)
+
+  if (nd <= 1L) {
+    dim(a) <- NULL
+    attributes(a) <- NULL
+    return(a)
+  }
 
   start_last <- any(axis < 0L)
   axis <- abs(axis)
@@ -729,7 +746,7 @@ transpose <- function(a, perm = NULL) {
 #'
 #' @export
 flip <- function(a, axis = 1L) {
-  d <- dim(a) %null% length(a)
+  d <- deepANN::DIM(a)
   nd <- length(d)
   axis[which((axis < 0L) | (axis > nd))] <- nd
   l <- lapply(d, seq_len)
@@ -753,7 +770,7 @@ flip <- function(a, axis = 1L) {
 rot90 <- function(a, k = 1L, axes = c(1L, 2L)) {
   stopifnot("a must be at least a 2-dimensional array." = ndim(a) >= 2L,
             "axes must consist of two values to spawn the plane the array is rotated." = length(axes) == 2L)
-  d <- dim(a)
+  d <- deepANN::DIM(a)
   nd <- length(d)
   axes[which((axes < 0L) | (axes > nd))] <- nd
   # shape of the output: d[axes] <- d[rev(axes)]
