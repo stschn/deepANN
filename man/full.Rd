@@ -4,12 +4,14 @@
 \alias{full}
 \title{Array creation}
 \usage{
-full(dim = NULL, fill_value = NA, order = c("C", "F"))
+full(dim = NULL, fill_value = NA, dimnames = NULL, order = c("C", "F"))
 }
 \arguments{
 \item{dim}{Shape of the new array.}
 
 \item{fill_value}{Value to fill the array.}
+
+\item{dimnames}{Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.}
 
 \item{order}{Whether to store multidimensional array in C- or Fortran-contiguous (row- or column-wise) order.}
 }

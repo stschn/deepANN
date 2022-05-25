@@ -563,13 +563,14 @@ vander <- function(data, n) {
 #' @family Array
 #'
 #' @param dim Shape of the new array.
+#' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
 #'
 #' @details This function corresponds to \code{ones()} from NumPy.
 #' @return An array of ones with the given shape.
 #'
 #' @export
-ones <- function(dim = NULL) {
-  marray(rep(1L, prod(dim)), dim = dim)
+ones <- function(dim = NULL, dimnames = NULL) {
+  marray(rep(1L, prod(dim)), dim = dim, dimnames = dimnames)
 }
 
 #' @title Array creation
@@ -578,13 +579,14 @@ ones <- function(dim = NULL) {
 #' @family Array
 #'
 #' @param dim Shape of the new array.
+#' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
 #'
 #' @details This function corresponds to \code{zeros()} from NumPy.
 #' @return An array of zeros with the given shape.
 #'
 #' @export
-zeros <- function(dim = NULL) {
-  marray(rep(0L, prod(dim)), dim = dim)
+zeros <- function(dim = NULL, dimnames = NULL) {
+  marray(rep(0L, prod(dim)), dim = dim, dimnames = dimnames)
 }
 
 #' @title Array creation
@@ -593,13 +595,14 @@ zeros <- function(dim = NULL) {
 #' @family Array
 #'
 #' @param dim Shape of the new array.
+#' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
 #'
 #' @details This function corresponds to \code{empty()} from NumPy with the difference that instead of arbitrary values \code{NA} are set.
 #' @return An array of \code{NA} with the given shape.
 #'
 #' @export
-empty <- function(dim = NULL) {
-  marray(rep(NA, prod(dim)), dim = dim)
+empty <- function(dim = NULL, dimnames = NULL) {
+  marray(rep(NA, prod(dim)), dim = dim, dimnames = dimnames)
 }
 
 #' @title Array creation
@@ -609,14 +612,15 @@ empty <- function(dim = NULL) {
 #'
 #' @param dim Shape of the new array.
 #' @param fill_value Value to fill the array.
+#' @param dimnames Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.
 #' @param order Whether to store multidimensional array in C- or Fortran-contiguous (row- or column-wise) order.
 #'
 #' @details This function corresponds to \code{full()} from NumPy.
 #' @return An array of \code{fill_value} with the given shape.
 #'
 #' @export
-full <- function(dim = NULL, fill_value = NA, order = c("C", "F")) {
-  marray(rep(fill_value, prod(dim) -> N)[seq_len(N)], dim = dim, order = order)
+full <- function(dim = NULL, fill_value = NA, dimnames = NULL, order = c("C", "F")) {
+  marray(rep(fill_value, prod(dim) -> N)[seq_len(N)], dim = dim, dimnames = dimnames, order = order)
 }
 
 #' @title Array insertion

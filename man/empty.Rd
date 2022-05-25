@@ -4,10 +4,12 @@
 \alias{empty}
 \title{Array creation}
 \usage{
-empty(dim = NULL)
+empty(dim = NULL, dimnames = NULL)
 }
 \arguments{
 \item{dim}{Shape of the new array.}
+
+\item{dimnames}{Either \code{NULL} or the names of the dimensions. This must be a list with one component for each dimension, either \code{NULL} or a character vector of the length given by \code{dim} for that dimension.}
 }
 \value{
 An array of \code{NA} with the given shape.
