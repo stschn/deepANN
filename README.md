@@ -26,7 +26,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>zeros()</code> creates an array filled with zeros.</li>
   <li><code>empty()</code> creates an array filled with NA.</li>
   <li><code>full()</code> creates an array filled with value.</li>
-  <li><code>insert()</code> inserts an object into an array.</li>
+  <li><code>insert()</code> inserts objects into an array.</li>
   <li><code>delete()</code> deletes axes from an array.</li>
   <li><code>transpose()</code> transposes an array by swapping dimensions.</li>
   <li><code>flip()</code> reverses the order of the elements of an array along axes.</li>
