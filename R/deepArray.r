@@ -394,7 +394,7 @@ slice <- function(a, ..., drop = TRUE) {
 #'
 #' @family Array
 #'
-#' @param ... Any numbers of objects they are coerced to arrays. The objects can be packed into a \code{list}. The dimensions of these objects must be equal if they are not to be coerced into a certain \code{input_shape}.
+#' @param ... Any number of objects that are combined into an array. The objects can be packed into a \code{list}. The dimensions of these objects must be equal, excluding axis, if they are not to be coerced into a certain \code{input_shape}.
 #' @param input_shape The dimension the input objects are to be coerced. By default \code{NULL}, the original dimensions are used.
 #' @param axis The dimension along the objects are combined. By default (\code{-1}), the last dimension is used for binding the arrays.
 #' @param order The order in which elements of the objects should be read during coercing to arrays.
@@ -629,15 +629,15 @@ full <- function(dim = NULL, fill_value = NA, dimnames = NULL, order = c("C", "F
 #' @family Array
 #'
 #' @param a An array.
-#' @param x An R object to insert into \code{a}.
-#' @param axis The axis along which to insert \code{x}.
-#' @param order The order in which elements of \code{x} should be read during insertion.
+#' @param ... Any number of objects inserted into or appended to \code{a}.
+#' @param axis The axis along which to insert the objects.
+#' @param order The order according to which the respective elements of the objects are read during insertion or appending.
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #'
 #' @details This function corresponds partially to \code{insert()} and \code{append()} from NumPy.
 #'
-#' @return The array \code{a} with \code{x} inserted.
+#' @return The array \code{a} with objects inserted or appended.
 #'
 #' @examples
 #' # original array
@@ -647,19 +647,23 @@ full <- function(dim = NULL, fill_value = NA, dimnames = NULL, order = c("C", "F
 #' insert(a, b, axis = 2L)
 #'
 #' @export
-insert <- function(a, x, axis = -1L, order = c("C", "F")) {
+insert <- function(a, ..., axis = -1L, order = c("C", "F")) {
   order <- match.arg(order)
   d <- deepANN::DIM(a)
   nd <- deepANN::ndim(a)
   axis[which((axis < 0L) | (axis > nd))] <- nd
 
+  x <- list(...)
+  if (any(sapply(x, is.list)))
+    x <- unlist(x, recursive = FALSE)
+
   # Reshape x with the same dimension as a but replacing the axis dimension with 1
   if (nd > 1L) {
     d[axis] <- 1L
-    x <- marray(x, dim = d, order = order)
+    x <- lapply(x, FUN = deepANN::marray, dim = d, order = order)
   }
   # Just bind the arrays along axis
-  mabind(a, x, axis = axis)
+  mabind(append(x, list(a), 0L), axis = axis)
 }
 
 #' @title Array deletion

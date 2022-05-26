@@ -4,21 +4,21 @@
 \alias{insert}
 \title{Array insertion}
 \usage{
-insert(a, x, axis = -1L, order = c("C", "F"))
+insert(a, ..., axis = -1L, order = c("C", "F"))
 }
 \arguments{
 \item{a}{An array.}
 
-\item{x}{An R object to insert into \code{a}.}
+\item{...}{Any number of objects inserted into or appended to \code{a}.}
 
-\item{axis}{The axis along which to insert \code{x}.}
+\item{axis}{The axis along which to insert the objects.}
 
-\item{order}{The order in which elements of \code{x} should be read during insertion.
+\item{order}{The order according to which the respective elements of the objects are read during insertion or appending.
 By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.}
 }
 \value{
-The array \code{a} with \code{x} inserted.
+The array \code{a} with objects inserted or appended.
 }
 \description{
 Insert an object into an array.
