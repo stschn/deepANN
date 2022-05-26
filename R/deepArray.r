@@ -123,22 +123,22 @@ reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a
 #' @seealso \code{\link{array}}, \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
 #'
 #' @examples
-#'   # Vector input with explicit dimensions
-#'   marray(1:24, dim = c(8, 3)) # 2D array with row-major ordering
-#'   marray(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
-#'   marray(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
-#'   marray(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
+#' # Vector input with explicit dimensions
+#' marray(1:24, dim = c(8, 3)) # 2D array with row-major ordering
+#' marray(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
+#' marray(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
+#' marray(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
 #'
-#'   # Different input types and applying the dimensions
-#'   v <- (1:24)
-#'   l <- list(x1 = 1:10, x2 = seq(10, 100, 10))
-#'   df <- data.frame(x1 = 1:6, x2 = seq(10, 60, 10), x3 = sample(letters, 6))
-#'   m <- matrix(1:24, nrow = 6)
-#'   a1 <- array(letters[1L:24L])
-#'   a3 <- array(v, dim = c(4, 3, 2))
-#'   a4 <- array(1:48, dim = c(4, 3, 2, 2))
-#'   data <- a3; data
-#'   a <- marray(data, order = "F", reverse = F); a
+#' # Different input types and applying the dimensions
+#' v <- (1:24)
+#' l <- list(x1 = 1:10, x2 = seq(10, 100, 10))
+#' df <- data.frame(x1 = 1:6, x2 = seq(10, 60, 10), x3 = sample(letters, 6))
+#' m <- matrix(1:24, nrow = 6)
+#' a1 <- array(letters[1L:24L])
+#' a3 <- array(v, dim = c(4, 3, 2))
+#' a4 <- array(1:48, dim = c(4, 3, 2, 2))
+#' data <- a3; data
+#' a <- marray(data, order = "F", reverse = F); a
 #' @export
 marray <- function(data, ...) {
   as.marray(data, ...)
@@ -366,6 +366,7 @@ mamatrix <- function(a, order = c("C", "F")) {
 #'
 #' @param a A vector, matrix, or array.
 #' @param ... Indexing instructions in form of \code{name = value} pairs. The names of the arguments specify the dimensions and the values its values.
+#' @param value Any values to assign to the slice of \code{a}.
 #' @param drop For matrices and arrays. If \code{TRUE} the result is coerced to the lowest possible dimension. This only works for extracting elements, not for the replacement. See \code{\link[base]{drop}} for further details.
 #'
 #' @details \code{slice} is an alternative way to handle indexing array objects, usually done with \code{\link[base]{[}}. The dimensions must be indexed by names,
@@ -373,13 +374,19 @@ mamatrix <- function(a, order = c("C", "F")) {
 #'
 #' @return An extracted part of \code{a}.
 #'
-#' @references \code{slice} is inspired by the function with the same name from package \code{arrayhelpers}. Implementation credits go the the author of this package.
+#' @references Implementation credits go to \url{https://github.com/cran/arrayhelpers}.
 #'
 #' @examples
-#'   a <- array(1:48, dim = c(4, 3, 2, 2))
-#'   slice(a) # complete four-dimensional array
-#'   slice(a, l = 2) # the values of the array of the second element of the last dimension (4th dimension)
-#'   slice(a, i = 1, j = 3) the values of the array of the first element of the first dimension (1st row) and the third element of the second dimension (3rd column) across all bunches of the remaining dimensions 3 and 4.
+#' a <- marray(1:48, dim = c(4, 3, 2, 2))
+#' slice(a) # complete four-dimensional array
+#' slice(a, l = 2) # the values of the array of the second element of the last dimension (4th dimension)
+#' slice(a, i = 1, j = 3) the values of the array of the first element of the first dimension (1st row) and the third element of the second dimension (3rd column) across all bunches of the remaining dimensions 3 and 4.
+#'
+#' a <- marray(1:24, dim = c(4, 3, 2), order = "F")
+#' slice(a, i = 1L) <- 0L
+#' slice(a, i = 1L) <- 100:102
+#' slice(a, i = 1L) <- 100:105
+#' slice(a, i = 1L) <- matrix(100:105, nrow = 2L)
 #' @export
 slice <- function(a, ..., drop = TRUE) {
   args <- as.list(rep(TRUE, deepANN::ndim(a)))
@@ -387,6 +394,17 @@ slice <- function(a, ..., drop = TRUE) {
   which <- match(names(params), letters) - 8L
   args[which] <- params
   do.call(`[`, c(list(a), args, list(drop = drop)))
+}
+
+#' @rdname slice
+#' @usage \code{slice(a, ...) <- value}.
+#' @export
+'slice<-' <- function(a, ..., value) {
+  args <- as.list(rep(TRUE, deepANN::ndim(a)))
+  params <- list(...)
+  which <- match(names(params), letters) - 8L
+  args[which] <- params
+  do.call(`[<-`, c(list(a), args, list(value = value)))
 }
 
 #' @title Array binding

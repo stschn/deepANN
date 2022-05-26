@@ -16,7 +16,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>expand_dims()</code> expands the shape of an array by inserting a new axis.</li>
   <li><code>squeeze()</code> removes dimensions of length one from array.</li>
   <li><code>mamatrix()</code> shrinks an array by rows or columns into a matrix.</li>
-  <li><code>slice()</code> extracts a part of an array.</li>
+  <li><code>slice()</code> read or write a part of an array.</li>
   <li><code>mabind()</code> combines input arrays to an output array along a specified axis.</li>
   <li><code>column_stack()</code> stacks 1D arrays as columns into a 2D array.</li>
   <li><code>row_stack()</code> stacks 1D arrays as rows into a 2D array.</li>

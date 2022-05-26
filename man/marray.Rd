@@ -79,22 +79,22 @@ This introduced n-dimensional array is an equivalent to \code{ndarray} class fro
   wile Python respectively NumPy prefers row-major ordering (C-style) but offers both. For a comparison see \url{https://rstudio.github.io/reticulate/articles/arrays.html}.
 }
 \examples{
-  # Vector input with explicit dimensions
-  marray(1:24, dim = c(8, 3)) # 2D array with row-major ordering
-  marray(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
-  marray(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
-  marray(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
+# Vector input with explicit dimensions
+marray(1:24, dim = c(8, 3)) # 2D array with row-major ordering
+marray(1:24, dim = c(8, 3), order = "F") # 2D array with column-major ordering
+marray(1:24, dim = c(4, 3, 2)) # 3D array with row-major ordering
+marray(1:24, dim = c(4, 3, 2), order = "F") # 3D array with column-major ordering
 
-  # Different input types and applying the dimensions
-  v <- (1:24)
-  l <- list(x1 = 1:10, x2 = seq(10, 100, 10))
-  df <- data.frame(x1 = 1:6, x2 = seq(10, 60, 10), x3 = sample(letters, 6))
-  m <- matrix(1:24, nrow = 6)
-  a1 <- array(letters[1L:24L])
-  a3 <- array(v, dim = c(4, 3, 2))
-  a4 <- array(1:48, dim = c(4, 3, 2, 2))
-  data <- a3; data
-  a <- marray(data, order = "F", reverse = F); a
+# Different input types and applying the dimensions
+v <- (1:24)
+l <- list(x1 = 1:10, x2 = seq(10, 100, 10))
+df <- data.frame(x1 = 1:6, x2 = seq(10, 60, 10), x3 = sample(letters, 6))
+m <- matrix(1:24, nrow = 6)
+a1 <- array(letters[1L:24L])
+a3 <- array(v, dim = c(4, 3, 2))
+a4 <- array(1:48, dim = c(4, 3, 2, 2))
+data <- a3; data
+a <- marray(data, order = "F", reverse = F); a
 }
 \seealso{
 \code{\link{array}}, \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.

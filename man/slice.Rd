@@ -2,9 +2,12 @@
 % Please edit documentation in R/deepArray.r
 \name{slice}
 \alias{slice}
+\alias{slice<-}
 \title{Array slicing}
 \usage{
 slice(a, ..., drop = TRUE)
+
+\code{slice(a, ...) <- value}.
 }
 \arguments{
 \item{a}{A vector, matrix, or array.}
@@ -12,6 +15,8 @@ slice(a, ..., drop = TRUE)
 \item{...}{Indexing instructions in form of \code{name = value} pairs. The names of the arguments specify the dimensions and the values its values.}
 
 \item{drop}{For matrices and arrays. If \code{TRUE} the result is coerced to the lowest possible dimension. This only works for extracting elements, not for the replacement. See \code{\link[base]{drop}} for further details.}
+
+\item{value}{Any values to assign to the slice of \code{a}.}
 }
 \value{
 An extracted part of \code{a}.
@@ -24,13 +29,19 @@ Slice an array by using indices i, j, k etc.
   i for the first dimension, j for the second and so on. The assigned values are the values (elements) of the corresponding dimension. The indexing expressions are the same as for \code{\link[base]{[}}.
 }
 \examples{
-  a <- array(1:48, dim = c(4, 3, 2, 2))
-  slice(a) # complete four-dimensional array
-  slice(a, l = 2) # the values of the array of the second element of the last dimension (4th dimension)
-  slice(a, i = 1, j = 3) the values of the array of the first element of the first dimension (1st row) and the third element of the second dimension (3rd column) across all bunches of the remaining dimensions 3 and 4.
+a <- marray(1:48, dim = c(4, 3, 2, 2))
+slice(a) # complete four-dimensional array
+slice(a, l = 2) # the values of the array of the second element of the last dimension (4th dimension)
+slice(a, i = 1, j = 3) the values of the array of the first element of the first dimension (1st row) and the third element of the second dimension (3rd column) across all bunches of the remaining dimensions 3 and 4.
+
+a <- marray(1:24, dim = c(4, 3, 2), order = "F")
+slice(a, i = 1L) <- 0L
+slice(a, i = 1L) <- 100:102
+slice(a, i = 1L) <- 100:105
+slice(a, i = 1L) <- matrix(100:105, nrow = 2L)
 }
 \references{
-\code{slice} is inspired by the function with the same name from package \code{arrayhelpers}. Implementation credits go the the author of this package.
+Implementation credits go to \url{https://github.com/cran/arrayhelpers}.
 }
 \seealso{
 Other Array: 
