@@ -33,6 +33,7 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{delete}()},
 \code{\link{dimC<-}()},
+\code{\link{embedseries}()},
 \code{\link{empty}()},
 \code{\link{expand_dims}()},
 \code{\link{eye}()},

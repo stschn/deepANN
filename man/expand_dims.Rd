@@ -29,6 +29,7 @@ Other Array:
 \code{\link{column_stack}()},
 \code{\link{delete}()},
 \code{\link{dimC<-}()},
+\code{\link{embedseries}()},
 \code{\link{empty}()},
 \code{\link{eye}()},
 \code{\link{flatten}()},
