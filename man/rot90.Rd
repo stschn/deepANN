@@ -42,6 +42,7 @@ Other Array:
 \code{\link{ndim}()},
 \code{\link{nsize}()},
 \code{\link{ones}()},
+\code{\link{rearrange}()},
 \code{\link{reshape.array}()},
 \code{\link{row_stack}()},
 \code{\link{slice}()},

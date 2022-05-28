@@ -29,6 +29,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>insert()</code> inserts objects into an array.</li>
   <li><code>delete()</code> deletes axes from an array.</li>
   <li><code>transpose()</code> transposes an array by swapping dimensions.</li>
+  <li><code>rearrange()</code> rearranges axis-driven an array by swapping dimensions.</li>
   <li><code>flip()</code> reverses the order of the elements of an array along axes.</li>
   <li><code>rot90()</code> rotates an array by 90 degrees in the plane specified by axes.</li>
   <li><code>embedseries()</code> resamples data into an ongoing shifted series array.</li>

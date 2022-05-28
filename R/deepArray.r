@@ -759,6 +759,34 @@ transpose <- function(a, perm = NULL) {
   aperm(a, perm = perm)
 }
 
+#' @title Array rearrangement
+#' @description Rearrange an array.
+#'
+#' @family Array
+#'
+#' @param a An array.
+#' @param axis The axis or axes along \code{a} will be read into the new shape. The default \code{NULL} indicates the reverse order of all dimensions.
+#'
+#' @details Rearrangement of an array is equal to permutation its dimensions (axes). The given \code{axis} are the dimensions along the data of \code{a} are read.
+#'   The remaining axes span the dimension space where the data are read into, including \code{axis} at the last position of the entire dimension space (shape).
+#'
+#' @return The array \code{a} with swapped dimensions.
+#'
+#' @seealso \code{\link{transpose}}.
+#'
+#' @export
+rearrange <- function(a, axis = NULL) {
+  d <- deepANN::DIM(a)
+
+  nd <- length(d)
+  axis[which((axis < 0L) | (axis > nd))] <- nd
+
+  ds <- seq_along(d)
+  s.call <- if (is.null(axis)) rev(ds) else ds[-axis]
+  s.ans <- if (is.null(axis)) NULL else ds[axis]
+  aperm(a, perm = c(s.call, s.ans))
+}
+
 #' @title Array flip
 #' @description Reverse the order of elements in an array along the given axes.
 #'
@@ -795,7 +823,7 @@ flip <- function(a, axis = 1L) {
 #' @export
 rot90 <- function(a, k = 1L, axes = c(1L, 2L)) {
   stopifnot("a must be at least a 2-dimensional array." = ndim(a) >= 2L,
-            "axes must consist of two values to spawn the plane the array is rotated." = length(axes) == 2L)
+            "axes must consist of two values to span the plane the array is rotated." = length(axes) == 2L)
   d <- deepANN::DIM(a)
   nd <- length(d)
   axes[which((axes < 0L) | (axes > nd))] <- nd
