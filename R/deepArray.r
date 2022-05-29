@@ -834,6 +834,7 @@ rot90 <- function(a, k = 1L, axes = c(1L, 2L)) {
 #'
 #' @param data The data to be embedded into a shifted series.
 #' @param length The length of a series.
+#' @param flip A logical value indicating whether the embedded series should be reversed.
 #'
 #' @return An ongoing shifted series of \code{data}.
 #' @export
@@ -845,31 +846,36 @@ rot90 <- function(a, k = 1L, axes = c(1L, 2L)) {
 #' head(a)
 #' a <- embedseries(df, length = 23L)
 #' head(a)
-embedseries <- function(data, length) {
+embedseries <- function(data, length, flip) {
   UseMethod("embedseries")
 }
 
 #' @rdname embedseries
 #' @export
-embedseries.default <- function(data, length = 1L) {
+embedseries.default <- function(data, length = 1L, flip = TRUE) {
   length <- ifelse(is.null(length) || (length < 1L), 1L, length) # at least a length of 1 is needed
-  flip(stats::embed(as.vector(deepANN::flatten(data)), dimension = length), axis = 2L)
+  a <- stats::embed(as.vector(deepANN::flatten(data)), dimension = length)
+  if (flip) a <- flip(a, axis = 2L)
+  a
 }
 
 #' @rdname embedseries
 #' @export
-embedseries.matrix <- function(data, length = 1L) {
+embedseries.matrix <- function(data, length = 1L, flip = TRUE) {
   length <- ifelse(is.null(length) || (length < 1L), 1L, length)
   n <- NROW(data) - length + 1L
   m <- NCOL(data)
   a <- empty(dim = c(n, length, m))
-  for (i in seq_len(m)) a[, , i] <- flip(stats::embed(data[, i], dimension = length), axis = 2L)
+  if (flip)
+    for (i in seq_len(m)) a[, , i] <- flip(stats::embed(data[, i], dimension = length), axis = 2L)
+  else
+    for (i in seq_len(m)) a[, , i] <- stats::embed(data[, i], dimension = length)
   dimnames(a) <- list(NULL, NULL, colnames(data))
   a
 }
 
 #' @rdname embedseries
 #' @export
-embedseries.data.frame <- function(data, length = 1L) {
-  return(embedseries.matrix(data.matrix(data), length))
+embedseries.data.frame <- function(data, length = 1L, flip = TRUE) {
+  return(embedseries.matrix(data.matrix(data), length, flip))
 }

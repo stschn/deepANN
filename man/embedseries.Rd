@@ -7,18 +7,20 @@
 \alias{embedseries.data.frame}
 \title{Series embedding}
 \usage{
-embedseries(data, length)
+embedseries(data, length, flip)
 
-\method{embedseries}{default}(data, length = 1L)
+\method{embedseries}{default}(data, length = 1L, flip = TRUE)
 
-\method{embedseries}{matrix}(data, length = 1L)
+\method{embedseries}{matrix}(data, length = 1L, flip = TRUE)
 
-\method{embedseries}{data.frame}(data, length = 1L)
+\method{embedseries}{data.frame}(data, length = 1L, flip = TRUE)
 }
 \arguments{
 \item{data}{The data to be embedded into a shifted series.}
 
 \item{length}{The length of a series.}
+
+\item{flip}{A logical value indicating whether the embedded series should be reversed.}
 }
 \value{
 An ongoing shifted series of \code{data}.

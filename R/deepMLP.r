@@ -95,7 +95,7 @@ as_tensor_2d <- function(data) {
 #'
 #' @export
 as_tensor_3d <- function(data, timesteps = 1L) {
-  embedseries(data.matrix(data), length = timesteps)
+  embedseries(data.matrix(data), length = timesteps, flip = TRUE)
 }
 
 #' @title Features (X) data format for SLP/MLP
