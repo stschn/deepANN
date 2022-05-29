@@ -26,12 +26,7 @@
 .ContinuousClasses <- .getBasicClasses("Integer", "Numeric", "Complex", "Raw")
 
 .deepANNClasses <-
-  c("marray"                       = "marray",
-    "Tensor"                       = "tensor",
-    "Feedforward Network"          = "mlp",
-    "Long Short-Term Memory"       = "lstm",
-    "Convolutional Neural Network" = "cnn",
-    "Naive Bayes"                  = "naivebayes",
+  c("Naive Bayes"                  = "naivebayes",
     "Decision Tree"                = "decisiontree",
     "Support Vector Machine"       = "supportvectormachine")
 

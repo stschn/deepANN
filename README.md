@@ -9,7 +9,7 @@ This R library is currently structured in form of the following functional famil
   <li><code>ndim()</code> returns the number of dimensions of an array.</li>
   <li><code>nsize()</code> returns the number of elements of an array.</li>
   <li><code>DIM()</code> returns the dimension of an object or its length.</li>
-  <li><code>dimC()</code> get or set the dimension of an object in row-major ordering (C-style).</li>
+  <li><code>dimC()</code> set the dimension of an object in row-major ordering (C-style).</li>
   <li><code>reshape.array()</code> reshapes an array to new dimension.</li>
   <li><code>marray()</code> and <code>as.marray()</code> transform data into a multidimensional array and <code>is.marray()</code> checks for that type of array.</li>
   <li><code>flatten()</code> flattens data into a one-dimensional array.</li>
@@ -124,14 +124,6 @@ This R library is currently structured in form of the following functional famil
   <li><code>list_as_numeric()</code> recursively transforms the objects of a list into numeric values.</li>
   <li><code>as_ANN_matrix()</code> converts a data set into a matrix with adjusted character values and factor levels to their numeric indices if necessary.</li>
   <li><code>vector_as_ANN_matrix()</code> transforms a vector into a ANN compatible matrix.</li>
-  <li><code>tensor()</code> and <code>as.tensor()</code> transform data into a n-dimensional tensor (array) and <code>is.tensor()</code> checks for a tensor.</li>
-  <li><code>nsamples()</code> extracts the number of samples within a data structure, usually a tensor.</li>
-  <li><code>nunits()</code> extracts the number of units within a data structure, usually a tensor.</li>
-  <li><code>ntimesteps()</code> extracts the number of timesteps within a data structure, usually a tensor.</li>
-  <li><code>nsubsequences()</code> extracts the number of subsequences within a data structure, usually a tensor.</li>
-  <li><code>as_tensor_1d()</code> transforms data into a one-dimensional tensor (vector).</li>
-  <li><code>as_tensor_2d()</code> transforms data into a two-dimensional tensor (matrix).</li>
-  <li><code>as_tensor_3d()</code> transforms data into a three-dimensional tensor.</li>
   <li><code>random_seed()</code> random number generator for reproducible results with Tensorflow/Keras.</li>
 </ul>
 
@@ -148,10 +140,19 @@ This R library is currently structured in form of the following functional famil
 
 <b>Single & Multi Layer Perceptron (SLP, MLP)</b>
 <ul>
+  <li><code>nsamples()</code> extracts the number of samples within a data structure, usually a tensor.</li>
+  <li><code>nunits()</code> extracts the number of units within a data structure, usually a tensor.</li>
+  <li><code>ntimesteps()</code> extracts the number of timesteps within a data structure, usually a tensor.</li>
+  <li><code>nsubsequences()</code> extracts the number of subsequences within a data structure, usually a tensor.</li>
+  <li><code>as_tensor_1d()</code> transforms data into a one-dimensional tensor (vector).</li>
+  <li><code>as_tensor_2d()</code> transforms data into a two-dimensional tensor (matrix).</li>
+  <li><code>as_tensor_3d()</code> transforms data into a three-dimensional tensor.</li>
   <li><code>as_MLP_X()</code> creates a 2D feature array with the dimensions samples and units.</li>
   <li><code>as_MLP_Y()</code> creates a 2D outcome array with the dimensions samples and units for a metric outcome or a one-hot vector for a non-metric outcome.</li>
   <li><code>build_MLP()</code> builds a sequential SLP/MLP model with stacked dense layers and optionally dropout layers.</li>
   <li><code>fit_MLP()</code> encapsulates fitting a SLP/MLP model.</li>
+  <li><code>save_weights_ANN()</code> saves the weights of a ANN into a HDF5-file.</li>
+  <li><code>load_weights_ANN()</code> loads the weights of a ANN from a HDF5-file.</li>
 </ul>
 
 <b>Reccurent Neural Network (RNN)</b>
@@ -168,8 +169,6 @@ This R library is currently structured in form of the following functional famil
   <li><code>fit_LSTM()</code> encapsulates fitting a LSTM model.</li>
   <li><code>predict_ANN()</code> predicts with different ANN models like SLP/MLP or LSTM.</li>
   <li><code>as_LSTM_period_outcome()</code> returns a data.frame with period column and actual outcome column for quality assurance and graphical illustration purposes.</li>
-  <li><code>save_weights_ANN()</code> saves the weights of a ANN into a HDF5-file.</li>
-  <li><code>load_weights_ANN()</code> loads the weights of a ANN from a HDF5-file.</li>
 </ul>
 
 <b>Convolutional Neural Network (CNN)</b>

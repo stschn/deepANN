@@ -4,7 +4,7 @@
 \alias{as_CNN_temp_X}
 \title{Features (X) data format for a temporal CNN}
 \usage{
-as_CNN_temp_X(x, timesteps = 1L, subsequences = NULL, reverse = FALSE)
+as_CNN_temp_X(x, timesteps = 1L, subsequences = NULL)
 }
 \arguments{
 \item{x}{A feature data set, usually a matrix or data frame, returned by \code{get_LSTM_XY}.}
@@ -12,8 +12,6 @@ as_CNN_temp_X(x, timesteps = 1L, subsequences = NULL, reverse = FALSE)
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{x}. If \code{subsequences} is given, \code{timesteps} is divided by \code{subsequences} to spawn the overall timesteps range (origin timesteps) within the result.}
 
 \item{subsequences}{Number of subsequences within the outcome tensor. Using a CNN without RNN layers like LSTM layers, the number of subsequences is \code{NULL} (default). Otherwise, this number must be an integer multiple of \code{timesteps} to keep the origin timesteps value. To avoid problems in this regard, using a value of \code{1} is a proper solution.}
-
-\item{reverse}{A logical value indicating the order of the values in the resampled feature matrix \code{x}. The values can be in given order (forward in time) or in reverse order (backward in time).}
 }
 \value{
 A 3D-array with dimensions samples, timesteps and features or a 4D-array with dimensions samples, subsequences, timesteps and features.

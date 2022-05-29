@@ -18,22 +18,14 @@ The combination of RNG from NumPy and Tensorflow allows to get reproducible resu
 \seealso{
 Other Utils: 
 \code{\link{as_ANN_matrix}()},
-\code{\link{as_tensor_1d}()},
-\code{\link{as_tensor_2d}()},
-\code{\link{as_tensor_3d}()},
 \code{\link{degree}()},
 \code{\link{distance}()},
 \code{\link{list_as_numeric}()},
-\code{\link{nsamples}()},
-\code{\link{nsubsequences}()},
-\code{\link{ntimesteps}()},
-\code{\link{nunits}()},
 \code{\link{probability}()},
 \code{\link{radian}()},
 \code{\link{re.factor}()},
 \code{\link{sd_pop}()},
 \code{\link{similarity}()},
-\code{\link{tensor}()},
 \code{\link{var_pop}()},
 \code{\link{vector_as_ANN_matrix}()},
 \code{\link{vector_as_numeric}()}

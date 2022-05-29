@@ -18,7 +18,7 @@ The array \code{a} with swapped dimensions.
 Transpose an array.
 }
 \seealso{
-\code{\link{t}}.
+\code{\link{t}}, \code{\link{rearrange}}.
 
 Other Array: 
 \code{\link{DIM}()},

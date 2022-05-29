@@ -6,7 +6,6 @@
 \alias{as.marray.default}
 \alias{as.marray.data.frame}
 \alias{as.marray.list}
-\alias{is.marray}
 \title{Multidimensional array}
 \usage{
 marray(data, ...)
@@ -18,8 +17,7 @@ as.marray(data, ...)
   dim = NULL,
   dimnames = NULL,
   order = c("C", "F"),
-  numeric = FALSE,
-  reverse = FALSE
+  numeric = FALSE
 )
 
 \method{as.marray}{data.frame}(
@@ -27,8 +25,7 @@ as.marray(data, ...)
   dim = NULL,
   dimnames = NULL,
   order = c("C", "F"),
-  numeric = FALSE,
-  reverse = FALSE
+  numeric = FALSE
 )
 
 \method{as.marray}{list}(
@@ -36,11 +33,8 @@ as.marray(data, ...)
   dim = NULL,
   dimnames = NULL,
   order = c("C", "F"),
-  numeric = FALSE,
-  reverse = FALSE
+  numeric = FALSE
 )
-
-is.marray(x)
 }
 \arguments{
 \item{data}{The data to be reshaped to a multidimensional array.}
@@ -57,17 +51,14 @@ In opposite, the \code{Fortran}-style ordering means elements should be read in 
 
 \item{numeric}{A logical value indicating whether the elements should be coerced as numeric elements.}
 
-\item{reverse}{Controls the order of the elements in the \code{marray}. By default, they are used in the given order, but they can also be used in reverse order.}
-
 \item{x}{An R object.}
 }
 \value{
-An array from type \code{marray}.
+An array.
 }
 \description{
 \code{marray(data, ...)} creates a reshaped multidimensional array.\cr
-  \code{as.marray(data, ...)} attempts to turn its argument into a \code{marray}.\cr
-  \code{is.marray(x)} tests if its argument is a \code{marray}.\cr
+  \code{as.marray(data, ...)} attempts to turn its argument into an array.\cr
 }
 \details{
 This introduced n-dimensional array is an equivalent to \code{ndarray} class from NumPy (\url{https://numpy.org/}), a famous package in Python.
@@ -97,7 +88,7 @@ data <- a3; data
 a <- marray(data, order = "F", reverse = F); a
 }
 \seealso{
-\code{\link{array}}, \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
+\code{\link{array}}, \code{\link{dim}}, \code{\link{reshape.array}}.
 
 Other Array: 
 \code{\link{DIM}()},

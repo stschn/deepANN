@@ -1,3 +1,103 @@
+#' @title Number of samples within an array
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param a An array.
+#' @details The number of samples is stored in the first dimension of \code{a}.
+#' @return Number of samples.
+#' @export
+nsamples <- function(a) {
+  deepANN::DIM(a)[1L]
+}
+
+#' @title Number of units within an array
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param a An array.
+#' @details The number of units is stored in the last dimension of \code{a}.
+#'   What a unit is or what it stands for is determined by the context. Usually, a unit is an attribute (feature or outcome).
+#'   In the context of image processing, a unit on feature side represents a color channel.
+#' @return Number of units.
+#' @export
+nunits <- function(a) {
+  return((deepANN::DIM(a) -> d)[length(d)])
+}
+
+#' @title Number of timesteps within an array
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param a An array.
+#' @details The number of timesteps is stored in the second dimension of a three-dimensional \code{a}, usually used for a LSTM,
+#'   or in the third dimension of a four-dimensional \code{a}, usually used for a temporal CNN.
+#' @return Number of timesteps.
+#' @export
+ntimesteps <- function(a) {
+  #stopifnot("a must be at least a three-dimensional array." = deepANN::ndim(a) >= 3L)
+  if (deepANN::ndim(a) < 3L) return(0L)
+  d <- dim(a)
+  dl <- length(d)
+  d[dl - 1L]
+}
+
+#' @title Number of subsequences within an array
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param a An array.
+#' @details The number of subsequences is stored in the second dimension of a four-dimensional \code{a}, usually used for a temporal CNN.
+#' @return Number of subsequences.
+#' @export
+nsubsequences <- function(a) {
+  #stopifnot("a must be at a four-dimensional array." = deepANN::ndim(a) == 4L)
+  if (deepANN::ndim(a) != 4L) return(0L)
+  dim(a)[2L]
+}
+
+#' @title Transform data into a 1D tensor
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param data The data to be reshaped to a one-dimensional tensor.
+#' @param order The order in which elements of \code{data} should be read during flattening.
+#'
+#' @return A one-dimensional array.
+#'
+#' @seealso \code{\link{flatten}}.
+#'
+#' @export
+as_tensor_1d <- function(data, order = c("C", "F")) {
+  deepANN::flatten(data, order = order)
+}
+
+#' @title Transform data into a 2D tensor.
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param data The data to be reshaped to a two-dimensional tensor.
+#'
+#' @return A two-dimensional array.
+#'
+#' @export
+as_tensor_2d <- function(data) {
+  data.matrix(data)
+}
+
+#' @title Transform data into a 3D tensor.
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#'
+#' @param data The data to be reshaped to a three-dimensional tensor, usually a matrix or data frame.
+#' @param timesteps The number of timesteps.
+#'
+#' @return A three-dimensional array.
+#'
+#' @export
+as_tensor_3d <- function(data, timesteps = 1L) {
+  embedseries(data.matrix(data), length = timesteps)
+}
+
 #' @title Features (X) data format for SLP/MLP
 #'
 #' @family Single & Multi Layer Perceptron (SLP, MLP)
@@ -10,7 +110,7 @@
 #'
 #' @export
 as_MLP_X <- function(x) {
-  return(as_tensor_2d(data.matrix(x)))
+  as_tensor_2d(x)
 }
 
 #' @title Outcomes (Y) data format for SLP/MLP
@@ -35,7 +135,7 @@ as_MLP_Y <- function(y, encoding = c("one_hot", "sparse")) {
     return(m)
   }
   # Metric outcome
-  else { return(as_tensor_2d(data.matrix(y))) }
+  else { return(as_tensor_2d(y)) }
 }
 
 #' @title Build SLP/MLP architecture
@@ -180,4 +280,44 @@ fit_MLP <- function(model, x, y, batch_size = 1, epochs = 10, verbose = 1, valid
     }
   }
   return(base_model)
+}
+
+#' @title Save model weights to file
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#' @family Recurrent Neural Network (RNN)
+#'
+#' @param model A model object.
+#' @param filename The file name.
+#'
+#' @return The model object.
+#'
+#' @seealso \code{\link{load_weights_ANN}}, \code{\link[base]{files}},
+#'   \code{\link[keras]{save_model_weights_hdf5}}.
+#'
+#' @export
+save_weights_ANN <- function(model, filename) {
+  model %>% keras::save_model_weights_hdf5(filename)
+  return(model)
+}
+
+#' @title Load model weights from file
+#'
+#' @family Single & Multi Layer Perceptron (SLP, MLP)
+#' @family Recurrent Neural Network (RNN)
+#'
+#' @param model A model object.
+#' @param filename The file name.
+#'
+#' @return The model object.
+#'
+#' @seealso \code{\link{save_weights_ANN}}, \code{\link[base]{files}},
+#'   \code{\link[keras]{save_model_weights_hdf5}}.
+#'
+#' @export
+load_weights_ANN <- function(model, filename) {
+  if (!file.exists(filename))
+    stop("file does not exist.")
+  model %>% keras::load_model_weights_hdf5(filename)
+  return(model)
 }

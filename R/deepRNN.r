@@ -188,7 +188,6 @@ as_timesteps <- function(lag = 1L, type = "univariate") {
 #'
 #' @param x A feature data set, usually a matrix or data frame, returned by \code{get_LSTM_XY}.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{x}.
-#' @param reverse Controls the order of the values in the resampled feature matrix \code{X}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #'
 #' @return A three-dimensional array of the resampled feature matrix \code{x} needed within Tensorflow for recurrent neural networks, e.g. LSTM.\cr
 #'   1. dimension: Samples (s) = Number of records\cr
@@ -196,21 +195,12 @@ as_timesteps <- function(lag = 1L, type = "univariate") {
 #'   3. dimension: Features (f) = Number of features within a sequence of a period\cr
 #'   Note: A 3D-array with dimensions (s x t x f) can be interpret as f (s x t)-matrices.
 #'
-#' @seealso \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_Y}}, \code{\link{as_ANN_matrix}}, \code{\link{as_tensor_3d}}.
+#' @seealso \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_Y}}, \code{\link{as_tensor_3d}}.
 #'
 #' @export
-as_LSTM_X <- function(x, timesteps = 1L, reverse = FALSE) {
-  # variables <- NCOL(m)
-  # samples <- NROW(m) - timesteps + 1
-  # variable_matrix <- sapply(1:variables, function(j) {
-  #   variable_list <- sapply(1:samples, function(i) {
-  #     if (!reverse) { m[i:(i + timesteps - 1), j] } else { m[(i + timesteps - 1):i, j] }})
-  # })
-  # tensor <- array(NA, dim = c(samples, timesteps, variables))
-  # for (i in 1:variables) { tensor[, , i] <- matrix(variable_matrix[, i], nrow = samples, ncol = timesteps, byrow = T) }
-  m <- data.matrix(x) # as_ANN_matrix(x)
+as_LSTM_X <- function(x, timesteps = 1L) {
   timesteps <- ifelse(is.null(timesteps) || (timesteps < 1L), 1L, timesteps) # at least a timestep of 1 is needed
-  return(as_tensor_3d(data = m, ncol = timesteps, by = c("step"), reverse = reverse))
+  as_tensor_3d(x, timesteps)
 }
 
 #' @title Outcomes (Y) data format for LSTM
@@ -241,12 +231,11 @@ as_LSTM_Y <- function(y, timesteps = 1L, reverse = FALSE, encoding = c("one_hot"
   }
   # Continuous outcome
   else {
-    m <- data.matrix(y) # as_ANN_matrix(y)
     if ((is.null(timesteps)) || (timesteps <= 1L)) {
-      return(as_tensor_2d(data = m, reverse = reverse))
+      return(as_tensor_2d(y))
     } else {
       timesteps <- ifelse(timesteps < 2L, 2L, timesteps) # at least a timestep of 2 is needed for a sequence outcome
-      return(as_tensor_3d(data = m, ncol = timesteps, by = c("step"), reverse = reverse))
+      return(as_tensor_3d(y, timesteps))
     }
   }
 }
@@ -260,7 +249,6 @@ as_LSTM_Y <- function(y, timesteps = 1L, reverse = FALSE, encoding = c("one_hot"
 #' @param xnames Names of the features.
 #' @param ynames Names of the outcomes.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{x}.
-#' @param reverse Controls the order of the values in the resampled feature matrix \code{x} and the resampled outcome matrix \code{y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).
 #' @param suffix The suffix for every feature per timestep or period.
 #'
 #' @return A data frame with outcome column(s) and a further resampled feature matrix.
@@ -270,7 +258,7 @@ as_LSTM_Y <- function(y, timesteps = 1L, reverse = FALSE, encoding = c("one_hot"
 #' @seealso \code{\link{get_LSTM_XY}}.
 #'
 #' @export
-as_LSTM_data_frame <- function(x, y, xnames, ynames, timesteps = 1L, reverse = FALSE, suffix = "_t") {
+as_LSTM_data_frame <- function(x, y, xnames, ynames, timesteps = 1L, suffix = "_t") {
 
   gen_colnames_timesteps <- function(caption, timesteps) {
     if (!reverse) { tsteps <- c(1:timesteps) } else { tsteps <- c(timesteps:1) }
@@ -289,9 +277,9 @@ as_LSTM_data_frame <- function(x, y, xnames, ynames, timesteps = 1L, reverse = F
     y_steps <- timesteps[2L]
   }
 
-  X_tensor <- as_LSTM_X(x, x_steps, reverse)
+  X_tensor <- as_LSTM_X(x, x_steps)
   #Y_tensor <- as_LSTM_Y(y, switch(y_sequence + 1, NULL, y_steps), reverse)
-  Y_tensor <- as_LSTM_Y(y, ifelse(!y_sequence, 1L, y_steps), reverse)
+  Y_tensor <- as_LSTM_Y(y, ifelse(!y_sequence, 1L, y_steps))
   dim(X_tensor) <- c(dim(X_tensor)[1L], dim(X_tensor)[2L] * dim(X_tensor)[3L])
   if (y_sequence) { dim(Y_tensor) <- c(dim(Y_tensor)[1L], dim(Y_tensor)[2L] * dim(Y_tensor)[3L]) }
   dataset <- cbind.data.frame(Y_tensor, X_tensor)
@@ -668,44 +656,4 @@ as_LSTM_period_outcome <- function(dataset, columns, timesteps = 1L, lag = 0L, t
     dataset <- dataset[, columns]
   }
   return(dataset)
-}
-
-#' @title Save model weights to file
-#'
-#' @family Single & Multi Layer Perceptron (SLP, MLP)
-#' @family Recurrent Neural Network (RNN)
-#'
-#' @param model A model object.
-#' @param filename The file name.
-#'
-#' @return The model object.
-#'
-#' @seealso \code{\link{load_weights_ANN}}, \code{\link[base]{files}},
-#'   \code{\link[keras]{save_model_weights_hdf5}}.
-#'
-#' @export
-save_weights_ANN <- function(model, filename) {
-  model %>% keras::save_model_weights_hdf5(filename)
-  return(model)
-}
-
-#' @title Load model weights from file
-#'
-#' @family Single & Multi Layer Perceptron (SLP, MLP)
-#' @family Recurrent Neural Network (RNN)
-#'
-#' @param model A model object.
-#' @param filename The file name.
-#'
-#' @return The model object.
-#'
-#' @seealso \code{\link{save_weights_ANN}}, \code{\link[base]{files}},
-#'   \code{\link[keras]{save_model_weights_hdf5}}.
-#'
-#' @export
-load_weights_ANN <- function(model, filename) {
-  if (!file.exists(filename))
-    stop("file does not exist.")
-  model %>% keras::load_model_weights_hdf5(filename)
-  return(model)
 }

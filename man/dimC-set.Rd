@@ -15,7 +15,7 @@ dimC(x) <- value
 The (redimensioned) object \code{x}.
 }
 \description{
-Retrieve or set the dimensions of an object in row-major order.
+Set the dimensions of an object in row-major order.
 }
 \references{
 Implementation credits go to \url{https://github.com/t-kalinowski/listarrays}.

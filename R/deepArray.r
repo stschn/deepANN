@@ -2,7 +2,7 @@
 #'
 #' @family Array
 #'
-#' @param x A multidimensional data structure like array, marray, tensor, matrix or data.frame.
+#' @param x A multidimensional data structure like array, matrix or data.frame.
 #' @details This function corresponds to \code{ndarray.ndim} from NumPy.
 #' @return Number of dimensions.
 #' @export
@@ -12,7 +12,7 @@ ndim <- function(x) { length(dim(x)) }
 #'
 #' @family Array
 #'
-#' @param x A multidimensional data structure like array, marray, tensor, matrix or data.frame.
+#' @param x A multidimensional data structure like array, matrix or data.frame.
 #' @details This function corresponds to \code{ndarray.size} from NumPy.
 #' @return Number of elements.
 #' @export
@@ -29,7 +29,7 @@ nsize <- function(x) { prod(dim(x)) }
 DIM <- function(x) { dim(x) %null% length(x) }
 
 #' @title Dimensions of an object
-#' @description Retrieve or set the dimensions of an object in row-major order.
+#' @description Set the dimensions of an object in row-major order.
 #'
 #' @family Array
 #'
@@ -77,6 +77,8 @@ DIM <- function(x) { dim(x) %null% length(x) }
 #' @details This function corresponds to \code{reshape()} from NumPy.
 #' @return The (redimensioned) array \code{a}.
 #'
+#' @seealso \code{\link[reticulate]{array_reshape}}.
+#'
 #' @export
 reshape.array <- function(a, dim = NULL, order = c("C", "F")) {
   order <- match.arg(order)
@@ -87,15 +89,10 @@ reshape.array <- function(a, dim = NULL, order = c("C", "F")) {
   a
 }
 
-#' @rdname reshape.array
-#' @export
-reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a, dim = dim, order = order) }
-
 #' @title Multidimensional array
 #' @description
 #'   \code{marray(data, ...)} creates a reshaped multidimensional array.\cr
-#'   \code{as.marray(data, ...)} attempts to turn its argument into a \code{marray}.\cr
-#'   \code{is.marray(x)} tests if its argument is a \code{marray}.\cr
+#'   \code{as.marray(data, ...)} attempts to turn its argument into an array.\cr
 #'
 #' @family Array
 #'
@@ -106,7 +103,6 @@ reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a
 #'   By default, the order is equivalent to the \code{C}-style ordering and means elements should be read in row-major order.
 #'   In opposite, the \code{Fortran}-style ordering means elements should be read in column-major order.
 #' @param numeric A logical value indicating whether the elements should be coerced as numeric elements.
-#' @param reverse Controls the order of the elements in the \code{marray}. By default, they are used in the given order, but they can also be used in reverse order.
 #' @param x An R object.
 #' @param ... Additional arguments to be passed to or from methods.
 #'
@@ -118,9 +114,9 @@ reshape.marray <- function(a, dim = NULL, order = c("C", "F")) { reshape.array(a
 #'   The behavior of \code{marray} is similar to that of ndarray from NumPy. R follows a column-major ordering (Fortran-style) during building up an array,
 #'   wile Python respectively NumPy prefers row-major ordering (C-style) but offers both. For a comparison see \url{https://rstudio.github.io/reticulate/articles/arrays.html}.
 #'
-#' @return An array from type \code{marray}.
+#' @return An array.
 #'
-#' @seealso \code{\link{array}}, \code{\link{dim}}, \code{\link[reticulate]{array_reshape}}.
+#' @seealso \code{\link{array}}, \code{\link{dim}}, \code{\link{reshape.array}}.
 #'
 #' @examples
 #' # Vector input with explicit dimensions
@@ -152,7 +148,7 @@ as.marray <- function(data, ...) {
 
 #' @rdname marray
 #' @export
-as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE, reverse = FALSE) {
+as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE) {
   order <- match.arg(order)
   if (numeric) {
     if ((!all(is.na(data))) && (is.atomic(data)) && (!(deepANN::ndim(data) > 1L))) {
@@ -175,42 +171,22 @@ as.marray.default <- function(data, dim = NULL, dimnames = NULL, order = c("C", 
   if (!is.array(data)) data <- array(data)
   data <- reshape.array(a = data, dim = dim, order = order)
 
-  if (reverse) {
-    if (ldim == 1L) data <- rev(data)
-    if (ldim >= 2L) {
-      fixed_dimension <- seq_len(ldim)[-c(1L:2L)]
-      if (order == "F") {
-        data <- apply(data, c(2L, fixed_dimension), rev)
-      } else {
-        data <- aperm(apply(data, c(1L, fixed_dimension), rev), perm = c(2L, 1L, fixed_dimension))
-      }
-    }
-  }
-
   if (!is.null(dimnames)) { dimnames(data) <- dimnames }
-  if (!is.marray(data)) data <- structure(data, class = c(class(data), .deepANNClasses[["marray"]]))
   return(data)
 }
 
 #' @rdname marray
 #' @export
-as.marray.data.frame <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE, reverse = FALSE) {
+as.marray.data.frame <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE) {
   if (numeric) data <- data.matrix(data)
-  as.marray.default(as.matrix(data), dim = dim, dimnames = dimnames, order = order, numeric = numeric, reverse = reverse)
+  as.marray.default(as.matrix(data), dim = dim, dimnames = dimnames, order = order, numeric = numeric)
 }
 
 #' @rdname marray
 #' @export
-as.marray.list <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE, reverse = FALSE) {
+as.marray.list <- function(data, dim = NULL, dimnames = NULL, order = c("C", "F"), numeric = FALSE) {
   if (numeric) data <- list_as_numeric(data)
-  as.marray.default(array(unlist(data)), dim = dim, dimnames = dimnames, order = order, numeric = numeric, reverse = reverse)
-}
-
-#' @rdname marray
-#' @export
-is.marray <- function(x) {
-  # return(.deepANNClasses[["marray"]] %in% class(x))
-  return(inherits(x, .deepANNClasses[["marray"]]))
+  as.marray.default(array(unlist(data)), dim = dim, dimnames = dimnames, order = order, numeric = numeric)
 }
 
 #' @title Data flattening
@@ -350,8 +326,8 @@ squeeze <- function(a, axis = NULL, order = c("C", "F")) {
 #'
 #' @export
 mamatrix <- function(a, order = c("C", "F")) {
-  if (!((is.array(a) || is.marray(a)) && (deepANN::ndim(a) >= 2L)))
-    stop("x must be at least a two-dimensional array.")
+  if (!(is.array(a) && (deepANN::ndim(a) >= 2L)))
+    stop("a must be at least a two-dimensional array.")
   order <- match.arg(order)
   if (order == "C")
     apply(a, 2L, base::identity) # rbind()
@@ -678,7 +654,7 @@ insert <- function(a, ..., axis = -1L, order = c("C", "F")) {
   # Reshape x with the same dimension as a but replacing the axis dimension with 1
   if (nd > 1L) {
     d[axis] <- 1L
-    x <- lapply(x, FUN = deepANN::marray, dim = d, order = order)
+    x <- lapply(x, FUN = marray, dim = d, order = order)
   }
   # Just bind the arrays along axis
   mabind(append(x, list(a), 0L), axis = axis)
@@ -752,7 +728,7 @@ delete <- function(a, axis = 1L, order = c("C", "F")) {
 #'
 #' @return The array \code{a} with swapped dimensions.
 #'
-#' @seealso \code{\link{t}}.
+#' @seealso \code{\link{t}}, \code{\link{rearrange}}.
 #'
 #' @export
 transpose <- function(a, perm = NULL) {

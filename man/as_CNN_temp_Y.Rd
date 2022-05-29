@@ -4,14 +4,12 @@
 \alias{as_CNN_temp_Y}
 \title{Outcomes (Y) data format for a temporal CNN}
 \usage{
-as_CNN_temp_Y(y, timesteps = 1L, reverse = FALSE)
+as_CNN_temp_Y(y, timesteps = 1L)
 }
 \arguments{
 \item{y}{An outcome data set, usually a vector, matrix or data frame, returned by \code{get_LSTM_XY}.}
 
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{y}.}
-
-\item{reverse}{A logical value indicating the order of the values in the resampled outcome matrix \code{y}. The values can be in given order (forward in time) or in reverse order (backward in time).}
 }
 \value{
 Dependent on the type of \code{y} and timesteps. If \code{y} is a factor, the result is a one-hot vector.

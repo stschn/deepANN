@@ -4,15 +4,7 @@
 \alias{as_LSTM_data_frame}
 \title{Recreation of a data frame based on preformatted X and Y data sets}
 \usage{
-as_LSTM_data_frame(
-  x,
-  y,
-  xnames,
-  ynames,
-  timesteps = 1L,
-  reverse = FALSE,
-  suffix = "_t"
-)
+as_LSTM_data_frame(x, y, xnames, ynames, timesteps = 1L, suffix = "_t")
 }
 \arguments{
 \item{x}{A feature data set, usually a matrix or data frame, returned by \code{get_LSTM_XY}.}
@@ -24,8 +16,6 @@ as_LSTM_data_frame(
 \item{ynames}{Names of the outcomes.}
 
 \item{timesteps}{Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{x}.}
-
-\item{reverse}{Controls the order of the values in the resampled feature matrix \code{x} and the resampled outcome matrix \code{y}. By default they are used in the given order (forward in time), but they can also be used in reverse order (backward in time).}
 
 \item{suffix}{The suffix for every feature per timestep or period.}
 }

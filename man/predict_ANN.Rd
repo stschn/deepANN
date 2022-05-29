@@ -62,9 +62,16 @@ Predict with ANN model
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as_MLP_X}()},
 \code{\link{as_MLP_Y}()},
+\code{\link{as_tensor_1d}()},
+\code{\link{as_tensor_2d}()},
+\code{\link{as_tensor_3d}()},
 \code{\link{build_MLP}()},
 \code{\link{fit_MLP}()},
 \code{\link{load_weights_ANN}()},
+\code{\link{nsamples}()},
+\code{\link{nsubsequences}()},
+\code{\link{ntimesteps}()},
+\code{\link{nunits}()},
 \code{\link{save_weights_ANN}()}
 
 Other Recurrent Neural Network (RNN): 

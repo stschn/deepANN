@@ -225,7 +225,7 @@ as_CNN_image_Y <- function(y, encoding = c("one_hot", "sparse")) {
     return(m)
   }
   # Multi-label classification
-  else { return(as_tensor_2d(data.matrix(y))) }
+  else { return(as_tensor_2d(y)) }
 }
 
 #' @title Features (X) data format for a temporal CNN
@@ -235,15 +235,14 @@ as_CNN_image_Y <- function(y, encoding = c("one_hot", "sparse")) {
 #' @param x A feature data set, usually a matrix or data frame, returned by \code{get_LSTM_XY}.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled feature matrix \code{x}. If \code{subsequences} is given, \code{timesteps} is divided by \code{subsequences} to spawn the overall timesteps range (origin timesteps) within the result.
 #' @param subsequences Number of subsequences within the outcome tensor. Using a CNN without RNN layers like LSTM layers, the number of subsequences is \code{NULL} (default). Otherwise, this number must be an integer multiple of \code{timesteps} to keep the origin timesteps value. To avoid problems in this regard, using a value of \code{1} is a proper solution.
-#' @param reverse A logical value indicating the order of the values in the resampled feature matrix \code{x}. The values can be in given order (forward in time) or in reverse order (backward in time).
 #'
 #' @return A 3D-array with dimensions samples, timesteps and features or a 4D-array with dimensions samples, subsequences, timesteps and features.
 #'
 #' @seealso \code{\link{get_LSTM_XY}}, \code{\link{as_CNN_temp_Y}}.
 #'
 #' @export
-as_CNN_temp_X <- function(x, timesteps = 1L, subsequences = NULL, reverse = FALSE) {
-  tensor <- deepANN::as_LSTM_X(x, timesteps = timesteps, reverse = reverse)
+as_CNN_temp_X <- function(x, timesteps = 1L, subsequences = NULL) {
+  tensor <- deepANN::as_LSTM_X(x, timesteps)
   if (!is.null(subsequences)) {
     if (timesteps %% subsequences != 0) { stop("timesteps must be an integer multiple of subsequences.")}
     dim(tensor) <- c(nsamples(tensor), subsequences, as.integer(timesteps / subsequences), nunits(tensor))
@@ -257,7 +256,6 @@ as_CNN_temp_X <- function(x, timesteps = 1L, subsequences = NULL, reverse = FALS
 #'
 #' @param y An outcome data set, usually a vector, matrix or data frame, returned by \code{get_LSTM_XY}.
 #' @param timesteps Number of timesteps; stands for the number of different periods within one sample (record) of the result, the resampled outcome matrix \code{y}.
-#' @param reverse A logical value indicating the order of the values in the resampled outcome matrix \code{y}. The values can be in given order (forward in time) or in reverse order (backward in time).
 #'
 #' @return Dependent on the type of \code{y} and timesteps. If \code{y} is a factor, the result is a one-hot vector.
 #'   If \code{timesteps = NULL|1} a 2D-array with the dimensions samples and number of output units, representing a scalar outcome;
@@ -266,8 +264,8 @@ as_CNN_temp_X <- function(x, timesteps = 1L, subsequences = NULL, reverse = FALS
 #' @seealso \code{\link{get_LSTM_XY}}, \code{\link{as_CNN_temp_X}}.
 #'
 #' @export
-as_CNN_temp_Y <- function(y, timesteps = 1L, reverse = FALSE) {
-  return(deepANN::as_LSTM_Y(y, timesteps = timesteps, reverse = reverse))
+as_CNN_temp_Y <- function(y, timesteps = 1L) {
+  return(deepANN::as_LSTM_Y(y, timesteps))
 }
 
 # Predefined CNN architectures

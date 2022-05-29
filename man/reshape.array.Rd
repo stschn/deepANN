@@ -2,12 +2,9 @@
 % Please edit documentation in R/deepArray.r
 \name{reshape.array}
 \alias{reshape.array}
-\alias{reshape.marray}
 \title{Reshape an array}
 \usage{
 reshape.array(a, dim = NULL, order = c("C", "F"))
-
-reshape.marray(a, dim = NULL, order = c("C", "F"))
 }
 \arguments{
 \item{a}{An array.}
@@ -28,6 +25,8 @@ Reshape an array
 This function corresponds to \code{reshape()} from NumPy.
 }
 \seealso{
+\code{\link[reticulate]{array_reshape}}.
+
 Other Array: 
 \code{\link{DIM}()},
 \code{\link{column_stack}()},

@@ -7,7 +7,7 @@
 ndim(x)
 }
 \arguments{
-\item{x}{A multidimensional data structure like array, marray, tensor, matrix or data.frame.}
+\item{x}{A multidimensional data structure like array, matrix or data.frame.}
 }
 \value{
 Number of dimensions.
