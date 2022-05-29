@@ -247,7 +247,8 @@ probability <- function(x, ...) {
 
 #' @rdname probability
 #' @export
-probability.factor <- function(x, y, laplace = 0) {
+probability.character <- function(x, y, laplace = 0) {
+  y <- as.factor(y)
   # distribution <- table(y) / length(y)
   n <- nlevels(y)
   distribution <- sapply(levels(y), function(lvl) { (sum(y == lvl) + laplace) / (length(y) + (n * laplace)) })
@@ -258,8 +259,8 @@ probability.factor <- function(x, y, laplace = 0) {
 
 #' @rdname probability
 #' @export
-probability.character <- function(x, y, laplace = 0) {
-  probability.factor(as.factor(x), y, laplace)
+probability.factor <- function(x, y, laplace = 0) {
+  probability.character(as.character(x), y, laplace)
 }
 
 #' @rdname probability

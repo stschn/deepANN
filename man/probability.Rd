@@ -2,17 +2,17 @@
 % Please edit documentation in R/deepUtils.r
 \name{probability}
 \alias{probability}
-\alias{probability.factor}
 \alias{probability.character}
+\alias{probability.factor}
 \alias{probability.logical}
 \alias{probability.numeric}
 \title{Probability}
 \usage{
 probability(x, ...)
 
-\method{probability}{factor}(x, y, laplace = 0)
-
 \method{probability}{character}(x, y, laplace = 0)
+
+\method{probability}{factor}(x, y, laplace = 0)
 
 \method{probability}{logical}(x, y, laplace = 0)
 
