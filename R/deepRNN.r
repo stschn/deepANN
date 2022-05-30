@@ -510,7 +510,7 @@ predict_ANN <- function(model, x, batch_size = 1,
                         diff_type = NULL, timesteps = 1, lag = 0, differences = 1, invert_first_row = NULL, y = NULL,
                         type = "univariate") {
   Yhat <- model %>% predict(x, batch_size = batch_size)
-  num_dim <- deepANN::ndim(Yhat) # 2 without timesteps, 3 with timesteps
+  num_dim <- marray::ndim(Yhat) # 2 without timesteps, 3 with timesteps
   if (num_dim == 2L) { # useful for e.g. MLP or LSTM without sequence outcome
     if (!is.null(scale_type)) {
       if (scale_type == "minmax") {

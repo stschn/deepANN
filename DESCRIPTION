@@ -6,12 +6,15 @@ Author: person("Stephan", "Schneider", email = "stschn@vodafonemail.de", role = 
 Maintainer: Stephan Schneider <stschn@vodafonemail.de>
 Description: A Toolbox for Machine & Deep Learning mainly with Tensorflow
    SLP/MLP, RNN/LSTM, CNN.
-License: GPL-2
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/stschn/deepANN/
 Imports:
+   marray,
    reticulate (>= 1.16),
    tensorflow (>= 2.0.0),
    keras (>= 2.3.0.0)
+Remotes:
+   stschn/marray
 RoxygenNote: 7.2.0

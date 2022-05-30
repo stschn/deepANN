@@ -7,7 +7,7 @@
 #' @return Number of samples.
 #' @export
 nsamples <- function(a) {
-  deepANN::DIM(a)[1L]
+  marray::DIM(a)[1L]
 }
 
 #' @title Number of units within an array
@@ -21,7 +21,7 @@ nsamples <- function(a) {
 #' @return Number of units.
 #' @export
 nunits <- function(a) {
-  return((deepANN::DIM(a) -> d)[length(d)])
+  return((marray::DIM(a) -> d)[length(d)])
 }
 
 #' @title Number of timesteps within an array
@@ -34,8 +34,8 @@ nunits <- function(a) {
 #' @return Number of timesteps.
 #' @export
 ntimesteps <- function(a) {
-  #stopifnot("a must be at least a three-dimensional array." = deepANN::ndim(a) >= 3L)
-  if (deepANN::ndim(a) < 3L) return(0L)
+  #stopifnot("a must be at least a three-dimensional array." = marray::ndim(a) >= 3L)
+  if (marray::ndim(a) < 3L) return(0L)
   d <- dim(a)
   dl <- length(d)
   d[dl - 1L]
@@ -50,8 +50,8 @@ ntimesteps <- function(a) {
 #' @return Number of subsequences.
 #' @export
 nsubsequences <- function(a) {
-  #stopifnot("a must be at a four-dimensional array." = deepANN::ndim(a) == 4L)
-  if (deepANN::ndim(a) != 4L) return(0L)
+  #stopifnot("a must be at a four-dimensional array." = marray::ndim(a) == 4L)
+  if (marray::ndim(a) != 4L) return(0L)
   dim(a)[2L]
 }
 
@@ -68,7 +68,7 @@ nsubsequences <- function(a) {
 #'
 #' @export
 as_tensor_1d <- function(data, order = c("C", "F")) {
-  deepANN::flatten(data, order = order)
+  marray::flatten(data, order = order)
 }
 
 #' @title Transform data into a 2D tensor.
@@ -95,7 +95,7 @@ as_tensor_2d <- function(data) {
 #'
 #' @export
 as_tensor_3d <- function(data, timesteps = 1L) {
-  embedseries(data.matrix(data), length = timesteps, flip = TRUE)
+  marray::embedseries(data.matrix(data), length = timesteps, flip = TRUE)
 }
 
 #' @title Features (X) data format for SLP/MLP

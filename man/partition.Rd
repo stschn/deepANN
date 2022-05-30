@@ -33,16 +33,16 @@ Subset data set/time series into several slices
 If no column and between values are specified a typically split into two slices is done.
 }
 \examples{
-  df <- data.frame(date = as.Date(c("01.01.2021", "02.01.2021", "03.01.2021", "04.01.2021", "05.01.2021", "06.01.2021", "07.01.2021", "08.01.2021", "09.01.2021", "10.01.2021", "11.01.2021", "12.01.2021", "13.01.2021", "14.01.2021"), format = "\%d.\%m.\%Y"),
-                   value = sample(100, 14L))
-  library(keras)
-  c(train, test) \%<-\% partition(df, shuffle = T)
-  c(train, test1, test2, test3) \%<-\%
-    partition(df, column = "date",
-                  between = list(c(from = "2021-01-01", to = "2021-01-06"),
-                                 c(from = "2021-01-07", to = "2021-01-10"),
-                                 c(from = "2021-01-08", to = "2021-01-11"),
-                                 c(from = "2021-01-01")))
+df <- data.frame(date = as.Date(c("01.01.2021", "02.01.2021", "03.01.2021", "04.01.2021", "05.01.2021", "06.01.2021", "07.01.2021", "08.01.2021", "09.01.2021", "10.01.2021", "11.01.2021", "12.01.2021", "13.01.2021", "14.01.2021"), format = "\%d.\%m.\%Y"),
+                 value = sample(100, 14L))
+library(keras)
+c(train, test) \%<-\% partition(df, shuffle = T)
+c(train, test1, test2, test3) \%<-\%
+  partition(df, column = "date",
+                between = list(c(from = "2021-01-01", to = "2021-01-06"),
+                               c(from = "2021-01-07", to = "2021-01-10"),
+                               c(from = "2021-01-08", to = "2021-01-11"),
+                               c(from = "2021-01-01")))
 
 }
 \seealso{
