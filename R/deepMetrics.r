@@ -467,8 +467,8 @@ accuracy <- function(actuals, preds, type = c("standard", "misclass", "tpr", "tn
 #'
 #' @export
 dice <- function(actuals, preds, smooth = 1) {
-  actuals <- deepANN::flatten(actuals)
-  preds <- deepANN::flatten(preds)
+  actuals <- marray::flatten(actuals)
+  preds <- marray::flatten(preds)
   intersection <- sum(actuals * preds)
   union <- sum(actuals) + sum(preds)
   out <- (2 * intersection + smooth) / (union + smooth)
@@ -491,8 +491,8 @@ dice <- function(actuals, preds, smooth = 1) {
 #'
 #' @export
 iou <- function(actuals, preds, smooth = 1) {
-  actuals <- deepANN::flatten(actuals)
-  preds <- deepANN::flatten(preds)
+  actuals <- marray::flatten(actuals)
+  preds <- marray::flatten(preds)
   intersection <- sum(abs(actuals * preds))
   union <- sum(actuals) + sum(preds) - intersection
   out <- (intersection + smooth) / (union + smooth)
