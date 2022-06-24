@@ -161,9 +161,11 @@ diffinv_simple <- function(delta, origin) {
   }
   # The original series is iteratively be used for invert differencing
   else {
-    if (lo != ld) stop("length of deltas and origins are not equal.")
-    sums <- numeric(ld)
-    sums <- sapply(1L:lo, function(x) { sums[x] <- origin[x] + delta[x] })
+    # if (lo != ld) stop("length of deltas and origins are not equal.")
+    # sums <- numeric(ld)
+    # sums <- sapply(1L:lo, function(x) { sums[x] <- origin[x] + delta[x] })
+    stopifnot("the length of origin must be at least equal to the length of delta." = (lo >= ld))
+    sums <- origin[1L:ld] + delta
   }
   return(sums)
 }
@@ -213,9 +215,11 @@ diffinv_log <- function(delta, origin) {
   }
   # The original series is iteratively be used for invert differencing
   else {
-    if (lo != ld) stop("length of deltas and origins are not equal.")
-    invs <- numeric(ld)
-    invs <- sapply(1L:lo, function(i) { invs[i] <- exp(log(origin[i]) + delta[i]) })
+    # if (lo != ld) stop("length of deltas and origins are not equal.")
+    # invs <- numeric(ld)
+    # invs <- sapply(1L:lo, function(i) { invs[i] <- exp(log(origin[i]) + delta[i]) })
+    stopifnot("the length of origin must be at least equal to the length of delta." = (lo >= ld))
+    invs <- exp(log(origin[1L:ld]) + delta)
   }
   return(invs)
 }
@@ -264,9 +268,11 @@ diffinv_percentage <- function(delta, origin) {
   }
   # The original series is iteratively be used for invert differencing
   else {
-    if (lo != ld) stop("length of deltas and origins are not equal.")
-    invs <- numeric(ld)
-    invs <- sapply(1L:lo, function(i) { invs[i] <- (delta[i] + 1) * origin[i] })
+    # if (lo != ld) stop("length of deltas and origins are not equal.")
+    # invs <- numeric(ld)
+    # invs <- sapply(1L:lo, function(i) { invs[i] <- (delta[i] + 1) * origin[i] })
+    stopifnot("the length of origin must be at least equal to the length of delta." = (lo >= ld))
+    invs <- (delta + 1) * origin[1L:ld]
   }
   return(invs)
 }
