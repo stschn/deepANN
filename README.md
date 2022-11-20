@@ -150,18 +150,19 @@ This R library is currently structured in form of the following functional famil
   <li><code>as_CNN_image_Y()</code> creates a one-hot vector for the image labels.</li>
   <li><code>as_CNN_temp_X()</code> resamples a feature matrix into a 3D feature array with the dimensions samples, timesteps and units or into a 4D array with the dimensions samples, subsequences, timesteps and features.</li>
   <li><code>as_CNN_temp_Y()</code> creates either a 2D outcome array with the dimensions samples and units respectively a 3D array with dimensions samples, timesteps and units for a metric outcome or a one-hot vector for a non-metric outcome.</li>
-  <li><code>build_CNN_lenet5()</code> build a CNN model from type LeNet-5.</li>
-  <li><code>build_CNN_alexnet()</code> build a CNN model from type AlexNet.</li>
-  <li><code>build_CNN_zfnet()</code> build a CNN model from type ZFNet.</li>
-  <li><code>build_CNN_vgg16()</code> build a CNN model from type VGG-16.</li>
-  <li><code>build_CNN_vgg19()</code> build a CNN model from type VGG-19.</li>
-  <li><code>build_CNN_resnet50()</code> build a CNN model from type ResNet-50.</li>
-  <li><code>build_CNN_inception_v3()</code> build a CNN model from type Inception v3.</li>
-  <li><code>build_CNN_inception_resnet_v2()</code> build a CNN model from type Inception-ResNet v2.</li>
-  <li><code>build_CNN_mobilenet()</code> build a CNN model from type MobileNet.</li>
-  <li><code>build_CNN_mobilenet_v2()</code> build a CNN model from type MobileNetV2.</li>
-  <li><code>build_CNN_mobilenet_v3()</code> build a CNN model from type MobileNetV3.</li>
-  <li><code>build_CNN_xception()</code> build a CNN model from type Xception.</li>
-  <li><code>build_CNN_nasnet()</code> build a CNN model from type NASNet-A.</li>
-  <li><code>build_CNN_unet()</code> build a CNN model from type U-Net.</li>
+  <li><code>lenet5()</code> build a CNN model from type LeNet-5.</li>
+  <li><code>alexnet()</code> build a CNN model from type AlexNet.</li>
+  <li><code>zfnet()</code> build a CNN model from type ZFNet.</li>
+  <li><code>vgg16()</code> build a CNN model from type VGG-16.</li>
+  <li><code>vgg19()</code> build a CNN model from type VGG-19.</li>
+  <li><code>resnet50()</code> build a CNN model from type ResNet-50.</li>
+  <li><code>inception_v3()</code> build a CNN model from type Inception v3.</li>
+  <li><code>inception_resnet_v2()</code> build a CNN model from type Inception-ResNet v2.</li>
+  <li><code>mobilenet()</code> build a CNN model from type MobileNet.</li>
+  <li><code>mobilenet_v2()</code> build a CNN model from type MobileNetV2.</li>
+  <li><code>mobilenet_v3()</code> build a CNN model from type MobileNetV3.</li>
+  <li><code>xception()</code> build a CNN model from type Xception.</li>
+  <li><code>nasnet()</code> build a CNN model from type NASNet-A.</li>
+  <li><code>unet()</code> build a CNN model from type U-Net.</li>
+  <li><code>unet3d()</code> build a CNN model from type 3D U-Net.</li>
 </ul>

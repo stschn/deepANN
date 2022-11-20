@@ -17,4 +17,4 @@ Imports:
    keras (>= 2.3.0.0)
 Remotes:
    stschn/marray
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1

@@ -21,26 +21,25 @@ Create a one-hot vector for image labels (output)
 \code{\link{one_hot_encode}}, \code{\link{as_CNN_image_X}}
 
 Other Convolutional Neural Network (CNN): 
+\code{\link{alexnet}()},
 \code{\link{as_CNN_image_X}()},
 \code{\link{as_CNN_temp_X}()},
 \code{\link{as_CNN_temp_Y}()},
 \code{\link{as_images_array}()},
 \code{\link{as_images_tensor}()},
-\code{\link{build_CNN_alexnet}()},
-\code{\link{build_CNN_inception_resnet_v2}()},
-\code{\link{build_CNN_inception_v3}()},
-\code{\link{build_CNN_lenet5}()},
-\code{\link{build_CNN_mobilenet_v2}()},
-\code{\link{build_CNN_mobilenet_v3}()},
-\code{\link{build_CNN_mobilenet}()},
-\code{\link{build_CNN_nasnet}()},
-\code{\link{build_CNN_resnet50}()},
-\code{\link{build_CNN_unet}()},
-\code{\link{build_CNN_vgg16}()},
-\code{\link{build_CNN_vgg19}()},
-\code{\link{build_CNN_xception}()},
-\code{\link{build_CNN_zfnet}()},
 \code{\link{images_load}()},
-\code{\link{images_resize}()}
+\code{\link{images_resize}()},
+\code{\link{inception_resnet_v2}()},
+\code{\link{inception_v3}()},
+\code{\link{lenet5}()},
+\code{\link{mobilenet_v2}()},
+\code{\link{mobilenet_v3}()},
+\code{\link{mobilenet}()},
+\code{\link{nasnet}()},
+\code{\link{resnet}},
+\code{\link{unet}()},
+\code{\link{vgg}},
+\code{\link{xception}()},
+\code{\link{zfnet}()}
 }
 \concept{Convolutional Neural Network (CNN)}

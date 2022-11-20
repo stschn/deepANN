@@ -270,7 +270,7 @@ as_CNN_temp_Y <- function(y, timesteps = 1L) {
 
 # Predefined CNN architectures
 
-#' @title Build LeNet-5
+#' @title LeNet-5 model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -290,9 +290,10 @@ as_CNN_temp_Y <- function(y, timesteps = 1L) {
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_lenet5(include_top = FALSE)} \cr
+#'   \code{base_model <- lenet5(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -302,7 +303,7 @@ as_CNN_temp_Y <- function(y, timesteps = 1L) {
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_lenet5(input_tensor = blocks)}
+#'   \code{model <- lenet5(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type LeNet-5.
 #'
@@ -310,7 +311,7 @@ as_CNN_temp_Y <- function(y, timesteps = 1L) {
 #'   \url{http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf}
 #'
 #' @export
-build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+lenet5 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
   # Check for valid weights
   if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
     stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
@@ -366,7 +367,7 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
   return(model)
 }
 
-#' @title Build AlexNet
+#' @title AlexNet model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -386,9 +387,10 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_alexnet(include_top = FALSE)} \cr
+#'   \code{base_model <- alexnet(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -398,7 +400,7 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_alexnet(input_tensor = blocks)}
+#'   \code{model <- alexnet(input_tensor = blocks)}
 #'
 #' @return A CNN model object from typ AlexNet.
 #'
@@ -406,7 +408,7 @@ build_CNN_lenet5 <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   \url{https://papers.nips.cc/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf}
 #'
 #' @export
-build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+alexnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
   # Check for valid weights
   if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
     stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
@@ -486,7 +488,7 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
   return(model)
 }
 
-#' @title Build ZFNet
+#' @title ZFNet model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -506,9 +508,10 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_zfnet(include_top = FALSE)} \cr
+#'   \code{base_model <- zfnet(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -518,7 +521,7 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_zfnet(input_tensor = blocks)}
+#'   \code{model <- zfnet(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type ZFNet.
 #'
@@ -526,7 +529,7 @@ build_CNN_alexnet <- function(include_top = TRUE, weights = "imagenet", input_te
 #'   \url{https://arxiv.org/pdf/1311.2901.pdf}
 #'
 #' @export
-build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+zfnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
   # Check for valid weights
   if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
     stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
@@ -597,7 +600,8 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
   return(model)
 }
 
-#' @title Build VGG-16
+#' @title VGG models
+#' @description VGG16 and VGG19 models
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -617,9 +621,10 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_vgg16(include_top = FALSE)} \cr
+#'   \code{base_model <- vgg16(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -629,7 +634,7 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_vgg16(input_tensor = blocks)}
+#'   \code{model <- vgg16(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type VGG-16.
 #'
@@ -638,8 +643,10 @@ build_CNN_zfnet <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/vgg16.py}
 #'
+#' @rdname vgg
+#' @name vgg
 #' @export
-build_CNN_vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
   # Check for valid weights
   if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
     stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
@@ -714,49 +721,9 @@ build_CNN_vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tens
   return(model)
 }
 
-#' @title Build VGG-19
-#'
-#' @family Convolutional Neural Network (CNN)
-#'
-#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
-#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
-#' @param input_tensor Optional tensor to use as image input for the model.
-#' @param input_shape Dimensionality of the input not including the samples axis.
-#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
-#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
-#'
-#' @details The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 224x224x3 is used. \cr
-#'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
-#'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
-#'
-#'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
-#'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
-#'
-#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
-#'
-#'   \code{base_model <- build_CNN_vgg19(include_top = FALSE)} \cr
-#'   \code{base_model$trainable <- FALSE} \cr
-#'   \code{outputs <- base_model$output \%>\%} \cr
-#'   \code{layer_dense(units = 1, activation = "linear")} \cr
-#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
-#'
-#'   For a task with another input layer, use the following code template: \cr
-#'
-#'   \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
-#'   \code{blocks <- inputs \%>\% } \cr
-#'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
-#'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_vgg19(input_tensor = blocks)}
-#'
-#' @return A CNN model object from type VGG-19.
-#'
-#' @references Simonyan, K., Zisserman, A. (2015): Very Deep Convolutional Networks for Large-Scale Image Recognition. arXiv:1409.1556v6 [cs]. \url{http://arxiv.org/abs/1409.1556}. \cr
-#'   \url{https://arxiv.org/pdf/1409.1556.pdf} \cr
-#'
-#'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/vgg19.py}
-#'
+#' @rdname vgg
 #' @export
-build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
   # Check for valid weights
   if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
     stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
@@ -834,7 +801,7 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
   return(model)
 }
 
-#' @title Build ResNet-50
+#' @title ResNet models
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -854,9 +821,10 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_resnet50(include_top = FALSE)} \cr
+#'   \code{base_model <- resnet50(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -866,7 +834,7 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_resnet50(input_tensor = blocks)}
+#'   \code{model <- resnet50(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type ResNet-50.
 #'
@@ -876,8 +844,10 @@ build_CNN_vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tens
 #'
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/resnet50.py}
 #'
+#' @rdname resnet
+#' @name resnet
 #' @export
-build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+resnet50 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   # The identity block is the standard block used in ResNet. The input and output dimensions match up.
   .identity_block <- function(object, filters, kernel_size = c(3, 3), strides = c(1, 1)) {
@@ -1006,7 +976,12 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
   return(model)
 }
 
-#' @title Build Inception v3
+#' @rdname resnet
+#' @export
+resnet50_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+}
+
+#' @title Inception v3 model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1026,9 +1001,10 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_inception_v3(include_top = FALSE)} \cr
+#'   \code{base_model <- inception_v3(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -1038,7 +1014,7 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_inception_v3(input_tensor = blocks)}
+#'   \code{model <- inception_v3(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type Inception v3.
 #'
@@ -1048,7 +1024,7 @@ build_CNN_resnet50 <- function(include_top = TRUE, weights = "imagenet", input_t
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/inception_v3.py}
 #'
 #' @export
-build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   .conv2d_bn <- function(object, filters, kernel_size, strides = c(1, 1), padding = 'same') {
     object <- object %>%
@@ -1324,7 +1300,7 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
   return(model)
 }
 
-#' @title Build Inception-ResNet v2
+#' @title Inception-ResNet v2 model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1344,9 +1320,10 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_resnet_v2(include_top = FALSE)} \cr
+#'   \code{base_model <- resnet_v2(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -1356,7 +1333,7 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_resnet_v2(input_tensor = blocks)}
+#'   \code{model <- resnet_v2(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type Inception-ResNet v2.
 #'
@@ -1366,7 +1343,7 @@ build_CNN_inception_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/inception_resnet_v2.py}
 #'
 #' @export
-build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   .conv2d_bn <- function(object, filters, kernel_size, strides = 1, padding = 'same', activation = 'relu', use_bias = FALSE) {
     object <- object %>% keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = padding, use_bias = use_bias)
@@ -1535,7 +1512,7 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
   return(model)
 }
 
-#' @title Build MobileNet
+#' @title MobileNet model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1562,9 +1539,10 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_mobilenet(include_top = FALSE)} \cr
+#'   \code{base_model <- mobilenet(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -1574,7 +1552,7 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_mobilenet(input_tensor = blocks)}
+#'   \code{model <- mobilenet(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type MobileNet.
 #'
@@ -1584,7 +1562,7 @@ build_CNN_inception_resnet_v2 <- function(include_top = TRUE, weights = "imagene
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet.py}
 #'
 #' @export
-build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", alpha = 1.0, depth_multiplier = 1, dropout = 1e-3) {
+mobilenet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", alpha = 1.0, depth_multiplier = 1, dropout = 1e-3) {
 
   .conv_block <- function(object, filters, alpha, kernel_size = c(3, 3), strides = c(1, 1)) {
     filters <- as.integer(filters * alpha)
@@ -1682,7 +1660,7 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
   return(model)
 }
 
-#' @title Build MobileNetV2
+#' @title MobileNetV2 model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1707,9 +1685,10 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_mobilenet_v2(include_top = FALSE)} \cr
+#'   \code{base_model <- mobilenet_v2(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -1717,7 +1696,7 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_mobilenet_v2(input_tensor = blocks)}
+#'   \code{model <- mobilenet_v2(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type MobileNetV2.
 #'
@@ -1727,7 +1706,7 @@ build_CNN_mobilenet <- function(include_top = TRUE, weights = "imagenet", input_
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet_v2.py}
 #'
 #' @export
-build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape, classes = 1000, classifier_activation = "softmax", alpha = 1.0) {
+mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape, classes = 1000, classifier_activation = "softmax", alpha = 1.0) {
 
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
@@ -1866,7 +1845,7 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
   return(model)
 }
 
-#' @title Build MobileNetV3
+#' @title MobileNetV3 model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -1895,9 +1874,10 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_mobilenet_v3(include_top = FALSE)} \cr
+#'   \code{base_model <- mobilenet_v3(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -1905,7 +1885,7 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_mobilenet_v3(input_tensor = blocks)}
+#'   \code{model <- mobilenet_v3(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type MobileNetV3.
 #'
@@ -1915,7 +1895,7 @@ build_CNN_mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/mobilenet_v3.py}
 #'
 #' @export
-build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", type = c("large", "small"), minimalistic = FALSE, alpha = 1.0) {
+mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", type = c("large", "small"), minimalistic = FALSE, alpha = 1.0) {
 
   # Custom activation function
   activation_hard_sigmoid <- function(x, alpha = 0, max_value = 6., threshold = 0) {
@@ -2136,7 +2116,7 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
   return(model)
 }
 
-#' @title Build Xception
+#' @title Xception model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -2156,9 +2136,10 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_xception(include_top = FALSE)} \cr
+#'   \code{base_model <- xception(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -2166,7 +2147,7 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_xception(input_tensor = blocks)}
+#'   \code{model <- xception(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type Xception.
 #'
@@ -2176,7 +2157,7 @@ build_CNN_mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", inp
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/xception.py}
 #'
 #' @export
-build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
+xception <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   channel_axis <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
 
@@ -2308,7 +2289,7 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
   return(model)
 }
 
-#' @title Build NASNet-A
+#' @title NASNet-A model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -2346,9 +2327,10 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_nasnet(include_top = FALSE)} \cr
+#'   \code{base_model <- nasnet(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -2356,7 +2338,7 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_nasnet(input_tensor = blocks)}
+#'   \code{model <- nasnet(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type NASNet-A.
 #'
@@ -2366,7 +2348,7 @@ build_CNN_xception <- function(include_top = TRUE, weights = "imagenet", input_t
 #'   see also \url{https://github.com/keras-team/keras-applications/blob/master/keras_applications/nasnet.py}
 #'
 #' @export
-build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", default_size = NULL, penultimate_filters = 4032, num_blocks = 6, stem_block_filters = 96, skip_reduction = TRUE, filter_multiplier = 2) {
+nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax", default_size = NULL, penultimate_filters = 4032, num_blocks = 6, stem_block_filters = 96, skip_reduction = TRUE, filter_multiplier = 2) {
 
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
@@ -2581,7 +2563,7 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
   return(model)
 }
 
-#' @title Build U-Net
+#' @title U-Net model
 #'
 #' @family Convolutional Neural Network (CNN)
 #'
@@ -2604,9 +2586,10 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'
 #'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 #'
-#'   \code{base_model <- build_CNN_unet(include_top = FALSE)} \cr
+#'   \code{base_model <- unet(include_top = FALSE)} \cr
 #'   \code{base_model$trainable <- FALSE} \cr
 #'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_flatten()} \cr
 #'   \code{layer_dense(units = 1, activation = "linear")} \cr
 #'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 #'
@@ -2614,7 +2597,7 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   \code{blocks <- inputs \%>\% } \cr
 #'   \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
 #'   \code{layer_max_pooling_2d()} \cr
-#'   \code{model <- build_CNN_unet(input_tensor = blocks)}
+#'   \code{model <- unet(input_tensor = blocks)}
 #'
 #' @return A CNN model object from type U-Net.
 #'
@@ -2622,7 +2605,7 @@ build_CNN_nasnet <- function(include_top = TRUE, weights = "imagenet", input_ten
 #'   see also: \url{https://arxiv.org/pdf/1505.04597.pdf} \cr
 #'
 #' @export
-build_CNN_unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, dropout = 0.5, filters = 64, num_layers = 4, classes = 1, classifier_activation = "sigmoid") {
+unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, dropout = 0.5, filters = 64, num_layers = 4, classes = 1, classifier_activation = "sigmoid") {
 
   .conv2d_block <- function(object, use_batch_norm = TRUE, dropout = 0.3, filters = 16, kernel_size = c(3, 3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same') {
     x <- object %>%
@@ -2753,6 +2736,117 @@ build_CNN_unet <- function(include_top = TRUE, weights = "imagenet", input_tenso
     inputs <- keras::keras$utils$get_source_inputs(input_tensor)
   # Create model
   model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "UNet")
+
+  # Load weights
+  if (weights == "imagenet") {
+    # must yet be implemented
+  } else {
+  if (!is.null(weights)) {
+    if (is.array(weights)) {
+      model %>% keras::set_weights(weights)
+    } else {
+    if (is.character(weights)) {
+      model %>% keras::load_model_weights_tf(weights)
+    }}
+  }}
+
+  return(model)
+}
+
+#' @title 3D U-Net model
+#'
+#' @param include_top Whether to include the fully-connected layer at the top of the network. A model without a top will output activations from the last convolutional or pooling layer directly.
+#' @param weights One of \code{NULL} (random initialization), \code{'imagenet'} (pre-trained weights), an \code{array}, or the path to the weights file to be loaded.
+#' @param input_tensor Optional tensor to use as image input for the model.
+#' @param input_shape Dimensionality of the input not including the samples axis.
+#' @param dropout Dropout rate applied between downsampling and upsampling phases.
+#' @param filters Number of filters of the first convolution.
+#' @param num_layers Number of downsizing blocks in the encoder.
+#' @param classes Optional number of classes or labels to classify images into, only to be specified if \code{include_top = TRUE}.
+#' @param classifier_activation A string or callable for the activation function to use on top layer, only if \code{include_top = TRUE}.
+#'
+#' @details The \code{input shape} is usually \code{c(height, width, depth, channels)} for a 3D image but this is depending on the given image.
+#'   The image array can also be given in the shape \code{x, y, z}, so width x height x depth. That doesn't really matter whether height or weight are interchanged.
+#'   If no input shape is specified the default shape 132x132x116x3 is used. \cr
+#'   The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
+#'   one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
+#'
+#'   For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
+#'   For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+#'
+#'   For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+#'
+#'   \code{base_model <- unet3d(include_top = FALSE)} \cr
+#'   \code{base_model$trainable <- FALSE} \cr
+#'   \code{outputs <- base_model$output \%>\%} \cr
+#'   \code{layer_dense(units = 1, activation = "linear")} \cr
+#'   \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+#'
+#'   \code{inputs <- layer_input(shape = c(512, 512, 128, 1))} \cr
+#'   \code{blocks <- inputs \%>\% } \cr
+#'   \code{layer_conv_3d_transpose(filters = 3, kernel_size = c(1, 1, 1)) \%>\%} \cr
+#'   \code{layer_max_pooling_3d()} \cr
+#'   \code{model <- unet3d(input_tensor = blocks)}
+#'
+#' @return A CNN model object from type 3D U-Net.
+#'
+#' @references  Ronneberger, O., Fischer, P., Brox T. (2015): U-Net: Convolutional Networks f?r Biomedical Image Segmentation. In: Navab, N., Hornegger, J., Wells, W., Frangi, A. (Hrsg.): Medical Image Computing and Computer-Assisted Intervention - MICCAI 2015. Lecture Notes in Computer Science, vol 9351. Part III. pp. 234-241. Cham: Springer. \url{https://doi.org/10.1007/978-3-319-24574-4_28}. \cr
+#'   see also: \url{https://arxiv.org/pdf/1505.04597.pdf} \cr
+#'   For an implementation in Python see \href{https://www.kaggle.com/code/kmader/unet-conv3d-baseline/notebook}{here}.
+#'
+#' @export
+unet3d <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, dropout = 0.5, filters = 64, num_layers = 4, classes = 1, classifier_activation = "sigmoid") {
+  # Check for valid weights
+  if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
+    stop("The 'weights' argument should be either NULL (random initialization), imagenet (pre-training on ImageNet), an array, or the path to the weights file to be loaded.") }
+
+  # Determine proper input shape
+  if (is.null(input_shape)) input_shape <- c(132, 132, 116, 3)
+
+  # Input layer
+  if (is.null(input_tensor)) {
+    inputs <- keras::layer_input(shape = input_shape)
+  } else {
+  if (!keras::k_is_keras_tensor(input_tensor))
+    inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+  else
+    inputs <- input_tensor
+  }
+
+  # Building blocks
+  bn <- inputs %>% keras::layer_batch_normalization()
+  cn1 <- bn %>% keras::layer_conv_3d(filters = 8, kernel_size = c(1, 5, 5), padding = "same", activation = "relu")
+  cn2 <- cn1 %>% keras::layer_conv_3d(filters = 8, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
+  bn2 <- cn2 %>% keras::layer_batch_normalization() %>% keras::layer_activation(activation = "relu")
+
+  dn1 <- bn2 %>% keras::layer_max_pooling_3d(pool_size = c(2, 2, 2))
+  cn3 <- dn1 %>% keras::layer_conv_3d(filters = 16, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
+  bn3 <- cn3 %>% keras::layer_batch_normalization() %>% keras::layer_activation(activation = "relu")
+
+  dn2 <- bn3 %>% keras::layer_max_pooling_3d(pool_size = c(1, 2, 2))
+  cn4 <- dn2 %>% keras::layer_conv_3d(filters = 16, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
+  bn4 <- cn4 %>% keras::layer_batch_normalization() %>% keras::layer_activation(activation = "relu")
+
+  up1 <- bn4 %>% keras::layer_conv_3d_transpose(filters = 16, kernel_size = c(3, 3, 3), strides = c(1, 2, 2), padding = "same")
+  cat1 <- keras::layer_concatenate(list(up1, bn3))
+  up2 <- cat1 %>% keras::layer_conv_3d_transpose(filters = 8, kernel_size = c(3, 3, 3), strides = c(2, 2, 2), padding = "same")
+  cat2 <- keras::layer_concatenate(list(up2, bn2))
+
+  blocks <- cat2
+
+  if (include_top) {
+    # Classification block
+    blocks <- blocks %>%
+      keras::layer_conv_3d(filters = classes, kernel_size = c(1, 1, 1), padding = "same", activation = classifier_activation) %>%
+      keras::layer_cropping_3d(cropping = c(1, 2, 2)) %>% # avoid skewing boundaries
+      keras::layer_zero_padding_3d(padding = c(1, 2, 2))
+  }
+
+  # Ensure that the model takes into account any potential predecessors of input_tensor
+  if (!is.null(input_tensor))
+    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+  # Create model
+  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "UNet3D")
 
   # Load weights
   if (weights == "imagenet") {
