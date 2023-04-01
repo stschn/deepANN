@@ -9,20 +9,23 @@ accuracy(
   preds,
   type = c("standard", "misclass", "tpr", "tnr", "ppv", "npv", "fnr", "fpr", "fdr",
     "for", "lrplus", "lrminus", "dor", "ts", "f1", "mcc", "fm", "kappa"),
+  compound = FALSE,
   na.rm = FALSE
 )
 }
 \arguments{
-\item{actuals}{Numeric data (vector, array, matrix, data frame or list) of actual values.}
+\item{actuals}{Numeric data (vector, array, matrix, data frame or list) of ground truth (actual) values.}
 
-\item{preds}{Numeric data (vector, array, matrix, data frame or list) of prediction values.}
+\item{preds}{Numeric data (vector, array, matrix, data frame or list) of predicted values.}
 
 \item{type}{Denotes the calculated type of accuracy derivative from confusion matrix.}
+
+\item{compound}{A logical value indicating whether the metric score is calculated for each label (default \code{FALSE}) or across all labels (\code{TRUE}).}
 
 \item{na.rm}{A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.}
 }
 \value{
-The type-specific accuracy of a classification problem.
+The type-specific accuracy score of a classification problem.
 }
 \description{
 Classification accuracy
@@ -51,6 +54,12 @@ The following accuracy types are implemented:
   }
 
   Standard accuracy and misclassification error are mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
+}
+\examples{
+accuracy(actuals = c(rep("A", 6), rep("B", 6), rep("C", 6)),
+         preds = c(rep("A", 4), "B", "C", rep("B", 5), "A", rep("C", 6)),
+         type = "standard")
+
 }
 \seealso{
 Other Metrics: 
