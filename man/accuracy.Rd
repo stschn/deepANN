@@ -7,6 +7,7 @@
 accuracy(
   actuals,
   preds,
+  categories = NULL,
   type = c("standard", "misclass", "tpr", "tnr", "ppv", "npv", "fnr", "fpr", "fdr",
     "for", "lrplus", "lrminus", "dor", "ts", "f1", "mcc", "fm", "kappa"),
   compound = FALSE,
@@ -17,6 +18,8 @@ accuracy(
 \item{actuals}{Numeric data (vector, array, matrix, data frame or list) of ground truth (actual) values.}
 
 \item{preds}{Numeric data (vector, array, matrix, data frame or list) of predicted values.}
+
+\item{categories}{Categories (unique values) for \code{actuals} and \code{preds}. If \code{NULL} (default), the sorted values within \code{actuals} are used.}
 
 \item{type}{Denotes the calculated type of accuracy derivative from confusion matrix.}
 

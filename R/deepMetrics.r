@@ -325,6 +325,7 @@ coerce_dimension <- function(x) {
 #'
 #' @param actuals Numeric data (vector, array, matrix, data frame or list) of ground truth (actual) values.
 #' @param preds Numeric data (vector, array, matrix, data frame or list) of predicted values.
+#' @param categories Categories (unique values) for \code{actuals} and \code{preds}. If \code{NULL} (default), the sorted values within \code{actuals} are used.
 #' @param type Denotes the calculated type of accuracy derivative from confusion matrix.
 #' @param compound A logical value indicating whether the metric score is calculated for each label (default \code{FALSE}) or across all labels (\code{TRUE}).
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
@@ -361,7 +362,7 @@ coerce_dimension <- function(x) {
 #'          type = "standard")
 #'
 #' @export
-accuracy <- function(actuals, preds, type = c("standard", "misclass", "tpr", "tnr", "ppv", "npv", "fnr", "fpr", "fdr", "for", "lrplus", "lrminus", "dor", "ts", "f1", "mcc", "fm", "kappa"), compound = FALSE, na.rm = FALSE) {
+accuracy <- function(actuals, preds, categories = NULL, type = c("standard", "misclass", "tpr", "tnr", "ppv", "npv", "fnr", "fpr", "fdr", "for", "lrplus", "lrminus", "dor", "ts", "f1", "mcc", "fm", "kappa"), compound = FALSE, na.rm = FALSE) {
   type <- match.arg(type)
   actuals <- marray::marray(actuals)
   preds <- marray::marray(preds)
@@ -369,7 +370,27 @@ accuracy <- function(actuals, preds, type = c("standard", "misclass", "tpr", "tn
   #if (ndim(actuals) == 1L) actuals <- reshape.array(actuals, dim = c(-1, 1))
   #if (ndim(preds) == 1L) preds <- reshape.array(preds, dim = c(-1, 1))
 
-  confusion_matrix <- as.matrix(table(actuals, preds))
+  # There's a dispatcher for class table in marray
+  confusion_matrix <- marray(table(actuals, preds))
+
+  # Extend confusion matrix if predicted values are missing regarding to actual values
+  if (is.null(categories)) {
+    vactuals <- sort(unique(actuals))
+  } else {
+    stopifnot("categories must be of the same length as actuals." = length(unique(marray::flatten(actuals))) == length(categories))
+    vactuals <- categories
+  }
+  vpreds <- unique(preds)
+  missings <- setdiff(vactuals, vpreds)
+  if (length(missings)) {
+    cm <- marray::zeros(dim = c(length(vactuals), length(vactuals)))
+    idx <- seq_along(vactuals)[-which(vactuals %in% missings)]
+    marray::slice(cm, j = idx) <- confusion_matrix
+    dimnames(cm) <- list(actuals = vactuals, preds = vactuals)
+    confusion_matrix <- cm
+  }
+
+  # Compute basic metrics
   true_positives <- diag(confusion_matrix)
   false_positives <- colSums(confusion_matrix) - true_positives
   false_negatives <- rowSums(confusion_matrix) - true_positives
