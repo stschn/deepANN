@@ -371,7 +371,7 @@ accuracy <- function(actuals, preds, categories = NULL, type = c("standard", "mi
   #if (ndim(preds) == 1L) preds <- reshape.array(preds, dim = c(-1, 1))
 
   # There's a dispatcher for class table in marray
-  confusion_matrix <- marray(table(actuals, preds))
+  confusion_matrix <- marray::marray(table(actuals, preds))
 
   # Extend confusion matrix if predicted values are missing regarding to actual values
   if (is.null(categories)) {
