@@ -41,25 +41,21 @@ dummify <- function(dataset, columns = NULL, remove_level = c("first", "last", "
     lvl <- as.character(lvl) # The levels which are dummified
     values <- dataset[[col_name]] # The occurrences of the levels within a column
     if (length(lvl) > 1L) {
-      if (remove_level == "first") {
-        lvl <- lvl[-1]
-      } else {
-      if (remove_level == "last") {
-        lvl <- lvl[-length(lvl)]
-      } else {
-      if (remove_level == "most") {
-        lvl.max <- names(which.max(table(values))) # majority level
-        lvl <- lvl[-which(lvl == lvl.max)]
-      } else {
-      if (remove_level == "least") {
-        lvl.min <- names(which.min(table(values))) # minority level
-        lvl <- lvl[-which(lvl == lvl.min)]
-      }}}}
+      switch(remove_level,
+        first = { lvl <- lvl[-1] },
+        last = { lvl <- lvl[-length(lvl)] },
+        most = {
+          lvl.max <- names(which.max(table(values))) # majority level
+          lvl <- lvl[-which(lvl == lvl.max)] },
+        least = {
+          lvl.min <- names(which.min(table(values))) # minority level
+          lvl <- lvl[-which(lvl == lvl.min)] }
+      )
     }
     dummies <- sapply(lvl, function(l) {
       ifelse(values == l, 1, zero_value)
     })
-    colnames(dummies) <- do.call(paste0, list(rep(col_name, length(lvl)), "_", lvl))
+    colnames(dummies) <- do.call(paste0, list(col_name, "_", lvl))
     dataset <- cbind(dataset, as.data.frame(dummies))
     if (remove_columns == TRUE) dataset[[col_name]] <- NULL
   }

@@ -325,7 +325,6 @@ coerce_dimension <- function(x) {
 #'
 #' @param actuals Numeric data (vector, array, matrix, data frame or list) of ground truth (actual) values.
 #' @param preds Numeric data (vector, array, matrix, data frame or list) of predicted values.
-#' @param categories Categories (unique values) for \code{actuals} and \code{preds}. If \code{NULL} (default), the sorted values within \code{actuals} are used.
 #' @param type Denotes the calculated type of accuracy derivative from confusion matrix.
 #' @param compound A logical value indicating whether the metric score is calculated for each label (default \code{FALSE}) or across all labels (\code{TRUE}).
 #' @param na.rm A logical value indicating whether actual and prediction pairs with at least one NA value should be ignored.
@@ -361,11 +360,21 @@ coerce_dimension <- function(x) {
 #'          preds = c(rep("A", 4), "B", "C", rep("B", 5), "A", rep("C", 6)),
 #'          type = "standard")
 #'
+#' # preds does not cover all categories of actuals
+#' accuracy(actuals = c(rep("A", 6), rep("B", 6), rep("C", 6)),
+#'          preds = c(rep("A", 10), rep("C", 8)),
+#'          type = "tpr")
+#'
 #' @export
-accuracy <- function(actuals, preds, categories = NULL, type = c("standard", "misclass", "tpr", "tnr", "ppv", "npv", "fnr", "fpr", "fdr", "for", "lrplus", "lrminus", "dor", "ts", "f1", "mcc", "fm", "kappa"), compound = FALSE, na.rm = FALSE) {
+accuracy <- function(actuals, preds, type = c("standard", "misclass", "tpr", "tnr", "ppv", "npv", "fnr", "fpr", "fdr", "for", "lrplus", "lrminus", "dor", "ts", "f1", "mcc", "fm", "kappa"), compound = FALSE, na.rm = FALSE) {
+  actuals <- as.factor(actuals)
+  categories_actuals <- levels(actuals)
+  preds <- as.factor(preds)
+  categories_preds <- levels(preds)
+
   type <- match.arg(type)
-  actuals <- marray::marray(actuals)
-  preds <- marray::marray(preds)
+  actuals <- marray::marray(actuals, encode = NULL)
+  preds <- marray::marray(preds, encode = NULL)
   stopifnot("actuals and preds must be of same shape." = marray::DIM(actuals) == marray::DIM(preds))
   #if (ndim(actuals) == 1L) actuals <- reshape.array(actuals, dim = c(-1, 1))
   #if (ndim(preds) == 1L) preds <- reshape.array(preds, dim = c(-1, 1))
@@ -373,20 +382,13 @@ accuracy <- function(actuals, preds, categories = NULL, type = c("standard", "mi
   # There's a dispatcher for class table in marray
   confusion_matrix <- marray::marray(table(actuals, preds))
 
-  # Extend confusion matrix if predicted values are missing regarding to actual values
-  if (is.null(categories)) {
-    vactuals <- sort(unique(actuals))
-  } else {
-    stopifnot("categories must be of the same length as actuals." = length(unique(marray::flatten(actuals))) == length(categories))
-    vactuals <- categories
-  }
-  vpreds <- unique(preds)
-  missings <- setdiff(vactuals, vpreds)
+  # Extend confusion matrix if categories within preds are missing regarding to categories of actuals
+  missings <- setdiff(categories_actuals, categories_preds)
   if (length(missings)) {
-    cm <- marray::zeros(dim = c(length(vactuals), length(vactuals)))
-    idx <- seq_along(vactuals)[-which(vactuals %in% missings)]
+    cm <- marray::zeros(dim = c(length(categories_actuals), length(categories_actuals)))
+    idx <- seq_along(categories_actuals)[-which(categories_actuals %in% missings)]
     marray::slice(cm, j = idx) <- confusion_matrix
-    dimnames(cm) <- list(actuals = vactuals, preds = vactuals)
+    dimnames(cm) <- list(actuals = categories_actuals, preds = categories_actuals)
     confusion_matrix <- cm
   }
 
