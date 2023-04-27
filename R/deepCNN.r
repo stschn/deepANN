@@ -32,16 +32,16 @@ images_load <- function(images, FUN, ...) {
       if (!any(unlist(lapply(list(height, width), is.null)))) target_size <- c(height, width) else target_size <- NULL
 
       if (any(names_channel %in% names(params))) channels <- params[[which(names(params) %in% names_channel)[1L]]] else channels <- 3L
-      if (is.numeric(channels)) grayscale <- ifelse(channels == 1L, TRUE, FALSE) else grayscale <- ifelse(any(c("gray", "grayscale", "blackwhite") %in% channels), TRUE, FALSE)
+      if (is.numeric(channels)) color_mode <- ifelse(channels == 1L, "grayscale", "rgb") else color_mode <- ifelse(any(c("gray", "grayscale", "blackwhite") %in% channels), "grayscale", "rgb")
 
       if (any(names_interpolation %in% names(params))) interpolation <- params[[which(names(params) %in% names_interpolation)[1L]]] else interpolation <- "nearest"
     } else {
       target_size <- NULL
-      grayscale <- FALSE
+      color_mode <- "grayscale"
       interpolation <- "nearest"
     }
     # By default, image_load() from keras is called
-    img_list <- lapply(images, function(img_name) { keras::image_load(img_name, grayscale = grayscale, target_size = target_size, interpolation = interpolation) })
+    img_list <- lapply(images, function(img_name) { keras::image_load(img_name, color_mode = color_mode, target_size = target_size, interpolation = interpolation) })
   }
   return(img_list)
 }
