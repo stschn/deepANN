@@ -16,12 +16,12 @@ A matrix with all levels as columns with either \code{0} or \code{1} values.
 }
 \description{
 \code{one_hot_encode} rebuilds a categorical variable to a so-called 'one-hot vector'.
-  Within a sample (row) of a one-hot vector (matrix) each level of the variable is rebuild in the binary form \code{(0|1,0|1,0|1,...)}.
+Within a sample (row) of a one-hot vector (matrix) each level of the variable is rebuild in the binary form \code{(0|1,0|1,0|1,...)}.
 }
 \details{
 An unordered encoding creates an indicator matrix with the value \code{1} only for the given level of \code{x} and \code{0} for all other levels.
-  In opposite, an ordered encoding assumes an intrinsic order of all levels whereby a given level automatically means reaching and exceeding all previous levels.
-  In that case, all previous levels are also encoded with value \code{1}.
+In opposite, an ordered encoding assumes an intrinsic order of all levels whereby a given level automatically means reaching and exceeding all previous levels.
+In that case, all previous levels are also encoded with value \code{1}.
 }
 \examples{
   x <- factor(sample(lvls <- c("dog", "cat", "mouse"), 10, TRUE), levels = lvls)

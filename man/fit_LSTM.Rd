@@ -47,7 +47,7 @@ A trained model object.
 }
 \seealso{
 \code{\link{build_LSTM}}, \code{\link{get_LSTM_XY}},
-  \code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
+\code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as_LSTM_X}()},

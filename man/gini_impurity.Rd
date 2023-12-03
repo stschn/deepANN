@@ -17,8 +17,8 @@ Gini impurity
 }
 \details{
 Gini impurity is the probability of how often a randomly chosen element from a set \code{x} would be
-  incorrectly labeled if it was randomly labeled according to the distribution of labels in the set. So, impurity is
-  the probability of being incorrect if a label is randomly assigned to a sample of \code{x}.
+incorrectly labeled if it was randomly labeled according to the distribution of labels in the set. So, impurity is
+the probability of being incorrect if a label is randomly assigned to a sample of \code{x}.
 }
 \examples{
   gini_impurity(c("dog", "dog", "cat", "mouse"))

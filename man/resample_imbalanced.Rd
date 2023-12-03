@@ -26,7 +26,7 @@ resample_imbalanced(
 
 \item{type}{The technique to be used for creating a balanced data set.\cr
 \code{oversampling}: copy \code{n} rows of minority class (under-represented category)\cr
-\code{undersampling}: delete \code{n}% rows of majority class (over-represented category)\cr
+\code{undersampling}: delete \code{n}\% rows of majority class (over-represented category)\cr
 \code{smote}: Synthetic Minority Oversampling Technique (SMOTE): create \code{n} synthetic rows of minority class of \code{k} nearest neighbors}
 }
 \value{
@@ -37,8 +37,8 @@ A balanced data set.
 }
 \references{
 Chawla, Nitesh V., Bowyer, Kevin W., Hall, Lawrence O., Kegelmeyer, W. Philip (2002): SMOTE: Synthetic Minority Over-sampling Technique. In: Journal of Artificial Intelligence Research, 16 (2002), 321-357. https://doi.org/10.1613/jair.953;
- \url{https://www.cs.cmu.edu/afs/cs/project/jair/pub/volume16/chawla02a-html/chawla2002.html},
- \url{http://rikunert.com/SMOTE_explained}.
+\url{https://www.cs.cmu.edu/afs/cs/project/jair/pub/volume16/chawla02a-html/chawla2002.html},
+\url{http://rikunert.com/SMOTE_explained}.
 }
 \seealso{
 Other Dummifying: 

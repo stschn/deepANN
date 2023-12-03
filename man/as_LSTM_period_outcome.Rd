@@ -25,16 +25,16 @@ as_LSTM_period_outcome(
 }
 \value{
 A data frame with \code{columns} that can be used for quality assurance or
-  for graphical representation together with the predicted values produced by \code{predict_LSTM}.
+for graphical representation together with the predicted values produced by \code{predict_LSTM}.
 }
 \description{
 Extract columns from a data frame under consideration of time series type, timesteps and lags.
 }
 \details{
 Within time series analysis, \code{get_LSTM_XY} extracts X and Y of a matrix or data frame in a LSTM compatible preformat.
-  Then, these values are resampled thru \code{as_LSTM_X} and \code{as_LSTM_Y}. During extraction, the period shift is calculated
-  to determine the number of past periods which are used to extract X values for Y description/prediction. Because of this number
-  of periods cannot be used to extract Y values, this number must be deleted from \code{dataset}.
+Then, these values are resampled thru \code{as_LSTM_X} and \code{as_LSTM_Y}. During extraction, the period shift is calculated
+to determine the number of past periods which are used to extract X values for Y description/prediction. Because of this number
+of periods cannot be used to extract Y values, this number must be deleted from \code{dataset}.
 }
 \seealso{
 \code{\link{get_LSTM_XY}}, \code{\link{get_period_shift}}, \code{\link{predict_ANN}}.

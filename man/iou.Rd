@@ -21,8 +21,8 @@ Intersection-over-Union (IoU, Jaccard Index)
 }
 \details{
 This metric is used for evaluation of the results within image segmentation. \code{actuals} as well as \code{preds} are binary encoded
-  image data masks in form of a n-dimensional array, mainly a two-dimensional array with the dimensions height and width for every channel. A value of
-  \code{1} indicates the background (e.g. white color), a value equal \code{0} indicates the object (e.g. black color).
+image data masks in form of a n-dimensional array, mainly a two-dimensional array with the dimensions height and width for every channel. A value of
+\code{1} indicates the background (e.g. white color), a value equal \code{0} indicates the object (e.g. black color).
 }
 \seealso{
 Other Metrics: 

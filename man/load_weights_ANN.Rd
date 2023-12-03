@@ -19,7 +19,7 @@ Load model weights from file
 }
 \seealso{
 \code{\link{save_weights_ANN}}, \code{\link[base]{files}},
-  \code{\link[keras]{save_model_weights_hdf5}}.
+\code{\link[keras]{save_model_weights_hdf5}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as_MLP_X}()},

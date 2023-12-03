@@ -38,15 +38,15 @@ Naive Bayes
 }
 \details{
 The Naive Bayes model is based on Bayes' theorem: \eqn{P(A|B) = P(B|A) * P(A) / P(B)}\cr
-  Adopted to a classification problem, the equation is: \eqn{P(y=k|X) = P(X|y=k) * P(y=k) / P(X)}, whereby
-  \itemize{
-  \item \eqn{P(y=k|X)} is the conditional probability of \code{y=k} given a feature set \code{X}. This probability is also called posterior probability.
-  \item \eqn{P(X|y=k)} is the conditional probability of \code{X} given a specific category \code{k} of \code{y}. This probability is also called the probability of likelihood of evidence.
-  \item \eqn{P(y=k)} is the probability that \code{y} takes the value \code{k}. This probability is also called the prior probability.
-  \item \eqn{P(X)} is the probability that features \code{X} have the given values. This probability is also called the probability of evidence.
-    This probability is constant for every value of \code{y}, and therefore it will not affect the posterior probabilities. For reasons of simplification, the probability of evidence will be ignored in computation.
-    The result without probability of evidence is no longer strictly a probability. The calculated largest value is used for class prediction.
-  }
+Adopted to a classification problem, the equation is: \eqn{P(y=k|X) = P(X|y=k) * P(y=k) / P(X)}, whereby
+\itemize{
+\item \eqn{P(y=k|X)} is the conditional probability of \code{y=k} given a feature set \code{X}. This probability is also called posterior probability.
+\item \eqn{P(X|y=k)} is the conditional probability of \code{X} given a specific category \code{k} of \code{y}. This probability is also called the probability of likelihood of evidence.
+\item \eqn{P(y=k)} is the probability that \code{y} takes the value \code{k}. This probability is also called the prior probability.
+\item \eqn{P(X)} is the probability that features \code{X} have the given values. This probability is also called the probability of evidence.
+This probability is constant for every value of \code{y}, and therefore it will not affect the posterior probabilities. For reasons of simplification, the probability of evidence will be ignored in computation.
+The result without probability of evidence is no longer strictly a probability. The calculated largest value is used for class prediction.
+}
 }
 \examples{
   # Continuous features

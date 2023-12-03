@@ -21,10 +21,10 @@ Period shift
 }
 \details{
 The period shift denotes the number of past periods starting from a certain period t, whose values of X are needed
-  to describe Y in period t and which cannot be used to extract Y values. This number of past periods depends on the type of
-  timeseries (univariate or multivariate), the number of timesteps and the underpinned number of lags. In other words, the
-  period shift is the number of periods to go backwards to get features (X) for outcomes (Y) or as a question: how many samples
-  get lost respectively must be used as X for Y description/prediction?
+to describe Y in period t and which cannot be used to extract Y values. This number of past periods depends on the type of
+timeseries (univariate or multivariate), the number of timesteps and the underpinned number of lags. In other words, the
+period shift is the number of periods to go backwards to get features (X) for outcomes (Y) or as a question: how many samples
+get lost respectively must be used as X for Y description/prediction?
 }
 \seealso{
 Other Recurrent Neural Network (RNN): 

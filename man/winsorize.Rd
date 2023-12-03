@@ -16,11 +16,11 @@ winsorize(
 \arguments{
 \item{x}{A numeric vector to be winsorized.}
 
-\item{minx}{The low border value, all values within \code{x} being lower than this value will be replaced by this value. By default, this value is set to the 5\% quantile of \code{x}.}
+\item{minx}{The low border value, all values within \code{x} being lower than this value will be replaced by this value. By default, this value is set to the 5\\% quantile of \code{x}.}
 
-\item{maxx}{The high border value, all values within \code{x} being higher than this value will be replaced by this value. By default, this value is set to the 95\% quantile of \code{x}.}
+\item{maxx}{The high border value, all values within \code{x} being higher than this value will be replaced by this value. By default, this value is set to the 95\\% quantile of \code{x}.}
 
-\item{probs}{A numeric vector of probabilities with values in [0,1] as used in \code{\link[stats]{quantile}}.}
+\item{probs}{A numeric vector of probabilities with values in \link{0,1} as used in \code{\link[stats]{quantile}}.}
 
 \item{na.rm}{A logical value indicating whether missing values should be omitted or not (default) to calculate the quantiles.}
 

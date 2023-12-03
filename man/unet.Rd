@@ -43,30 +43,30 @@ U-Net model
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 256x256x1 is used. \cr
-  The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
-  one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
+The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
+one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 
-  For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
-  For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
+For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 
-  For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 
-  \code{base_model <- unet(include_top = FALSE)} \cr
-  \code{base_model$trainable <- FALSE} \cr
-  \code{outputs <- base_model$output \%>\%} \cr
-  \code{layer_flatten()} \cr
-  \code{layer_dense(units = 1, activation = "linear")} \cr
-  \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+\code{base_model <- unet(include_top = FALSE)} \cr
+\code{base_model$trainable <- FALSE} \cr
+\code{outputs <- base_model$output \%>\%} \cr
+\code{layer_flatten()} \cr
+\code{layer_dense(units = 1, activation = "linear")} \cr
+\code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 
-  \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
-  \code{blocks <- inputs \%>\% } \cr
-  \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
-  \code{layer_max_pooling_2d()} \cr
-  \code{model <- unet(input_tensor = blocks)}
+\code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+\code{blocks <- inputs \%>\% } \cr
+\code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+\code{layer_max_pooling_2d()} \cr
+\code{model <- unet(input_tensor = blocks)}
 }
 \references{
 Ronneberger, O., Fischer, P., Brox T. (2015): U-Net: Convolutional Networks f?r Biomedical Image Segmentation. In: Navab, N., Hornegger, J., Wells, W., Frangi, A. (Hrsg.): Medical Image Computing and Computer-Assisted Intervention - MICCAI 2015. Lecture Notes in Computer Science, vol 9351. Part III. pp. 234-241. Cham: Springer. \url{https://doi.org/10.1007/978-3-319-24574-4_28}. \cr
-  see also: \url{https://arxiv.org/pdf/1505.04597.pdf} \cr
+see also: \url{https://arxiv.org/pdf/1505.04597.pdf} \cr
 }
 \seealso{
 Other Convolutional Neural Network (CNN): 

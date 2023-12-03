@@ -49,15 +49,15 @@ z-score scaling needs a list with vectors with mean and sd values for each outco
 }
 \value{
 A two- or three-dimensional array with predicted outcome values.
-  A two-dimensional array results for \code{fit_MLP} or for \code{fit_LSTM} if \code{return_sequences = FALSE}.
-  A three-dimensional array results for \code{fit_LSTM} if \code{return_sequences = TRUE}.
+A two-dimensional array results for \code{fit_MLP} or for \code{fit_LSTM} if \code{return_sequences = FALSE}.
+A three-dimensional array results for \code{fit_LSTM} if \code{return_sequences = TRUE}.
 }
 \description{
 Predict with ANN model
 }
 \seealso{
 \code{\link{fit_MLP}}, \code{\link{as_MLP_X}}, \code{\link{fit_LSTM}}, \code{\link{as_LSTM_X}},
-  \code{\link[stats]{predict}}, \code{\link{scale_train_test}}.
+\code{\link[stats]{predict}}, \code{\link{scale_train_test}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as_MLP_X}()},

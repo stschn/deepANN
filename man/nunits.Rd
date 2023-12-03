@@ -17,8 +17,8 @@ Number of units within an array
 }
 \details{
 The number of units is stored in the last dimension of \code{a}.
-  What a unit is or what it stands for is determined by the context. Usually, a unit is an attribute (feature or outcome).
-  In the context of image processing, a unit on feature side represents a color channel.
+What a unit is or what it stands for is determined by the context. Usually, a unit is an attribute (feature or outcome).
+In the context of image processing, a unit on feature side represents a color channel.
 }
 \seealso{
 Other Single & Multi Layer Perceptron (SLP, MLP): 

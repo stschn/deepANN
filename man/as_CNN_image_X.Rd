@@ -28,7 +28,7 @@ Create a 4-dimensional array for image features (input)
 }
 \seealso{
 \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}},
-  \code{\link{as_CNN_image_Y}}.
+\code{\link{as_CNN_image_Y}}.
 
 Other Convolutional Neural Network (CNN): 
 \code{\link{alexnet}()},

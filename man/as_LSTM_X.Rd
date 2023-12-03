@@ -13,10 +13,12 @@ as_LSTM_X(x, timesteps = 1L)
 }
 \value{
 A three-dimensional array of the resampled feature matrix \code{x} needed within Tensorflow for recurrent neural networks, e.g. LSTM.\cr
-  1. dimension: Samples (s) = Number of records\cr
-  2. dimension: Timesteps (t) = Number of different periods within one record\cr
-  3. dimension: Features (f) = Number of features within a sequence of a period\cr
-  Note: A 3D-array with dimensions (s x t x f) can be interpret as f (s x t)-matrices.
+\enumerate{
+\item dimension: Samples (s) = Number of records\cr
+\item dimension: Timesteps (t) = Number of different periods within one record\cr
+\item dimension: Features (f) = Number of features within a sequence of a period\cr
+Note: A 3D-array with dimensions (s x t x f) can be interpret as f (s x t)-matrices.
+}
 }
 \description{
 Features (X) data format for LSTM

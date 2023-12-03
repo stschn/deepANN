@@ -37,23 +37,23 @@ In that case, each feature can have its own specified lag.}
 \item{y_as_feature}{Indicates whether lagged outcomes are used as features in a multivariate time series.\cr
 \code{none} doesn't include lagged y-variables (default).\cr
 \code{plain} The lagged y-variables retrieve in the periods (timesteps) of the later resampled feature matrix thru \code{as_LSTM_X}.
-  Therefore, only one lagged y-variable with a lag order of adjusted \code{y_as_feature_lag} is chosen.\cr
+Therefore, only one lagged y-variable with a lag order of adjusted \code{y_as_feature_lag} is chosen.\cr
 \code{timesteps} The number of included lagged y-variables is equal to the value of the \code{timesteps} argument.}
 
 \item{ylag}{The considered lag for lagged outcomes (\code{y}) as further features.}
 }
 \value{
 A list with named elements
-  \code{X}: A feature matrix in LSTM compatible preformat for usage with \code{as_LSTM_X}.\cr
-  \code{Y}: An outcome matrix in LSTM compatible preformat for usage with \code{as_LSTM_Y}.\cr
-  \code{other_columns}: A data frame of the selected \code{other_columns}.
+\code{X}: A feature matrix in LSTM compatible preformat for usage with \code{as_LSTM_X}.\cr
+\code{Y}: An outcome matrix in LSTM compatible preformat for usage with \code{as_LSTM_Y}.\cr
+\code{other_columns}: A data frame of the selected \code{other_columns}.
 }
 \description{
 \code{get_LSTM_XY} extracts features and outcomes from a data/time series in a Long Short-Term Memory (LSTM) compatible preformat.
-  Within a univariate time series, y(t) is explained by past y(t-1), y(t-2) etc. Therefore the last sample of the
-  feature set must be deleted, because there is no Y-value for it. Resampling of the Y-values must start at timesteps + 1.
-  That is different to a multivariate time series. For y(t), the corresponding features at time t are already given.
-  Resampling must start at timesteps.
+Within a univariate time series, y(t) is explained by past y(t-1), y(t-2) etc. Therefore the last sample of the
+feature set must be deleted, because there is no Y-value for it. Resampling of the Y-values must start at timesteps + 1.
+That is different to a multivariate time series. For y(t), the corresponding features at time t are already given.
+Resampling must start at timesteps.
 }
 \seealso{
 \code{\link{as_LSTM_X}}, \code{\link{as_LSTM_Y}}.

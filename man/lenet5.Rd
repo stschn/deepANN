@@ -34,32 +34,32 @@ LeNet-5 model
 }
 \details{
 The \code{input shape} is usually \code{c(height, width, channels)} for a 2D image. If no input shape is specified the default shape 32x32x1 is used. \cr
-  The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
-  one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
+The number of \code{classes} can be computed in three steps. First, build a factor of the labels (classes). Second, use \code{\link{as_CNN_image_Y}} to
+one-hot encode the outcome created in the first step. Third, use \code{\link{nunits}} to get the number of classes. The result is equal to \code{\link{nlevels}} used on the result of the first step.
 
-  For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
-  For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
+For a n-ary classification problem with single-label associations, the output is either one-hot encoded with categorical_crossentropy loss function or binary encoded (0,1) with sparse_categorical_crossentropy loss function. In both cases, the output activation function is softmax. \cr
+For a n-ary classification problem with multi-label associations, the output is one-hot encoded with sigmoid activation function and binary_crossentropy loss function.
 
-  For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
+For a task with another top layer block, e.g. a regression problem, use the following code template: \cr
 
-  \code{base_model <- lenet5(include_top = FALSE)} \cr
-  \code{base_model$trainable <- FALSE} \cr
-  \code{outputs <- base_model$output \%>\%} \cr
-  \code{layer_flatten()} \cr
-  \code{layer_dense(units = 1, activation = "linear")} \cr
-  \code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
+\code{base_model <- lenet5(include_top = FALSE)} \cr
+\code{base_model$trainable <- FALSE} \cr
+\code{outputs <- base_model$output \%>\%} \cr
+\code{layer_flatten()} \cr
+\code{layer_dense(units = 1, activation = "linear")} \cr
+\code{model <- keras_model(inputs = base_model$input, outputs = outputs)}
 
-  For a task with another input layer, use the following code template: \cr
+For a task with another input layer, use the following code template: \cr
 
-  \code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
-  \code{blocks <- inputs \%>\% } \cr
-  \code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
-  \code{layer_max_pooling_2d()} \cr
-  \code{model <- lenet5(input_tensor = blocks)}
+\code{inputs <- layer_input(shape = c(256, 256, 3))} \cr
+\code{blocks <- inputs \%>\% } \cr
+\code{layer_conv_2d_transpose(filters = 3, kernel_size = c(1, 1)) \%>\%} \cr
+\code{layer_max_pooling_2d()} \cr
+\code{model <- lenet5(input_tensor = blocks)}
 }
 \references{
 LeCun, Y., Bottou, L., Bengio, Y., Haffner, P. (1998): Gradient-Based Learning Applied to Document Recognition. In: Proceedings of the IEEE, 86 (1998) 11, pp. 2278-2324. https://doi.org/10.1109/5.726791 \cr
-  \url{http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf}
+\url{http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf}
 }
 \seealso{
 Other Convolutional Neural Network (CNN): 

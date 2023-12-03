@@ -86,3 +86,10 @@ NULL
 #' @export
 #' @usage c(x, y) %<-% values
 NULL
+
+# Imports from packages
+
+# #' @import marray
+#' @importFrom R6 R6Class is.R6
+NULL
+

@@ -19,7 +19,7 @@ Population standard deviation
 }
 \details{
 The population standard deviation and sample standard deviation, implemented in \code{stats} package, differ in the denominator.
-  The value of denominator in the formula for standard deviation in case of population data is \code{n}, while it is \code{n-1} for sample data.
+The value of denominator in the formula for standard deviation in case of population data is \code{n}, while it is \code{n-1} for sample data.
 }
 \examples{
   x <- sample(1000)

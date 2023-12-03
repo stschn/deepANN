@@ -32,28 +32,28 @@ Classification accuracy
 }
 \details{
 The following accuracy types are implemented:
-  \itemize{
-  \item Standard: \eqn{Number of correct predictions / Total number of predictions}
-  \item Misclassification error: \eqn{Number of incorrect predictions / Total number of predictions}
-  \item TPR (True Positive Rate), also sensitivity, recall or hit rate: \eqn{TP / (TP + FN)}
-  \item TNR (True Negative Rate), also specificity or selectivity: \eqn{TN / (TN + FP)}
-  \item PPV (Positive Predictive Value), also precision: \eqn{TP / (TP + FP)}
-  \item NPV (Negative Predictive Value): \eqn{TN / (TN + FN)}
-  \item FNR (False Negative Rate), also miss rate: \eqn{FN / (FN + TP)}
-  \item FPR (False Positive rate), also fall-out: \eqn{FP / (FP + TN)}
-  \item FDR (False Discovery Rate): \eqn{FP / (FP + TP)}
-  \item FOR (False Omission Rate): \eqn{FN / (FN + TN)}
-  \item LR+ (Positive Likelihood Ratio): \eqn{TPR / FPR}
-  \item LR- (Negative Likelihood Ratio): \eqn{FNR / TNR}
-  \item DOR (Diagnostics Odds Ratio): \eqn{LR+ / LR-}
-  \item TS (Threat Score), also critical succes index: \eqn{TP (TP + FN + FP)}
-  \item F1 score: \eqn{2 * Precision * Recall / (Precision + Recall)}
-  \item MCC (Matthews Correlation Coefficient), also phi coefficient: \eqn{TP * TN - FP * FN / \sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))}
-  \item FM (Fowlkes-Mallows index): \eqn{\sqrt((TP / (TP + FP)) * (TP / (TP * FN)))}
-  \item Kappa statistics: \eqn{(p0 - pe) / (1 - pe)}
-  }
+\itemize{
+\item Standard: \eqn{Number of correct predictions / Total number of predictions}
+\item Misclassification error: \eqn{Number of incorrect predictions / Total number of predictions}
+\item TPR (True Positive Rate), also sensitivity, recall or hit rate: \eqn{TP / (TP + FN)}
+\item TNR (True Negative Rate), also specificity or selectivity: \eqn{TN / (TN + FP)}
+\item PPV (Positive Predictive Value), also precision: \eqn{TP / (TP + FP)}
+\item NPV (Negative Predictive Value): \eqn{TN / (TN + FN)}
+\item FNR (False Negative Rate), also miss rate: \eqn{FN / (FN + TP)}
+\item FPR (False Positive rate), also fall-out: \eqn{FP / (FP + TN)}
+\item FDR (False Discovery Rate): \eqn{FP / (FP + TP)}
+\item FOR (False Omission Rate): \eqn{FN / (FN + TN)}
+\item LR+ (Positive Likelihood Ratio): \eqn{TPR / FPR}
+\item LR- (Negative Likelihood Ratio): \eqn{FNR / TNR}
+\item DOR (Diagnostics Odds Ratio): \eqn{LR+ / LR-}
+\item TS (Threat Score), also critical succes index: \eqn{TP (TP + FN + FP)}
+\item F1 score: \eqn{2 * Precision * Recall / (Precision + Recall)}
+\item MCC (Matthews Correlation Coefficient), also phi coefficient: \eqn{TP * TN - FP * FN / \sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN))}
+\item FM (Fowlkes-Mallows index): \eqn{\sqrt((TP / (TP + FP)) * (TP / (TP * FN)))}
+\item Kappa statistics: \eqn{(p0 - pe) / (1 - pe)}
+}
 
-  Standard accuracy and misclassification error are mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
+Standard accuracy and misclassification error are mainly used for single-label classification problems, while the others can also be used for multi-label classification problems.
 }
 \examples{
 accuracy(actuals = c(rep("A", 6), rep("B", 6), rep("C", 6)),

@@ -41,8 +41,8 @@ A model object with stacked dense layers and dropout layers.
 }
 \seealso{
 \code{\link{nunits}},
-  \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}},
-  \code{\link[keras]{compile.keras.engine.training.Model}}.
+\code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}},
+\code{\link[keras]{compile.keras.engine.training.Model}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as_MLP_X}()},

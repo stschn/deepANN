@@ -21,7 +21,7 @@ Mean absolute error (MAE)
 }
 \details{
 In Machine and Deep Learning, MAE is also known as L1 loss function.
-  In opposite to MSE, MAE is more robust to outliers.
+In opposite to MSE, MAE is more robust to outliers.
 }
 \seealso{
 Other Metrics: 

@@ -17,7 +17,7 @@ Number of timesteps within an array
 }
 \details{
 The number of timesteps is stored in the second dimension of a three-dimensional \code{a}, usually used for a LSTM,
-  or in the third dimension of a four-dimensional \code{a}, usually used for a temporal CNN.
+or in the third dimension of a four-dimensional \code{a}, usually used for a temporal CNN.
 }
 \seealso{
 Other Single & Multi Layer Perceptron (SLP, MLP): 

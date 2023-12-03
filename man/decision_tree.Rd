@@ -44,10 +44,10 @@ Decision Tree
 }
 \details{
 A decision tree is a type of model that puts a certain feature from \code{x} onto a node, called split node, of the tree structure on the basis of
-  operations (e.g. gini impurity, information gain) and also uses a calculated value of the feature for each node for further separations into
-  left and right subnodes. At the end of the tree are the leaf nodes, each of which has a resulting level of \code{y}.\cr
-  \code{treeheight()} computes the height of a tree. The height of a tree is the number of nodes from the starting node on the path to its deepest leaf node.\cr
-  \code{treedepth()} computes the depth of a tree. The depth of a tree is the number of edges or arcs from the starting node on the path to its deepest leaf node.\cr
+operations (e.g. gini impurity, information gain) and also uses a calculated value of the feature for each node for further separations into
+left and right subnodes. At the end of the tree are the leaf nodes, each of which has a resulting level of \code{y}.\cr
+\code{treeheight()} computes the height of a tree. The height of a tree is the number of nodes from the starting node on the path to its deepest leaf node.\cr
+\code{treedepth()} computes the depth of a tree. The depth of a tree is the number of edges or arcs from the starting node on the path to its deepest leaf node.\cr
 }
 \examples{
   df <- data.frame(Outlook = factor(c("Sunny", "Sunny", "Overcast", "Rain", "Rain", "Rain", "Overcast", "Sunny", "Sunny", "Rain", "Sunny", "Overcast", "Overcast", "Rain")),

@@ -20,10 +20,10 @@ The constants \code{day.name} and \code{day.abb} are additions to the built-in c
 }
 \details{
 The following constants are available:
-  \itemize{
-  \item \code{day.name}: the English names for the day of the week: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
-  \item \code{day.abb}: the three-letter abbreviations for the English day names: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
-  }
+\itemize{
+\item \code{day.name}: the English names for the day of the week: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
+\item \code{day.abb}: the three-letter abbreviations for the English day names: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
+}
 }
 \seealso{
 \code{\link{month.name}}, \code{\link{month.abb}}

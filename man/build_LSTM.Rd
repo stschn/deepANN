@@ -51,17 +51,17 @@ A model object with stacked lstm layers, an output dense layer and optional drop
 }
 \description{
 \code{build.LSTM} creates a sequential ANN model with stacked lstm layers, an output dense layer and optional dropout layers.
-  For a univariate time series, usually \code{stateful = TRUE} and \code{batch_size = 1} with \code{return_sequences = FALSE}.
-  For a multivariate time series, usually \code{stateful = FALSE} and \code{batch_size = NULL} with \code{return_sequences = TRUE}.
+For a univariate time series, usually \code{stateful = TRUE} and \code{batch_size = 1} with \code{return_sequences = FALSE}.
+For a multivariate time series, usually \code{stateful = FALSE} and \code{batch_size = NULL} with \code{return_sequences = TRUE}.
 }
 \references{
 Gulli, A., Pal, S. (2017): Deep Learning with Keras: Implement neural networks with Keras on Theano and TensorFlow. 2017. Birmingham: Packt Publishing.
-  Gulli, A., Kapoor, A., Pal, S. (2017): Deep Learning with TensorFlow 2 and Keras: Regression, ConvNets, GANs, RNNs, NLP, and more with TensorFlow 2 and the Keras API. 2. Aufl., 2019. Birmingham: Packt Publishing.
+Gulli, A., Kapoor, A., Pal, S. (2017): Deep Learning with TensorFlow 2 and Keras: Regression, ConvNets, GANs, RNNs, NLP, and more with TensorFlow 2 and the Keras API. 2. Aufl., 2019. Birmingham: Packt Publishing.
 }
 \seealso{
 \code{\link{as_LSTM_X}}, \code{\link{nunits}},
-  \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}}, \code{\link[keras]{layer_lstm}},
-  \code{\link[keras]{compile.keras.engine.training.Model}}.
+\code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}}, \code{\link[keras]{layer_lstm}},
+\code{\link[keras]{compile.keras.engine.training.Model}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as_LSTM_X}()},

@@ -22,15 +22,15 @@ as_LSTM_Y(
 }
 \value{
 Dependent on the type of \code{y} and timesteps. If \code{y} is a factor, the result is a one-hot vector.
-  If \code{timesteps = NULL|1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{y},
-  if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{y}.
+If \code{timesteps = NULL|1} a 2D-array with the dimensions (1) samples as number of records and (2) number of output units, representing a scalar outcome \code{y},
+if \code{timesteps >= 2} a 3D-array with the dimensions (1) samples, (2) timesteps and (3) number of output units, representing a sequence or multi-step outcome \code{y}.
 }
 \description{
 Outcomes (Y) data format for LSTM
 }
 \seealso{
 \code{\link{get_LSTM_XY}}, \code{\link{as_LSTM_X}}, \code{\link{as_ANN_matrix}}, \code{\link{one_hot_encode}}, \code{\link{sparse_encode}}
-  \code{\link{as_tensor_2d}}, \code{\link{as_tensor_3d}}.
+\code{\link{as_tensor_2d}}, \code{\link{as_tensor_3d}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as_LSTM_X}()},

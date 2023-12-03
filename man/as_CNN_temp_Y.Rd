@@ -13,8 +13,8 @@ as_CNN_temp_Y(y, timesteps = 1L)
 }
 \value{
 Dependent on the type of \code{y} and timesteps. If \code{y} is a factor, the result is a one-hot vector.
-  If \code{timesteps = NULL|1} a 2D-array with the dimensions samples and number of output units, representing a scalar outcome;
-  if \code{timesteps >= 2} a 3D-array with the dimensions samples, timesteps and number of output units, representing a sequence or multi-step outcome.
+If \code{timesteps = NULL|1} a 2D-array with the dimensions samples and number of output units, representing a scalar outcome;
+if \code{timesteps >= 2} a 3D-array with the dimensions samples, timesteps and number of output units, representing a sequence or multi-step outcome.
 }
 \description{
 Outcomes (Y) data format for a temporal CNN

@@ -36,9 +36,9 @@ Build a stationary data series by differencing
 }
 \details{
 Differencing is a method of transforming a time series. The equations for the different types of differencing are\cr
-  \code{simple}: d(t) = x(t) - x(t-1).\cr
-  \code{log}: d(t) = ln(x(t) / x(t-1)) = ln(x(t)) - ln(x(t-1)).\cr
-  \code{percentage}: d(t) = (x(t) / x(t-1)) - 1.
+\code{simple}: d(t) = x(t) - x(t-1).\cr
+\code{log}: d(t) = ln(x(t) / x(t-1)) = ln(x(t)) - ln(x(t-1)).\cr
+\code{percentage}: d(t) = (x(t) / x(t-1)) - 1.
 }
 \seealso{
 \code{\link{invert_differencing}}.

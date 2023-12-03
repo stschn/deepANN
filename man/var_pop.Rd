@@ -24,7 +24,7 @@ Population variance
 }
 \details{
 The population variance and sample variance, implemented in \code{stats} package, differ in the denominator.
-  The value of denominator in the formula for variance in case of population data is \code{n}, while it is \code{n-1} for sample data.
+The value of denominator in the formula for variance in case of population data is \code{n}, while it is \code{n-1} for sample data.
 }
 \examples{
   x <- sample(1000)

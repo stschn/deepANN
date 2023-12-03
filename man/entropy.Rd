@@ -20,7 +20,7 @@ Shannon entropy
 }
 \details{
 Shannon entropy is a concept from information theory and represents a quantification of the level
-  of impurity or randomness that exists within a partition with class levels of \code{x}.
+of impurity or randomness that exists within a partition with class levels of \code{x}.
 }
 \examples{
   entropy(c("no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no"))

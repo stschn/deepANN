@@ -22,8 +22,8 @@ Cross entropy
 }
 \details{
 Cross entropy quantifies the difference between two probability distributions.
-  For a binary classification problem, the following equation can be used instead:
-  \eqn{-sum((p * log(q)) + ((1 - p) * (1 - log(q))))}
+For a binary classification problem, the following equation can be used instead:
+\eqn{-sum((p * log(q)) + ((1 - p) * (1 - log(q))))}
 }
 \examples{
   # multiclass classification

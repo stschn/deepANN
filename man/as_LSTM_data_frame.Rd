@@ -21,8 +21,8 @@ as_LSTM_data_frame(x, y, xnames, ynames, timesteps = 1L, suffix = "_t")
 }
 \value{
 A data frame with outcome column(s) and a further resampled feature matrix.
-  The feature matrix within this data frame has the following forward oriented form:
-  x1(t1), x1(t2), x1(t3)...x2(t1), x2(t2), x2(t3)...x3(t1), x3(t2), x3(t3)...
+The feature matrix within this data frame has the following forward oriented form:
+x1(t1), x1(t2), x1(t3)...x2(t1), x2(t2), x2(t3)...x3(t1), x3(t2), x3(t3)...
 }
 \description{
 Recreation of a data frame based on preformatted X and Y data sets
