@@ -12,7 +12,7 @@ This is an abstract class for sampling datasets.
 \describe{
 \item{\code{label}}{('character()')}
 
-\item{\code{label}}{('character()')}
+\item{\code{mode}}{('character()')}
 }
 \if{html}{\out{</div>}}
 }

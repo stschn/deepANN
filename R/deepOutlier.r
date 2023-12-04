@@ -111,8 +111,8 @@ outlier_dataset <- function(dataset, columns = NULL, type = c("iqr", "mean", "me
 #' @family Outlier
 #'
 #' @param x A numeric vector to be winsorized.
-#' @param minx The low border value, all values within \code{x} being lower than this value will be replaced by this value. By default, this value is set to the 5\% quantile of \code{x}.
-#' @param maxx The high border value, all values within \code{x} being higher than this value will be replaced by this value. By default, this value is set to the 95\% quantile of \code{x}.
+#' @param minx The low border value, all values within \code{x} being lower than this value will be replaced by this value. By default, this value is set to the 5% quantile of \code{x}.
+#' @param maxx The high border value, all values within \code{x} being higher than this value will be replaced by this value. By default, this value is set to the 95% quantile of \code{x}.
 #' @param probs A numeric vector of probabilities with values in [0,1] as used in \code{\link[stats]{quantile}}.
 #' @param na.rm A logical value indicating whether missing values should be omitted or not (default) to calculate the quantiles.
 #' @param type An integer between 1 and 9 selecting one of the nine quantile algorithms detailed in \code{\link[stats]{quantile}} to be used.

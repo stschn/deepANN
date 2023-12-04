@@ -33,7 +33,7 @@ Sampler <- R6Class("Sampler",
   public = list(
     #' @field label ('character()')
     label = NA_character_,
-    #' @field label ('character()')
+    #' @field mode ('character()')
     mode = NA_character_,
 
     #' @description
@@ -192,7 +192,7 @@ random_oversampling <- function(X, y, mode = c("auto")) {
 SMOTE <- R6Class("SMOTE",
   inherit = Sampler,
   public = list(
-    #' @field label ('integer()')
+    #' @field k_neighbors ('integer()')
     k_neighbors = NA_integer_,
 
     #' @description

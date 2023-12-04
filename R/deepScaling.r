@@ -23,7 +23,7 @@ scale_minmax <- function(x, use_attr = TRUE, invert = FALSE, minx = NULL, maxx =
       minx <- minx
       maxx <- maxx
     }
-    scaled <- (x - minx) / (maxx - minx)
+    scaled <- .divide(x - minx, maxx - minx)
     if (use_attr) {
       attr(scaled, attr_name[1L]) <- minx
       attr(scaled, attr_name[2L]) <- maxx
@@ -67,7 +67,7 @@ scale_zscore <- function(x, use_attr = TRUE, invert = FALSE, meanx = NULL, sdx =
       meanx <- meanx
       sdx <- sdx
     }
-    scaled <- (x - meanx) / sdx
+    scaled <- .divide(x - meanx, sdx)
     if (use_attr) {
       attr(scaled, attr_name[1L]) <- meanx
       attr(scaled, attr_name[2L]) <- sdx
