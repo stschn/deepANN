@@ -23,7 +23,7 @@ Load images from different sources like from files or web
   For an example see \code{\link{as_images_tensor}}.
 }
 \seealso{
-\code{\link[base]{list.files}}, \code{\link[keras]{image_load}}.
+\code{\link[base]{list.files}}, \code{\link[keras3]{image_load}}.
 
 Other Convolutional Neural Network (CNN): 
 \code{\link{alexnet}()},
@@ -37,9 +37,9 @@ Other Convolutional Neural Network (CNN):
 \code{\link{inception_resnet_v2}()},
 \code{\link{inception_v3}()},
 \code{\link{lenet5}()},
+\code{\link{mobilenet}()},
 \code{\link{mobilenet_v2}()},
 \code{\link{mobilenet_v3}()},
-\code{\link{mobilenet}()},
 \code{\link{nasnet}()},
 \code{\link{resnet}},
 \code{\link{unet}()},

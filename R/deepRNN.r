@@ -321,16 +321,16 @@ as_LSTM_data_frame <- function(x, y, xnames, ynames, timesteps = 1L, suffix = "_
 #'   Gulli, A., Kapoor, A., Pal, S. (2017): Deep Learning with TensorFlow 2 and Keras: Regression, ConvNets, GANs, RNNs, NLP, and more with TensorFlow 2 and the Keras API. 2. Aufl., 2019. Birmingham: Packt Publishing.
 #'
 #' @seealso \code{\link{as_LSTM_X}}, \code{\link{nunits}},
-#'   \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}}, \code{\link[keras]{layer_lstm}},
-#'   \code{\link[keras]{compile.keras.engine.training.Model}}.
+#'   \code{\link[keras3]{keras_model_sequential}}, \code{\link[keras3]{layer_dense}}, \code{\link[keras3]{layer_dropout}}, \code{\link[keras3]{layer_lstm}},
+#'   \code{\link[keras3]{compile.keras.engine.training.Model}}.
 #'
 #' @export
 build_LSTM <- function(features, timesteps = 1L, batch_size = NULL, hidden = NULL, dropout = NULL, output = list(1, "linear"),
                        stateful = FALSE, return_sequences = FALSE,
                        loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
-  model <- keras::keras_model_sequential()
+  model <- keras3::keras_model_sequential()
   if (is.null(hidden)) {
-    model %>% keras::layer_lstm(units = output[[1L]], activation = output[[2L]], input_shape = c(timesteps[1L], features), batch_size = batch_size, stateful = stateful, return_sequences = return_sequences)
+    model %>% keras3::layer_lstm(units = output[[1L]], activation = output[[2L]], input_shape = c(timesteps[1L], features), batch_size = batch_size, stateful = stateful, return_sequences = return_sequences)
   } else {
     h <- as.data.frame(hidden)
     N <- NROW(h)
@@ -338,26 +338,26 @@ build_LSTM <- function(features, timesteps = 1L, batch_size = NULL, hidden = NUL
     # Therefore, return_sequences must be set to TRUE with exception of the last layer if no sequence outcome is produced.
     rs <- ifelse(N <= 1, return_sequences, TRUE)
     # First hidden layer with input shape
-    model %>% keras::layer_lstm(units = h[1L, 1L], activation = h[1L, 2L], input_shape = c(timesteps[1L], features), batch_size = batch_size, stateful = stateful, return_sequences = rs)
+    model %>% keras3::layer_lstm(units = h[1L, 1L], activation = h[1L, 2L], input_shape = c(timesteps[1L], features), batch_size = batch_size, stateful = stateful, return_sequences = rs)
     d <- 1L
     D <- ifelse(!(is.null(dropout)), NROW(dropout), 0L)
-    if (D > 0L) { model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1L }
+    if (D > 0L) { model %>% keras3::layer_dropout(rate = dropout[d]); d <- d + 1L }
     # Further hidden layers
     i <- 2L
     while (i <= N) {
       if ((i == (N)) && (!return_sequences)) { rs <- !rs }
-      model %>% keras::layer_lstm(units = h[i, 1L], activation = h[i, 2L], stateful = stateful, return_sequences = rs)
+      model %>% keras3::layer_lstm(units = h[i, 1L], activation = h[i, 2L], stateful = stateful, return_sequences = rs)
       i <- i + 1L
-      if (d <= D) { model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1L }
+      if (d <= D) { model %>% keras3::layer_dropout(rate = dropout[d]); d <- d + 1L }
     }
     # Output layer
     if (!return_sequences) {
-      model %>% keras::layer_dense(units = output[[1L]], activation = output[[2L]])
+      model %>% keras3::layer_dense(units = output[[1L]], activation = output[[2L]])
     } else {
-      model %>% keras::time_distributed(keras::layer_dense(units = output[[1L]], activation = output[[2L]]))
+      model %>% keras3::time_distributed(keras3::layer_dense(units = output[[1L]], activation = output[[2L]]))
     }
   }
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
+  model %>% keras3::compile(loss = loss, optimizer = optimizer, metrics = metrics)
   return(model)
 }
 
@@ -383,7 +383,7 @@ build_LSTM <- function(features, timesteps = 1L, batch_size = NULL, hidden = NUL
 #' @return A trained model object.
 #'
 #' @seealso \code{\link{build_LSTM}}, \code{\link{get_LSTM_XY}},
-#'   \code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
+#'   \code{\link[keras3]{fit.keras.engine.training.Model}}, \code{\link[keras3]{evaluate.keras.engine.training.Model}}.
 #'
 #' @export
 fit_LSTM <- function(model, x, y, timesteps = 1L, batch_size = 1, epochs = 10, verbose = 1,
@@ -405,11 +405,11 @@ fit_LSTM <- function(model, x, y, timesteps = 1L, batch_size = 1, epochs = 10, v
         # By default, Keras will shuffle the rows within each batch, which will destroy the alignment
         # that is needed for a stateful RNN to learn effectively [Gulli/Pal (2017:211)].
         # Therefore, shuffle must be set to false to keep alignment alive.
-        base_model %>% keras::fit(x = X_train, y = Y_train, batch_size = batch_size, epochs = 1, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
-        base_model %>% keras::reset_states()
+        base_model %>% keras3::fit(x = X_train, y = Y_train, batch_size = batch_size, epochs = 1, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
+        base_model %>% keras3::reset_states()
       }
     } else {
-      base_model %>% keras::fit(X_train, Y_train, batch_size = batch_size, epochs = epochs, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
+      base_model %>% keras3::fit(X_train, Y_train, batch_size = batch_size, epochs = epochs, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
     }
   }
   else {
@@ -437,11 +437,11 @@ fit_LSTM <- function(model, x, y, timesteps = 1L, batch_size = 1, epochs = 10, v
 
       # Train/fit model
       history <- temp_model %>%
-        keras::fit(x = x_train_fold, y = y_train_fold, batch_size = batch_size, epochs = epochs, verbose = verbose,
+        keras3::fit(x = x_train_fold, y = y_train_fold, batch_size = batch_size, epochs = epochs, verbose = verbose,
             validation_data = list(x_val_fold, y_val_fold), shuffle = FALSE)
 
       # Store training results
-      results <- temp_model %>% keras::evaluate(x_val_fold, y_val_fold, batch_size = batch_size, verbose = 0)
+      results <- temp_model %>% keras3::evaluate(x_val_fold, y_val_fold, batch_size = batch_size, verbose = 0)
       m <- temp_model$metrics_names[2L]
       all_scores <- c(all_scores, results[m])
       qual_history <- history$metrics[[4L]]
@@ -465,11 +465,11 @@ fit_LSTM <- function(model, x, y, timesteps = 1L, batch_size = 1, epochs = 10, v
       }
       if (isTRUE(base_model$stateful)) {
         for (i in 1:opt_epochs) {
-          base_model %>% keras::fit(x = X_train, y = Y_train, batch_size = batch_size, epochs = 1, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
-          base_model %>% keras::reset_states()
+          base_model %>% keras3::fit(x = X_train, y = Y_train, batch_size = batch_size, epochs = 1, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
+          base_model %>% keras3::reset_states()
         }
       } else {
-        base_model %>% keras::fit(x = X_train, y = Y_train, batch_size = batch_size, epochs = opt_epochs, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
+        base_model %>% keras3::fit(x = X_train, y = Y_train, batch_size = batch_size, epochs = opt_epochs, verbose = verbose, validation_split = validation_split, shuffle = FALSE)
       }
     }
   }

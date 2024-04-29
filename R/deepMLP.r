@@ -159,37 +159,37 @@ as_MLP_Y <- function(y, encoding = c("one_hot", "sparse")) {
 #' @return A model object with stacked dense layers and dropout layers.
 #'
 #' @seealso \code{\link{nunits}},
-#'   \code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}},
-#'   \code{\link[keras]{compile.keras.engine.training.Model}}.
+#'   \code{\link[keras3]{keras_model_sequential}}, \code{\link[keras3]{layer_dense}}, \code{\link[keras3]{layer_dropout}},
+#'   \code{\link[keras3]{compile.keras.engine.training.Model}}.
 #'
 #' @export
 build_MLP <- function(features, hidden = NULL, dropout = NULL, output = list(1, "linear"),
                       loss = "mean_squared_error", optimizer = "adam", metrics = c('mean_absolute_error')) {
-  model <- keras::keras_model_sequential()
+  model <- keras3::keras_model_sequential()
   # SLP
   if (is.null(hidden)) {
-    model %>% keras::layer_dense(units = output[[1L]], activation = output[[2L]], input_shape = features)
+    model %>% keras3::layer_dense(units = output[[1L]], activation = output[[2L]], input_shape = features)
   }
   # MLP
   else {
     h <- as.data.frame(hidden)
     N <- NROW(h)
     # First hidden layer with input shape
-    model %>% keras::layer_dense(units = h[1L, 1L], activation = h[1L, 2L], input_shape = features)
+    model %>% keras3::layer_dense(units = h[1L, 1L], activation = h[1L, 2L], input_shape = features)
     d <- 1L # dropout layers to prevent overfitting
     D <- ifelse(!(is.null(dropout)), NROW(dropout), 0L)
-    if (D > 0L) { model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1L }
+    if (D > 0L) { model %>% keras3::layer_dropout(rate = dropout[d]); d <- d + 1L }
     # Further hidden layers
     i <- 2L
     while (i <= N) {
-      model %>% keras::layer_dense(units = h[i, 1L], activation = h[i, 2L])
+      model %>% keras3::layer_dense(units = h[i, 1L], activation = h[i, 2L])
       i <- i + 1L
-      if (d <= D) { model %>% keras::layer_dropout(rate = dropout[d]); d <- d + 1L }
+      if (d <= D) { model %>% keras3::layer_dropout(rate = dropout[d]); d <- d + 1L }
     }
     # Output layer
-    model %>% keras::layer_dense(units = output[[1L]], activation = output[[2L]])
+    model %>% keras3::layer_dense(units = output[[1L]], activation = output[[2L]])
   }
-  model %>% keras::compile(loss = loss, optimizer = optimizer, metrics = metrics)
+  model %>% keras3::compile(loss = loss, optimizer = optimizer, metrics = metrics)
   return(model)
 }
 
@@ -211,7 +211,7 @@ build_MLP <- function(features, hidden = NULL, dropout = NULL, output = list(1, 
 #' @return A trained model object.
 #'
 #' @seealso \code{\link{build_MLP}},
-#'   \code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
+#'   \code{\link[keras3]{fit.keras.engine.training.Model}}, \code{\link[keras3]{evaluate.keras.engine.training.Model}}.
 #'
 #' @export
 fit_MLP <- function(model, x, y, batch_size = 1, epochs = 10, verbose = 1, validation_split = 0, cross_validation = NULL) {
@@ -223,7 +223,7 @@ fit_MLP <- function(model, x, y, batch_size = 1, epochs = 10, verbose = 1, valid
 
   if (is.null(cross_validation)) {
     # Train the model
-    base_model %>% keras::fit(X_train, Y_train, batch_size = batch_size, epochs = epochs, verbose = verbose, validation_split = validation_split)
+    base_model %>% keras3::fit(X_train, Y_train, batch_size = batch_size, epochs = epochs, verbose = verbose, validation_split = validation_split)
   }
   else {
     if (length(cross_validation) < 2L)
@@ -250,11 +250,11 @@ fit_MLP <- function(model, x, y, batch_size = 1, epochs = 10, verbose = 1, valid
 
       # Train/fit model
       history <- temp_model %>%
-        keras::fit(x = x_train_fold, y = y_train_fold, epochs = epochs, batch_size = batch_size, verbose = verbose,
+        keras3::fit(x = x_train_fold, y = y_train_fold, epochs = epochs, batch_size = batch_size, verbose = verbose,
             validation_data = list(x_val_fold, y_val_fold))
 
       # Store training results
-      results <- temp_model %>% keras::evaluate(x_val_fold, y_val_fold, batch_size = batch_size, verbose = 0)
+      results <- temp_model %>% keras3::evaluate(x_val_fold, y_val_fold, batch_size = batch_size, verbose = 0)
       m <- temp_model$metrics_names[2L]
       all_scores <- c(all_scores, results[m]) #$mean_absolute_error
       qual_history <- history$metrics[[4L]] #$val_mean_absolute_error
@@ -276,7 +276,7 @@ fit_MLP <- function(model, x, y, batch_size = 1, epochs = 10, verbose = 1, valid
       } else {
         opt_epochs <- average_qual_history$epoch[which.max(average_qual_history$validation_qual)]
       }
-      base_model %>% keras::fit(X_train, Y_train, batch_size = batch_size, epochs = opt_epochs, validation_split = validation_split, verbose = verbose)
+      base_model %>% keras3::fit(X_train, Y_train, batch_size = batch_size, epochs = opt_epochs, validation_split = validation_split, verbose = verbose)
     }
   }
   return(base_model)
@@ -293,11 +293,11 @@ fit_MLP <- function(model, x, y, batch_size = 1, epochs = 10, verbose = 1, valid
 #' @return The model object.
 #'
 #' @seealso \code{\link{load_weights_ANN}}, \code{\link[base]{files}},
-#'   \code{\link[keras]{save_model_weights_hdf5}}.
+#'   \code{\link[keras3]{save_model_weights_hdf5}}.
 #'
 #' @export
 save_weights_ANN <- function(model, filename) {
-  model %>% keras::save_model_weights_hdf5(filename)
+  model %>% keras3::save_model_weights_hdf5(filename)
   return(model)
 }
 
@@ -312,12 +312,12 @@ save_weights_ANN <- function(model, filename) {
 #' @return The model object.
 #'
 #' @seealso \code{\link{save_weights_ANN}}, \code{\link[base]{files}},
-#'   \code{\link[keras]{save_model_weights_hdf5}}.
+#'   \code{\link[keras3]{save_model_weights_hdf5}}.
 #'
 #' @export
 load_weights_ANN <- function(model, filename) {
   if (!file.exists(filename))
     stop("file does not exist.")
-  model %>% keras::load_model_weights_hdf5(filename)
+  model %>% keras3::load_model_weights_hdf5(filename)
   return(model)
 }

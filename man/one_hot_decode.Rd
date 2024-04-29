@@ -20,8 +20,8 @@ A vector with the original levels of a categorical variable.
 
 Other Dummifying: 
 \code{\link{append_rows}()},
-\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
+\code{\link{dummify_multilabel}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_encode}()},
 \code{\link{remove_columns}()},

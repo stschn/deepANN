@@ -36,7 +36,7 @@ A vector of the same length as \code{x} containing the winsorized values.
 \code{\link[stats]{quantile}}, \code{\link{outlier}}.
 
 Other Outlier: 
-\code{\link{outlier_dataset}()},
-\code{\link{outlier}()}
+\code{\link{outlier}()},
+\code{\link{outlier_dataset}()}
 }
 \concept{Outlier}
