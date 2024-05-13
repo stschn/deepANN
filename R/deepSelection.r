@@ -25,6 +25,7 @@ data_split.default <- function(.data, test_size = .25, train_size = .75, random_
 #' @rdname data_split
 #' @export
 data_split.array <- function(.data, test_size = .25, train_size = .75, random_state = NULL, shuffle = TRUE, axis = 1) {
+<<<<<<< HEAD
   n <- (marray::DIM(.data) -> d)[axis[1L]]
   #asym <- c(marray:::.axis_symbol(axis[1L]))
 
@@ -33,15 +34,29 @@ data_split.array <- function(.data, test_size = .25, train_size = .75, random_st
   args_train <- lapply(d, seq_len)
   args_train[[axis[1L]]] <- idx_train
   #args_train <- eval(parse(text = paste(asym, "=", enquote(idx_train))))
+=======
+  n <- marray::DIM(.data)[axis[1L]]
+  asym <- c(marray:::.axis_symbol(axis[1L]))
+
+  if (!is.null(random_state)) set.seed(random_state)
+  if (!shuffle) idx_train <- 1L:round(n * train_size) else idx_train <- sample(n, size = round(n * train_size))
+  e_train <- eval(parse(text = paste(asym, "=", enquote(idx_train))))
+>>>>>>> 559c7b209d3ba31543cb9b5fd6f61db2f34cb76a
 
   idx_test <- setdiff(seq_len(n), idx_train)
   n_test <- min(length(idx_test), round(n * test_size))
   if (!shuffle) idx_test <- sort(idx_test)[1L:n_test] else idx_test <- sample(idx_test, size = n_test)
+<<<<<<< HEAD
   args_test <- lapply(d, seq_len)
   args_test[[axis[1L]]] <- idx_test
   #args_test <- eval(parse(text = paste(asym, "=", enquote(idx_test))))
 
   return(list(slice(.data, args_train), slice(.data, args_test)))
+=======
+  e_test <- eval(parse(text = paste(asym, "=", enquote(idx_test))))
+
+  return(list(slice(.data, e_train), slice(.data, e_test)))
+>>>>>>> 559c7b209d3ba31543cb9b5fd6f61db2f34cb76a
 }
 
 #' @rdname data_split
