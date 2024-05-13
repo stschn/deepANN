@@ -5,6 +5,12 @@
   quotient
 }
 
+#' @title Backend
+#' @rdname backend
+#' @details A fuzz factor used in numeric expressions.Default: \code{1e-7}
+#' @export
+epsilon <- 1e-7
+
 #' @title Standard error
 #'
 #' @family Metrics
@@ -602,6 +608,17 @@ entropy <- function(x, base = NULL) {
 #' @export
 cross_entropy <- function(p, q, base = NULL) {
   return(-sum(p * log(q, base = ifelse(is.null(base), exp(1L), base))))
+}
+
+#' @rdname cross_entropy
+#' @export
+categorical_crossentropy <- function(target, output, axis = -1) {
+  target <- marray::marray(target)
+  output <- marray::marray(output)
+  output <- output / marray::apply_over_axes(output, axes = axis, FUN = sum)
+  output <- marray::maclip(output, a_min = epsilon, a_max = 1 - epsilon)
+  log_prob <- log(output)
+  return(-marray::apply_over_axes(target * log_prob, axes = axis, sum))
 }
 
 #' @title Error function (from MATLAB)

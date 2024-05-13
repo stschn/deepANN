@@ -8,7 +8,7 @@
 #'
 #' @return A list of images.
 #'
-#' @seealso \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}.
+#' @seealso \code{\link[base]{list.files}}, \code{\link[keras3]{image_load}}.
 #'
 #' @examples
 #'   For an example see \code{\link{as_images_tensor}}.
@@ -41,7 +41,7 @@ images_load <- function(images, FUN, ...) {
       interpolation <- "nearest"
     }
     # By default, image_load() from keras is called
-    img_list <- lapply(images, function(img_name) { keras::image_load(img_name, color_mode = color_mode, target_size = target_size, interpolation = interpolation) })
+    img_list <- lapply(images, function(img_name) { keras3::image_load(img_name, color_mode = color_mode, target_size = target_size, interpolation = interpolation) })
   }
   return(img_list)
 }
@@ -80,7 +80,7 @@ images_resize <- function(imagelist, FUN, ...) {
 #'
 #' @return A list of images represented in 3D arrays with dimensions height, width and channels.
 #'
-#' @seealso \code{\link[keras]{image_to_array}}.
+#' @seealso \code{\link[keras3]{image_to_array}}.
 #'
 #' @examples
 #'   For an example see \code{\link{as_images_tensor}}.
@@ -91,7 +91,7 @@ as_images_array <- function(imagelist, FUN, ...) {
     img_list <- lapply(imagelist, function(img) { FUN(img, ...) })
   } else {
     # By default, image_to_array() from keras is called
-    img_list <- lapply(imagelist, function(img) { keras::image_to_array(img) })
+    img_list <- lapply(imagelist, function(img) { keras3::image_to_array(img) })
   }
   return(img_list)
 }
@@ -146,7 +146,7 @@ as_images_array <- function(imagelist, FUN, ...) {
 #'     as_images_tensor(height = height, width = width, channels = channels)
 #' @export
 as_images_tensor <- function(imagelist, height, width, depth = NULL, channels = 3L) {
-  #feature <- keras::array_reshape(imagelist, dim = c(NROW(imagelist), height, width, channels))
+  #feature <- keras3::array_reshape(imagelist, dim = c(NROW(imagelist), height, width, channels))
   if (is.null(depth)) {
     # 2D image
     tensor <- array(NA, dim = c((N <- NROW(imagelist)), height, width, channels))
@@ -174,7 +174,7 @@ as_images_tensor <- function(imagelist, height, width, depth = NULL, channels = 
 #'
 #' @return A 4D feature array with the dimensions samples (number of images), height, width and channels.
 #'
-#' @seealso \code{\link[base]{list.files}}, \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}},
+#' @seealso \code{\link[base]{list.files}}, \code{\link[keras3]{image_load}}, \code{\link[keras3]{image_to_array}}, \code{\link[reticulate]{array_reshape}},
 #'   \code{\link{as_CNN_image_Y}}.
 #'
 #' @export
@@ -182,10 +182,10 @@ as_CNN_image_X <- function(images, height, width, channels = 3L, order = c("C", 
   if (is.null(dim(images))) {
     if (!all(file.exists(images))) { stop("images contains invalid file names.") }
     img_list <- lapply(images, function(imgname) {
-      keras::image_load(imgname, grayscale = ifelse(channels == 1L, TRUE, FALSE), target_size = c(height, width))
+      keras3::image_load(imgname, grayscale = ifelse(channels == 1L, TRUE, FALSE), target_size = c(height, width))
     })
     img_array <- lapply(img_list, function(img) {
-      keras::image_to_array(img) # The image is in format height x width x channels
+      keras3::image_to_array(img) # The image is in format height x width x channels
     })
   } else {
     img_array <- images
@@ -199,7 +199,7 @@ as_CNN_image_X <- function(images, height, width, channels = 3L, order = c("C", 
   # dim(feature_array) <- c(NROW(img_array), height, width, channels)
 
   order <- match.arg(order)
-  feature_array <- keras::array_reshape(img_array, c(NROW(img_array), height, width, channels), order = order)
+  feature_array <- keras3::array_reshape(img_array, c(NROW(img_array), height, width, channels), order = order)
   return(feature_array)
 }
 
@@ -321,35 +321,35 @@ lenet5 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
   blocks <- inputs %>%
-    keras::layer_conv_2d(filters = 6, kernel_size = c(5, 5), strides = 1, activation = 'tanh') %>%
-    keras::layer_average_pooling_2d(pool_size = 2, strides = 1, padding = 'valid') %>%
-    keras::layer_conv_2d(filters = 16L, kernel_size = c(5L, 5L), strides = 1L, activation = 'tanh', padding = 'valid') %>%
-    keras::layer_average_pooling_2d(pool_size = 2L, strides = 2L, padding = 'valid') %>%
-    keras::layer_conv_2d(filters = 120L, kernel_size = c(5L, 5L), strides = 1L, activation = 'tanh', padding = 'valid')
+    keras3::layer_conv_2d(filters = 6, kernel_size = c(5, 5), strides = 1, activation = 'tanh') %>%
+    keras3::layer_average_pooling_2d(pool_size = 2, strides = 1, padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 16L, kernel_size = c(5L, 5L), strides = 1L, activation = 'tanh', padding = 'valid') %>%
+    keras3::layer_average_pooling_2d(pool_size = 2L, strides = 2L, padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 120L, kernel_size = c(5L, 5L), strides = 1L, activation = 'tanh', padding = 'valid')
 
   if (include_top) {
     # Classification block
     blocks <- blocks %>%
-      keras::layer_flatten() %>%
-      keras::layer_dense(units = 84L, activation = "tanh") %>%
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_flatten() %>%
+      keras3::layer_dense(units = 84L, activation = "tanh") %>%
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "LeNet5")
+  model <- keras3::keras_model(inputs = inputs, outputs = blocks, name = "LeNet5")
 
   # Load weights
   if (weights == "imagenet") {
@@ -357,10 +357,10 @@ lenet5 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -418,59 +418,59 @@ alexnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NUL
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
   blocks <- inputs %>%
-    keras::layer_conv_2d(filters = 96, kernel_size = c(11, 11), strides = c(4, 4), padding = 'same', activation = 'relu') %>%
-    keras::layer_batch_normalization() %>% # layer_lambda(tf$nn$local_response_normalization)
+    keras3::layer_conv_2d(filters = 96, kernel_size = c(11, 11), strides = c(4, 4), padding = 'same', activation = 'relu') %>%
+    keras3::layer_batch_normalization() %>% # layer_lambda(tf$nn$local_response_normalization)
     # Overlapping pooling with a size of 3x3 vs. non-overlapping pooling with a size of 2x2.
     # Models with overlapping pooling find it slightly more difficult to overfit, see paper.
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same') %>%
 
-    keras::layer_conv_2d(filters = 256, kernel_size = c(5, 5), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
-    keras::layer_batch_normalization() %>% # layer_lambda(tf$nn$local_response_normalization)
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same') %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(5, 5), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
+    keras3::layer_batch_normalization() %>% # layer_lambda(tf$nn$local_response_normalization)
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same') %>%
 
-    keras::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
-    keras::layer_batch_normalization() %>%
+    keras3::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
+    keras3::layer_batch_normalization() %>%
 
-    keras::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
-    keras::layer_batch_normalization() %>%
+    keras3::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
+    keras3::layer_batch_normalization() %>%
 
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
-    keras::layer_batch_normalization() %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
+    keras3::layer_batch_normalization() %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
 
   if (include_top) {
     # Classification block
     blocks <- blocks %>%
-      keras::layer_flatten() %>%
+      keras3::layer_flatten() %>%
 
-      keras::layer_dense(units = 4096, activation = 'relu') %>%
-      #keras::layer_batch_normalization() %>%
-      keras::layer_dropout(rate = 0.5) %>%
+      keras3::layer_dense(units = 4096, activation = 'relu') %>%
+      #keras3::layer_batch_normalization() %>%
+      keras3::layer_dropout(rate = 0.5) %>%
 
-      keras::layer_dense(units = 4096, activation = 'relu') %>%
-      #keras::layer_batch_normalization() %>%
-      keras::layer_dropout(rate = 0.5) %>%
+      keras3::layer_dense(units = 4096, activation = 'relu') %>%
+      #keras3::layer_batch_normalization() %>%
+      keras3::layer_dropout(rate = 0.5) %>%
 
-      keras::layer_dense(units = classes) %>%
-      #keras::layer_batch_normalization() %>%
-      keras::layer_activation(activation = classifier_activation)
+      keras3::layer_dense(units = classes) %>%
+      #keras3::layer_batch_normalization() %>%
+      keras3::layer_activation(activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "AlexNet")
+  model <- keras3::keras_model(inputs = inputs, outputs = blocks, name = "AlexNet")
 
   # Load weights
   if (weights == "imagenet") {
@@ -478,10 +478,10 @@ alexnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NUL
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -539,50 +539,50 @@ zfnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL,
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
   blocks <- inputs %>%
-    keras::layer_conv_2d(filters = 96, kernel_size = c(7, 7), strides = c(2, 2), padding = 'valid', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'valid') %>%
-    keras::layer_batch_normalization() %>%
+    keras3::layer_conv_2d(filters = 96, kernel_size = c(7, 7), strides = c(2, 2), padding = 'valid', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_batch_normalization() %>%
 
-    keras::layer_conv_2d(filters = 256, kernel_size = c(5, 5), strides = c(2, 2), padding = 'valid', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'valid') %>%
-    keras::layer_batch_normalization() %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(5, 5), strides = c(2, 2), padding = 'valid', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_batch_normalization() %>%
 
-    keras::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
 
-    keras::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 384, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
 
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), strides = c(1, 1), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
 
   if (include_top) {
     # Classification block
     blocks <- blocks %>%
-      keras::layer_flatten() %>%
+      keras3::layer_flatten() %>%
 
-      keras::layer_dense(units = 4096, activation = "relu") %>%
-      keras::layer_dropout(rate = 0.5) %>%
+      keras3::layer_dense(units = 4096, activation = "relu") %>%
+      keras3::layer_dropout(rate = 0.5) %>%
 
-      keras::layer_dense(units = 4096, activation = "relu") %>%
-      keras::layer_dropout(rate = 0.5) %>%
+      keras3::layer_dense(units = 4096, activation = "relu") %>%
+      keras3::layer_dropout(rate = 0.5) %>%
 
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ZFNet")
+  model <- keras3::keras_model(inputs = inputs, outputs = blocks, name = "ZFNet")
 
   # Load weights
   if (weights == "imagenet") {
@@ -590,10 +590,10 @@ zfnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL,
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -656,54 +656,54 @@ vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL,
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
   blocks <- inputs %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
 
-    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
 
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
 
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
 
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid')
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid')
 
   if (include_top) {
     # Classification block
     blocks <- blocks %>%
-      keras::layer_flatten() %>%
-      keras::layer_dense(units = 4096, activation = "relu") %>%
-      keras::layer_dense(units = 4096, activation = "relu") %>%
+      keras3::layer_flatten() %>%
+      keras3::layer_dense(units = 4096, activation = "relu") %>%
+      keras3::layer_dense(units = 4096, activation = "relu") %>%
 
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG16")
+  model <- keras3::keras_model(inputs = inputs, outputs = blocks, name = "VGG16")
 
   # Load weights
   if (weights == "imagenet") {
@@ -711,10 +711,10 @@ vgg16 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL,
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -733,57 +733,57 @@ vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL,
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
   blocks <- inputs %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
 
-    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
 
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
 
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid') %>%
 
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
-    keras::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid')
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu') %>%
+    keras3::layer_max_pooling_2d(pool_size = c(2, 2), strides = c(2, 2), padding = 'valid')
 
   if (include_top) {
     # Classification block
     blocks <- blocks %>%
-      keras::layer_flatten() %>%
-      keras::layer_dense(units = 4096, activation = "relu") %>%
-      keras::layer_dense(units = 4096, activation = "relu") %>%
+      keras3::layer_flatten() %>%
+      keras3::layer_dense(units = 4096, activation = "relu") %>%
+      keras3::layer_dense(units = 4096, activation = "relu") %>%
 
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "VGG19")
+  model <- keras3::keras_model(inputs = inputs, outputs = blocks, name = "VGG19")
 
   # Load weights
   if (weights == "imagenet") {
@@ -791,10 +791,10 @@ vgg19 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL,
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -856,19 +856,19 @@ resnet50 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NU
     shortcut <- object
 
     object <- object %>%
-      keras::layer_conv_2d(filters = filters1, kernel_size = c(1, 1), strides = strides, padding = 'valid') %>%
-      keras::layer_batch_normalization(axis = 3) %>%
-      keras::layer_activation(activation = 'relu') %>%
+      keras3::layer_conv_2d(filters = filters1, kernel_size = c(1, 1), strides = strides, padding = 'valid') %>%
+      keras3::layer_batch_normalization(axis = 3) %>%
+      keras3::layer_activation(activation = 'relu') %>%
 
-      keras::layer_conv_2d(filters = filters2, kernel_size = kernel_size, strides = strides, padding = 'same') %>%
-      keras::layer_batch_normalization(axis = 3) %>%
-      keras::layer_activation(activation = 'relu') %>%
+      keras3::layer_conv_2d(filters = filters2, kernel_size = kernel_size, strides = strides, padding = 'same') %>%
+      keras3::layer_batch_normalization(axis = 3) %>%
+      keras3::layer_activation(activation = 'relu') %>%
 
-      keras::layer_conv_2d(filters = filters3, kernel_size = c(1, 1), strides = strides, padding = 'valid') %>%
-      keras::layer_batch_normalization(axis = 3)
+      keras3::layer_conv_2d(filters = filters3, kernel_size = c(1, 1), strides = strides, padding = 'valid') %>%
+      keras3::layer_batch_normalization(axis = 3)
 
-    object <- keras::layer_add(list(object, shortcut)) %>%  # skip connection
-      keras::layer_activation(activation = 'relu') %>%
+    object <- keras3::layer_add(list(object, shortcut)) %>%  # skip connection
+      keras3::layer_activation(activation = 'relu') %>%
 
     return(object)
   }
@@ -880,23 +880,23 @@ resnet50 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NU
     shortcut <- object
 
     object <- object %>%
-      keras::layer_conv_2d(filters = filters1, kernel_size = c(1, 1), strides = strides, padding = 'valid') %>%
-      keras::layer_batch_normalization(axis = 3) %>%
-      keras::layer_activation(activation = 'relu') %>%
+      keras3::layer_conv_2d(filters = filters1, kernel_size = c(1, 1), strides = strides, padding = 'valid') %>%
+      keras3::layer_batch_normalization(axis = 3) %>%
+      keras3::layer_activation(activation = 'relu') %>%
 
-      keras::layer_conv_2d(filters = filters2, kernel_size = kernel_size, strides = c(1, 1), padding = 'same') %>%
-      keras::layer_batch_normalization(axis = 3) %>%
-      keras::layer_activation(activation = 'relu') %>%
+      keras3::layer_conv_2d(filters = filters2, kernel_size = kernel_size, strides = c(1, 1), padding = 'same') %>%
+      keras3::layer_batch_normalization(axis = 3) %>%
+      keras3::layer_activation(activation = 'relu') %>%
 
-      keras::layer_conv_2d(filters = filters3, kernel_size = c(1, 1), strides = c(1, 1), padding = 'valid') %>%
-      keras::layer_batch_normalization(axis = 3)
+      keras3::layer_conv_2d(filters = filters3, kernel_size = c(1, 1), strides = c(1, 1), padding = 'valid') %>%
+      keras3::layer_batch_normalization(axis = 3)
 
     shortcut <- shortcut %>%
-      keras::layer_conv_2d(filters = filters3, kernel_size = c(1, 1), strides = strides, padding = 'valid')  %>%
-      keras::layer_batch_normalization(axis = 3)
+      keras3::layer_conv_2d(filters = filters3, kernel_size = c(1, 1), strides = strides, padding = 'valid')  %>%
+      keras3::layer_batch_normalization(axis = 3)
 
-    object <- keras::layer_add(list(object, shortcut)) %>%
-      keras::layer_activation(activation = 'relu') %>%
+    object <- keras3::layer_add(list(object, shortcut)) %>%
+      keras3::layer_activation(activation = 'relu') %>%
 
     return(object)
   }
@@ -910,22 +910,22 @@ resnet50 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NU
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
   blocks <- inputs %>%
-    keras::layer_zero_padding_2d(padding = c(3, 3)) %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(7, 7), strides = c(2, 2), padding = 'valid', kernel_initializer = 'he_normal') %>%
-    keras::layer_batch_normalization(axis = 3) %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_zero_padding_2d(padding = c(1, 1)) %>% # keras implementation, other's drop this layer
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2)) %>%
+    keras3::layer_zero_padding_2d(padding = c(3, 3)) %>%
+    keras3::layer_conv_2d(filters = 64, kernel_size = c(7, 7), strides = c(2, 2), padding = 'valid', kernel_initializer = 'he_normal') %>%
+    keras3::layer_batch_normalization(axis = 3) %>%
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_zero_padding_2d(padding = c(1, 1)) %>% # keras implementation, other's drop this layer
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2)) %>%
 
     .convolutional_block(filters = c(64, 64, 256)) %>%
     .identity_block(filters = c(64, 64, 256)) %>%
@@ -950,15 +950,15 @@ resnet50 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NU
   if (include_top) {
     # Classification block
     blocks <- blocks %>%
-      keras::layer_global_average_pooling_2d() %>% # another implementation: layer_average_pooling_2d(pool_size = c(2, 2))
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_global_average_pooling_2d() %>% # another implementation: layer_average_pooling_2d(pool_size = c(2, 2))
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "ResNet50")
+  model <- keras3::keras_model(inputs = inputs, outputs = blocks, name = "ResNet50")
 
   # Load weights
   if (weights == "imagenet") {
@@ -966,10 +966,10 @@ resnet50 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NU
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -1028,9 +1028,9 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
 
   .conv2d_bn <- function(object, filters, kernel_size, strides = c(1, 1), padding = 'same') {
     object <- object %>%
-      keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = padding, use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = 3, scale = FALSE) %>%
-      keras::layer_activation(activation = 'relu')
+      keras3::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = padding, use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(axis = 3, scale = FALSE) %>%
+      keras3::layer_activation(activation = 'relu')
     return(object)
   }
 
@@ -1043,10 +1043,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
@@ -1056,11 +1056,11 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 32, kernel_size = c(3, 3), strides = c(2, 2), padding = 'valid') %>%
     .conv2d_bn(filters = 32, kernel_size = c(3, 3), padding = 'valid') %>%
     .conv2d_bn(filters = 64, kernel_size = c(3, 3)) %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2)) %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2)) %>%
 
     .conv2d_bn(filters = 80, kernel_size = c(1, 1), padding = 'valid') %>%
     .conv2d_bn(filters = 192, kernel_size = c(3, 3), padding = 'valid') %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2))
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2))
 
   # mixed 0: 35 x 35 x 256
   branch1x1 <- x %>% .conv2d_bn(filters = 64, kernel_size = c(1, 1))
@@ -1075,10 +1075,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 96, kernel_size = c(3, 3))
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 32, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch5x5, branch3x3dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch5x5, branch3x3dbl, branch_pool), axis = 3)
 
   # mixed 1: 35 x 35 x 288
   branch1x1 <- x %>% .conv2d_bn(filters = 64, kernel_size = c(1, 1))
@@ -1093,10 +1093,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 96, kernel_size = c(3, 3))
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 64, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch5x5, branch3x3dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch5x5, branch3x3dbl, branch_pool), axis = 3)
 
   # mixed 2: 35 x 35 x 256
   branch1x1 <- x %>% .conv2d_bn(filters = 64, kernel_size = c(1, 1))
@@ -1111,10 +1111,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 96, kernel_size = c(3, 3))
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 64, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch5x5, branch3x3dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch5x5, branch3x3dbl, branch_pool), axis = 3)
 
   # mixed 3: 17 x 17 x 768
   branch3x3 <- x %>% .conv2d_bn(filters = 384, kernel_size = c(3, 3), strides = c(2, 2), padding = 'valid')
@@ -1125,10 +1125,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 96, kernel_size = c(3, 3), strides = c(2, 2), padding = 'valid')
 
   branch_pool <- x %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2)) %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2)) %>%
     .conv2d_bn(filters = 32, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch3x3, branch3x3dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch3x3, branch3x3dbl, branch_pool), axis = 3)
 
   # mixed 4: 17 x 17 x 768
   branch1x1 <- x %>% .conv2d_bn(filters = 192, kernel_size = c(1, 1))
@@ -1146,10 +1146,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 192, kernel_size = c(1, 7))
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 192, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch7x7, branch7x7dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch7x7, branch7x7dbl, branch_pool), axis = 3)
 
   # mixed 5: 17 x 17 x 768
   branch1x1 <- x %>% .conv2d_bn(filters = 192, kernel_size = c(1, 1))
@@ -1167,10 +1167,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 192, kernel_size = c(1, 7))
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 192, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch7x7, branch7x7dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch7x7, branch7x7dbl, branch_pool), axis = 3)
 
   # mixed 6: 17 x 17 x 768
   branch1x1 <- x %>% .conv2d_bn(filters = 192, kernel_size = c(1, 1))
@@ -1188,10 +1188,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 192, kernel_size = c(1, 7))
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 192, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch7x7, branch7x7dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch7x7, branch7x7dbl, branch_pool), axis = 3)
 
   # mixed 7: 17 x 17 x 768
   branch1x1 <- x %>% .conv2d_bn(filters = 192, kernel_size = c(1, 1))
@@ -1209,10 +1209,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 192, kernel_size = c(1, 7))
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 192, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch7x7, branch7x7dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch7x7, branch7x7dbl, branch_pool), axis = 3)
 
   # mixed 8: 8 x 8 x 1280
   branch3x3 <- x %>%
@@ -1225,9 +1225,9 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     .conv2d_bn(filters = 192, kernel_size = c(7, 1)) %>%
     .conv2d_bn(filters = 192, kernel_size = c(3, 3), strides = c(2, 2),  padding = 'valid')
 
-  branch_pool <- x %>% keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2))
+  branch_pool <- x %>% keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2))
 
-  x <- keras::layer_concatenate(inputs = c(branch3x3, branch7x7x3, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch3x3, branch7x7x3, branch_pool), axis = 3)
 
   # mixed 9-1: 8 x 8 x 2048
   branch1x1 <- x %>% .conv2d_bn(filters = 320, kernel_size = c(1, 1))
@@ -1235,20 +1235,20 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   branch3x3 <- x %>% .conv2d_bn(filters = 384, kernel_size = c(1, 1))
   branch3x3_1 <- branch3x3 %>% .conv2d_bn(filters = 384, kernel_size = c(1, 3))
   branch3x3_2 <- branch3x3 %>% .conv2d_bn(filters = 384, kernel_size = c(3, 1))
-  branch3x3 <- keras::layer_concatenate(inputs = c(branch3x3_1, branch3x3_2), axis = 3)
+  branch3x3 <- keras3::layer_concatenate(inputs = c(branch3x3_1, branch3x3_2), axis = 3)
 
   branch3x3dbl <- x %>%
     .conv2d_bn(filters = 448, kernel_size = c(1, 1)) %>%
     .conv2d_bn(filters = 384, kernel_size = c(3, 3))
   branch3x3dbl_1 <- branch3x3dbl %>% .conv2d_bn(filters = 384, kernel_size = c(1, 3))
   branch3x3dbl_2 <- branch3x3dbl %>% .conv2d_bn(filters = 384, kernel_size = c(3, 1))
-  branch3x3dbl <- keras::layer_concatenate(inputs = c(branch3x3dbl_1, branch3x3dbl_2), axis = 3)
+  branch3x3dbl <- keras3::layer_concatenate(inputs = c(branch3x3dbl_1, branch3x3dbl_2), axis = 3)
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 192, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch3x3, branch3x3dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch3x3, branch3x3dbl, branch_pool), axis = 3)
 
   # mixed 9-2: 8 x 8 x 2048
   branch1x1 <- x %>% .conv2d_bn(filters = 320, kernel_size = c(1, 1))
@@ -1256,33 +1256,33 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   branch3x3 <- x %>% .conv2d_bn(filters = 384, kernel_size = c(1, 1))
   branch3x3_1 <- branch3x3 %>% .conv2d_bn(filters = 384, kernel_size = c(1, 3))
   branch3x3_2 <- branch3x3 %>% .conv2d_bn(filters = 384, kernel_size = c(3, 1))
-  branch3x3 <- keras::layer_concatenate(inputs = c(branch3x3_1, branch3x3_2), axis = 3)
+  branch3x3 <- keras3::layer_concatenate(inputs = c(branch3x3_1, branch3x3_2), axis = 3)
 
   branch3x3dbl <- x %>%
     .conv2d_bn(filters = 448, kernel_size = c(1, 1)) %>%
     .conv2d_bn(filters = 384, kernel_size = c(3, 3))
   branch3x3dbl_1 <- branch3x3dbl %>% .conv2d_bn(filters = 384, kernel_size = c(1, 3))
   branch3x3dbl_2 <- branch3x3dbl %>% .conv2d_bn(filters = 384, kernel_size = c(3, 1))
-  branch3x3dbl <- keras::layer_concatenate(inputs = c(branch3x3dbl_1, branch3x3dbl_2), axis = 3)
+  branch3x3dbl <- keras3::layer_concatenate(inputs = c(branch3x3dbl_1, branch3x3dbl_2), axis = 3)
 
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = c(3, 3), strides = c(1, 1), padding = 'same') %>%
     .conv2d_bn(filters = 192, kernel_size = c(1, 1))
 
-  x <- keras::layer_concatenate(inputs = c(branch1x1, branch3x3, branch3x3dbl, branch_pool), axis = 3)
+  x <- keras3::layer_concatenate(inputs = c(branch1x1, branch3x3, branch3x3dbl, branch_pool), axis = 3)
 
   if (include_top) {
     # Classification block
     x <- x %>%
-      keras::layer_global_average_pooling_2d() %>%
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_global_average_pooling_2d() %>%
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_v3")
+  model <- keras3::keras_model(inputs = inputs, outputs = x, name = "Inception_v3")
 
   # Load weights
   if (weights == "imagenet") {
@@ -1290,10 +1290,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -1346,10 +1346,10 @@ inception_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
 inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
   .conv2d_bn <- function(object, filters, kernel_size, strides = 1, padding = 'same', activation = 'relu', use_bias = FALSE) {
-    object <- object %>% keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = padding, use_bias = use_bias)
-    bn_axis <- ifelse(keras::k_image_data_format() == "channels_last", 3, 1)
-    if (!use_bias) object <- object %>% keras::layer_batch_normalization(axis = bn_axis, scale = FALSE)
-    if (!is.null(activation)) object <- object %>% keras::layer_activation(activation = activation)
+    object <- object %>% keras3::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = padding, use_bias = use_bias)
+    bn_axis <- ifelse(keras3::k_image_data_format() == "channels_last", 3, 1)
+    if (!use_bias) object <- object %>% keras3::layer_batch_normalization(axis = bn_axis, scale = FALSE)
+    if (!is.null(activation)) object <- object %>% keras3::layer_activation(activation = activation)
     return(object)
   }
 
@@ -1388,13 +1388,13 @@ inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_
         .conv2d_bn(filters = 256, kernel_size = c(3, 1))
       branches <- c(branch_0, branch_1)
     }}}
-    channel_axis <- ifelse(keras::k_image_data_format() == "channels_last", 3, 1)
-    mixed <- keras::layer_concatenate(inputs = branches, axis = channel_axis)
-    up <- .conv2d_bn(mixed, filters = unlist(keras::k_int_shape(object))[channel_axis], kernel_size = 1, activation = NULL, use_bias = TRUE)
-    object <- keras::layer_lambda(f = function(inputs, scale) { inputs[[1]] + inputs[[2]] * scale },
-                                  output_shape = unlist(keras::k_int_shape(object))[-1],
+    channel_axis <- ifelse(keras3::k_image_data_format() == "channels_last", 3, 1)
+    mixed <- keras3::layer_concatenate(inputs = branches, axis = channel_axis)
+    up <- .conv2d_bn(mixed, filters = unlist(keras3::k_int_shape(object))[channel_axis], kernel_size = 1, activation = NULL, use_bias = TRUE)
+    object <- keras3::layer_lambda(f = function(inputs, scale) { inputs[[1]] + inputs[[2]] * scale },
+                                  output_shape = unlist(keras3::k_int_shape(object))[-1],
                                   arguments = list(scale = scale))(c(object, up))
-    if (!is.null(activation)) object <- keras::layer_activation(object, activation = activation)
+    if (!is.null(activation)) object <- keras3::layer_activation(object, activation = activation)
     return(object)
   }
 
@@ -1407,10 +1407,10 @@ inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
@@ -1421,10 +1421,10 @@ inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_
     .conv2d_bn(filters = 32, kernel_size = 3, strides = 2, padding = 'valid') %>%
     .conv2d_bn(filters = 32, kernel_size = 3, padding = 'valid') %>%
     .conv2d_bn(filters = 64, kernel_size = 3) %>%
-    keras::layer_max_pooling_2d(pool_size = 3, strides = 2) %>%
+    keras3::layer_max_pooling_2d(pool_size = 3, strides = 2) %>%
     .conv2d_bn(filters = 80, kernel_size = 1, padding = 'valid') %>%
     .conv2d_bn(filters = 192, kernel_size = 3, padding = 'valid') %>%
-    keras::layer_max_pooling_2d(pool_size = 3, strides = 2)
+    keras3::layer_max_pooling_2d(pool_size = 3, strides = 2)
 
   # Mixed 5b (Inception-A block): 35 x 35 x 320
   branch_0 <- x %>% .conv2d_bn(filters = 96, kernel_size = 1)
@@ -1436,10 +1436,10 @@ inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_
     .conv2d_bn(filters = 96, kernel_size = 3) %>%
     .conv2d_bn(filters = 96, kernel_size = 3)
   branch_pool <- x %>%
-    keras::layer_average_pooling_2d(pool_size = 3, strides = 1, padding = 'same') %>%
+    keras3::layer_average_pooling_2d(pool_size = 3, strides = 1, padding = 'same') %>%
     .conv2d_bn(filters = 64, kernel_size = 1)
-  channel_axis <- ifelse(keras::k_image_data_format() == "channels_last", 3, 1)
-  x <- keras::layer_concatenate(inputs = c(branch_0, branch_1, branch_2, branch_pool), axis = channel_axis)
+  channel_axis <- ifelse(keras3::k_image_data_format() == "channels_last", 3, 1)
+  x <- keras3::layer_concatenate(inputs = c(branch_0, branch_1, branch_2, branch_pool), axis = channel_axis)
 
   # 10x block35 (Inception-ResNet-A block): 35 x 35 x 320
   for (i in 1:10) {
@@ -1452,8 +1452,8 @@ inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_
     .conv2d_bn(filters = 256, kernel_size = 1) %>%
     .conv2d_bn(filters = 256, kernel_size = 3) %>%
     .conv2d_bn(filters = 384, kernel_size = 3, strides = 2, padding = 'valid')
-  branch_pool <- keras::layer_max_pooling_2d(x, pool_size = 3, strides = 2, padding = 'valid')
-  x <- keras::layer_concatenate(inputs = c(branch_0, branch_1, branch_pool), axis = channel_axis)
+  branch_pool <- keras3::layer_max_pooling_2d(x, pool_size = 3, strides = 2, padding = 'valid')
+  x <- keras3::layer_concatenate(inputs = c(branch_0, branch_1, branch_pool), axis = channel_axis)
 
   # 20x block17 (Inception-ResNet-B block): 17 x 17 x 1088
   for (i in 1:20) {
@@ -1471,8 +1471,8 @@ inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_
     .conv2d_bn(filters = 256, kernel_size = 1) %>%
     .conv2d_bn(filters = 288, kernel_size = 3) %>%
     .conv2d_bn(filters = 320, kernel_size = 3, strides = 2, padding = 'valid')
-  branch_pool <- keras::layer_max_pooling_2d(x, pool_size = 3, strides = 2, padding = 'valid')
-  x <- keras::layer_concatenate(inputs = c(branch_0, branch_1, branch_2, branch_pool), axis = channel_axis)
+  branch_pool <- keras3::layer_max_pooling_2d(x, pool_size = 3, strides = 2, padding = 'valid')
+  x <- keras3::layer_concatenate(inputs = c(branch_0, branch_1, branch_2, branch_pool), axis = channel_axis)
 
   # 10x block8 (Inception-ResNet-C block): 8 x 8 x 2080
   for (i in 1:9) {
@@ -1486,15 +1486,15 @@ inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_
   if (include_top) {
     # Classification block
     x <- x %>%
-      keras::layer_global_average_pooling_2d() %>%
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_global_average_pooling_2d() %>%
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "Inception_ResNet_v2")
+  model <- keras3::keras_model(inputs = inputs, outputs = x, name = "Inception_ResNet_v2")
 
   # Load weights
   if (weights == "imagenet") {
@@ -1502,10 +1502,10 @@ inception_resnet_v2 <- function(include_top = TRUE, weights = "imagenet", input_
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -1567,10 +1567,10 @@ mobilenet <- function(include_top = TRUE, weights = "imagenet", input_tensor = N
   .conv_block <- function(object, filters, alpha, kernel_size = c(3, 3), strides = c(1, 1)) {
     filters <- as.integer(filters * alpha)
     object <- object %>%
-      keras::layer_zero_padding_2d(padding = list(list(0, 1), list(0, 1))) %>%
-      keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = 'valid', use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = 3) %>%
-      keras::layer_activation_relu(max_value = 6.)
+      keras3::layer_zero_padding_2d(padding = list(list(0, 1), list(0, 1))) %>%
+      keras3::layer_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = 'valid', use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(axis = 3) %>%
+      keras3::layer_activation_relu(max_value = 6.)
     return(object)
   }
 
@@ -1578,18 +1578,18 @@ mobilenet <- function(include_top = TRUE, weights = "imagenet", input_tensor = N
     if (setequal(strides, c(1, 1))) {
       x <- object
     } else {
-      x <- object %>% keras::layer_zero_padding_2d(padding = list(list(0, 1), list(0, 1)))
+      x <- object %>% keras3::layer_zero_padding_2d(padding = list(list(0, 1), list(0, 1)))
     }
     x <- x %>%
-      keras::layer_depthwise_conv_2d(kernel_size = c(3, 3), strides = strides,
+      keras3::layer_depthwise_conv_2d(kernel_size = c(3, 3), strides = strides,
                                      padding = ifelse(setequal(strides, c(1, 1)), 'same', 'valid'),
                                      depth_multiplier = depth_multiplier,
                                      use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = 3) %>%
-      keras::layer_activation_relu(max_value = 6.) %>%
-      keras::layer_conv_2d(filters = pointwise_conv_filters, kernel_size = c(1, 1), strides = c(1, 1), padding = 'same', use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = 3) %>%
-      keras::layer_activation_relu(max_value = 6.)
+      keras3::layer_batch_normalization(axis = 3) %>%
+      keras3::layer_activation_relu(max_value = 6.) %>%
+      keras3::layer_conv_2d(filters = pointwise_conv_filters, kernel_size = c(1, 1), strides = c(1, 1), padding = 'same', use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(axis = 3) %>%
+      keras3::layer_activation_relu(max_value = 6.)
     return(x)
   }
 
@@ -1602,10 +1602,10 @@ mobilenet <- function(include_top = TRUE, weights = "imagenet", input_tensor = N
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
@@ -1630,19 +1630,19 @@ mobilenet <- function(include_top = TRUE, weights = "imagenet", input_tensor = N
   if (include_top) {
     # Classification block
     x <- x %>%
-      keras::layer_global_average_pooling_2d() %>%
-      keras::layer_reshape(target_shape = c(1, 1, as.integer(1024 * alpha))) %>%
-      keras::layer_dropout(rate = dropout) %>%
-      keras::layer_conv_2d(filters = classes, kernel_size = c(1, 1), padding = 'same') %>%
-      keras::layer_reshape(target_shape = c(classes)) %>%
-      keras::layer_activation(activation = classifier_activation)
+      keras3::layer_global_average_pooling_2d() %>%
+      keras3::layer_reshape(target_shape = c(1, 1, as.integer(1024 * alpha))) %>%
+      keras3::layer_dropout(rate = dropout) %>%
+      keras3::layer_conv_2d(filters = classes, kernel_size = c(1, 1), padding = 'same') %>%
+      keras3::layer_reshape(target_shape = c(classes)) %>%
+      keras3::layer_activation(activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNet")
+  model <- keras3::keras_model(inputs = inputs, outputs = x, name = "MobileNet")
 
   # Load weights
   if (weights == "imagenet") {
@@ -1650,10 +1650,10 @@ mobilenet <- function(include_top = TRUE, weights = "imagenet", input_tensor = N
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -1711,8 +1711,8 @@ mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
   .correct_pad <- function(object, kernel_size) {
-    img_dim <- ifelse(keras::k_image_data_format() == 'channels_last', 1, 2)
-    input_size <- unlist(keras::k_int_shape(object))[img_dim:(img_dim + 2)]
+    img_dim <- ifelse(keras3::k_image_data_format() == 'channels_last', 1, 2)
+    input_size <- unlist(keras3::k_int_shape(object))[img_dim:(img_dim + 2)]
     if (length(kernel_size) == 1)
       kernel_size <- as.integer(c(kernel_size, kernel_size))
     if (is.na(input_size[1]) || is.null(input_size[1])) {
@@ -1734,7 +1734,7 @@ mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   }
 
   .inverted_res_block <- function(object, filters, alpha, strides, expansion, block = TRUE) {
-    in_channels <- (shape <- unlist(keras::k_int_shape(object)))[length(shape)]
+    in_channels <- (shape <- unlist(keras3::k_int_shape(object)))[length(shape)]
     pointwise_conv_filters <- as.integer(filters * alpha)
     pointwise_filters <- .make_divisible(pointwise_conv_filters, 8)
 
@@ -1742,21 +1742,21 @@ mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
 
     if (block) {
       x <- x %>%
-        keras::layer_conv_2d(filters = expansion * in_channels, kernel_size = 1, padding = 'same', use_bias = FALSE) %>%
-        keras::layer_batch_normalization(epsilon = 1e-3, momentum = 0.999) %>%
-        keras::layer_activation_relu(max_value = 6.)
+        keras3::layer_conv_2d(filters = expansion * in_channels, kernel_size = 1, padding = 'same', use_bias = FALSE) %>%
+        keras3::layer_batch_normalization(epsilon = 1e-3, momentum = 0.999) %>%
+        keras3::layer_activation_relu(max_value = 6.)
     }
 
     # Depthwise
-    if (strides == 2) x <- x %>% keras::layer_zero_padding_2d(padding = .correct_pad(x, 3))
+    if (strides == 2) x <- x %>% keras3::layer_zero_padding_2d(padding = .correct_pad(x, 3))
     x <- x %>%
-      keras::layer_depthwise_conv_2d(kernel_size = 3, strides = strides, use_bias = FALSE, padding = ifelse(strides == 1, 'same', 'valid')) %>%
-      keras::layer_batch_normalization(epsilon = 1e-3, momentum = 0.999) %>%
-      keras::layer_activation_relu(max_value = 6.) %>%
+      keras3::layer_depthwise_conv_2d(kernel_size = 3, strides = strides, use_bias = FALSE, padding = ifelse(strides == 1, 'same', 'valid')) %>%
+      keras3::layer_batch_normalization(epsilon = 1e-3, momentum = 0.999) %>%
+      keras3::layer_activation_relu(max_value = 6.) %>%
     # Project
-      keras::layer_conv_2d(filters = pointwise_filters, kernel_size = 1, padding = 'same', use_bias = FALSE) %>%
-      keras::layer_batch_normalization(epsilon = 1e-3, momentum = 0.999)
-    if ((in_channels == pointwise_filters) && (strides == 1)) x <- keras::layer_add(inputs = c(object, x))
+      keras3::layer_conv_2d(filters = pointwise_filters, kernel_size = 1, padding = 'same', use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(epsilon = 1e-3, momentum = 0.999)
+    if ((in_channels == pointwise_filters) && (strides == 1)) x <- keras3::layer_add(inputs = c(object, x))
     return(x)
   }
 
@@ -1769,23 +1769,23 @@ mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
-  channel_axis <- ifelse(keras::k_image_data_format() == 'channels_last', -1, 1)
+  channel_axis <- ifelse(keras3::k_image_data_format() == 'channels_last', -1, 1)
   first_block_filters <- .make_divisible(32 * alpha, 8)
 
   x <- inputs %>%
-    keras::layer_zero_padding_2d(padding = .correct_pad(inputs, 3)) %>%
-    keras::layer_conv_2d(filters = first_block_filters, kernel_size = 3, strides = c(2, 2), padding = 'valid', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis, epsilon = 1e-3, momentum = 0.999) %>%
-    keras::layer_activation_relu(max_value = 6.) %>%
+    keras3::layer_zero_padding_2d(padding = .correct_pad(inputs, 3)) %>%
+    keras3::layer_conv_2d(filters = first_block_filters, kernel_size = 3, strides = c(2, 2), padding = 'valid', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis, epsilon = 1e-3, momentum = 0.999) %>%
+    keras3::layer_activation_relu(max_value = 6.) %>%
     .inverted_res_block(filters = 16, alpha = alpha, strides = 1, expansion = 1, block = FALSE) %>%
     .inverted_res_block(filters = 24, alpha = alpha, strides = 2, expansion = 6) %>%
     .inverted_res_block(filters = 24, alpha = alpha, strides = 1, expansion = 6) %>%
@@ -1812,22 +1812,22 @@ mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   }
 
   x <- x %>%
-    keras::layer_conv_2d(filters = last_block_filters, kernel_size = 1, use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis, epsilon = 1e-3, momentum = 0.999) %>%
-    keras::layer_activation_relu(max_value = 6.)
+    keras3::layer_conv_2d(filters = last_block_filters, kernel_size = 1, use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis, epsilon = 1e-3, momentum = 0.999) %>%
+    keras3::layer_activation_relu(max_value = 6.)
 
   if (include_top) {
     # Classification block
     x <- x %>%
-      keras::layer_global_average_pooling_2d() %>%
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_global_average_pooling_2d() %>%
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNetV2")
+  model <- keras3::keras_model(inputs = inputs, outputs = x, name = "MobileNetV2")
 
   # Load weights
   if (weights == "imagenet") {
@@ -1835,10 +1835,10 @@ mobilenet_v2 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -1900,29 +1900,29 @@ mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   # Custom activation function
   activation_hard_sigmoid <- function(x, alpha = 0, max_value = 6., threshold = 0) {
     x <- x + 3.
-    out <- keras::activation_relu(x, alpha = alpha, max_value = max_value, threshold = threshold)
+    out <- keras3::activation_relu(x, alpha = alpha, max_value = max_value, threshold = threshold)
     out <- out * (1. / 6.)
     return(out)
   }
 
   # Custom layer functions
   relu <- function(object) {
-    return(object %>% keras::layer_activation_relu())
+    return(object %>% keras3::layer_activation_relu())
   }
 
   hard_sigmoid <- function(object) {
-    return(object %>% keras::layer_activation(activation = activation_hard_sigmoid))
+    return(object %>% keras3::layer_activation(activation = activation_hard_sigmoid))
   }
 
   hard_swish <- function(object) {
-    return(keras::layer_multiply(inputs = c(hard_sigmoid(object), object)))
+    return(keras3::layer_multiply(inputs = c(hard_sigmoid(object), object)))
   }
 
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
   correct_pad <- function(object, kernel_size) {
-    img_dim <- ifelse(keras::k_image_data_format() == 'channels_last', 1, 2)
-    input_size <- unlist(keras::k_int_shape(object))[img_dim:(img_dim + 2)]
+    img_dim <- ifelse(keras3::k_image_data_format() == 'channels_last', 1, 2)
+    input_size <- unlist(keras3::k_int_shape(object))[img_dim:(img_dim + 2)]
     if (length(kernel_size) == 1)
       kernel_size <- as.integer(c(kernel_size, kernel_size))
     if (is.na(input_size[1]) || is.null(input_size[1])) {
@@ -1948,13 +1948,13 @@ mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   }
 
   se_block <- function(object, filters, se_ratio) {
-    x <- keras::layer_global_average_pooling_2d(object)
-    x <- keras::layer_reshape(x, target_shape = c(1, 1, filters))
-    x <- keras::layer_conv_2d(x, filters = make_divisible(filters * se_ratio), kernel_size = 1, padding = 'same')
-    x <- keras::layer_activation_relu(x)
-    x <- keras::layer_conv_2d(x, filters = filters, kernel_size = 1, padding = 'same')
+    x <- keras3::layer_global_average_pooling_2d(object)
+    x <- keras3::layer_reshape(x, target_shape = c(1, 1, filters))
+    x <- keras3::layer_conv_2d(x, filters = make_divisible(filters * se_ratio), kernel_size = 1, padding = 'same')
+    x <- keras3::layer_activation_relu(x)
+    x <- keras3::layer_conv_2d(x, filters = filters, kernel_size = 1, padding = 'same')
     x <- hard_sigmoid(x)
-    x <- keras::layer_multiply(inputs = c(object, x))
+    x <- keras3::layer_multiply(inputs = c(object, x))
     return(x)
   }
 
@@ -1963,30 +1963,30 @@ mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
     if (is.null(FUN_layer_activation))
       stop("A function for layer activation must be specified", call. = FALSE)
 
-    channel_axis <- ifelse(keras::k_image_data_format() == 'channels_last', -1, 1)
-    infilters <- (shape <- unlist(keras::k_int_shape(object)))[length(shape)]
+    channel_axis <- ifelse(keras3::k_image_data_format() == 'channels_last', -1, 1)
+    infilters <- (shape <- unlist(keras3::k_int_shape(object)))[length(shape)]
 
     x <- object
 
     if (block) {
-      x <- keras::layer_conv_2d(x, filters = make_divisible(infilters * expansion), kernel_size = 1, padding = 'same', use_bias = FALSE)
-      x <- keras::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
+      x <- keras3::layer_conv_2d(x, filters = make_divisible(infilters * expansion), kernel_size = 1, padding = 'same', use_bias = FALSE)
+      x <- keras3::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
       x <- FUN_layer_activation(x, ...)
     }
 
     if (strides == 2)
-      x <- keras::layer_zero_padding_2d(x, padding = correct_pad(x, kernel_size))
-    x <- keras::layer_depthwise_conv_2d(x, kernel_size = kernel_size, strides = strides, padding = ifelse(strides == 1, 'same', 'valid'), use_bias = FALSE)
-    x <- keras::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
+      x <- keras3::layer_zero_padding_2d(x, padding = correct_pad(x, kernel_size))
+    x <- keras3::layer_depthwise_conv_2d(x, kernel_size = kernel_size, strides = strides, padding = ifelse(strides == 1, 'same', 'valid'), use_bias = FALSE)
+    x <- keras3::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
     x <- FUN_layer_activation(x, ...)
 
     if (!is.null(se_ratio))
       x <- se_block(x, filters = make_divisible(infilters * expansion), se_ratio = se_ratio)
-    x <- keras::layer_conv_2d(x, filters = filters, kernel_size = 1, padding = 'same', use_bias = FALSE)
-    x <- keras::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
+    x <- keras3::layer_conv_2d(x, filters = filters, kernel_size = 1, padding = 'same', use_bias = FALSE)
+    x <- keras3::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
 
     if ((strides == 1) && (infilters == filters))
-      x <- keras::layer_add(inputs = c(object, x))
+      x <- keras3::layer_add(inputs = c(object, x))
     return(x)
   }
 
@@ -2046,20 +2046,20 @@ mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
-  channel_axis <- ifelse(keras::k_image_data_format() == 'channels_last', -1, 1)
+  channel_axis <- ifelse(keras3::k_image_data_format() == 'channels_last', -1, 1)
 
-  x <- keras::layer_zero_padding_2d(inputs, padding = correct_pad(inputs, 3))
-  x <- keras::layer_conv_2d(x, filters = 16, kernel_size = 3, strides = c(2, 2), padding = 'valid', use_bias = FALSE)
-  x <- keras::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
+  x <- keras3::layer_zero_padding_2d(inputs, padding = correct_pad(inputs, 3))
+  x <- keras3::layer_conv_2d(x, filters = 16, kernel_size = 3, strides = c(2, 2), padding = 'valid', use_bias = FALSE)
+  x <- keras3::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
   x <- layer_activation(x)
 
   if (type == "small") {
@@ -2069,36 +2069,36 @@ mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
       x <- stack_large(x, kernel_size = kernel, alpha = alpha, se_ratio = se_ratio, FUN_layer_activation = layer_activation)
     }}
 
-  last_conv_channels <- make_divisible((shape <- unlist(keras::k_int_shape(x)))[length(shape)] * 6)
+  last_conv_channels <- make_divisible((shape <- unlist(keras3::k_int_shape(x)))[length(shape)] * 6)
   if (alpha > 1.0)
     last_point_channels <- make_divisible(last_point_channels * alpha)
 
-  x <- keras::layer_conv_2d(x, filters = last_conv_channels, kernel_size = 1, padding = 'same', use_bias = FALSE)
-  x <- keras::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
+  x <- keras3::layer_conv_2d(x, filters = last_conv_channels, kernel_size = 1, padding = 'same', use_bias = FALSE)
+  x <- keras3::layer_batch_normalization(x, axis = channel_axis, epsilon = 1e-3, momentum = 0.999)
   x <- layer_activation(x)
 
   if (include_top) {
-    x <- keras::layer_global_average_pooling_2d(x)
+    x <- keras3::layer_global_average_pooling_2d(x)
 
     if (channel_axis == -1) {
-      x <- keras::layer_reshape(x, target_shape = c(1, 1, last_conv_channels))
+      x <- keras3::layer_reshape(x, target_shape = c(1, 1, last_conv_channels))
     } else {
-      x <- keras::layer_reshape(x, target_shape = c(last_conv_channels, 1, 1))
+      x <- keras3::layer_reshape(x, target_shape = c(last_conv_channels, 1, 1))
     }
 
-    x <- keras::layer_conv_2d(x, filters = last_point_channels, kernel_size = 1, padding = 'same')
+    x <- keras3::layer_conv_2d(x, filters = last_point_channels, kernel_size = 1, padding = 'same')
     x <- layer_activation(x)
-    x <- keras::layer_dropout(x, rate = 0.2)
-    x <- keras::layer_conv_2d(x, filters = classes, kernel_size = 1, padding = 'same')
-    x <- keras::layer_flatten(x)
-    x <- keras::layer_activation(x, activation = classifier_activation)
+    x <- keras3::layer_dropout(x, rate = 0.2)
+    x <- keras3::layer_conv_2d(x, filters = classes, kernel_size = 1, padding = 'same')
+    x <- keras3::layer_flatten(x)
+    x <- keras3::layer_activation(x, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "MobileNetV3")
+  model <- keras3::keras_model(inputs = inputs, outputs = x, name = "MobileNetV3")
 
   # Load weights
   if (weights == "imagenet") {
@@ -2106,10 +2106,10 @@ mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -2159,7 +2159,7 @@ mobilenet_v3 <- function(include_top = TRUE, weights = "imagenet", input_tensor 
 #' @export
 xception <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, input_shape = NULL, classes = 1000, classifier_activation = "softmax") {
 
-  channel_axis <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
+  channel_axis <- ifelse(keras3::k_image_data_format() == "channels_last", -1, 1)
 
   # Check for valid weights
   if (!(is.null(weights) || (weights == "imagenet") || (is.array(weights)) || ((is.character(weights)) && (file.exists(weights))))) {
@@ -2170,108 +2170,108 @@ xception <- function(include_top = TRUE, weights = "imagenet", input_tensor = NU
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
   x <- inputs %>%
-    keras::layer_conv_2d(filters = 32, kernel_size = c(3, 3), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_activation(activation = 'relu')
+    keras3::layer_conv_2d(filters = 32, kernel_size = c(3, 3), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_activation(activation = 'relu')
   residual <- x %>%
-    keras::layer_conv_2d(filters = 128, kernel_size = c(1, 1), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis)
+    keras3::layer_conv_2d(filters = 128, kernel_size = c(1, 1), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis)
   x <- x %>%
-    keras::layer_separable_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_separable_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
-  x <- keras::layer_add(inputs = c(x, residual))
+    keras3::layer_separable_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_separable_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
+  x <- keras3::layer_add(inputs = c(x, residual))
 
   residual <- x %>%
-    keras::layer_conv_2d(filters = 256, kernel_size = c(1, 1), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis)
+    keras3::layer_conv_2d(filters = 256, kernel_size = c(1, 1), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis)
   x <- x %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_separable_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_separable_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
-  x <- keras::layer_add(inputs = c(x, residual))
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_separable_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_separable_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
+  x <- keras3::layer_add(inputs = c(x, residual))
 
   residual <- x %>%
-    keras::layer_conv_2d(filters = 728, kernel_size = c(1, 1), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis)
+    keras3::layer_conv_2d(filters = 728, kernel_size = c(1, 1), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis)
   x <- x %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
-  x <- keras::layer_add(inputs = c(x, residual))
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
+  x <- keras3::layer_add(inputs = c(x, residual))
 
   for (i in 0:7) {
     residual <- x
     x <- x %>%
-      keras::layer_activation(activation = 'relu') %>%
-      keras::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = channel_axis) %>%
-      keras::layer_activation(activation = 'relu') %>%
-      keras::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = channel_axis) %>%
-      keras::layer_activation(activation = 'relu') %>%
-      keras::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = channel_axis)
-    x <- keras::layer_add(inputs = c(x, residual))
+      keras3::layer_activation(activation = 'relu') %>%
+      keras3::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(axis = channel_axis) %>%
+      keras3::layer_activation(activation = 'relu') %>%
+      keras3::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(axis = channel_axis) %>%
+      keras3::layer_activation(activation = 'relu') %>%
+      keras3::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(axis = channel_axis)
+    x <- keras3::layer_add(inputs = c(x, residual))
   }
 
   residual <- x %>%
-    keras::layer_conv_2d(filters = 1024, kernel_size = c(1, 1), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis)
+    keras3::layer_conv_2d(filters = 1024, kernel_size = c(1, 1), strides = c(2, 2), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis)
   x <- x %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_separable_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
-  x <- keras::layer_add(inputs = c(x, residual))
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_separable_conv_2d(filters = 728, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_separable_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_max_pooling_2d(pool_size = c(3, 3), strides = c(2, 2), padding = 'same')
+  x <- keras3::layer_add(inputs = c(x, residual))
 
   x <- x %>%
-    keras::layer_separable_conv_2d(filters = 1536, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_activation(activation = 'relu') %>%
-    keras::layer_separable_conv_2d(filters = 2048, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
-    keras::layer_batch_normalization(axis = channel_axis) %>%
-    keras::layer_activation(activation = 'relu')
+    keras3::layer_separable_conv_2d(filters = 1536, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_activation(activation = 'relu') %>%
+    keras3::layer_separable_conv_2d(filters = 2048, kernel_size = c(3, 3), padding = 'same', use_bias = FALSE) %>%
+    keras3::layer_batch_normalization(axis = channel_axis) %>%
+    keras3::layer_activation(activation = 'relu')
 
   if (include_top) {
     # Classification block
     x <- x %>%
-      keras::layer_global_average_pooling_2d() %>%
-      keras::layer_dense(units = classes, activation = classifier_activation)
+      keras3::layer_global_average_pooling_2d() %>%
+      keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "Xception")
+  model <- keras3::keras_model(inputs = inputs, outputs = x, name = "Xception")
 
   # Load weights
   if (weights == "imagenet") {
@@ -2279,10 +2279,10 @@ xception <- function(include_top = TRUE, weights = "imagenet", input_tensor = NU
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -2353,8 +2353,8 @@ nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
   # Returns a tuple for zero-padding for 2D convolution with downsampling
   # https://github.com/keras-team/keras-applications/blob/bc89834ed36935ab4a4994446e34ff81c0d8e1b7/keras_applications/__init__.py
   .correct_pad <- function(object, kernel_size) {
-    img_dim <- ifelse(keras::k_image_data_format() == 'channels_last', 1, 2)
-    input_size <- unlist(keras::k_int_shape(object))[img_dim:(img_dim + 2)]
+    img_dim <- ifelse(keras3::k_image_data_format() == 'channels_last', 1, 2)
+    input_size <- unlist(keras3::k_int_shape(object))[img_dim:(img_dim + 2)]
     if (length(kernel_size) == 1)
       kernel_size <- as.integer(c(kernel_size, kernel_size))
     if (is.na(input_size[1]) || is.null(input_size[1])) {
@@ -2368,114 +2368,114 @@ nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
   }
 
   .separable_conv_block <- function(ip, filters, kernel_size = c(3, 3), strides = c(1, 1)) {
-    channel_dim <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
-    x <- keras::layer_activation(ip, activation = 'relu')
+    channel_dim <- ifelse(keras3::k_image_data_format() == "channels_last", -1, 1)
+    x <- keras3::layer_activation(ip, activation = 'relu')
     if (setequal(strides, c(2, 2))) {
-      x <- keras::layer_zero_padding_2d(x, padding = .correct_pad(x, kernel_size))
+      x <- keras3::layer_zero_padding_2d(x, padding = .correct_pad(x, kernel_size))
       conv_pad <- 'valid'
     } else {
       conv_pad <- 'same'
     }
     x <- x %>%
-      keras::layer_separable_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = conv_pad, use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = channel_dim, momentum = 0.9997, epsilon = 1e-3) %>%
-      keras::layer_activation(activation = 'relu') %>%
-      keras::layer_separable_conv_2d(filters = filters, kernel_size = kernel_size, padding = 'same', use_bias = FALSE) %>%
-      keras::layer_batch_normalization(axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
+      keras3::layer_separable_conv_2d(filters = filters, kernel_size = kernel_size, strides = strides, padding = conv_pad, use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(axis = channel_dim, momentum = 0.9997, epsilon = 1e-3) %>%
+      keras3::layer_activation(activation = 'relu') %>%
+      keras3::layer_separable_conv_2d(filters = filters, kernel_size = kernel_size, padding = 'same', use_bias = FALSE) %>%
+      keras3::layer_batch_normalization(axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
     return(x)
   }
 
   .adjust_block <- function(p, ip, filters) {
-    channel_dim <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
+    channel_dim <- ifelse(keras3::k_image_data_format() == "channels_last", -1, 1)
 
-    ip_shape <- unlist(keras::k_int_shape(ip))
-    if (!is.null(p)) p_shape <- unlist(keras::k_int_shape(p))
+    ip_shape <- unlist(keras3::k_int_shape(ip))
+    if (!is.null(p)) p_shape <- unlist(keras3::k_int_shape(p))
 
     if (is.null(p)) {
       p <- ip
     } else {
     if (p_shape[length(p_shape) - 1] != ip_shape[length(ip_shape) - 1]) {
-      p <- p %>% keras::layer_activation(activation = 'relu')
+      p <- p %>% keras3::layer_activation(activation = 'relu')
       p1 <- p %>%
-        keras::layer_average_pooling_2d(pool_size = c(1, 1), strides = c(2, 2), padding = 'valid') %>%
-        keras::layer_conv_2d(filters = floor(filters / 2), kernel_size = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal')
+        keras3::layer_average_pooling_2d(pool_size = c(1, 1), strides = c(2, 2), padding = 'valid') %>%
+        keras3::layer_conv_2d(filters = floor(filters / 2), kernel_size = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal')
       p2 <- p %>%
-        keras::layer_zero_padding_2d(padding = list(c(0, 1), c(0, 1))) %>%
-        keras::layer_cropping_2d(cropping = list(c(1, 0), c(1, 0))) %>%
-        keras::layer_average_pooling_2d(pool_size = c(1, 1), strides = c(2, 2), padding = 'valid') %>%
-        keras::layer_conv_2d(filters = floor(filters / 2), kernel_size = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal')
-      p <- keras::layer_concatenate(inputs = c(p1, p2), axis = channel_dim)
-      p <- keras::layer_batch_normalization(p, axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
+        keras3::layer_zero_padding_2d(padding = list(c(0, 1), c(0, 1))) %>%
+        keras3::layer_cropping_2d(cropping = list(c(1, 0), c(1, 0))) %>%
+        keras3::layer_average_pooling_2d(pool_size = c(1, 1), strides = c(2, 2), padding = 'valid') %>%
+        keras3::layer_conv_2d(filters = floor(filters / 2), kernel_size = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal')
+      p <- keras3::layer_concatenate(inputs = c(p1, p2), axis = channel_dim)
+      p <- keras3::layer_batch_normalization(p, axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
     } else {
     if (p_shape[length(p_shape)] != filters)  {
       p <- p %>%
-        keras::layer_activation(activation = 'relu') %>%
-        keras::layer_conv_2d(filters = filters, kernel_size = c(1, 1), strides = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal') %>%
-        keras::layer_batch_normalization(p, axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
+        keras3::layer_activation(activation = 'relu') %>%
+        keras3::layer_conv_2d(filters = filters, kernel_size = c(1, 1), strides = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal') %>%
+        keras3::layer_batch_normalization(p, axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
     }}}
     return(p)
   }
 
   .normal_cell <- function(ip, p, filters) {
-    channel_dim <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
+    channel_dim <- ifelse(keras3::k_image_data_format() == "channels_last", -1, 1)
     p <- .adjust_block(p, ip, filters)
     h <- ip %>%
-      keras::layer_activation(activation = 'relu') %>%
-      keras::layer_conv_2d(filters = filters, kernel_size = c(1, 1), strides = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal') %>%
-      keras::layer_batch_normalization(axis = channel_dim, momentum = .09997, epsilon = 1e-3)
+      keras3::layer_activation(activation = 'relu') %>%
+      keras3::layer_conv_2d(filters = filters, kernel_size = c(1, 1), strides = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal') %>%
+      keras3::layer_batch_normalization(axis = channel_dim, momentum = .09997, epsilon = 1e-3)
 
     x1_1 <- .separable_conv_block(h, filters = filters, kernel_size = c(5, 5))
     x1_2 <- .separable_conv_block(p, filters = filters)
-    x1 <- keras::layer_add(inputs = c(x1_1, x1_2))
+    x1 <- keras3::layer_add(inputs = c(x1_1, x1_2))
 
     x2_1 <- .separable_conv_block(p, filters = filters, kernel_size = c(5, 5))
     x2_2 <- .separable_conv_block(p, filters = filters, kernel_size = c(3, 3))
-    x2 <- keras::layer_add(inputs = c(x2_1, x2_2))
+    x2 <- keras3::layer_add(inputs = c(x2_1, x2_2))
 
-    x3 <- keras::layer_average_pooling_2d(h, pool_size = c(3, 3), strides = c(1, 1), padding = 'same')
-    x3 <- keras::layer_add(inputs = c(x3, p))
+    x3 <- keras3::layer_average_pooling_2d(h, pool_size = c(3, 3), strides = c(1, 1), padding = 'same')
+    x3 <- keras3::layer_add(inputs = c(x3, p))
 
-    x4_1 <- keras::layer_average_pooling_2d(p, pool_size = c(3, 3), strides = c(1, 1), padding = 'same')
-    x4_2 <- keras::layer_average_pooling_2d(p, pool_size = c(3, 3), strides = c(1, 1), padding = 'same')
-    x4 <- keras::layer_add(inputs = c(x4_1, x4_2))
+    x4_1 <- keras3::layer_average_pooling_2d(p, pool_size = c(3, 3), strides = c(1, 1), padding = 'same')
+    x4_2 <- keras3::layer_average_pooling_2d(p, pool_size = c(3, 3), strides = c(1, 1), padding = 'same')
+    x4 <- keras3::layer_add(inputs = c(x4_1, x4_2))
 
     x5 <- .separable_conv_block(h, filters = filters)
-    x5 <- keras::layer_add(inputs = c(x5, h))
+    x5 <- keras3::layer_add(inputs = c(x5, h))
 
-    x <- keras::layer_concatenate(inputs = c(p, x1, x2, x3, x4, x5), axis = channel_dim)
+    x <- keras3::layer_concatenate(inputs = c(p, x1, x2, x3, x4, x5), axis = channel_dim)
 
     return(list(x, ip))
   }
 
   .reduction_cell <- function(ip, p, filters) {
-    channel_dim <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
+    channel_dim <- ifelse(keras3::k_image_data_format() == "channels_last", -1, 1)
     p <- .adjust_block(p, ip, filters)
     h <- ip %>%
-      keras::layer_activation(activation = 'relu') %>%
-      keras::layer_conv_2d(filters = filters, kernel_size = c(1, 1), strides = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal') %>%
-      keras::layer_batch_normalization(axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
-    h3 <- keras::layer_zero_padding_2d(h, padding = .correct_pad(h, 3))
+      keras3::layer_activation(activation = 'relu') %>%
+      keras3::layer_conv_2d(filters = filters, kernel_size = c(1, 1), strides = c(1, 1), padding = 'same', use_bias = FALSE, kernel_initializer = 'he_normal') %>%
+      keras3::layer_batch_normalization(axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
+    h3 <- keras3::layer_zero_padding_2d(h, padding = .correct_pad(h, 3))
 
     x1_1 <- .separable_conv_block(h, filters = filters, kernel_size = c(5, 5), strides = c(2, 2))
     x1_2 <- .separable_conv_block(p, filters = filters, kernel_size = c(7, 7), strides = c(2, 2))
-    x1 <- keras::layer_add(inputs = c(x1_1, x1_2))
+    x1 <- keras3::layer_add(inputs = c(x1_1, x1_2))
 
-    x2_1 <- keras::layer_max_pooling_2d(h3, pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
+    x2_1 <- keras3::layer_max_pooling_2d(h3, pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
     x2_2 <- .separable_conv_block(p, filters = filters, kernel_size = c(7, 7), strides = c(2, 2))
-    x2 <- keras::layer_add(inputs = c(x2_1, x2_2))
+    x2 <- keras3::layer_add(inputs = c(x2_1, x2_2))
 
-    x3_1 <- keras::layer_average_pooling_2d(h3, pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
+    x3_1 <- keras3::layer_average_pooling_2d(h3, pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
     x3_2 <- .separable_conv_block(p, filters = filters, kernel_size = c(5, 5), strides =  c(2, 2))
-    x3 <- keras::layer_add(inputs = c(x3_1, x3_2))
+    x3 <- keras3::layer_add(inputs = c(x3_1, x3_2))
 
-    x4 <- keras::layer_average_pooling_2d(x1, pool_size = c(3, 3), strides = c(1, 1), padding = 'same')
-    x4 <- keras::layer_add(inputs = c(x2, x4))
+    x4 <- keras3::layer_average_pooling_2d(x1, pool_size = c(3, 3), strides = c(1, 1), padding = 'same')
+    x4 <- keras3::layer_add(inputs = c(x2, x4))
 
     x5_1 <- .separable_conv_block(x1, filters = filters, kernel_size = c(3, 3))
-    x5_2 <- keras::layer_max_pooling_2d(h3, pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
-    x5 <- keras::layer_add(inputs = c(x5_1, x5_2))
+    x5_2 <- keras3::layer_max_pooling_2d(h3, pool_size = c(3, 3), strides = c(2, 2), padding = 'valid')
+    x5 <- keras3::layer_add(inputs = c(x5_1, x5_2))
 
-    x <- keras::layer_concatenate(inputs = c(x2, x3, x4, x5), axis = channel_dim)
+    x <- keras3::layer_concatenate(inputs = c(x2, x3, x4, x5), axis = channel_dim)
 
     return(list(x, ip))
   }
@@ -2483,7 +2483,7 @@ nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
   if (penultimate_filters %% (24 * (filter_multiplier^2)) != 0)
     stop("For NASNet-A models, the penultimate_filters must be a multiple of 24 * (filter_multiplier^2)", call. = FALSE)
 
-  channel_dim <- ifelse(keras::k_image_data_format() == "channels_last", -1, 1)
+  channel_dim <- ifelse(keras3::k_image_data_format() == "channels_last", -1, 1)
   filters <- floor(penultimate_filters / 24)
 
   # Check for valid weights
@@ -2497,18 +2497,18 @@ nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
 
   # Building blocks
   x <- inputs %>%
-    keras::layer_conv_2d(filters = stem_block_filters, kernel_size = c(3, 3), strides = c(2, 2), padding = 'valid', use_bias = FALSE, kernel_initializer = 'he_normal') %>%
-    keras::layer_batch_normalization(axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
+    keras3::layer_conv_2d(filters = stem_block_filters, kernel_size = c(3, 3), strides = c(2, 2), padding = 'valid', use_bias = FALSE, kernel_initializer = 'he_normal') %>%
+    keras3::layer_batch_normalization(axis = channel_dim, momentum = 0.9997, epsilon = 1e-3)
 
   p <- NULL
   c(x, p) %<-% .reduction_cell(x, p, filters = floor(filters / (filter_multiplier * 2)))
@@ -2534,18 +2534,18 @@ nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
     c(x, p) %<-% .normal_cell(x, p, filters = filters * filter_multiplier^2)
   }
 
-  x <- x %>% keras::layer_activation(activation = 'relu')
+  x <- x %>% keras3::layer_activation(activation = 'relu')
 
   if (include_top) {
-    keras::layer_global_average_pooling_2d() %>%
-    keras::layer_dense(units = classes, activation = classifier_activation)
+    keras3::layer_global_average_pooling_2d() %>%
+    keras3::layer_dense(units = classes, activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = x, name = "NASNet_A")
+  model <- keras3::keras_model(inputs = inputs, outputs = x, name = "NASNet_A")
 
   # Load weights
   if (weights == "imagenet") {
@@ -2553,10 +2553,10 @@ nasnet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -2609,17 +2609,17 @@ unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, 
 
   .conv2d_block <- function(object, use_batch_norm = TRUE, dropout = 0.3, filters = 16, kernel_size = c(3, 3), activation = 'relu', kernel_initializer = 'he_normal', padding = 'same') {
     x <- object %>%
-      keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, activation = activation, kernel_initializer = kernel_initializer, padding = padding, use_bias = !use_batch_norm)
+      keras3::layer_conv_2d(filters = filters, kernel_size = kernel_size, activation = activation, kernel_initializer = kernel_initializer, padding = padding, use_bias = !use_batch_norm)
     if (use_batch_norm) {
-      x <- keras::layer_batch_normalization(x)
+      x <- keras3::layer_batch_normalization(x)
     }
     if (dropout > 0) {
-      x <- keras::layer_dropout(x, rate = dropout)
+      x <- keras3::layer_dropout(x, rate = dropout)
     }
     x <- x %>%
-      keras::layer_conv_2d(filters = filters, kernel_size = kernel_size, activation = activation, kernel_initializer = kernel_initializer, padding = padding, use_bias = !use_batch_norm)
+      keras3::layer_conv_2d(filters = filters, kernel_size = kernel_size, activation = activation, kernel_initializer = kernel_initializer, padding = padding, use_bias = !use_batch_norm)
     if (use_batch_norm) {
-      x <- keras::layer_batch_normalization(x)
+      x <- keras3::layer_batch_normalization(x)
     }
     return(x)
   }
@@ -2633,10 +2633,10 @@ unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, 
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-    if (!keras::k_is_keras_tensor(input_tensor))
-      inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+    if (!keras3::k_is_keras_tensor(input_tensor))
+      inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
     else
       inputs <- input_tensor
   }
@@ -2648,94 +2648,94 @@ unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, 
   for (i in seq_len(num_layers)) {
     x <- .conv2d_block(x, use_batch_norm = FALSE, dropout = 0, filters = filters)
     down_layers[[i]] <- x
-    x <- keras::layer_max_pooling_2d(x, pool_size = c(2, 2), strides = c(2, 2))
+    x <- keras3::layer_max_pooling_2d(x, pool_size = c(2, 2), strides = c(2, 2))
     filters <- filters * 2
   }
 
   if (dropout > 0) {
-    x <- keras::layer_dropout(x, rate = dropout)
+    x <- keras3::layer_dropout(x, rate = dropout)
   }
 
   x <- .conv2d_block(x, use_batch_norm = FALSE, dropout = 0, filters = filters)
 
   for (conv in rev(down_layers)) {
     filters <- filters / 2L
-    x <- keras::layer_conv_2d_transpose(x, filters = filters, kernel_size = c(2, 2), strides = c(2, 2), padding = 'same')
-    x <- keras::layer_concatenate(list(conv, x))
+    x <- keras3::layer_conv_2d_transpose(x, filters = filters, kernel_size = c(2, 2), strides = c(2, 2), padding = 'same')
+    x <- keras3::layer_concatenate(list(conv, x))
     x <- .conv2d_block(x, use_batch_norm = FALSE, dropout = 0, filters = filters)
   }
 
   blocks <- x
 
   # conv1 <- inputs %>%
-  #   keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  # pool1 <- conv1 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  #   keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # pool1 <- conv1 %>% keras3::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
   # conv2 <- pool1 %>%
-  #   keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  # pool2 <- conv2 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  #   keras3::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # pool2 <- conv2 %>% keras3::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
   # conv3 <- pool2 %>%
-  #   keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu')
-  # pool3 <- conv3 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  #   keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu')
+  # pool3 <- conv3 %>% keras3::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
   # conv4 <- pool3 %>%
-  #   keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  # drop4 <- conv4 %>% keras::layer_dropout(rate = 0.5)
-  # pool4 <- drop4 %>% keras::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
+  #   keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # drop4 <- conv4 %>% keras3::layer_dropout(rate = 0.5)
+  # pool4 <- drop4 %>% keras3::layer_max_pooling_2d(pool_size = c(2, 2), padding = 'valid')
   #
   # conv5 <- pool4 %>%
-  #   keras::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  # drop5 <- conv5 %>% keras::layer_dropout(rate = 0.5)
+  #   keras3::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 1024, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # drop5 <- conv5 %>% keras3::layer_dropout(rate = 0.5)
   #
   # up6 <- drop5 %>%
-  #   keras::layer_upsampling_2d(size = c(2, 2)) %>%
-  #   keras::layer_conv_2d(filters = 512, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  # merge6 <- keras::layer_concatenate(inputs = c(drop4, up6), axis = 3)
+  #   keras3::layer_upsampling_2d(size = c(2, 2)) %>%
+  #   keras3::layer_conv_2d(filters = 512, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # merge6 <- keras3::layer_concatenate(inputs = c(drop4, up6), axis = 3)
   # conv6 <- merge6 %>%
-  #   keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  #   keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 512, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
   #
   # up7 <- conv6 %>%
-  #   keras::layer_upsampling_2d(size = c(2, 2)) %>%
-  #   keras::layer_conv_2d(filters = 256, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  # merge7 <- keras::layer_concatenate(inputs = c(conv3, up7), axis = 3)
+  #   keras3::layer_upsampling_2d(size = c(2, 2)) %>%
+  #   keras3::layer_conv_2d(filters = 256, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # merge7 <- keras3::layer_concatenate(inputs = c(conv3, up7), axis = 3)
   # conv7 <- merge7 %>%
-  #   keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  #   keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 256, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
   #
   # up8 <- conv7 %>%
-  #   keras::layer_upsampling_2d(size = c(2, 2)) %>%
-  #   keras::layer_conv_2d(filters = 128, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  # merge8 <- keras::layer_concatenate(inputs = c(conv2, up8), axis = 3)
+  #   keras3::layer_upsampling_2d(size = c(2, 2)) %>%
+  #   keras3::layer_conv_2d(filters = 128, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # merge8 <- keras3::layer_concatenate(inputs = c(conv2, up8), axis = 3)
   # conv8 <- merge8 %>%
-  #   keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  #   keras3::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 128, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
   #
   # up9 <- conv8 %>%
-  #   keras::layer_upsampling_2d(size = c(2, 2)) %>%
-  #   keras::layer_conv_2d(filters = 64, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
-  # merge9 <- keras::layer_concatenate(inputs = c(conv1, up9), axis = 3)
+  #   keras3::layer_upsampling_2d(size = c(2, 2)) %>%
+  #   keras3::layer_conv_2d(filters = 64, kernel_size = c(2, 2), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  # merge9 <- keras3::layer_concatenate(inputs = c(conv1, up9), axis = 3)
   # conv9 <- merge9 %>%
-  #   keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
-  #   keras::layer_conv_2d(filters = 2, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
+  #   keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 64, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal') %>%
+  #   keras3::layer_conv_2d(filters = 2, kernel_size = c(3, 3), padding = 'same', activation = 'relu', kernel_initializer = 'he_normal')
   #
   # blocks <- conv9
 
   if (include_top) {
     # Classification block
     blocks <- blocks %>%
-      keras::layer_conv_2d(filters = classes, kernel_size = c(1, 1), activation = classifier_activation)
+      keras3::layer_conv_2d(filters = classes, kernel_size = c(1, 1), activation = classifier_activation)
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "UNet")
+  model <- keras3::keras_model(inputs = inputs, outputs = blocks, name = "UNet")
 
   # Load weights
   if (weights == "imagenet") {
@@ -2743,10 +2743,10 @@ unet <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL, 
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 
@@ -2805,48 +2805,48 @@ unet3d <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
 
   # Input layer
   if (is.null(input_tensor)) {
-    inputs <- keras::layer_input(shape = input_shape)
+    inputs <- keras3::layer_input(shape = input_shape)
   } else {
-  if (!keras::k_is_keras_tensor(input_tensor))
-    inputs <- keras::layer_input(tensor = input_tensor, shape = input_shape)
+  if (!keras3::k_is_keras_tensor(input_tensor))
+    inputs <- keras3::layer_input(tensor = input_tensor, shape = input_shape)
   else
     inputs <- input_tensor
   }
 
   # Building blocks
-  bn <- inputs %>% keras::layer_batch_normalization()
-  cn1 <- bn %>% keras::layer_conv_3d(filters = 8, kernel_size = c(1, 5, 5), padding = "same", activation = "relu")
-  cn2 <- cn1 %>% keras::layer_conv_3d(filters = 8, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
-  bn2 <- cn2 %>% keras::layer_batch_normalization() %>% keras::layer_activation(activation = "relu")
+  bn <- inputs %>% keras3::layer_batch_normalization()
+  cn1 <- bn %>% keras3::layer_conv_3d(filters = 8, kernel_size = c(1, 5, 5), padding = "same", activation = "relu")
+  cn2 <- cn1 %>% keras3::layer_conv_3d(filters = 8, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
+  bn2 <- cn2 %>% keras3::layer_batch_normalization() %>% keras3::layer_activation(activation = "relu")
 
-  dn1 <- bn2 %>% keras::layer_max_pooling_3d(pool_size = c(2, 2, 2))
-  cn3 <- dn1 %>% keras::layer_conv_3d(filters = 16, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
-  bn3 <- cn3 %>% keras::layer_batch_normalization() %>% keras::layer_activation(activation = "relu")
+  dn1 <- bn2 %>% keras3::layer_max_pooling_3d(pool_size = c(2, 2, 2))
+  cn3 <- dn1 %>% keras3::layer_conv_3d(filters = 16, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
+  bn3 <- cn3 %>% keras3::layer_batch_normalization() %>% keras3::layer_activation(activation = "relu")
 
-  dn2 <- bn3 %>% keras::layer_max_pooling_3d(pool_size = c(1, 2, 2))
-  cn4 <- dn2 %>% keras::layer_conv_3d(filters = 16, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
-  bn4 <- cn4 %>% keras::layer_batch_normalization() %>% keras::layer_activation(activation = "relu")
+  dn2 <- bn3 %>% keras3::layer_max_pooling_3d(pool_size = c(1, 2, 2))
+  cn4 <- dn2 %>% keras3::layer_conv_3d(filters = 16, kernel_size = c(3, 3, 3), padding = "same", activation = "linear")
+  bn4 <- cn4 %>% keras3::layer_batch_normalization() %>% keras3::layer_activation(activation = "relu")
 
-  up1 <- bn4 %>% keras::layer_conv_3d_transpose(filters = 16, kernel_size = c(3, 3, 3), strides = c(1, 2, 2), padding = "same")
-  cat1 <- keras::layer_concatenate(list(up1, bn3))
-  up2 <- cat1 %>% keras::layer_conv_3d_transpose(filters = 8, kernel_size = c(3, 3, 3), strides = c(2, 2, 2), padding = "same")
-  cat2 <- keras::layer_concatenate(list(up2, bn2))
+  up1 <- bn4 %>% keras3::layer_conv_3d_transpose(filters = 16, kernel_size = c(3, 3, 3), strides = c(1, 2, 2), padding = "same")
+  cat1 <- keras3::layer_concatenate(list(up1, bn3))
+  up2 <- cat1 %>% keras3::layer_conv_3d_transpose(filters = 8, kernel_size = c(3, 3, 3), strides = c(2, 2, 2), padding = "same")
+  cat2 <- keras3::layer_concatenate(list(up2, bn2))
 
   blocks <- cat2
 
   if (include_top) {
     # Classification block
     blocks <- blocks %>%
-      keras::layer_conv_3d(filters = classes, kernel_size = c(1, 1, 1), padding = "same", activation = classifier_activation) %>%
-      keras::layer_cropping_3d(cropping = c(1, 2, 2)) %>% # avoid skewing boundaries
-      keras::layer_zero_padding_3d(padding = c(1, 2, 2))
+      keras3::layer_conv_3d(filters = classes, kernel_size = c(1, 1, 1), padding = "same", activation = classifier_activation) %>%
+      keras3::layer_cropping_3d(cropping = c(1, 2, 2)) %>% # avoid skewing boundaries
+      keras3::layer_zero_padding_3d(padding = c(1, 2, 2))
   }
 
   # Ensure that the model takes into account any potential predecessors of input_tensor
   if (!is.null(input_tensor))
-    inputs <- keras::keras$utils$get_source_inputs(input_tensor)
+    inputs <- keras3::keras$utils$get_source_inputs(input_tensor)
   # Create model
-  model <- keras::keras_model(inputs = inputs, outputs = blocks, name = "UNet3D")
+  model <- keras3::keras_model(inputs = inputs, outputs = blocks, name = "UNet3D")
 
   # Load weights
   if (weights == "imagenet") {
@@ -2854,10 +2854,10 @@ unet3d <- function(include_top = TRUE, weights = "imagenet", input_tensor = NULL
   } else {
   if (!is.null(weights)) {
     if (is.array(weights)) {
-      model %>% keras::set_weights(weights)
+      model %>% keras3::set_weights(weights)
     } else {
     if (is.character(weights)) {
-      model %>% keras::load_model_weights_tf(weights)
+      model %>% keras3::load_model_weights_tf(weights)
     }}
   }}
 

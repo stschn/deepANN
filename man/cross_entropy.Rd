@@ -2,9 +2,12 @@
 % Please edit documentation in R/deepMetrics.r
 \name{cross_entropy}
 \alias{cross_entropy}
+\alias{categorical_crossentropy}
 \title{Cross entropy}
 \usage{
 cross_entropy(p, q, base = NULL)
+
+categorical_crossentropy(target, output, axis = -1)
 }
 \arguments{
 \item{p}{A vector of ground truth probabilities (true probability distribution).}
@@ -43,10 +46,10 @@ Other Metrics:
 \code{\link{accuracy}()},
 \code{\link{dice}()},
 \code{\link{entropy}()},
-\code{\link{erfcinv}()},
-\code{\link{erfc}()},
-\code{\link{erfinv}()},
 \code{\link{erf}()},
+\code{\link{erfc}()},
+\code{\link{erfcinv}()},
+\code{\link{erfinv}()},
 \code{\link{gini_impurity}()},
 \code{\link{huber_loss}()},
 \code{\link{iou}()},

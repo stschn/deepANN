@@ -19,12 +19,12 @@ Imports:
    marray,
    reticulate (>= 1.16),
    tensorflow (>= 2.0.0),
-   keras (>= 2.3.0.0)
+   keras3
 Remotes:
    stschn/marray
 Suggests: 
     knitr,
     rmarkdown
 Roxygen: list(markdown = TRUE, r6 = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 VignetteBuilder: knitr

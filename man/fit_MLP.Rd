@@ -41,7 +41,7 @@ A trained model object.
 }
 \seealso{
 \code{\link{build_MLP}},
-\code{\link[keras]{fit.keras.engine.training.Model}}, \code{\link[keras]{evaluate.keras.engine.training.Model}}.
+\code{\link[keras3]{fit.keras.engine.training.Model}}, \code{\link[keras3]{evaluate.keras.engine.training.Model}}.
 
 Other Single & Multi Layer Perceptron (SLP, MLP): 
 \code{\link{as_MLP_X}()},

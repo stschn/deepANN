@@ -43,8 +43,8 @@ Chawla, Nitesh V., Bowyer, Kevin W., Hall, Lawrence O., Kegelmeyer, W. Philip (2
 \seealso{
 Other Dummifying: 
 \code{\link{append_rows}()},
-\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
+\code{\link{dummify_multilabel}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},

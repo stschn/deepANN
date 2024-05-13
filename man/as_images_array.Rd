@@ -23,7 +23,7 @@ Convert (resized) images to 3D arrays
   For an example see \code{\link{as_images_tensor}}.
 }
 \seealso{
-\code{\link[keras]{image_to_array}}.
+\code{\link[keras3]{image_to_array}}.
 
 Other Convolutional Neural Network (CNN): 
 \code{\link{alexnet}()},
@@ -37,9 +37,9 @@ Other Convolutional Neural Network (CNN):
 \code{\link{inception_resnet_v2}()},
 \code{\link{inception_v3}()},
 \code{\link{lenet5}()},
+\code{\link{mobilenet}()},
 \code{\link{mobilenet_v2}()},
 \code{\link{mobilenet_v3}()},
-\code{\link{mobilenet}()},
 \code{\link{nasnet}()},
 \code{\link{resnet}},
 \code{\link{unet}()},

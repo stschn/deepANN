@@ -27,8 +27,8 @@ Append dummy rows
 \code{\link{dummify}}.
 
 Other Dummifying: 
-\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
+\code{\link{dummify_multilabel}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{one_hot_encode}()},
