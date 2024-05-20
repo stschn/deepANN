@@ -37,6 +37,12 @@ The classes based on R6 class <code>Sampler</code> offer variant ways to balance
   <li><code>train_test_split()</code> splits a sequence of data into random train and test subsets.</li>
 </ul>
 
+<b>Selection</b>
+<ul>
+  <li><code>data_split()</code> splits data into train and test subsets.</li>
+  <li><code>train_test_split()</code> splits a sequence of data into random train and test subsets.</li>
+</ul>
+
 <b>Outlier</b>
 <ul>
   <li><code>outlier()</code> detects and optionally replaces outliers thru the methods quartiles (from Tukey (1977)), mean (maximum likelihood estimation) or median (scaled median absolute deviation).</li>
