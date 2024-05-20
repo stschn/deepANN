@@ -83,7 +83,7 @@ MinMaxScaler <- R6Class("MinMaxScaler", inherit = Scaler,
 
       Xt <- vector("list", length = n_iter)
       for (iter in seq(n_iter)) {
-        Xt[[iter]] <- minmax(slice(X, ds), .min = self$data_min[iter], .max = self$data_max[iter], .range = self$feature_range)
+        Xt[[iter]] <- minmax(marray::slice(X, ds), .min = self$data_min[iter], .max = self$data_max[iter], .range = self$feature_range)
         for (i in axis_iter_order) {
           ds[axis_iter][[i]] <- ds[axis_iter][[i]] + 1
           if (ds[axis_iter][[i]] <= d[i])
@@ -128,7 +128,7 @@ MinMaxScaler <- R6Class("MinMaxScaler", inherit = Scaler,
 
       Xt <- vector("list", length = n_iter)
       for (iter in seq(n_iter)) {
-        Xt[[iter]] <- inverse_minmax(slice(X, ds), .min = self$data_min[iter], .max = self$data_max[iter], .range = self$feature_range)
+        Xt[[iter]] <- inverse_minmax(marray::slice(X, ds), .min = self$data_min[iter], .max = self$data_max[iter], .range = self$feature_range)
         for (i in axis_iter_order) {
           ds[axis_iter][[i]] <- ds[axis_iter][[i]] + 1
           if (ds[axis_iter][[i]] <= d[i])
@@ -234,7 +234,7 @@ StandardScaler <- R6Class("StandardScaler", inherit = Scaler,
 
       Xt <- vector("list", length = n_iter)
       for (iter in seq(n_iter)) {
-        Xt[[iter]] <- zscore(slice(X, ds), .mean = self$mean[iter], .sd = self$std[iter])
+        Xt[[iter]] <- zscore(marray::slice(X, ds), .mean = self$mean[iter], .sd = self$std[iter])
         for (i in axis_iter_order) {
           ds[axis_iter][[i]] <- ds[axis_iter][[i]] + 1
           if (ds[axis_iter][[i]] <= d[i])
@@ -279,7 +279,7 @@ StandardScaler <- R6Class("StandardScaler", inherit = Scaler,
 
       Xt <- vector("list", length = n_iter)
       for (iter in seq(n_iter)) {
-        Xt[[iter]] <- inverse_zscore(slice(X, ds), .mean = self$mean[iter], .sd = self$std[iter])
+        Xt[[iter]] <- inverse_zscore(marray::slice(X, ds), .mean = self$mean[iter], .sd = self$std[iter])
         for (i in axis_iter_order) {
           ds[axis_iter][[i]] <- ds[axis_iter][[i]] + 1
           if (ds[axis_iter][[i]] <= d[i])
