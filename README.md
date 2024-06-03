@@ -16,6 +16,13 @@ This R library is currently structured in form of the following functional famil
   <li><code>remove_columns()</code> removes columns with only one specific value.</li>
 </ul>
 
+<b>Encoder</b>
+<ul>
+  <li><code>class Encoder</code> is the base class for all encoding classes.</li>
+  <li><code>class LabelEncoder</code> used for encoding labels between 0 and n_labels-1.</li>
+  <li><code>class OneHotEncoder</code> used for encoding labels as a one-hot numeric array.</li>
+</ul>
+
 <b>Sampler</b>
 The classes based on R6 class <code>Sampler</code> offer variant ways to balance data sets.
 <ul>
@@ -37,12 +44,6 @@ The classes based on R6 class <code>Sampler</code> offer variant ways to balance
   <li><code>train_test_split()</code> splits a sequence of data into random train and test subsets.</li>
 </ul>
 
-<b>Selection</b>
-<ul>
-  <li><code>data_split()</code> splits data into train and test subsets.</li>
-  <li><code>train_test_split()</code> splits a sequence of data into random train and test subsets.</li>
-</ul>
-
 <b>Outlier</b>
 <ul>
   <li><code>outlier()</code> detects and optionally replaces outliers thru the methods quartiles (from Tukey (1977)), mean (maximum likelihood estimation) or median (scaled median absolute deviation).</li>
@@ -52,6 +53,7 @@ The classes based on R6 class <code>Sampler</code> offer variant ways to balance
 
 <b>Scaling</b>
 <ul>
+  <li><code>class Scaler</code> is the base class for all scaler classes.</li>
   <li><code>class MinMaxScaler</code> used for transforming features by scaling each feature to a given range.</li>
   <li><code>class StandardScaler</code> used for transforming features by removing the mean and scaling to unit standard deviation.</li>
   <li><code>scale_minmax()</code> scales a numeric vector thru min-max scaling.</li>
