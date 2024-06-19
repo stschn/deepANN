@@ -60,8 +60,8 @@ Gulli, A., Kapoor, A., Pal, S. (2017): Deep Learning with TensorFlow 2 and Keras
 }
 \seealso{
 \code{\link{as_LSTM_X}}, \code{\link{nunits}},
-\code{\link[keras]{keras_model_sequential}}, \code{\link[keras]{layer_dense}}, \code{\link[keras]{layer_dropout}}, \code{\link[keras]{layer_lstm}},
-\code{\link[keras]{compile.keras.engine.training.Model}}.
+\code{\link[keras3]{keras_model_sequential}}, \code{\link[keras3]{layer_dense}}, \code{\link[keras3]{layer_dropout}}, \code{\link[keras3]{layer_lstm}},
+\code{\link[keras3]{compile.keras.engine.training.Model}}.
 
 Other Recurrent Neural Network (RNN): 
 \code{\link{as_LSTM_X}()},

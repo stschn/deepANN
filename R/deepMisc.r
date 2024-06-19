@@ -71,7 +71,7 @@ day.abb <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 # Re-exports
 
 #' Pipe operator
-#' @importFrom keras %>%
+#' @importFrom keras3 %>%
 #' @name %>%
 #' @rdname pipe
 #' @details R v4.1.0 directly provides simple native forward pipe operator |>. The simple form of the forward pipe inserts the left-hand side as the first argument in the right-hand side call.
@@ -80,7 +80,7 @@ day.abb <- c("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 NULL
 
 #' Multi-assign operator
-#' @importFrom keras %<-%
+#' @importFrom keras3 %<-%
 #' @name %<-%
 #' @rdname multi-assign
 #' @export

@@ -16,9 +16,34 @@ This R library is currently structured in form of the following functional famil
   <li><code>remove_columns()</code> removes columns with only one specific value.</li>
 </ul>
 
+<b>Encoder</b>
+<ul>
+  <li><code>class Encoder</code> is the base class for all encoding classes.</li>
+  <li><code>class LabelEncoder</code> used for encoding labels between 0 and n_labels-1.</li>
+  <li><code>class OneHotEncoder</code> used for encoding labels as a one-hot numeric array.</li>
+  <li><code>class LabelBinarizer</code> used for encoding a categorical variable as a label indicator matrix.</li>
+  <li><code>class MultiLabelBinarizer</code> used for encoding multi-labels as a multiple binary numeric matrix.</li>
+</ul>
+
 <b>Sampler</b>
 The classes based on R6 class <code>Sampler</code> offer variant ways to balance data sets.
 <ul>
+  <li><code>class OverSampler</code>.</li>
+  <li><code>oversampling()</code> a class wrapper function.</li>
+  <li><code>class RandomOverSampler</code>.</li>
+  <li><code>random_oversampling()</code> a class wrapper function.</li>
+  <li><code>class SMOTE</code>.</li>
+  <li><code>smote()</code> a class wrapper function.</li>
+  <li><code>class UnderSampler</code>.</li>
+  <li><code>undersampling()</code> a class wrapper function.</li>
+  <li><code>class RandomUnderSampler</code>.</li>
+  <li><code>random_undersampling()</code> a class wrapper function.</li>
+</ul>
+
+<b>Selection</b>
+<ul>
+  <li><code>data_split()</code> splits data into train and test subsets.</li>
+  <li><code>train_test_split()</code> splits a sequence of data into random train and test subsets.</li>
 </ul>
 
 <b>Outlier</b>
@@ -30,6 +55,9 @@ The classes based on R6 class <code>Sampler</code> offer variant ways to balance
 
 <b>Scaling</b>
 <ul>
+  <li><code>class Scaler</code> is the base class for all scaler classes.</li>
+  <li><code>class MinMaxScaler</code> used for transforming features by scaling each feature to a given range.</li>
+  <li><code>class StandardScaler</code> used for transforming features by removing the mean and scaling to unit standard deviation.</li>
   <li><code>scale_minmax()</code> scales a numeric vector thru min-max scaling.</li>
   <li><code>scale_zscore()</code> scales a numeric vector thru z-score scaling.</li>
   <li><code>scale_center()</code> scales a numeric vector thru (mean) centering.</li>

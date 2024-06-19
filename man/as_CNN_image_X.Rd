@@ -27,7 +27,7 @@ A 4D feature array with the dimensions samples (number of images), height, width
 Create a 4-dimensional array for image features (input)
 }
 \seealso{
-\code{\link[base]{list.files}}, \code{\link[keras]{image_load}}, \code{\link[keras]{image_to_array}}, \code{\link[reticulate]{array_reshape}},
+\code{\link[base]{list.files}}, \code{\link[keras3]{image_load}}, \code{\link[keras3]{image_to_array}}, \code{\link[reticulate]{array_reshape}},
 \code{\link{as_CNN_image_Y}}.
 
 Other Convolutional Neural Network (CNN): 
@@ -42,9 +42,9 @@ Other Convolutional Neural Network (CNN):
 \code{\link{inception_resnet_v2}()},
 \code{\link{inception_v3}()},
 \code{\link{lenet5}()},
+\code{\link{mobilenet}()},
 \code{\link{mobilenet_v2}()},
 \code{\link{mobilenet_v3}()},
-\code{\link{mobilenet}()},
 \code{\link{nasnet}()},
 \code{\link{resnet}},
 \code{\link{unet}()},

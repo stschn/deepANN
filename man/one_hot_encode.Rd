@@ -34,8 +34,8 @@ In that case, all previous levels are also encoded with value \code{1}.
 
 Other Dummifying: 
 \code{\link{append_rows}()},
-\code{\link{dummify_multilabel}()},
 \code{\link{dummify}()},
+\code{\link{dummify_multilabel}()},
 \code{\link{effectcoding}()},
 \code{\link{one_hot_decode}()},
 \code{\link{remove_columns}()},
